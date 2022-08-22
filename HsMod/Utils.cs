@@ -1,11 +1,8 @@
-﻿using System;
+﻿using BepInEx.Logging;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ComponentModel;
-using BepInEx.Logging;
-using System.Reflection;
+using System.Linq;
 using static HsMod.PluginConfig;
 
 namespace HsMod
@@ -271,7 +268,7 @@ namespace HsMod
                     }
                 }
             }
-            if ((SceneMgr.Get()?.GetMode() == SceneMgr.Mode.LETTUCE_COLLECTION)|| (SceneMgr.Get().GetMode() == SceneMgr.Mode.LETTUCE_PACK_OPENING)) // 执行后，需要重新进入佣兵收藏
+            if ((SceneMgr.Get()?.GetMode() == SceneMgr.Mode.LETTUCE_COLLECTION) || (SceneMgr.Get().GetMode() == SceneMgr.Mode.LETTUCE_PACK_OPENING)) // 执行后，需要重新进入佣兵收藏
             {
                 List<PegasusLettuce.MercenaryAcknowledgeData> m_mercenaryAcknowledgements = new List<PegasusLettuce.MercenaryAcknowledgeData>();
                 foreach (var merc in CollectionManager.Get().FindOrderedMercenaries(null, true, null, null, null).m_mercenaries)
@@ -348,7 +345,7 @@ namespace HsMod
             network.RegisterNetHandler(PegasusUtil.BoughtSoldCard.PacketID.ID, new Network.NetHandler(TryRefundCardDisenchantCallback), null);
             foreach (var record in CollectionManager.Get().GetOwnedCards())
             {
-                if (record != null && record.IsCraftable &&record.IsRefundable && (record.OwnedCount > 0))
+                if (record != null && record.IsCraftable && record.IsRefundable && (record.OwnedCount > 0))
                 {
                     CraftingManager.Get().TryGetCardSellValue(record.CardId, record.PremiumType, out int value);
                     network.SellCard(record.CardDbId, record.PremiumType, record.OwnedCount, value, record.OwnedCount);
@@ -375,7 +372,7 @@ namespace HsMod
 
         public static class CacheInfo
         {
-            
+
             public static void UpdateCoin()  // 不能传入参数 List<T> List
             {
                 CacheCoin.Clear();
@@ -460,7 +457,7 @@ namespace HsMod
                 CacheMercenarySkin.Clear();
                 foreach (var merc in GameDbf.LettuceMercenary.GetRecords())
                 {
-                    
+
                     if (merc != null && merc.MercenaryArtVariations.Count > 0)
                     {
                         MercenarySkin mercSkin = new MercenarySkin
@@ -469,16 +466,16 @@ namespace HsMod
                             Id = new List<int>(),
                             hasDiamond = false
                         };
-                        foreach (var art in merc.MercenaryArtVariations.OrderBy(x=>x.ID).ToList())
+                        foreach (var art in merc.MercenaryArtVariations.OrderBy(x => x.ID).ToList())
                         {
                             if (art != null)
                             {
                                 mercSkin.Id.Add(art.CardId);
-                                if(art.DefaultVariation)
+                                if (art.DefaultVariation)
                                 {
                                     mercSkin.Default = art.CardId;
                                 }
-                                foreach(var premiums in art.MercenaryArtVariationPremiums)
+                                foreach (var premiums in art.MercenaryArtVariationPremiums)
                                 {
                                     if (premiums != null && premiums.Premium == Assets.MercenaryArtVariationPremium.MercenariesPremium.PREMIUM_DIAMOND)
                                     {
@@ -513,7 +510,7 @@ namespace HsMod
             }
         }
 
-        
+
         public static long CalcMercenaryCoinNeed(LettuceMercenary merc)
         {
             long coinNeed = 0;
@@ -522,7 +519,7 @@ namespace HsMod
                 coinNeed = merc.GetCraftingCost() - merc.m_currencyAmount;
                 return (coinNeed > 0) ? coinNeed : 4096;
             }
-            
+
             foreach (var ability in merc.m_abilityList)
             {
                 if (ability.GetNextUpgradeCost() <= 0)
@@ -645,7 +642,7 @@ namespace HsMod
                     return false;
                 }
             }
-            
+
             public static bool IsMercenarySkin(string cardID, out MercenarySkin skin)
             {
                 if (CacheMercenarySkin.Count == 0) CacheInfo.UpdateMercenarySkin();
@@ -653,7 +650,7 @@ namespace HsMod
 
                 foreach (var mercSkin in CacheMercenarySkin)
                 {
-                    if(mercSkin.Id.Contains(dbid))
+                    if (mercSkin.Id.Contains(dbid))
                     {
                         skin = mercSkin;
                         return true;
@@ -662,7 +659,7 @@ namespace HsMod
                 skin = new MercenarySkin();
                 return false;
             }
-            
+
         }
 
 

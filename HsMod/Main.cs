@@ -1,16 +1,8 @@
-﻿using System.Reflection;
-using BepInEx;
-using PegasusShared;
-using UnityEngine;
-using HarmonyLib;
-using System.Collections;
+﻿using BepInEx;
 using System;
-using System.Threading;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-using static HsMod.PluginConfig;
 using System.Linq;
+using UnityEngine;
+using static HsMod.PluginConfig;
 
 
 namespace HsMod
@@ -136,11 +128,11 @@ namespace HsMod
                 }
                 else
                 {
-                    if(keyReadNewCards.Value.IsDown())
+                    if (keyReadNewCards.Value.IsDown())
                     {
                         Utils.TryReadNewCards();
                     }
-                    if (keyRefund.Value.IsDown() 
+                    if (keyRefund.Value.IsDown()
                         && (SceneMgr.Get().GetMode() != SceneMgr.Mode.GAMEPLAY)
                         && (
                             (SceneMgr.Get().GetMode() == SceneMgr.Mode.COLLECTIONMANAGER)
@@ -151,7 +143,7 @@ namespace HsMod
                         Utils.TryRefundCardDisenchant();
                         return;
                     }
-                    
+
                     if (GameState.Get() == null || GameMgr.Get() == null) return;
                     if (GameMgr.Get().IsBattlegrounds() && keyShutUpBob.Value.IsDown())
                     {
@@ -214,7 +206,7 @@ namespace HsMod
                                     ClipboardUtils.CopyToClipboard(bnetTag.GetString());
                                     UIStatus.Get().AddInfo(bnetTag.GetString());
                                 }
-                                else if(!GameMgr.Get().IsBattlegrounds())
+                                else if (!GameMgr.Get().IsBattlegrounds())
                                 {
                                     bnetPlayer = BnetPresenceMgr.Get().GetPlayer(GameState.Get().GetOpposingSidePlayer().GetGameAccountId());
                                     string tempFullName = bnetPlayer?.GetBestName();

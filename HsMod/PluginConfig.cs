@@ -1,11 +1,6 @@
-﻿using System;
+﻿using BepInEx.Configuration;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using BepInEx.Configuration;
 using UnityEngine;
 
 namespace HsMod
@@ -91,16 +86,6 @@ namespace HsMod
         public static ConfigEntry<int> skinBgsFinisher;
         public static ConfigEntry<int> skinBob;
         public static ConfigEntry<int> skinHero;
-        //public static ConfigEntry<int> skinWarlock;      //术士
-        //public static ConfigEntry<int> skinRouge;        //潜行者
-        //public static ConfigEntry<int> skinDruid;        //德鲁伊
-        //public static ConfigEntry<int> skinShaman;       //萨满
-        //public static ConfigEntry<int> skinHunter;       //猎人
-        //public static ConfigEntry<int> skinMage;         //法师
-        //public static ConfigEntry<int> skinPaladin;      //圣骑士
-        //public static ConfigEntry<int> skinPriest;       //牧师
-        //public static ConfigEntry<int> skinWarrior;      //战士
-        //public static ConfigEntry<int> skinDemonHunter;  //恶魔猎手
 
         public static ConfigEntry<bool> isShowFPSEnable;
         public static ConfigEntry<bool> isInternalModeEnable;
@@ -113,7 +98,7 @@ namespace HsMod
         public static Dictionary<int, int> HeroesMapping = new Dictionary<int, int>();
         public static Dictionary<string, string> HeroesPowerMapping = new Dictionary<string, string>();
 
-        
+
         public static List<Utils.CardMapping> CardsMapping = new List<Utils.CardMapping>();    //卡片替换映射，目前暂未使用
         public static IGraphicsManager graphicsManager;
         public static void ConfigBind(ConfigFile config)
@@ -149,7 +134,7 @@ namespace HsMod
             firesideGatheringLatitude = config.Bind("好友", "炉边聚会纬度", 0.0, "炉边聚会纬度");
             firesideGatheringLongitude = config.Bind("好友", "炉边聚会经度", 0.0, "炉边聚会经度");
             firesideGatheringGpsAccuracy = config.Bind("好友", "炉边聚会Gps定位精度", 54.0, "炉边聚会定位精度");
-            
+
 
             isFullnameShow = config.Bind("炉石", "显示全名", false, "是否显示对手战网全名；如果启用该选项，还会允许添加当前对手(启动快捷键时，也允许添加对手)。");
             isOpponentRankInGameShow = config.Bind("炉石", "显示天梯等级", false, "是否在传说前显示对手天梯等级");
@@ -176,17 +161,6 @@ namespace HsMod
             skinBgsFinisher = config.Bind("皮肤", "酒馆击杀特效", -1, "酒馆击杀的偏好ID，-1表示不做修改");
             skinBob = config.Bind("皮肤", "鲍勃", -1, "鲍勃的偏好ID，-1表示不做修改");
             skinHero = config.Bind("皮肤", "英雄", -1, "（废弃，不建议使用，建议从文件加载英雄皮肤，修改完后F4更新；如果再对局中，则还需要模拟拔线）英雄的偏好ID，-1表示不做修改");
-            
-            //skinWarlock = config.Bind("皮肤", "术士", -1, "术士的皮肤偏好ID，-1表示不做修改");
-            //skinRouge = config.Bind("皮肤", "潜行者", -1, "潜行者的皮肤偏好ID，-1表示不做修改");
-            //skinDruid = config.Bind("皮肤", "德鲁伊", -1, "德鲁伊的皮肤偏好ID，-1表示不做修改");
-            //skinShaman = config.Bind("皮肤", "萨满", -1, "萨满的皮肤偏好ID，-1表示不做修改");
-            //skinHunter = config.Bind("皮肤", "猎人", -1, "猎人的皮肤偏好ID，-1表示不做修改");
-            //skinMage = config.Bind("皮肤", "法师", -1, "法师的皮肤偏好ID，-1表示不做修改");
-            //skinPaladin = config.Bind("皮肤", "圣骑士", -1, "圣骑士的皮肤偏好ID，-1表示不做修改");
-            //skinPriest = config.Bind("皮肤", "牧师", -1, "牧师的皮肤偏好ID，-1表示不做修改");
-            //skinWarrior = config.Bind("皮肤", "战士", -1, "战士的皮肤偏好ID，-1表示不做修改");
-            //skinDemonHunter = config.Bind("皮肤", "恶魔猎手", -1, "恶魔猎手的皮肤偏好ID，-1表示不做修改");
 
             keyTimeGearUp = config.Bind("快捷键", "齿轮倍率+1", new KeyboardShortcut(KeyCode.UpArrow), "齿轮倍率增加1，默认方向上");
             keyTimeGearDown = config.Bind("快捷键", "齿轮倍率-1", new KeyboardShortcut(KeyCode.DownArrow), "齿轮倍率减少1，默认方向下");
@@ -214,8 +188,9 @@ namespace HsMod
 
             isInternalModeEnable = config.Bind("开发", "内部模式", false, "是否切换到内部模式（需要重启炉石）");
             isShowFPSEnable = config.Bind("开发", "显示FPS", false, "是否显示FPS信息");
-            webServerPort = config.Bind("开发", "网站端口", 23333, new ConfigDescription("WebServer端口", new AcceptableValueRange<int>(1, 65535)));
+            webServerPort = config.Bind("开发", "网站端口", 58744, new ConfigDescription("WebServer端口", new AcceptableValueRange<int>(1, 65535)));
             webPageBackImg = config.Bind("开发", "网页背景图", "", "网页背景图片");
+
             mercLogPath = config.Bind("日志", "佣兵对局文件", @"BepInEx\merc.log", "佣兵日志文件位置（相对于Hearthstone）");
 
 
@@ -251,7 +226,7 @@ namespace HsMod
 
         public static void ConfigTemplateSettingChanged(Utils.ConfigTemplate cTemplate)
         {
-            switch(cTemplate)
+            switch (cTemplate)
             {
                 case Utils.ConfigTemplate.DoNothing:
                     return;
@@ -359,7 +334,7 @@ namespace HsMod
                         string[] parts = line.Split(':');
                         if (parts.Length == 2)
                         {
-                            if(!HeroesMapping.ContainsKey(int.Parse(parts[0])))
+                            if (!HeroesMapping.ContainsKey(int.Parse(parts[0])))
                             {
                                 HeroesMapping.Add(int.Parse(parts[0]), int.Parse(parts[1]));
                             }
@@ -376,7 +351,7 @@ namespace HsMod
                 File.WriteAllText(file, newConfigFile);
             }
         }
-        
+
         public static ConfigValue configValue = new ConfigValue();
     }
 
@@ -464,7 +439,7 @@ namespace HsMod
 
         public string CacheOpponentFullName
         {
-            get {return Utils.CacheFullName; }
+            get { return Utils.CacheFullName; }
         }
 
         public static ConfigValue Get()

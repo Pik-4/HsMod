@@ -1,17 +1,16 @@
-﻿using HarmonyLib;
-using System;
-using static HsMod.PluginConfig;
-using Blizzard.T5.Core.Time;
+﻿using Blizzard.GameService.SDK.Client.Integration;
 using Blizzard.T5.Core;
-using BepInEx;
+using Blizzard.T5.Core.Time;
+using HarmonyLib;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Collections.Generic;
-using UnityEngine;
-using Blizzard.GameService.SDK.Client.Integration;
 using System.Reflection.Emit;
-using System.Collections;
 using System.Runtime.CompilerServices;
+using UnityEngine;
+using static HsMod.PluginConfig;
 
 namespace HsMod
 {
@@ -82,7 +81,7 @@ namespace HsMod
             {
                 TimeScaleMgr.Get().Update();
             };
-            
+
             isShowCardLargeCount.SettingChanged += delegate
             {
                 if (isShowCardLargeCount.Value)
@@ -175,7 +174,7 @@ namespace HsMod
             {
                 LoadPatch(typeof(Patcher.PatchDeathOb));
             }
-            if(isAutoRecvMercenaryRewardEnable.Value)
+            if (isAutoRecvMercenaryRewardEnable.Value)
             {
                 LoadPatch(typeof(Patcher.PatchMercenariesReward));
             }
@@ -184,7 +183,7 @@ namespace HsMod
                 LoadPatch(typeof(Patcher.PatchBoxesReward));
             }
             TimeScaleMgr.Get().Update();
-            
+
         }
         public static void UnPatchAll()
         {
@@ -305,7 +304,8 @@ namespace HsMod
             public static bool PatchAlertPopupShow(ref UIBButton ___m_okayButton, ref UIBButton ___m_confirmButton, ref UIBButton ___m_cancelButton)
             {
                 if (isAlertPopupShow.Value) return true;
-                else {
+                else
+                {
                     switch (responseAlertPopup.Value)
                     {
                         case Utils.AlertPopupResponse.OK:
@@ -327,7 +327,7 @@ namespace HsMod
                                 ___m_confirmButton.TriggerRelease();
                                 break;
                             }
-                            else 
+                            else
                             {
                                 ___m_okayButton.TriggerPress();
                                 ___m_okayButton.TriggerRelease();
@@ -337,7 +337,7 @@ namespace HsMod
                     return false;
                 }
             }
-            
+
             //屏蔽开屏防沉迷提示
             [HarmonyPrefix]
             [HarmonyPatch(typeof(SplashScreen), "GetRatingsScreenRegion")]
@@ -529,8 +529,8 @@ namespace HsMod
                         case CollectionUtils.ViewMode.COINS:
                         case CollectionUtils.ViewMode.CARDS:
                         case CollectionUtils.ViewMode.HERO_SKINS:
-                                if(__instance.CardId != "") dId = GameUtils.TranslateCardIdToDbId(__instance.CardId);
-                                break;
+                            if (__instance.CardId != "") dId = GameUtils.TranslateCardIdToDbId(__instance.CardId);
+                            break;
                         case CollectionUtils.ViewMode.CARD_BACKS:
                             dId = __instance.GetActor().GetComponent<CollectionCardBack>().GetCardBackId();
                             break;
@@ -737,7 +737,7 @@ namespace HsMod
 
 
 
-            
+
         }
 
         public class PatchRealtimeCardNum
@@ -918,7 +918,7 @@ namespace HsMod
 
         public class PatchFiresideGathering
         {
-            
+
             //炉边聚会
             [HarmonyPrefix]
             [HarmonyPatch(typeof(FiresideGatheringManager), "RequestNearbyFSGs")]
@@ -948,7 +948,7 @@ namespace HsMod
                 }
                 return list;
             }
-            
+
             private static readonly MethodInfo ChangeStateInfo = typeof(FiresideGatheringLocationHelperDialog).GetMethod("ChangeState", BindingFlags.Instance | BindingFlags.NonPublic);
             [HarmonyTranspiler]
             [HarmonyPatch(typeof(FiresideGatheringLocationHelperDialog), "Start")]
@@ -1129,7 +1129,7 @@ namespace HsMod
             [HarmonyReversePatch]
             [HarmonyPatch(typeof(SpellController), "OnProcessTaskList")]
             [MethodImpl(MethodImplOptions.NoInlining)]
-            public static void AttackSpellControllerBase(AttackSpellController instance) { ; }
+            public static void AttackSpellControllerBase(AttackSpellController instance) {; }
             [HarmonyPrefix]
             [HarmonyPatch(typeof(AttackSpellController), "OnProcessTaskList")]
             public static bool PatchAttackSpellControllerOnProcessTaskList(AttackSpellController __instance)
@@ -1201,11 +1201,11 @@ namespace HsMod
                 {
                     Utils.CardState mGolden = goldenCardState.Value;
                     Utils.CardState mDiamond = diamondCardState.Value;
-                    
+
                     int dbid = GameUtils.TranslateCardIdToDbId(__instance.GetCardId());
                     bool mercDiamond = false;
                     bool isMerc = false;
-                    if(Utils.CheckInfo.IsMercenarySkin(__instance.GetCardId(),out Utils.MercenarySkin skin))
+                    if (Utils.CheckInfo.IsMercenarySkin(__instance.GetCardId(), out Utils.MercenarySkin skin))
                     {
                         isMerc = true;
                         if (dbid == skin.Diamond)
@@ -1214,11 +1214,11 @@ namespace HsMod
                         }
                     }
 
-                    
+
                     if (__instance.IsControlledByOpposingSidePlayer() && (!isOpponentGoldenCardShow.Value))
                     {
                         __result = TAG_PREMIUM.NORMAL;
-                        if(isMerc)
+                        if (isMerc)
                         {
                             __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.NORMAL);
                             __instance.SetTag(GAME_TAG.HAS_DIAMOND_QUALITY, false);
@@ -1286,7 +1286,7 @@ namespace HsMod
                 }
                 return list;
             }
-            
+
             //设置当前对手、用于获取战网标签
             [HarmonyPostfix]
             [HarmonyPatch(typeof(PlayerLeaderboardManager), "SetCurrentOpponent")]
@@ -1360,7 +1360,7 @@ namespace HsMod
                 }
                 return true;
             }
-            
+
 
             //显示天梯等级
             [HarmonyTranspiler]
@@ -1400,7 +1400,7 @@ namespace HsMod
                 }
                 return list;
             }
-            
+
             //跳过英雄介绍
             [HarmonyTranspiler]
             [HarmonyPatch(typeof(MulliganManager), "HandleGameStart")]
@@ -1418,7 +1418,7 @@ namespace HsMod
                 }
                 return list;
             }
-            
+
             //设置静音
             [HarmonyPrefix]
             [HarmonyPatch(typeof(SoundManager), "UpdateAllMutes")]
@@ -1453,7 +1453,7 @@ namespace HsMod
                             return;
                         }
                     }
-                    if(!isOpponentGoldenCardShow.Value)
+                    if (!isOpponentGoldenCardShow.Value)
                     {
                         if (__instance.GetCard().GetControllerSide() == global::Player.Side.OPPOSING)
                         {
@@ -1463,13 +1463,13 @@ namespace HsMod
                     }
                     if ((diamondCardState.Value == Utils.CardState.All) || (mercenaryDiamondCardState.Value == Utils.CardState.All))
                     {
-                        if(skin.hasDiamond)
+                        if (skin.hasDiamond)
                         {
                             cardId = GameUtils.TranslateDbIdToCardId(skin.Diamond);
                             return;
                         }
                     }
-                    if((diamondCardState.Value == Utils.CardState.OnlyMy) || (mercenaryDiamondCardState.Value == Utils.CardState.OnlyMy))
+                    if ((diamondCardState.Value == Utils.CardState.OnlyMy) || (mercenaryDiamondCardState.Value == Utils.CardState.OnlyMy))
                     {
                         if (skin.hasDiamond && (__instance.GetCard().GetControllerSide() == global::Player.Side.FRIENDLY))
                         {
@@ -1477,7 +1477,7 @@ namespace HsMod
                             return;
                         }
                     }
-                    if((randomMercenarySkinEnable.Value == Utils.CardState.OnlyMy) || (randomMercenarySkinEnable.Value == Utils.CardState.All))
+                    if ((randomMercenarySkinEnable.Value == Utils.CardState.OnlyMy) || (randomMercenarySkinEnable.Value == Utils.CardState.All))
                     {
                         List<int> dbids = new List<int>();
                         dbids.AddRange(skin.Id);
@@ -1660,7 +1660,7 @@ namespace HsMod
             public static bool PatchGetFinisherGameplaySettings(ref Entity hero, ref FinisherGameplaySettings __result)
             {
                 int num;
-                if ( skinBgsFinisher.Value != -1
+                if (skinBgsFinisher.Value != -1
                     && Utils.CheckInfo.IsBgsFinisher()
                     && hero.GetControllerSide() == Player.Side.FRIENDLY
                     )
@@ -1693,7 +1693,7 @@ namespace HsMod
                     assetHandle = AssetLoader.Get().LoadAsset<FinisherGameplaySettings>(assetReference, AssetLoadingOptions.None);
                     finisherGameplaySettings = assetHandle.Asset;
                 }
-                __result =  finisherGameplaySettings;
+                __result = finisherGameplaySettings;
                 return false;
             }
 
@@ -1798,7 +1798,7 @@ namespace HsMod
                 Traverse.Create(__instance).Method("OnMessageClosed").GetValue();
                 Traverse.Create(__instance).Method("OnMessageClosed").GetValue();
             }
-            
+
             //天梯结算奖励
             [HarmonyPrefix]
             [HarmonyPatch(typeof(SeasonEndDialog), "ShowWhenReady")]
@@ -1944,7 +1944,7 @@ namespace HsMod
                 return true;
             }
         }
-        
+
         public class PatchMercenaries
         {
             public static readonly float m_FieldOfViewDefault = BoardCameras.Get().m_FieldOfViewDefault;
@@ -1954,7 +1954,7 @@ namespace HsMod
             [HarmonyPatch(typeof(LettuceMissionEntity), "SetFullScreenFXForCombat")]
             public static bool PatchSetFullScreenFXForCombat()
             {
-                if(isMercenaryBattleZoom.Value)
+                if (isMercenaryBattleZoom.Value)
                 {
                     return true;
                 }
@@ -1963,9 +1963,9 @@ namespace HsMod
                     BoardCameras.Get().m_FieldOfViewDefault = m_FieldOfViewDefault;
                     BoardCameras.Get().m_FieldOfViewZoomed = m_FieldOfViewDefault;
                     return false;
-                }    
+                }
             }
-            
+
 
         }
 
@@ -2036,7 +2036,7 @@ namespace HsMod
     {
         private static readonly FieldInfo m_currentlyMousedOverTileInfo = typeof(PlayerLeaderboardManager).GetField("m_currentlyMousedOverTile", BindingFlags.Instance | BindingFlags.NonPublic);
         private static BnetPlayer m_currentOpponent;
-        
+
         public static void UpdateCurrentOpponent(int opponentPlayerId)
         {
             if (GameState.Get() == null || !GameState.Get().GetPlayerInfoMap().ContainsKey(opponentPlayerId))
@@ -2057,7 +2057,7 @@ namespace HsMod
         {
             return PlayerLeaderboardManagerPatch.m_currentOpponent;
         }
-        
+
         public static BnetPlayer GetSelectedOpponent(this PlayerLeaderboardManager __instance)
         {
             if (!(m_currentlyMousedOverTileInfo?.GetValue(__instance) is PlayerLeaderboardCard playerLeaderboardCard) || GameState.Get() == null)
@@ -2133,7 +2133,7 @@ namespace HsMod
                 }
                 EmoteHandlerPatch.m_totalEmotesInfo.SetValue(__instance, (int)EmoteHandlerPatch.m_totalEmotesInfo.GetValue(__instance) + 1);
                 //if (MixModConfig.Get().DisableRandomForEmotes || !GameState.Get().GetGameEntity().HasTag(GAME_TAG.ALL_TARGETS_RANDOM))
-                if(!GameState.Get().GetGameEntity().HasTag(GAME_TAG.ALL_TARGETS_RANDOM))
+                if (!GameState.Get().GetGameEntity().HasTag(GAME_TAG.ALL_TARGETS_RANDOM))
                 {
                     list[EmoteIndex].DoClick();
                     return;
@@ -2296,7 +2296,7 @@ namespace HsMod
             }
         }
     }
-    
+
     //开包
     public static class PackOpeningDirectorPatch
     {
@@ -2354,7 +2354,7 @@ namespace HsMod
         public static void OnGameCreated(GameState.CreateGamePhase phase, object userData)
         {
             GameState.Get().UnregisterCreateGameListener(new GameState.CreateGameCallback(FriendMgrPatch.OnGameCreated), null);
-			
+
             FriendMgrPatch.UpdateCurrentOpponent();
         }
     }

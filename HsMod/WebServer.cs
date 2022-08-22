@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using static HsMod.PluginConfig;
 
@@ -15,14 +12,15 @@ namespace HsMod
     {
         public static HttpListener httpListener = new HttpListener
         {
-            AuthenticationSchemes = AuthenticationSchemes.Anonymous 
+            AuthenticationSchemes = AuthenticationSchemes.Anonymous
         };
 
         public static Task listenerTask;
 
         public static void Restart()
         {
-            try {
+            try
+            {
                 httpListener.Stop();
                 listenerTask = null;
             }
@@ -43,7 +41,7 @@ namespace HsMod
                 }
             }
         }
-        
+
         public static void Start()
         {
             httpListener.Prefixes.Add($"http://+:{webServerPort.Value}/");
