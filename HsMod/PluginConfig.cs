@@ -1,5 +1,4 @@
 ﻿using BepInEx.Configuration;
-using PegasusShared;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;

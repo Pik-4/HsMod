@@ -1,9 +1,7 @@
 ﻿using Blizzard.GameService.SDK.Client.Integration;
-using Blizzard.Proto;
 using Blizzard.T5.Core;
 using Blizzard.T5.Core.Time;
 using HarmonyLib;
-using PegasusShared;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -195,7 +193,7 @@ namespace HsMod
             {
                 LoadPatch(typeof(Patcher.PatchBoxesReward));
             }
-            if(isFakeOpenEnable.Value)
+            if (isFakeOpenEnable.Value)
             {
                 LoadPatch(typeof(Patcher.PatchFakePackOpening));
             }
@@ -261,10 +259,10 @@ namespace HsMod
                     string pattern = @"(CN|KR|TW|EU|US)\-[a-f0-9]{32}\-\d{9}";
                     string argv = String.Join(" ", Environment.GetCommandLineArgs());
                     var res = System.Text.RegularExpressions.Regex.Match(argv, pattern);
-                    if(res.Success)
+                    if (res.Success)
                     {
                         __instance.Set("Aurora.VerifyWebCredentials", res.Value);
-                        __instance.Set("Aurora.Env", res.Value.Substring(0,2).ToLower()+ ".actual.battle.net");
+                        __instance.Set("Aurora.Env", res.Value.Substring(0, 2).ToLower() + ".actual.battle.net");
                     }
                 }
             }
