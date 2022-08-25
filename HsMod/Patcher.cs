@@ -241,7 +241,6 @@ namespace HsMod
             public static void PatchLoad(string path, bool ignoreUselessLines, Blizzard.T5.Configuration.ConfigFile __instance)
             {
                 Blizzard.T5.Configuration.ConfigFile.Line token = (Blizzard.T5.Configuration.ConfigFile.Line)findEntry.Invoke(__instance, new object[] { "Aurora.VerifyWebCredentials" }); ;
-                Blizzard.T5.Configuration.ConfigFile.Line env = (Blizzard.T5.Configuration.ConfigFile.Line)findEntry.Invoke(__instance, new object[] { "Aurora.Env" }); ;
 
                 if (token != null)
                 {
