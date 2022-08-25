@@ -25,3 +25,27 @@
 
 
 
+### client.config
+
+位于Hearthstone.exe所在文件夹，内容如下
+
+```config
+[Config]
+Version = 3
+[Aurora]
+VerifyWebCredentials = "VerifyWebCredentials"
+ClientCheck = 0
+Env.Override = 1
+Env = cn.actual.battle.net
+```
+
+一些token获取链接
+
+```url
+https://www.battlenet.com.cn/login/zh-cn/?app=wtcg
+https://tw.battle.net/login/zh/?app=wtcg
+https://kr.battle.net/login/zh/?app=wtcg
+https://us.battle.net/login/en/?app=wtcg
+https://eu.battle.net/login/en/?app=wtcg
+```
+
