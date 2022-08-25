@@ -1,4 +1,5 @@
 ﻿using Blizzard.GameService.SDK.Client.Integration;
+using Blizzard.Proto;
 using Blizzard.T5.Core;
 using Blizzard.T5.Core.Time;
 using HarmonyLib;
@@ -231,6 +232,28 @@ namespace HsMod
                 new CodeInstruction(OpCodes.Callvirt, typeof(Blizzard.T5.Configuration.VarKey).GetMethod("GetStr", BindingFlags.Instance | BindingFlags.Public))
                 });
                 return list;
+            }
+
+
+            private static readonly MethodInfo findEntry = typeof(Blizzard.T5.Configuration.ConfigFile).GetMethod("FindEntry", BindingFlags.Instance | BindingFlags.NonPublic);
+            [HarmonyPostfix]
+            [HarmonyPatch(typeof(Blizzard.T5.Configuration.ConfigFile), "Load", new Type[] { typeof(string), typeof(bool) })]
+            public static void PatchLoad(string path, bool ignoreUselessLines, Blizzard.T5.Configuration.ConfigFile __instance)
+            {
+                Blizzard.T5.Configuration.ConfigFile.Line token = (Blizzard.T5.Configuration.ConfigFile.Line)findEntry.Invoke(__instance, new object[] { "Aurora.VerifyWebCredentials" }); ;
+                Blizzard.T5.Configuration.ConfigFile.Line env = (Blizzard.T5.Configuration.ConfigFile.Line)findEntry.Invoke(__instance, new object[] { "Aurora.Env" }); ;
+
+                if (token != null)
+                {
+                    string pattern = @"(CN|KR|TW|EU|US)\-[a-f0-9]{32}\-\d{9}";
+                    string argv = String.Join(" ", Environment.GetCommandLineArgs());
+                    var res = System.Text.RegularExpressions.Regex.Match(argv, pattern);
+                    if(res.Success)
+                    {
+                        __instance.Set("Aurora.VerifyWebCredentials", res.Value);
+                        __instance.Set("Aurora.Env", res.Value.Substring(0,2).ToLower()+ ".actual.battle.net");
+                    }
+                }
             }
 
             //禁止发送错误报告
