@@ -3,6 +3,7 @@ using Blizzard.Proto;
 using Blizzard.T5.Core;
 using Blizzard.T5.Core.Time;
 using HarmonyLib;
+using PegasusShared;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -153,6 +154,17 @@ namespace HsMod
                     UnPatch("PatchDeathOb");
                 }
             };
+            isFakeOpenEnable.SettingChanged += delegate
+            {
+                if (isFakeOpenEnable.Value)
+                {
+                    LoadPatch(typeof(Patcher.PatchFakePackOpening));
+                }
+                else
+                {
+                    UnPatch("PatchFakePackOpening");
+                }
+            };
         }
 
         public static void PatchAll()
@@ -182,6 +194,10 @@ namespace HsMod
             if (isAutoOpenBoxesRewardEnable.Value)
             {
                 LoadPatch(typeof(Patcher.PatchBoxesReward));
+            }
+            if(isFakeOpenEnable.Value)
+            {
+                LoadPatch(typeof(Patcher.PatchFakePackOpening));
             }
             TimeScaleMgr.Get().Update();
 
@@ -233,8 +249,6 @@ namespace HsMod
                 });
                 return list;
             }
-
-
             private static readonly MethodInfo findEntry = typeof(Blizzard.T5.Configuration.ConfigFile).GetMethod("FindEntry", BindingFlags.Instance | BindingFlags.NonPublic);
             [HarmonyPostfix]
             [HarmonyPatch(typeof(Blizzard.T5.Configuration.ConfigFile), "Load", new Type[] { typeof(string), typeof(bool) })]
@@ -528,7 +542,7 @@ namespace HsMod
                         wordWrap = true,
                         fontSize = 54,
                         alignment = TextAnchor.MiddleCenter,
-                        contentOffset = new Vector2(64f, 48f)
+                        contentOffset = new UnityEngine.Vector2(64f, 48f)
                     });
                 }
                 return false;
@@ -1991,6 +2005,176 @@ namespace HsMod
 
         }
 
+        public class PatchFakePackOpening
+        {
+            //激活开包模拟
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(GameUtils), "IsFakePackOpeningEnabled")]
+            public static bool PatchIsFakePackOpeningEnabled(ref bool __result)
+            {
+                if (isFakeOpenEnable.Value == false)
+                {
+                    return true;
+                }
+                __result = true;
+                return false;
+            }
+            //设置模拟卡包数量
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(GameUtils), "GetFakePackCount")]
+            public static bool PatchGetFakePackCount(ref int __result)
+            {
+                if (isFakeOpenEnable.Value == false)
+                {
+                    return true;
+                }
+                __result = fakePackCount.Value >= 0 ? fakePackCount.Value : 0;
+                return false;
+            }
+            //设置模拟卡包类型
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(NetCache), "GetTestData")]
+            public static bool PatchGetTestData(ref Type type, ref object __result)
+            {
+                if (isFakeOpenEnable.Value == false)
+                {
+                    return true;
+                }
+                if (type == typeof(NetCache.NetCacheBoosters) && GameUtils.IsFakePackOpeningEnabled())
+                {
+                    NetCache.NetCacheBoosters netCacheBoosters = new NetCache.NetCacheBoosters();
+                    int fakePackCount = GameUtils.GetFakePackCount();
+                    NetCache.BoosterStack boosterStack = new NetCache.BoosterStack
+                    {
+                        Id = (int)fakeBoosterDbId.Value,
+                        Count = fakePackCount
+                    };
+                    netCacheBoosters.BoosterStacks.Add(boosterStack);
+                    __result = netCacheBoosters;
+                    return false;
+                }
+                __result = null;
+                return false;
+            }
+
+            //模拟开包
+            [HarmonyReversePatch]
+            [HarmonyPatch(typeof(MonoBehaviour), "StopCoroutine", new Type[] { typeof(Coroutine) })]
+            [MethodImpl(MethodImplOptions.NoInlining)]
+            public static void PackOpeningBaseStopCoroutine(PackOpening instance, Coroutine routine) {; }
+            private static readonly MethodInfo onDirectorFinished = typeof(PackOpening).GetMethod("OnDirectorFinished",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            private static readonly MethodInfo onBoosterOpened = typeof(PackOpening).GetMethod("OnBoosterOpened",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(PackOpening), "OpenBooster")]
+            public static bool PatchOpenBooster(ref UnopenedPack pack,
+                                                ref PackOpening __instance,
+                                                ref float ___m_packOpeningStartTime,
+                                                ref int ___m_packOpeningId,
+                                                ref GameObject ___m_InputBlocker,
+                                                ref Coroutine ___m_autoOpenPackCoroutine,
+                                                ref PackOpeningDirector ___m_director,
+                                                ref int ___m_lastOpenedBoosterId,
+                                                ref UIBScrollable ___m_UnopenedPackScroller
+                )
+            {
+                if (isFakeOpenEnable.Value == false)
+                {
+                    return true;
+                }
+                Hearthstone.Progression.AchievementManager.Get().PauseToastNotifications();
+                int num = (int)fakeBoosterDbId.Value;
+                if (!GameUtils.IsFakePackOpeningEnabled())
+                {
+                    num = pack.GetBoosterId();
+                    ___m_packOpeningStartTime = Time.realtimeSinceStartup;
+                    ___m_packOpeningId = num;
+                    BoosterPackUtils.OpenBooster(num);
+                }
+                ___m_InputBlocker.SetActive(true);
+                if (___m_autoOpenPackCoroutine != null)
+                {
+                    PackOpeningBaseStopCoroutine(__instance, ___m_autoOpenPackCoroutine);
+                    ___m_autoOpenPackCoroutine = null;
+                }
+
+                object target = __instance;
+                Delegate myDelegate = Delegate.CreateDelegate(typeof(EventHandler), target, onDirectorFinished);
+                EventHandler myMethod = myDelegate as EventHandler;
+                ___m_director.OnFinishedEvent += myMethod;
+                ___m_lastOpenedBoosterId = num;
+                BnetBar.Get().HideCurrencyTemporarily();
+                if (GameUtils.IsFakePackOpeningEnabled())
+                {
+                    onBoosterOpened?.Invoke(__instance, null);
+                }
+                ___m_UnopenedPackScroller.Pause(true);
+                return false;
+            }
+            // 开包结果替换
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(PackOpening), "OnBoosterOpened")]
+            public static bool PatchOnBoosterOpened(ref float ___m_packOpeningStartTime,
+                                               ref PackOpeningDirector ___m_director,
+                                               ref int ___m_lastOpenedBoosterId,
+                                               ref int ___m_packOpeningId,
+                                               ref bool ___m_autoOpenPending)
+            {
+                if (isFakeOpenEnable.Value == false)
+                {
+                    return true;
+                }
+                float timeToRegisterPackOpening = Time.realtimeSinceStartup - ___m_packOpeningStartTime;
+                ___m_director.Play(___m_lastOpenedBoosterId, timeToRegisterPackOpening, ___m_packOpeningId);
+                ___m_autoOpenPending = false;
+                //List<NetCache.BoosterCard> list = Network.Get().OpenedBooster();
+                if (isFakeRandomResult.Value)
+                {
+                    Utils.GenerateRandomCard(isFakeRandomRarity.Value, isFakeRandomPremium.Value);
+                }
+                List<NetCache.BoosterCard> cards = new List<NetCache.BoosterCard>
+            {
+                new NetCache.BoosterCard
+                {
+                    Def = {
+                            Name = GameUtils.TranslateDbIdToCardId(fakeCardID1.Value),
+                            Premium = fakeCardPremium1.Value
+                        }
+                },
+                new NetCache.BoosterCard
+                {
+                    Def = {
+                            Name = GameUtils.TranslateDbIdToCardId(fakeCardID2.Value),
+                            Premium = fakeCardPremium2.Value
+                        }
+                },
+                new NetCache.BoosterCard
+                {
+                    Def = {
+                            Name = GameUtils.TranslateDbIdToCardId(fakeCardID3.Value),
+                            Premium = fakeCardPremium3.Value
+                        }
+                },
+                new NetCache.BoosterCard
+                {
+                    Def = {
+                            Name = GameUtils.TranslateDbIdToCardId(fakeCardID4.Value),
+                            Premium = fakeCardPremium4.Value
+                        }
+                },
+                new NetCache.BoosterCard
+                {
+                    Def = {
+                            Name = GameUtils.TranslateDbIdToCardId(fakeCardID5.Value),
+                            Premium = fakeCardPremium5.Value
+                        }
+                }
+            };
+                ___m_director.OnBoosterOpened(cards);
+                return false;
+            }
+        }
 
         ////测试补丁
         //[HarmonyPrefix]
@@ -2378,6 +2562,23 @@ namespace HsMod
             GameState.Get().UnregisterCreateGameListener(new GameState.CreateGameCallback(FriendMgrPatch.OnGameCreated), null);
 
             FriendMgrPatch.UpdateCurrentOpponent();
+        }
+    }
+
+    //模拟开包
+    public static class PackOpeningPatch
+    {
+        private static readonly MethodInfo onReloginComplete = typeof(PackOpening).GetMethod("OnReloginComplete", BindingFlags.Instance | BindingFlags.NonPublic);
+        private static readonly MethodInfo updatePacks = typeof(PackOpening).GetMethod("UpdatePacks", BindingFlags.Instance | BindingFlags.NonPublic);
+
+        public static void OnReloginComplete(this PackOpening __instance)
+        {
+            onReloginComplete?.Invoke(__instance, null);
+        }
+
+        public static void UpdatePacks(this PackOpening __instance)
+        {
+            updatePacks?.Invoke(__instance, null);
         }
     }
 }

@@ -61,6 +61,15 @@ namespace HsMod
             AntiAwayFromKeyboard
         }
 
+        // 卡牌稀有度
+        public enum CardRarity
+        {
+            COMMON = TAG_RARITY.COMMON,
+            RARE = TAG_RARITY.RARE,
+            EPIC = TAG_RARITY.EPIC,
+            LEGENDARY = TAG_RARITY.LEGENDARY
+        }
+
         public class CardCount
         {
             public int legendary = 0;
@@ -92,8 +101,6 @@ namespace HsMod
             public int Diamond;
             public int Default;
         }
-
-
 
         public static string CardsCount(TAG_RARITY Rarity, TAG_PREMIUM premium, int count, ref CardCount cardCount)
         {
@@ -359,6 +366,93 @@ namespace HsMod
             MyLogger(LogLevel.Warning, "尝试分解粉尘：" + totalSell);
             UIStatus.Get().AddInfo("尝试分解粉尘：" + totalSell);
         }
+
+
+        //虚假开包数据范围
+        public static List<int> GetCardsDbId()
+        {
+            List<int> cardsDbId = new List<int>();
+            foreach (int dbid in GameDbf.GetIndex().GetCollectibleCardDbIds())
+            {
+                var entitydef = DefLoader.Get().GetEntityDef(dbid, false);
+                if (entitydef != null)
+                {
+                    if (entitydef.GetRarity() != TAG_RARITY.FREE
+                        && entitydef.GetRarity() != TAG_RARITY.INVALID)
+                    {
+                        if (entitydef.GetCardType() != TAG_CARDTYPE.HERO)
+                            cardsDbId.Add(dbid);
+                        else if (entitydef.GetCost() != 0)    // 忽略英雄皮肤
+                            cardsDbId.Add(dbid);
+                    }
+                }
+            }
+            return cardsDbId;
+        }
+
+        //虚假结果，指定稀有度
+        public static int GetRandomCardID(TAG_RARITY rarity)
+        {
+            int dbid;
+            List<int> dbids = GetCardsDbId();
+            while (true)
+            {
+                dbid = dbids[UnityEngine.Random.Range(0, dbids.Count)];
+                if (DefLoader.Get().GetEntityDef(dbid, false).GetRarity() == rarity)
+                {
+                    break;
+                }
+            }
+            return dbid;
+        }
+
+        //虚假结果
+        public static void GenerateRandomCard(bool rarityRandom = false, bool premiumRandom = false, TAG_RARITY rarity = TAG_RARITY.LEGENDARY, TAG_PREMIUM premium = TAG_PREMIUM.GOLDEN)
+        {
+            if (!rarityRandom) rarity = (TAG_RARITY)fakeRandomRarity.Value;
+            if (!premiumRandom) premium = fakeRandomPremium.Value;
+            if (fakeBoosterDbId.Value.ToString().Substring(0, 7) == "GOLDEN_")
+            {
+                premiumRandom = false;
+                premium = TAG_PREMIUM.GOLDEN;
+            }
+            List<int> dbids = GetCardsDbId();
+            for (int i = 1; i <= 5; i++)
+            {
+                if (premiumRandom)
+                {
+                    if (!isFakeRandomDiamond.Value)
+                    {
+                        premium = (TAG_PREMIUM)UnityEngine.Random.Range(0, Enum.GetValues(typeof(TAG_PREMIUM)).Length - 1);
+                    }
+                    else premium = (TAG_PREMIUM)UnityEngine.Random.Range(0, Enum.GetValues(typeof(TAG_PREMIUM)).Length);
+                }
+                switch (i)
+                {
+                    case 1:
+                        fakeCardID1.Value = rarityRandom ? dbids[UnityEngine.Random.Range(0, dbids.Count)] : GetRandomCardID(rarity);
+                        fakeCardPremium1.Value = premium;
+                        break;
+                    case 2:
+                        fakeCardID2.Value = rarityRandom ? dbids[UnityEngine.Random.Range(0, dbids.Count)] : GetRandomCardID(rarity);
+                        fakeCardPremium2.Value = premium;
+                        break;
+                    case 3:
+                        fakeCardID3.Value = rarityRandom ? dbids[UnityEngine.Random.Range(0, dbids.Count)] : GetRandomCardID(rarity);
+                        fakeCardPremium3.Value = premium;
+                        break;
+                    case 4:
+                        fakeCardID4.Value = rarityRandom ? dbids[UnityEngine.Random.Range(0, dbids.Count)] : GetRandomCardID(rarity);
+                        fakeCardPremium4.Value = premium;
+                        break;
+                    case 5:
+                        fakeCardID5.Value = rarityRandom ? dbids[UnityEngine.Random.Range(0, dbids.Count)] : GetRandomCardID(rarity);
+                        fakeCardPremium5.Value = premium;
+                        break;
+                }
+            }
+        }
+
 
         public static List<int> CacheCoin = new List<int>();
         public static List<int> CacheCoinCard = new List<int>();

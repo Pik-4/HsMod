@@ -1,4 +1,5 @@
 ﻿using BepInEx.Configuration;
+using PegasusShared;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -8,6 +9,7 @@ namespace HsMod
     public static class PluginConfig
     {
         public static ConfigEntry<bool> isPluginEnable;
+        public static ConfigEntry<bool> isFakeOpenEnable;
         public static ConfigEntry<Utils.ConfigTemplate> configTemplate;
         public static ConfigEntry<bool> isTimeGearEnable;
         public static ConfigEntry<bool> isShortcutsEnable;
@@ -94,6 +96,28 @@ namespace HsMod
 
         public static ConfigEntry<string> mercLogPath;
 
+
+
+        public static ConfigEntry<int> fakePackCount;
+        public static ConfigEntry<BoosterDbId> fakeBoosterDbId;
+        public static ConfigEntry<bool> isFakeRandomResult;
+        public static ConfigEntry<bool> isFakeRandomRarity;
+        public static ConfigEntry<bool> isFakeRandomPremium;
+        public static ConfigEntry<bool> isFakeRandomDiamond;
+        public static ConfigEntry<TAG_PREMIUM> fakeRandomPremium;
+        public static ConfigEntry<Utils.CardRarity> fakeRandomRarity;
+        public static ConfigEntry<int> fakeCardID1;
+        public static ConfigEntry<TAG_PREMIUM> fakeCardPremium1;
+        public static ConfigEntry<int> fakeCardID2;
+        public static ConfigEntry<TAG_PREMIUM> fakeCardPremium2;
+        public static ConfigEntry<int> fakeCardID3;
+        public static ConfigEntry<TAG_PREMIUM> fakeCardPremium3;
+        public static ConfigEntry<int> fakeCardID4;
+        public static ConfigEntry<TAG_PREMIUM> fakeCardPremium4;
+        public static ConfigEntry<int> fakeCardID5;
+        public static ConfigEntry<TAG_PREMIUM> fakeCardPremium5;
+
+
         public static ShowFPS showFPS;
         public static Dictionary<int, int> HeroesMapping = new Dictionary<int, int>();
         public static Dictionary<string, string> HeroesPowerMapping = new Dictionary<string, string>();
@@ -105,6 +129,7 @@ namespace HsMod
         {
             config.Clear();
             isPluginEnable = config.Bind("全局", "HsMod状态", false, "是否启用插件（修改该选项后建议重启炉石）");
+            isFakeOpenEnable = config.Bind("全局", "模拟开包状态", false, "是否启用模拟开包（修改该选项后建议重启炉石）");
             configTemplate = config.Bind("全局", "设置模板", Utils.ConfigTemplate.DoNothing, "配置运行模板，当选项为DoNothing时，不修改任何配置。配置修改完成后自动替换回DoNothing");
             isShortcutsEnable = config.Bind("全局", "快捷键状态", false, "是否启用快捷键");
             isTimeGearEnable = config.Bind("全局", "变速齿轮状态", false, "是否启用变速齿轮");
@@ -193,6 +218,27 @@ namespace HsMod
 
             mercLogPath = config.Bind("日志", "佣兵对局文件", @"BepInEx\merc.log", "佣兵日志文件位置（相对于Hearthstone）");
 
+
+
+            fakePackCount = config.Bind("模拟", "数量", 233, "模拟卡包数量");
+            fakeBoosterDbId = config.Bind("模拟", "类型", BoosterDbId.GOLDEN_CLASSIC_PACK, "模拟卡包类型。(替换卡包图标)");
+            isFakeRandomResult = config.Bind("模拟", "随机结果", false, "是否启用随机结果");
+            isFakeRandomRarity = config.Bind("模拟", "随机稀有度", false, "是否随机稀有度（基于随机结果）");
+            isFakeRandomPremium = config.Bind("模拟", "随机品质", false, "是否随机品质（基于随机结果）");
+            isFakeRandomDiamond = config.Bind("模拟", "随机钻石", false, "随机品质中包括钻石（基于随机品质）");
+            fakeRandomRarity = config.Bind("模拟", "稀有度类型", Utils.CardRarity.LEGENDARY, "指定随机稀有度（基于随机稀有度）");
+            fakeRandomPremium = config.Bind("模拟", "品质类型", TAG_PREMIUM.GOLDEN, "指定品质（基于随机品质）");
+
+            fakeCardID1 = config.Bind("模拟", "卡牌1", 71984, "Card 1 DbID.");
+            fakeCardPremium1 = config.Bind("模拟", "卡牌1品质", TAG_PREMIUM.GOLDEN, "Card 1 Premium.");
+            fakeCardID2 = config.Bind("模拟", "卡牌2", 71945, "Card 2 DbID.");
+            fakeCardPremium2 = config.Bind("模拟", "卡牌2品质", TAG_PREMIUM.GOLDEN, "Card 2 Premium.");
+            fakeCardID3 = config.Bind("模拟", "卡牌3", 73446, "Card 3 DbID.");
+            fakeCardPremium3 = config.Bind("模拟", "卡牌3品质", TAG_PREMIUM.GOLDEN, "Card 3 Premium.");
+            fakeCardID4 = config.Bind("模拟", "卡牌4", 71781, "Card 4 DbID.");
+            fakeCardPremium4 = config.Bind("模拟", "卡牌4品质", TAG_PREMIUM.GOLDEN, "Card 4 Premium.");
+            fakeCardID5 = config.Bind("模拟", "卡牌5", 67040, "Card 5 DbID.");
+            fakeCardPremium5 = config.Bind("模拟", "卡牌5品质", TAG_PREMIUM.GOLDEN, "Card 5 Premium.");
 
             InitCardsMapping();
             LoadSkinsConfigFromFile();
