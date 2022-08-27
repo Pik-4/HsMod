@@ -474,6 +474,11 @@ namespace HsMod
             get { return PluginConfig.isAlertPopupShow.Value; }
             set { PluginConfig.isAlertPopupShow.Value = value; }
         }
+		public bool TimeGearEnable
+		{
+			get { return PluginConfig.isTimeGearEnable.Value; }
+			set { PluginConfig.isTimeGearEnable.Value = value; }
+		}
 
         public int TimeGearValue
         {
