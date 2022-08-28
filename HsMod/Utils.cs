@@ -21,7 +21,6 @@ namespace HsMod
             [Description("禁用特效")]
             Disabled
         }
-
         public enum SkinType
         {
             [Description("卡背")]
@@ -51,7 +50,6 @@ namespace HsMod
             YES,
             DONOTHING
         }
-
         public enum ConfigTemplate
         {
             [Description("默认")]
@@ -61,7 +59,6 @@ namespace HsMod
             [Description("反挂机")]
             AntiAwayFromKeyboard
         }
-
         public enum BuyAdventureTemplate
         {
             [Description("默认")]
@@ -75,16 +72,24 @@ namespace HsMod
             [Description("卡拉赞之夜")]
             BuyKara
         }
-
-
-        // 卡牌稀有度
-        public enum CardRarity
+        public enum CardRarity// 卡牌稀有度
         {
             COMMON = TAG_RARITY.COMMON,
             RARE = TAG_RARITY.RARE,
             EPIC = TAG_RARITY.EPIC,
             LEGENDARY = TAG_RARITY.LEGENDARY
         }
+        public enum DevicePreset
+        {
+            Default,
+            iPad,
+            iPhone,
+            Phone,
+            Tablet,
+            HuaweiPhone,
+            Custom
+        }
+
 
         public class CardCount
         {
@@ -535,6 +540,10 @@ namespace HsMod
                 else
                 {
                     StoreManager.Get().StartAdventureTransaction(productType, wingID, null, null, global::ShopType.ADVENTURE_STORE, 1, false, null, 0);
+
+                    //ProductDataModel productByPmtId = StoreManager.Get().Catalog.GetProductByPmtId(ProductId.CreateFromValidated((long)1));
+                    //PriceDataModel priceDataModel = productByPmtId.Prices.FirstOrDefault((PriceDataModel p) => p.Currency == CurrencyType.GOLD);
+                    //Shop.Get().AttemptToPurchaseProduct(productByPmtId, priceDataModel, 1);
                 }
 
             }

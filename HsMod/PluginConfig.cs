@@ -94,6 +94,12 @@ namespace HsMod
 
         public static ConfigEntry<string> mercLogPath;
 
+
+        public static ConfigEntry<Utils.DevicePreset> fakeDevicePreset;
+        public static ConfigEntry<OSCategory> fakeDeviceOs;
+        public static ConfigEntry<ScreenCategory> fakeDeviceScreen;
+        public static ConfigEntry<string> fakeDeviceName;
+
         public static ConfigEntry<int> fakePackCount;
         public static ConfigEntry<BoosterDbId> fakeBoosterDbId;
         public static ConfigEntry<bool> isFakeRandomResult;
@@ -212,11 +218,16 @@ namespace HsMod
             isInternalModeEnable = config.Bind("开发", "内部模式", false, "是否切换到内部模式（需要重启炉石）");
             isShowFPSEnable = config.Bind("开发", "显示FPS", false, "是否显示FPS信息");
             buyAdventure = config.Bind("开发", "冒险购买", Utils.BuyAdventureTemplate.DoNothing, "选择一个冒险进行购买尝试（有概率封号，酌情考虑使用）");
-            isKarazhanFixEnable = config.Bind("开发", "卡拉赞修复", false, "（存在问题，无法打序章）卡拉赞黑鸦翱翔修复（打完后请关闭。）");
+            isKarazhanFixEnable = config.Bind("开发", "卡拉赞修复", false, "（请打完后请关闭，目前无法打序章）卡拉赞黑鸦翱翔修复");
             webServerPort = config.Bind("开发", "网站端口", 58744, new ConfigDescription("WebServer端口", new AcceptableValueRange<int>(1, 65535)));
             webPageBackImg = config.Bind("开发", "网页背景图", "", "网页背景图片");
 
             mercLogPath = config.Bind("开发", "佣兵对局文件", @"BepInEx\merc.log", "佣兵日志文件位置（相对于Hearthstone）");
+
+            fakeDevicePreset = config.Bind("模拟", "设备模拟模板", Utils.DevicePreset.Default, "（重启炉石后生效）模拟设备，用于领取卡包卡背");
+            fakeDeviceOs = config.Bind("模拟", "设备模拟系统", OSCategory.PC, "模拟设备操作系统，当设备模拟模板为Custom时有效。");
+            fakeDeviceScreen = config.Bind("模拟", "设备屏幕大小", ScreenCategory.PC, "模拟尺寸（屏幕类型），当设备模拟模板为Custom时有效。");
+            fakeDeviceName = config.Bind("模拟", "设备设备型号", "HsMod", "模拟设备型号，当设备模拟模板为Custom时有效。");
 
             fakePackCount = config.Bind("模拟", "数量", 233, "模拟卡包数量");
             fakeBoosterDbId = config.Bind("模拟", "类型", BoosterDbId.GOLDEN_CLASSIC_PACK, "模拟卡包类型。(替换卡包图标)");
