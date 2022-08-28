@@ -333,8 +333,6 @@ namespace HsMod
             //    System.Diagnostics.Process.Start(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             //}
 
-
-
             //报错退出
             [HarmonyPrefix]
             [HarmonyPatch(typeof(DialogManager), "ShowReconnectHelperDialog")]
@@ -488,18 +486,6 @@ namespace HsMod
             {
                 PackOpeningDirectorPatch.m_WaitingForCards = true;
             }
-            //[HarmonyPostfix]
-            //[HarmonyPatch(typeof(PackOpeningDirector), "OnDoneButtonShown")]
-            //public static void PatchPackOpeningDirectorShowDoneButton(ref NormalButton ___m_doneButton, Spell spell, object userData)
-            //{
-            //    ___m_doneButton.TriggerPress();
-            //    ___m_doneButton.TriggerRelease();
-            //    Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "PatchPackOpeningOnDoneButtonShown");
-            //}
-
-            //测试补丁[HarmonyReversePatch]
-
-
 
             //展示FPS信息
             [HarmonyTranspiler]
@@ -624,7 +610,6 @@ namespace HsMod
                 }
             }
 
-
             //OnApplicationFocus
             [HarmonyPrefix]
             [HarmonyPatch(typeof(Hearthstone.HearthstoneApplication), "OnApplicationFocus")]
@@ -632,8 +617,6 @@ namespace HsMod
             {
                 return isOnApplicationFocus.Value;
             }
-
-
 
             //齿轮 需要进行delegate委托
             [HarmonyPrefix]
@@ -1175,7 +1158,6 @@ namespace HsMod
                 }
                 return list;
             }
-
 
             //快速战斗 - 理论上可以用于所有模式 现只应用于酒馆战旗
             [HarmonyReversePatch]

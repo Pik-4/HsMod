@@ -72,7 +72,7 @@ namespace HsMod
             [Description("卡拉赞之夜")]
             BuyKara
         }
-        public enum CardRarity// 卡牌稀有度
+        public enum CardRarity    // 卡牌稀有度
         {
             COMMON = TAG_RARITY.COMMON,
             RARE = TAG_RARITY.RARE,
@@ -249,14 +249,6 @@ namespace HsMod
             {
                 MyLogger(LogLevel.Warning, "分解失败");
                 UIStatus.Get().AddInfo("分解失败");
-                //AlertPopup.PopupInfo popupInfo = new AlertPopup.PopupInfo
-                //{
-                //    m_headerText = GameStrings.Get("GLUE_COLLECTION_ERROR_HEADER"),
-                //    m_text = GameStrings.Format("GLUE_COLLECTION_CARD_UNKNOWN_ERROR", new object[] { cardSaleResult.Action }),
-                //    m_showAlertIcon = true,
-                //    m_responseDisplay = AlertPopup.ResponseDisplay.OK
-                //};
-                //DialogManager.Get().ShowPopup(popupInfo);
             }
             else
             {
@@ -378,12 +370,8 @@ namespace HsMod
                     CraftingManager.Get().TryGetCardSellValue(record.CardId, record.PremiumType, out int value);
                     network.SellCard(record.CardDbId, record.PremiumType, record.OwnedCount, value, record.OwnedCount);
                     totalSell += record.OwnedCount * value;
-                    //    _ = NetCache.Get().GetNetObject<NetCache.NetCacheCollection>();
-                    //    CollectionManager.Get().OnCollectionChanged();
-                    //    CollectionManager.Get().GetOwnedCount(record.CardId, record.PremiumType))
                 }
             }
-            //network.RemoveNetHandler(PegasusUtil.BoughtSoldCard.PacketID.ID, new Network.NetHandler(TryRefundCardDisenchantCallback));
             MyLogger(LogLevel.Warning, "尝试分解粉尘：" + totalSell);
             UIStatus.Get().AddInfo("尝试分解粉尘：" + totalSell);
         }
