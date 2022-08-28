@@ -471,7 +471,7 @@ namespace HsMod
 
         public static void BuyAdventure(BuyAdventureTemplate adventure)
         {
-            if(adventure == BuyAdventureTemplate.DoNothing)
+            if (adventure == BuyAdventureTemplate.DoNothing)
             {
                 return;
             }
@@ -489,7 +489,8 @@ namespace HsMod
             {
                 int wingID = -1;
                 ProductType productType = ProductType.PRODUCT_TYPE_UNKNOWN;
-                switch (adventure){
+                switch (adventure)
+                {
                     case BuyAdventureTemplate.BuyKara:
                         productType = ProductType.PRODUCT_TYPE_WING;
                         wingID = 16;
