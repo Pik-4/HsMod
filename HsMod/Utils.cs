@@ -1,4 +1,5 @@
 ﻿using BepInEx.Logging;
+using PegasusUtil;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -60,6 +61,21 @@ namespace HsMod
             [Description("反挂机")]
             AntiAwayFromKeyboard
         }
+
+        public enum BuyAdventureTemplate
+        {
+            [Description("默认")]
+            DoNothing,
+            [Description("纳克萨玛斯的诅咒")]
+            BuyNAX,
+            [Description("黑石山的火焰")]
+            BuyBRM,
+            [Description("探险者协会")]
+            BuyLOE,
+            [Description("卡拉赞之夜")]
+            BuyKara
+        }
+
 
         // 卡牌稀有度
         public enum CardRarity
@@ -453,6 +469,63 @@ namespace HsMod
             }
         }
 
+        public static void BuyAdventure(BuyAdventureTemplate adventure)
+        {
+            if(adventure == BuyAdventureTemplate.DoNothing)
+            {
+                return;
+            }
+            if (SceneMgr.Get().GetMode() == SceneMgr.Mode.STARTUP || SceneMgr.Get().GetMode() == SceneMgr.Mode.LOGIN)
+            {
+                UIStatus.Get().AddInfo("未初始化！");
+                return;
+            }
+            if (SceneMgr.Get().GetMode() == SceneMgr.Mode.GAMEPLAY)
+            {
+                UIStatus.Get().AddInfo("不能在游戏内购买！");
+                return;
+            }
+            try
+            {
+                int wingID = -1;
+                ProductType productType = ProductType.PRODUCT_TYPE_UNKNOWN;
+                switch (adventure){
+                    case BuyAdventureTemplate.BuyKara:
+                        productType = ProductType.PRODUCT_TYPE_WING;
+                        wingID = 16;
+                        break;
+                    case BuyAdventureTemplate.BuyNAX:
+                        productType = ProductType.PRODUCT_TYPE_NAXX;
+                        wingID = 1;
+                        break;
+                    case BuyAdventureTemplate.BuyBRM:
+                        productType = ProductType.PRODUCT_TYPE_BRM;
+                        wingID = 6;
+                        break;
+                    case BuyAdventureTemplate.BuyLOE:
+                        productType = ProductType.PRODUCT_TYPE_LOE;
+                        wingID = 11;
+                        break;
+                    default:
+                        return;
+                }
+
+                if (StoreManager.GetProductItemOwnershipStatus(productType, wingID, out string failReason) == ItemOwnershipStatus.OWNED)
+                {
+                    Utils.MyLogger(LogLevel.Warning, $"{adventure}：冒险已拥有！");
+                    UIStatus.Get().AddInfo("所选冒险已拥有！");
+                }
+                else
+                {
+                    StoreManager.Get().StartAdventureTransaction(productType, wingID, null, null, global::ShopType.ADVENTURE_STORE, 1, false, null, 0);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Utils.MyLogger(LogLevel.Warning, ex);
+            }
+        }
 
         public static List<int> CacheCoin = new List<int>();
         public static List<int> CacheCoinCard = new List<int>();

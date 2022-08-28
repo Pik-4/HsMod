@@ -79,7 +79,6 @@ namespace HsMod
         public static ConfigEntry<KeyboardShortcut> keyEmoteOops;
         public static ConfigEntry<KeyboardShortcut> keyEmoteThreaten;
 
-
         public static ConfigEntry<int> skinCoin;
         public static ConfigEntry<int> skinCardBack;
         public static ConfigEntry<int> skinBoard;
@@ -94,8 +93,6 @@ namespace HsMod
         public static ConfigEntry<string> webPageBackImg;
 
         public static ConfigEntry<string> mercLogPath;
-
-
 
         public static ConfigEntry<int> fakePackCount;
         public static ConfigEntry<BoosterDbId> fakeBoosterDbId;
@@ -117,6 +114,7 @@ namespace HsMod
         public static ConfigEntry<TAG_PREMIUM> fakeCardPremium5;
 
 
+        public static ConfigEntry<Utils.BuyAdventureTemplate> buyAdventure;
         public static ShowFPS showFPS;
         public static Dictionary<int, int> HeroesMapping = new Dictionary<int, int>();
         public static Dictionary<string, string> HeroesPowerMapping = new Dictionary<string, string>();
@@ -212,12 +210,11 @@ namespace HsMod
 
             isInternalModeEnable = config.Bind("开发", "内部模式", false, "是否切换到内部模式（需要重启炉石）");
             isShowFPSEnable = config.Bind("开发", "显示FPS", false, "是否显示FPS信息");
+            buyAdventure = config.Bind("开发", "冒险购买", Utils.BuyAdventureTemplate.DoNothing, "选择一个冒险进行购买尝试（有概率封号，酌情考虑使用）");
             webServerPort = config.Bind("开发", "网站端口", 58744, new ConfigDescription("WebServer端口", new AcceptableValueRange<int>(1, 65535)));
             webPageBackImg = config.Bind("开发", "网页背景图", "", "网页背景图片");
 
             mercLogPath = config.Bind("日志", "佣兵对局文件", @"BepInEx\merc.log", "佣兵日志文件位置（相对于Hearthstone）");
-
-
 
             fakePackCount = config.Bind("模拟", "数量", 233, "模拟卡包数量");
             fakeBoosterDbId = config.Bind("模拟", "类型", BoosterDbId.GOLDEN_CLASSIC_PACK, "模拟卡包类型。(替换卡包图标)");
@@ -265,6 +262,14 @@ namespace HsMod
                         opponentCardBackID = opposingSidePlayer.GetCardBackId();
                     int friendlyCardBackID = skinCardBack.Value;
                     CardBackManager.Get().SetGameCardBackIDs(friendlyCardBackID, opponentCardBackID);
+                }
+            };
+            buyAdventure.SettingChanged += delegate
+            {
+                if (buyAdventure.Value != Utils.BuyAdventureTemplate.DoNothing)
+                {
+                    Utils.BuyAdventure(buyAdventure.Value);
+                    buyAdventure.Value = Utils.BuyAdventureTemplate.DoNothing;
                 }
             };
         }

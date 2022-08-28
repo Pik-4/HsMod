@@ -90,16 +90,6 @@ namespace HsMod
                 WebServer.Restart();
             }
 
-
-            //if (Input.GetKeyUp(KeyCode.Mouse1)
-            //    && (CollectionManager.Get()!=null)
-            //    && (SceneMgr.Get().GetMode() == SceneMgr.Mode.COLLECTIONMANAGER)
-            //    )
-            //{
-            //    Logger.LogWarning("keytest");
-            //    UIStatus.Get().AddInfo("keytest");
-            //    return;
-            //}
             if (!isPluginEnable.Value) return;
             if (!isShortcutsEnable.Value || !Input.anyKey) return;
             else

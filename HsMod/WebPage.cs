@@ -663,52 +663,6 @@ opacity: 0.6;
             }
             builder.Append(body);
 
-            //body = "<h4>佣兵皮肤</h4>";
-            //try
-            //{
-            //	string temp = @"<table border=0 style=""text-align: center;""><tr>";
-            //	temp += "<th>索引</th>";
-            //	temp += "<th>编号</th>";
-            //	temp += "<th>名称</th>";
-            //	temp += "<th>稀有度</th>";
-            //	temp += "</tr>";
-
-            //	foreach (var record in GameDbf.LettuceMercenary.GetRecords().OrderBy(x => x.ID).ToList())
-            //	{
-            //		if (record != null)
-            //		{
-            //			temp += "<tr>";
-            //			temp += $"<td>{record.ID}</td>";
-            //                     foreach (var art in record.MercenaryArtVariations.OrderBy(x => x.ID).ToList())
-            //			{
-            //                         temp += $"<td>{art.CardId}</td>";
-            //				temp += $"<td>{art.CardRecord.Name.GetString()}</td>";
-            //				temp += $"<td>{art.DefaultVariation}</td>";
-
-            //				temp += "<td>";
-            //				foreach(var t in art.MercenaryArtVariationPremiums)
-            //                         {
-            //                             temp += $"{t.ID} - {t.Premium}";
-            //                         }
-            //                         temp += "</td>";
-            //			}
-            //			temp += "</tr>";
-            //		}
-            //	}
-            //	temp += "</table>";
-            //	body += temp;
-            //}
-            //catch (Exception ex)
-            //{
-            //	body += $@"英雄信息获取异常<br /><p style=""white-space: pre-line;"">{ex}</p>";
-            //}
-            //finally
-            //{
-            //	body += "<br /><hr />";
-            //	Utils.LeakInfo.Skins();
-            //}
-            //builder.Append(body);
-
             return Template(builder, "Skins");
         }
 
