@@ -511,6 +511,22 @@ namespace HsMod
                         return;
                 }
 
+                if (adventure == BuyAdventureTemplate.BuyKara)
+                {
+                    for (int i = 16; i <= 20; i++)
+                    {
+                        wingID = i;
+                        if (StoreManager.GetProductItemOwnershipStatus(productType, wingID, out string _) != ItemOwnershipStatus.OWNED)
+                        {
+                            break;
+                        }
+                    }
+                    if (wingID == 20)
+                    {
+                        wingID = 15;
+                    }
+                }
+
                 if (StoreManager.GetProductItemOwnershipStatus(productType, wingID, out string failReason) == ItemOwnershipStatus.OWNED)
                 {
                     Utils.MyLogger(LogLevel.Warning, $"{adventure}：冒险已拥有！");

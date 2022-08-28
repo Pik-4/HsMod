@@ -115,6 +115,7 @@ namespace HsMod
 
 
         public static ConfigEntry<Utils.BuyAdventureTemplate> buyAdventure;
+        public static ConfigEntry<bool> isKarazhanFixEnable;
         public static ShowFPS showFPS;
         public static Dictionary<int, int> HeroesMapping = new Dictionary<int, int>();
         public static Dictionary<string, string> HeroesPowerMapping = new Dictionary<string, string>();
@@ -211,10 +212,11 @@ namespace HsMod
             isInternalModeEnable = config.Bind("开发", "内部模式", false, "是否切换到内部模式（需要重启炉石）");
             isShowFPSEnable = config.Bind("开发", "显示FPS", false, "是否显示FPS信息");
             buyAdventure = config.Bind("开发", "冒险购买", Utils.BuyAdventureTemplate.DoNothing, "选择一个冒险进行购买尝试（有概率封号，酌情考虑使用）");
+            isKarazhanFixEnable = config.Bind("开发", "卡拉赞修复", false, "（存在问题，无法打序章）卡拉赞黑鸦翱翔修复（打完后请关闭。）");
             webServerPort = config.Bind("开发", "网站端口", 58744, new ConfigDescription("WebServer端口", new AcceptableValueRange<int>(1, 65535)));
             webPageBackImg = config.Bind("开发", "网页背景图", "", "网页背景图片");
 
-            mercLogPath = config.Bind("日志", "佣兵对局文件", @"BepInEx\merc.log", "佣兵日志文件位置（相对于Hearthstone）");
+            mercLogPath = config.Bind("开发", "佣兵对局文件", @"BepInEx\merc.log", "佣兵日志文件位置（相对于Hearthstone）");
 
             fakePackCount = config.Bind("模拟", "数量", 233, "模拟卡包数量");
             fakeBoosterDbId = config.Bind("模拟", "类型", BoosterDbId.GOLDEN_CLASSIC_PACK, "模拟卡包类型。(替换卡包图标)");
