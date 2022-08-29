@@ -23,8 +23,6 @@
 1. 皮肤的配置文件在`Hearthstone\BepInEx\config\HsSkins.cfg`。若无，则在运行游戏后创建。
 2. `F4`为固定快捷键，用于获取游戏内部分信息（相关信息存放在`Hearthstone\BepInEx\`目录下），及更新皮肤配置使用。其余快捷键均可自定义配置。
 
-
-
 ### client.config
 
 位于Hearthstone.exe所在文件夹，内容如下
@@ -48,4 +46,13 @@ https://kr.battle.net/login/zh/?app=wtcg
 https://us.battle.net/login/en/?app=wtcg
 https://eu.battle.net/login/en/?app=wtcg
 ```
+
+### 参考
+
+1. [MixMod](https://4pda.to/forum/index.php?showtopic=870696&st=4780#entry114865283)
+2. [Hearthstone Advanced Mod](https://hearthmod.com/)
+3. [从0开始教你使用BepInEx为unity游戏制作插件Mod](https://mod.3dmgame.com/read/3)
+4. [BepInEx Docs](https://docs.bepinex.dev/)
+5. [Harmony](https://harmony.pardeike.net/articles/intro.html)
+6. [List of CIL instructions](https://en.wikipedia.org/wiki/List_of_CIL_instructions)
 
