@@ -29,7 +29,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ env.VERSION }}
+        tag_name: ${{ github.run_number }}
         release_name: Release ${{ github.event.head_commit.message }}
         body: |+
             New push to github\!
