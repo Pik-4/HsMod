@@ -40,6 +40,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./Release/HsMod.dll
+        asset_path: ./HsMod/Release/HsMod.dll
         asset_name: HsMod.dll
         asset_content_type: application/octet-stream
