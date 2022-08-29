@@ -4,6 +4,6 @@
     {
         public const string PLUGIN_GUID = "HsMod";
         public const string PLUGIN_NAME = "HsMod";
-        public const string PLUGIN_VERSION = "1.1.5.1";
+        public const string PLUGIN_VERSION = "1.1.5.2";
     }
 }
