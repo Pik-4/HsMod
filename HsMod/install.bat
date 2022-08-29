@@ -1,2 +1,7 @@
 cd "%~dp0"
-copy /y Release\HsMod.dll "%PROGRAMFILES(x86)%\Hearthstone\BepInEx\plugins\HsMod.dll"
+
+if exist "%PROGRAMFILES(x86)%\Hearthstone\BepInEx\core\BepInEx.dll" (
+    copy /y Release\HsMod.dll "%PROGRAMFILES(x86)%\Hearthstone\BepInEx\plugins\HsMod.dll"
+) else (
+    echo %SourceFile% is not exist!
+)
