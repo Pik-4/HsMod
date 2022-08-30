@@ -193,8 +193,11 @@ opacity: 0.6;
             try
             {
                 Hearthstone.DataModels.RewardTrackDataModel trackDataModel = Hearthstone.Progression.RewardTrackManager.Get().GetCurrentRewardTrack(Global.RewardTrackType.GLOBAL).TrackDataModel;
-                result += $"等级：{trackDataModel.Level}<br />";
-                result += "进度：" + ((trackDataModel.Level == 400 && trackDataModel.Xp == 0) ? "已满级！" : trackDataModel.XpProgress) + "<br />";
+                result += $"炉石：{trackDataModel.Level}&emsp;&emsp;";
+                result += "进度：" + ((trackDataModel.Level == trackDataModel.LevelHardCap && trackDataModel.Xp == 0) ? "已满级！" : trackDataModel.XpProgress) + "<br />";
+                trackDataModel = Hearthstone.Progression.RewardTrackManager.Get().GetCurrentRewardTrack(Global.RewardTrackType.BATTLEGROUNDS).TrackDataModel;
+                result += $"酒馆：{trackDataModel.Level}&emsp;&emsp;";
+                result += "进度：" + ((trackDataModel.Level == trackDataModel.LevelHardCap && trackDataModel.Xp == 0) ? "已满级！" : trackDataModel.XpProgress) + "<br />";
             }
             catch (Exception ex)
             {
@@ -254,6 +257,8 @@ opacity: 0.6;
                 Hearthstone.DataModels.QuestListDataModel dailyQuestListDataModel = new Hearthstone.DataModels.QuestListDataModel();
                 Hearthstone.DataModels.QuestListDataModel weeklyQuestListDataModel = new Hearthstone.DataModels.QuestListDataModel();
                 Hearthstone.DataModels.QuestListDataModel specialQuestListDataModel = new Hearthstone.DataModels.QuestListDataModel();
+                Hearthstone.DataModels.QuestListDataModel battlegroundsQuestListDataModel = new Hearthstone.DataModels.QuestListDataModel();
+                
                 foreach (Hearthstone.DataModels.QuestDataModel item in Hearthstone.Progression.QuestManager.Get().CreateActiveQuestsDataModel(Assets.QuestPool.QuestPoolType.DAILY, QuestPool.RewardTrackType.GLOBAL, true).Quests)
                 {
                     if (item == null || dailyQuestListDataModel.Quests.Count > 4)
@@ -262,7 +267,6 @@ opacity: 0.6;
                     }
                     dailyQuestListDataModel.Quests.Add(item);
                 }
-
                 result += @"<h4>日常任务</h4>";
                 foreach (Hearthstone.DataModels.QuestDataModel item in dailyQuestListDataModel.Quests)
                 {
@@ -319,7 +323,6 @@ opacity: 0.6;
                     }
                 }
 
-
                 foreach (Hearthstone.DataModels.QuestDataModel item in Hearthstone.Progression.QuestManager.Get().CreateActiveQuestsDataModel(Assets.QuestPool.QuestPoolType.NONE, QuestPool.RewardTrackType.GLOBAL, true).Quests)
                 {
                     if (item == null || specialQuestListDataModel.Quests.Count > 4)
@@ -328,7 +331,6 @@ opacity: 0.6;
                     }
                     specialQuestListDataModel.Quests.Add(item);
                 }
-
                 if (specialQuestListDataModel.Quests.Count >= 1 && specialQuestListDataModel.Quests[0].QuestId > 0)
                 {
 
@@ -354,8 +356,40 @@ opacity: 0.6;
                         }
                     }
                 }
-                result += @"<h4>佣兵任务</h4>";
 
+                foreach (Hearthstone.DataModels.QuestDataModel item in Hearthstone.Progression.QuestManager.Get().CreateActiveQuestsDataModel(Assets.QuestPool.QuestPoolType.WEEKLY, QuestPool.RewardTrackType.BATTLEGROUNDS, true).Quests)
+                {
+                    if (item == null)
+                    {
+                        break;
+                    }
+                    battlegroundsQuestListDataModel.Quests.Add(item);
+                }
+                result += @"<h4>酒馆任务</h4>";
+                foreach (Hearthstone.DataModels.QuestDataModel item in battlegroundsQuestListDataModel.Quests)
+                {
+                    if (item != null)
+                    {
+                        if (item.QuestId > 0)
+                        {
+                            result += "<li>";
+                            result += $@"{item.Status} {item.Name}：{item.Description}<br />进度：{item.ProgressMessage}<br />";
+
+                            result += $@"经验奖励：{item.RewardTrackXp}";
+                            result += (item.RerollCount > 0) ? "（可刷新）" : "";
+                            result += "</li><br />";
+                        }
+                        else
+                        {
+                            result += "<li>";
+                            result += $@"{item.TimeUntilNextQuest}";
+                            result += "</li>";
+                            break;
+                        }
+                    }
+                }
+
+                result += @"<h4>佣兵任务</h4>";
                 foreach (PegasusLettuce.MercenariesVisitorState mercenariesVisitorState in NetCache.Get().GetNetObject<NetCache.NetCacheMercenariesVillageVisitorInfo>().VisitorStates)
                 {
                     Hearthstone.DataModels.MercenaryVillageTaskItemDataModel mercenaryVillageTaskItemDataModel = LettuceVillageDataUtil.CreateTaskModelByTaskState(mercenariesVisitorState.ActiveTaskState, null, false, false);
