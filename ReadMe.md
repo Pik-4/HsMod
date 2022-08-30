@@ -18,10 +18,11 @@
 
 4. 将编译好的`HsMod.dll`文件，存放在`Hearthstone\BepInEx\plugins`即可。
 
-### 补充说明
+### **补充说明**
 
-1. 皮肤的配置文件在`Hearthstone\BepInEx\config\HsSkins.cfg`。若无，则在运行游戏后创建。
-2. `F4`为固定快捷键，用于获取游戏内部分信息（相关信息存放在`Hearthstone\BepInEx\`目录下），及更新皮肤配置使用。其余快捷键均可自定义配置。
+1. 插件与MixMod和基于`Assembly-CSharp.dll`修改的均冲突，原因是同一个方法多个Patch时结果不确定，本插件没有检测原方法是否被修改；此外，修改`Assembly-CSharp.dll`可能导致IL指令定位异常，进而造成相关Patch无法生效。
+2. 皮肤的配置文件在`Hearthstone\BepInEx\config\HsSkins.cfg`。若无，则在运行游戏后创建。
+3. `F4`为固定快捷键，用于获取游戏内部分信息（相关信息存放在`Hearthstone\BepInEx\`目录下），及更新皮肤配置使用。其余快捷键均可自定义配置。
 
 ### client.config
 
