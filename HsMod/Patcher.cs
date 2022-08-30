@@ -2102,7 +2102,7 @@ namespace HsMod
                 EventHandler myMethod = myDelegate as EventHandler;
                 ___m_director.OnFinishedEvent += myMethod;
                 ___m_lastOpenedBoosterId = num;
-                BnetBar.Get().HideCurrencyTemporarily();
+                BnetBar.Get().HideCurrencyFrames(false);
                 if (GameUtils.IsFakePackOpeningEnabled())
                 {
                     onBoosterOpened?.Invoke(__instance, null);

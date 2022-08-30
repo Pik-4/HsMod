@@ -133,7 +133,7 @@ namespace HsMod
         {
             config.Clear();
             isPluginEnable = config.Bind("全局", "HsMod状态", false, "是否启用插件（修改该选项后建议重启炉石）");
-            isFakeOpenEnable = config.Bind("全局", "模拟开包状态", false, "是否启用模拟开包（修改该选项后建议重启炉石）");
+            isFakeOpenEnable = config.Bind("全局", "模拟开包状态", false, "是否启用模拟开包（修改该选项后建议重启炉石，启用时可能会导致卡包信息统计异常）");
             configTemplate = config.Bind("全局", "设置模板", Utils.ConfigTemplate.DoNothing, "配置运行模板，当选项为DoNothing时，不修改任何配置。配置修改完成后自动替换回DoNothing");
             isShortcutsEnable = config.Bind("全局", "快捷键状态", false, "是否启用快捷键");
             isTimeGearEnable = config.Bind("全局", "变速齿轮状态", false, "是否启用变速齿轮");

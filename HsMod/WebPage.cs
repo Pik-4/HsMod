@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -191,7 +192,7 @@ opacity: 0.6;
             result += @"<h3 style=""text-align: center;"">战令信息</h3>";
             try
             {
-                Hearthstone.DataModels.RewardTrackDataModel trackDataModel = Hearthstone.Progression.RewardTrackManager.Get().TrackDataModel;
+                Hearthstone.DataModels.RewardTrackDataModel trackDataModel = Hearthstone.Progression.RewardTrackManager.Get().GetCurrentRewardTrack(Global.RewardTrackType.GLOBAL).TrackDataModel;
                 result += $"等级：{trackDataModel.Level}<br />";
                 result += "进度：" + ((trackDataModel.Level == 400 && trackDataModel.Xp == 0) ? "已满级！" : trackDataModel.XpProgress) + "<br />";
             }
@@ -253,7 +254,7 @@ opacity: 0.6;
                 Hearthstone.DataModels.QuestListDataModel dailyQuestListDataModel = new Hearthstone.DataModels.QuestListDataModel();
                 Hearthstone.DataModels.QuestListDataModel weeklyQuestListDataModel = new Hearthstone.DataModels.QuestListDataModel();
                 Hearthstone.DataModels.QuestListDataModel specialQuestListDataModel = new Hearthstone.DataModels.QuestListDataModel();
-                foreach (Hearthstone.DataModels.QuestDataModel item in Hearthstone.Progression.QuestManager.Get().CreateActiveQuestsDataModel(Assets.QuestPool.QuestPoolType.DAILY, true).Quests)
+                foreach (Hearthstone.DataModels.QuestDataModel item in Hearthstone.Progression.QuestManager.Get().CreateActiveQuestsDataModel(Assets.QuestPool.QuestPoolType.DAILY, QuestPool.RewardTrackType.GLOBAL, true).Quests)
                 {
                     if (item == null || dailyQuestListDataModel.Quests.Count > 4)
                     {
@@ -286,7 +287,7 @@ opacity: 0.6;
                     }
                 }
 
-                foreach (Hearthstone.DataModels.QuestDataModel item in Hearthstone.Progression.QuestManager.Get().CreateActiveQuestsDataModel(Assets.QuestPool.QuestPoolType.WEEKLY, true).Quests)
+                foreach (Hearthstone.DataModels.QuestDataModel item in Hearthstone.Progression.QuestManager.Get().CreateActiveQuestsDataModel(Assets.QuestPool.QuestPoolType.WEEKLY, QuestPool.RewardTrackType.GLOBAL, true).Quests)
                 {
                     if (item == null || weeklyQuestListDataModel.Quests.Count > 4)
                     {
@@ -319,7 +320,7 @@ opacity: 0.6;
                 }
 
 
-                foreach (Hearthstone.DataModels.QuestDataModel item in Hearthstone.Progression.QuestManager.Get().CreateActiveQuestsDataModel(Assets.QuestPool.QuestPoolType.NONE, true).Quests)
+                foreach (Hearthstone.DataModels.QuestDataModel item in Hearthstone.Progression.QuestManager.Get().CreateActiveQuestsDataModel(Assets.QuestPool.QuestPoolType.NONE, QuestPool.RewardTrackType.GLOBAL, true).Quests)
                 {
                     if (item == null || specialQuestListDataModel.Quests.Count > 4)
                     {

@@ -63,6 +63,9 @@
     <Reference Include="Blizzard.T5.AppsFlyer">
       <HintPath>LibHearthstone\Blizzard.T5.AppsFlyer.dll</HintPath>
     </Reference>
+    <Reference Include="Blizzard.T5.AssetLoader">
+      <HintPath>LibHearthstone\Blizzard.T5.AssetLoader.dll</HintPath>
+    </Reference>
     <Reference Include="Blizzard.T5.AssetManager">
       <HintPath>LibHearthstone\Blizzard.T5.AssetManager.dll</HintPath>
     </Reference>
@@ -71,6 +74,15 @@
     </Reference>
     <Reference Include="Blizzard.T5.Core">
       <HintPath>LibHearthstone\Blizzard.T5.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Blizzard.T5.ErrorInterface">
+      <HintPath>LibHearthstone\Blizzard.T5.ErrorInterface.dll</HintPath>
+    </Reference>
+    <Reference Include="Blizzard.T5.FontService">
+      <HintPath>LibHearthstone\Blizzard.T5.FontService.dll</HintPath>
+    </Reference>
+    <Reference Include="Blizzard.T5.GameStringsInterface">
+      <HintPath>LibHearthstone\Blizzard.T5.GameStringsInterface.dll</HintPath>
     </Reference>
     <Reference Include="Blizzard.T5.GraphicsManagerInterface">
       <HintPath>LibHearthstone\Blizzard.T5.GraphicsManagerInterface.dll</HintPath>
