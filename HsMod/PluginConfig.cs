@@ -146,7 +146,7 @@ namespace HsMod
             isAlertPopupShow = config.Bind("优化", "弹出消息", true, "是否显示弹窗");
             responseAlertPopup = config.Bind("优化", "弹出响应", Utils.AlertPopupResponse.DONOTHING, "在屏蔽弹出消息时，如何回应弹窗");
             isOnApplicationFocus = config.Bind("优化", "应用焦点", true, "isOnApplicationFocus");
-            isEndGameScreenShow = config.Bind("优化", "结算展示", true, "是否展示结算任务、升级提示");
+            isEndGameScreenShow = config.Bind("优化", "结算展示", true, "是否展示结算任务、升级提示（可能导致领取奖励时无提示）");
             isAutoOpenBoxesRewardEnable = config.Bind("优化", "自动开盒", false, "是否自动打开竞技场（对决、佣兵等）结算宝箱");
             isAutoExit = config.Bind("优化", "报错退出", false, "遇到错误是否自动退出");
             //isAutoRestart = config.Bind("优化", "退出时重启", false, "（可能无效）遇到错误是否自动重启");
