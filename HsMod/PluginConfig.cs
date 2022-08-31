@@ -40,6 +40,7 @@ namespace HsMod
         public static ConfigEntry<bool> isIdleKickEnable;
 
         public static ConfigEntry<bool> isMoveEnemyCardsEnable;
+        public static ConfigEntry<bool> isAutoReportEnable;
         public static ConfigEntry<bool> isFiresideGatheringEnable;
         public static ConfigEntry<double> firesideGatheringLatitude, firesideGatheringLongitude, firesideGatheringGpsAccuracy;
 
@@ -92,7 +93,7 @@ namespace HsMod
         public static ConfigEntry<int> webServerPort;
         public static ConfigEntry<string> webPageBackImg;
 
-        public static ConfigEntry<string> mercLogPath;
+        public static ConfigEntry<string> hsMatchLogPath;
 
 
         public static ConfigEntry<Utils.DevicePreset> fakeDevicePreset;
@@ -158,12 +159,12 @@ namespace HsMod
             isAutoPackOpeningEnable = config.Bind("开包", "自动开包", false, "（慎用，有BUG！）开完全部卡包，不区分卡包品类（基于开包加速）");
             isAutoRefundCardDisenchantEnable = config.Bind("开包", "自动分解", false, "是否在开包时自动分解全额反尘的卡");
 
+            isAutoReportEnable = config.Bind("好友", "自动举报", false, "对局结束后自动举报对手昵称违规、作弊和脚本、恶意投降");
             isMoveEnemyCardsEnable = config.Bind("好友", "观战展示卡牌", false, "（尚未测试）在Ob中展示(旋转)对手手中的牌");
             isFiresideGatheringEnable = config.Bind("好友", "炉边聚会虚拟定位", false, "（尚未测试）是否启用炉边聚会虚拟定位");
             firesideGatheringLatitude = config.Bind("好友", "炉边聚会纬度", 0.0, "炉边聚会纬度");
             firesideGatheringLongitude = config.Bind("好友", "炉边聚会经度", 0.0, "炉边聚会经度");
             firesideGatheringGpsAccuracy = config.Bind("好友", "炉边聚会Gps定位精度", 54.0, "炉边聚会定位精度");
-
 
             isFullnameShow = config.Bind("炉石", "显示全名", false, "是否显示对手战网全名；如果启用该选项，还会允许添加当前对手(启动快捷键时，也允许添加对手)。");
             isOpponentRankInGameShow = config.Bind("炉石", "显示天梯等级", false, "是否在传说前显示对手天梯等级");
@@ -222,7 +223,7 @@ namespace HsMod
             webServerPort = config.Bind("开发", "网站端口", 58744, new ConfigDescription("WebServer端口", new AcceptableValueRange<int>(1, 65535)));
             webPageBackImg = config.Bind("开发", "网页背景图", "", "网页背景图片");
 
-            mercLogPath = config.Bind("开发", "佣兵对局文件", @"BepInEx\merc.log", "佣兵日志文件位置（相对于Hearthstone）");
+            hsMatchLogPath = config.Bind("开发", "对局日志", @"BepInEx\HsMatch.log", "炉石对局日志文件位置（相对于Hearthstone）");
 
             fakeDevicePreset = config.Bind("模拟", "设备模拟模板", Utils.DevicePreset.Default, "（重启炉石后生效）模拟设备，用于领取卡包卡背");
             fakeDeviceOs = config.Bind("模拟", "设备模拟系统", OSCategory.PC, "模拟设备操作系统，当设备模拟模板为Custom时有效。");
@@ -507,7 +508,7 @@ namespace HsMod
 
         public string CacheOpponentFullName
         {
-            get { return Utils.CacheFullName; }
+            get { return Utils.CacheLastOpponentFullName; }
         }
 
         public static ConfigValue Get()
