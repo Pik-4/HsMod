@@ -81,8 +81,8 @@ namespace HsMod
                     return WebPage.MercenariesLettucePage();
                 case "/mercenaries":
                     return WebPage.MercenariesPage();
-                case "/mercmatchlog":
-                    return WebPage.MercMatchLogPage();
+                case "/matchlog":
+                    return WebPage.MatchLogPage();
                 case "/alive":
                     return WebPage.AlivePage();
                 case "":

@@ -242,6 +242,27 @@ namespace HsMod
             myLogSource.Log(level, message);
             BepInEx.Logging.Logger.Sources.Remove(myLogSource);
         }
+
+        public static void TryReportOpponent()
+        {
+            List<Blizzard.GameService.SDK.Client.Integration.ReportType.SubcomplaintType> subcomplaintTypes = new List<Blizzard.GameService.SDK.Client.Integration.ReportType.SubcomplaintType>();
+            subcomplaintTypes.Add(Blizzard.GameService.SDK.Client.Integration.ReportType.SubcomplaintType.BATTLETAG);
+
+            Blizzard.GameService.SDK.Client.Integration.BattleNet.Get().SubmitReport(Utils.CacheLastOpponentAccountID, Blizzard.GameService.SDK.Client.Integration.ReportType.ComplaintType.INAPPROPRIATE_NAME, subcomplaintTypes);
+            subcomplaintTypes.Clear();
+
+            subcomplaintTypes.Add(Blizzard.GameService.SDK.Client.Integration.ReportType.SubcomplaintType.HACKING);
+            subcomplaintTypes.Add(Blizzard.GameService.SDK.Client.Integration.ReportType.SubcomplaintType.BOTTING);
+            Blizzard.GameService.SDK.Client.Integration.BattleNet.Get().SubmitReport(Utils.CacheLastOpponentAccountID, Blizzard.GameService.SDK.Client.Integration.ReportType.ComplaintType.CHEATING, subcomplaintTypes);
+            subcomplaintTypes.Clear();
+
+            subcomplaintTypes.Add(Blizzard.GameService.SDK.Client.Integration.ReportType.SubcomplaintType.BOOSTING_DERANKING);
+            Blizzard.GameService.SDK.Client.Integration.BattleNet.Get().SubmitReport(Utils.CacheLastOpponentAccountID, Blizzard.GameService.SDK.Client.Integration.ReportType.ComplaintType.CHEATING, subcomplaintTypes);
+            subcomplaintTypes.Clear();
+
+            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, Utils.CacheLastOpponentFullName + Utils.CacheLastOpponentAccountID.EntityId.ToString() + "已举报");
+        }
+
         public static void TryRefundCardDisenchantCallback()
         {
             Network.CardSaleResult cardSaleResult = Network.Get().GetCardSaleResult();
@@ -548,13 +569,14 @@ namespace HsMod
         public static List<int> CacheCardBack = new List<int>();
         public static List<int> CacheBgsFinisher = new List<int>();
         public static Dictionary<int, Assets.CardHero.HeroType> CacheHeroes = new Dictionary<int, Assets.CardHero.HeroType>();
-        public static string CacheFullName;
+        public static string CacheLastOpponentFullName;
+        public static Blizzard.GameService.SDK.Client.Integration.BnetAccountId CacheLastOpponentAccountID;
         public static List<MercenarySkin> CacheMercenarySkin = new List<MercenarySkin>();
 
         public static class CacheInfo
         {
 
-            public static void UpdateCoin()  // 不能传入参数 List<T> List
+            public static void UpdateCoin()
             {
                 CacheCoin.Clear();
                 foreach (var record in GameDbf.Coin.GetRecords())

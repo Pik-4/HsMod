@@ -219,9 +219,9 @@ namespace HsMod
                                     string tempFullName = bnetPlayer?.GetBestName();
                                     if (tempFullName != null)
                                     {
-                                        tempFullName = Utils.CacheFullName.StartsWith(tempFullName) ? Utils.CacheFullName : tempFullName;
+                                        tempFullName = Utils.CacheLastOpponentFullName.StartsWith(tempFullName) ? Utils.CacheLastOpponentFullName : tempFullName;
                                     }
-                                    else tempFullName = Utils.CacheFullName;
+                                    else tempFullName = Utils.CacheLastOpponentFullName;
                                     ClipboardUtils.CopyToClipboard(@tempFullName);
                                     UIStatus.Get().AddInfo(@tempFullName);
                                 }

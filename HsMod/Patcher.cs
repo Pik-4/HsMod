@@ -1359,7 +1359,8 @@ namespace HsMod
                         if (gameAccount.Value.GetBattleTag() != (BnetBattleTag)null)
                         {
                             __result = isFullnameShow.Value ? gameAccount.Value.GetBattleTag().ToString() : gameAccount.Value.GetBattleTag().GetName();
-                            Utils.CacheFullName = gameAccount.Value.GetBattleTag().ToString();
+                            Utils.CacheLastOpponentFullName = gameAccount.Value.GetBattleTag().ToString();
+                            Utils.CacheLastOpponentAccountID = gameAccount.Value.GetOwnerId();
                             return false;
                         }
                     }
@@ -1462,6 +1463,49 @@ namespace HsMod
                 return true;
             }
 
+            [HarmonyPostfix]
+            [HarmonyPatch(typeof(GameEntity), "ShowEndGameScreen")]
+            public static void PatchEndGameScreenShow(ref TAG_PLAYSTATE playState, ref Spell enemyBlowUpSpell, ref Spell friendlyBlowUpSpell)
+            {
+                try
+                {
+                    if (!GameMgr.Get().IsSpectator() && (Utils.CacheLastOpponentAccountID != null) && (!String.IsNullOrEmpty(Utils.CacheLastOpponentFullName)))
+                    {
+                        if (isAutoReportEnable.Value)
+                        {
+                            Utils.TryReportOpponent();
+
+                            string finalResult = "未知";
+                            switch (playState)
+                            {
+                                case TAG_PLAYSTATE.WINNING:
+                                case TAG_PLAYSTATE.WON:
+                                    finalResult = "胜利";
+                                    break;
+                                case TAG_PLAYSTATE.CONCEDED:
+                                case TAG_PLAYSTATE.LOST:
+                                case TAG_PLAYSTATE.LOSING:
+                                    finalResult = "失败";
+                                    break;
+                                case TAG_PLAYSTATE.TIED:
+                                    finalResult = "平局";
+                                    break;
+                                default:
+                                    break;
+                            }
+                            finalResult = $"{String.Join("<br />", DateTime.Now.ToString().Split(' '))},{finalResult},-,{GameMgr.Get().GetGameType()},{Utils.CacheLastOpponentFullName},";
+                            finalResult += $"High:{Utils.CacheLastOpponentAccountID.High}+Low{Utils.CacheLastOpponentAccountID.Low} => 已举报";
+                            System.IO.File.AppendAllText(hsMatchLogPath.Value, finalResult + "\n");
+                            Utils.CacheLastOpponentAccountID = null;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex);
+                    Utils.CacheLastOpponentAccountID = null;
+                }
+            }
 
         }
         public class PatchFavorite

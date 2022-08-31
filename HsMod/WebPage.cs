@@ -137,7 +137,7 @@ opacity: 0.6;
             btn += @"<a href=""/skins""><button class=""btn_li"">皮肤信息</button><br/></a><br/>";
             btn += @"<a href=""/lettuce""><button class=""btn_li"">佣兵关卡</button><br/></a><br/>";
             btn += @"<a href=""/mercenaries""><button class=""btn_li"">佣兵收藏</button><br/></a><br/>";
-            if (System.IO.File.Exists(mercLogPath.Value)) btn += @"<a href=""/mercmatchlog""><button class=""btn_li"">佣兵对局</button><br/></a><br/>";
+            if (System.IO.File.Exists(hsMatchLogPath.Value)) btn += @"<a href=""/matchlog""><button class=""btn_li"">炉石对局</button><br/></a><br/>";
             btn += @"<a href=""/test""><button class=""btn_li"">测试界面</button><br/></a><br/>";
             string body = @"<h1 style=""text-align: center; opacity: 0.6;"">HsMod</h1>";
             body += $@"<div style=""text-align: center; width: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);"">{btn}</div>";
@@ -365,7 +365,7 @@ opacity: 0.6;
                     }
                     battlegroundsQuestListDataModel.Quests.Add(item);
                 }
-                result += @"<h4>酒馆任务</h4>";
+                result += @"<h4>每周酒馆</h4>";
                 foreach (Hearthstone.DataModels.QuestDataModel item in battlegroundsQuestListDataModel.Quests)
                 {
                     if (item != null)
@@ -839,25 +839,25 @@ opacity: 0.6;
             return Template("Pack", body);
         }
 
-        public static StringBuilder MercMatchLogPage()
+        public static StringBuilder MatchLogPage()
         {
             StringBuilder builder = new StringBuilder();
-            if (!System.IO.File.Exists(mercLogPath.Value)) return Template(builder.Append("对局文件不存在！"), "MercMatchLog");
-            else builder.Append(@"<h3 style=""text-align: center;"">佣兵对局记录</h3>");
+            if (!System.IO.File.Exists(hsMatchLogPath.Value)) return Template(builder.Append("对局文件不存在！"), "MatchLog");
+            else builder.Append(@"<h3 style=""text-align: center;"">对局记录</h3>");
 
             try
             {
                 string temp = @"<table border=0 style=""text-align: center;""><tr>";
                 temp += "<th>结束时间</th>";
                 temp += "<th>对局结果</th>";
-                temp += "<th>当前分数</th>";
-                temp += "<th>友方卡组</th>";
+                temp += "<th>当前排名</th>";
+                temp += "<th>友方信息</th>";
                 temp += "<th>你的对手</th>";
-                temp += "<th>敌方阵容</th>";
+                temp += "<th>对手信息</th>";
                 temp += "</tr>";
                 builder.Append(temp);
 
-                foreach (string line in System.IO.File.ReadLines(mercLogPath.Value).Reverse())
+                foreach (string line in System.IO.File.ReadLines(hsMatchLogPath.Value).Reverse())
                 {
                     temp = "";
                     if (line != String.Empty)
@@ -868,7 +868,10 @@ opacity: 0.6;
                         {
                             if (i == 1 && lineSplit[i].Length > 0)
                             {
-                                if (int.Parse(lineSplit[i]) > 0) temp += $"<td style=\"color:#01FF70\">+{int.Parse(lineSplit[i])}</td>";
+                                if (lineSplit[i] == "胜利") temp += $"<td style=\"color:#01FF70\">胜利</td>";
+                                else if (lineSplit[i] == "失败") temp += $"<td style=\"color:#FF4136\">失败</td>";
+                                else if (lineSplit[i] == "未知" || lineSplit[i] == "平局") temp += $"<td>{lineSplit[i]}</td>";
+                                else if (int.Parse(lineSplit[i]) > 0) temp += $"<td style=\"color:#01FF70\">+{int.Parse(lineSplit[i])}</td>";
                                 else if (int.Parse(lineSplit[i]) < 0) temp += $"<td style=\"color:#FF4136\">{lineSplit[i]}</td>";
                                 else temp += $"<td>{lineSplit[i]}</td>";
                             }
@@ -887,7 +890,7 @@ opacity: 0.6;
             {
                 builder.Append("</table>");
             }
-            return Template(builder, "MercMatchLog").Remove(108, 126);
+            return Template(builder, "MatchLog").Remove(108, 126);
         }
 
         public static StringBuilder AlivePage()
