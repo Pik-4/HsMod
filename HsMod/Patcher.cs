@@ -1507,7 +1507,7 @@ namespace HsMod
                                     break;
                             }
                             finalResult = $"{String.Join("<br />", DateTime.Now.ToString().Split(' '))},{finalResult},-,{GameMgr.Get().GetGameType()},{Utils.CacheLastOpponentFullName},";
-                            finalResult += $"High:{Utils.CacheLastOpponentAccountID.High}+Low{Utils.CacheLastOpponentAccountID.Low} => 已举报";
+                            finalResult += $"High:{Utils.CacheLastOpponentAccountID.High}+Low:{Utils.CacheLastOpponentAccountID.Low} => 已举报";
                             System.IO.File.AppendAllText(hsMatchLogPath.Value, finalResult + "\n");
                             Utils.CacheLastOpponentAccountID = null;
                         }

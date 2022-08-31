@@ -216,7 +216,7 @@ namespace HsMod
                                 else if (!GameMgr.Get().IsBattlegrounds())
                                 {
                                     bnetPlayer = BnetPresenceMgr.Get().GetPlayer(GameState.Get().GetOpposingSidePlayer().GetGameAccountId());
-                                    string tempFullName = bnetPlayer?.GetBestName();
+                                    string tempFullName = bnetPlayer?.GetBattleTag()?.ToString();
                                     if (tempFullName != null)
                                     {
                                         tempFullName = Utils.CacheLastOpponentFullName.StartsWith(tempFullName) ? Utils.CacheLastOpponentFullName : tempFullName;
