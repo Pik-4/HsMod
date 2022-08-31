@@ -274,7 +274,7 @@ namespace HsMod
 
                 if (token != null)
                 {
-                    string pattern = @"(CN|KR|TW|EU|US)\-[a-f0-9]{32}\-\d{9}";
+                    string pattern = @"(CN|KR|TW|EU|US)\-[a-f0-9]{32}\-\d+";    // Country-Token-AccountID.Low
                     string argv = String.Join(" ", Environment.GetCommandLineArgs());
                     var res = System.Text.RegularExpressions.Regex.Match(argv, pattern);
                     if (res.Success)
