@@ -160,6 +160,7 @@ namespace HsMod
             isAutoRefundCardDisenchantEnable = config.Bind("开包", "自动分解", false, "是否在开包时自动分解全额反尘的卡");
 
             isAutoReportEnable = config.Bind("好友", "自动举报", false, "对局结束后自动举报对手昵称违规、作弊和脚本、恶意投降");
+            // isAutoReportEnable = config.Bind("好友", "自动举报", true, new ConfigDescription("对局结束后自动举报对手昵称违规、作弊和脚本、恶意投降", null, new object[] { "Advanced" }));
             isMoveEnemyCardsEnable = config.Bind("好友", "观战展示卡牌", false, "（尚未测试）在Ob中展示(旋转)对手手中的牌");
             isFiresideGatheringEnable = config.Bind("好友", "炉边聚会虚拟定位", false, "（尚未测试）是否启用炉边聚会虚拟定位");
             firesideGatheringLatitude = config.Bind("好友", "炉边聚会纬度", 0.0, "炉边聚会纬度");
@@ -421,7 +422,7 @@ namespace HsMod
 
 
 
-    //用作生成IL指令，似乎可以优化
+    //对外接口，可用作生成IL指令，似乎可以优化
     public class ConfigValue
     {
         public bool IsOpponentRankInGameShowValue

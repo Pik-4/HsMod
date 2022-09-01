@@ -90,9 +90,9 @@ namespace HsMod
                 case "/home.html":
                 case "/home":
                     return WebPage.HomePage();
-                case "/test":
-                case "/test.html":
-                    return WebPage.TestPage();
+                case "/about":
+                case "/about.html":
+                    return WebPage.AboutPage();
                 default:
                     return new StringBuilder();
             }

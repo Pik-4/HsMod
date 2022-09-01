@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 using static HsMod.PluginConfig;
 
 namespace HsMod
@@ -22,19 +23,17 @@ namespace HsMod
 <style>
 body{{
 background: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url('{webPageBackImg.Value}') no-repeat 0% 25% / cover;
-//background: url({webPageBackImg.Value}) no-repeat top left;
 background-size: cover;
 background-repeat:no-repeat;
 background-position:center;
 background-attachment:fixed;
 opacity:1.0;
-//filter:alpha(opacity=100);
-//display: flex;
 align-items: center;
 justify-content: center;
-//text-align:center;
-//margin: 0;
+font-family: ""Lucida Console"", sans-serif;
 }}
+a{{color:#66CCFF;text-decoration: none;}}
+a:hover{{text-decoration:underline}}
 hr{{
 width: auto;
 margin: 0 auto;
@@ -82,19 +81,17 @@ opacity: 0.6;
 <style>
 body{{
 background: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url('{webPageBackImg.Value}') no-repeat 0% 25% / cover;
-//background: url({webPageBackImg.Value}) no-repeat top left;
 background-size: cover;
 background-repeat:no-repeat;
 background-position:center;
 background-attachment:fixed;
 opacity:1.0;
-//filter:alpha(opacity=100);
-//display: flex;
 align-items: center;
 justify-content: center;
-//text-align:center;
-//margin: 0;
+font-family: ""Lucida Console"", sans-serif;
 }}
+a{{color:#66CCFF;text-decoration: none;}}
+a:hover{{text-decoration:underline}}
 hr{{
 width: auto;
 margin: 0 auto;
@@ -138,16 +135,18 @@ opacity: 0.6;
             btn += @"<a href=""/lettuce""><button class=""btn_li"">佣兵关卡</button><br/></a><br/>";
             btn += @"<a href=""/mercenaries""><button class=""btn_li"">佣兵收藏</button><br/></a><br/>";
             if (System.IO.File.Exists(hsMatchLogPath.Value)) btn += @"<a href=""/matchlog""><button class=""btn_li"">炉石对局</button><br/></a><br/>";
-            btn += @"<a href=""/test""><button class=""btn_li"">测试界面</button><br/></a><br/>";
+            btn += @"<a href=""/about""><button class=""btn_li"">关&emsp;&emsp;于</button><br/></a><br/>";
             string body = @"<h1 style=""text-align: center; opacity: 0.6;"">HsMod</h1>";
             body += $@"<div style=""text-align: center; width: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);"">{btn}</div>";
             return Template("index", body);
         }
 
-        public static StringBuilder TestPage()
+        public static StringBuilder AboutPage()
         {
-            string body = $@"<div style=""text-align: center;""><p>Test page</p></div>";
-            return Template("Test", body);
+            StringBuilder builder = new StringBuilder();
+            builder.AppendLine(@"<h3 style=""text-align: center;"">关于HsMod</h3>");
+            builder.AppendLine($"<p>Author: <a href='https://github.com/Pik-4'>Pik_4</a><br />Last Updated: 2022.09.01</p><br />\r\n<p>当前HsMod版本{PluginInfo.PLUGIN_VERSION}，插件源代码位于<a href='https://github.com/Pik-4/HsMod'>github.com/Pik-4/HsMod</a>，仅用作学习研究。</p>\r\n<ol start='' >\r\n<li>本插件可能与基于<code>Assembly-CSharp.dll</code>的修改冲突，修改<code>Assembly-CSharp.dll</code>可能导致IL指令定位异常，进而造成相关Patch无法生效；还可能与其他BepInEx插件（例如佣兵、MixMod等）冲突，原因是同一个方法可能在两个插件中都存在Patch，当有多个Patch时，运行结果可能会异常，本插件没有检测原方法是否被修改。</li>\r\n<li>皮肤的配置文件在<code>Hearthstone\\BepInEx\\config\\HsSkins.cfg</code>。若无，则在运行游戏后创建。</li>\r\n<li><code>F4</code>为固定快捷键，用于获取游戏内部分信息（相关信息存放在<code>Hearthstone\\BepInEx\\</code>目录下），及更新皮肤配置使用。其余快捷键均可自定义配置。</li>\r\n<li>插件在默认状态下，几乎全部的功能均需要手动开启；插件大部分功能能在配置中找到说明，少部分功能只在Patch中提及（如最小化限制）。</li>\r\n<li>出现问题时先尝试删除相关<code>.cfg</code>配置文件，进行重新配置；如果依然存在问题，请带上<code>HsMod.cfg</code>提交<a href='https://github.com/Pik-4/HsMod/issues'>Issues</a>，但不保证及时解答。</li>\r\n</ol>");
+            return Template(builder, "About");
         }
 
         public static StringBuilder InfoPage()
