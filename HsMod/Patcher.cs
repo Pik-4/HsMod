@@ -1218,7 +1218,6 @@ namespace HsMod
                 }
                 else return true;
             }
-
             [HarmonyReversePatch]
             [HarmonyPatch(typeof(SpellController), "OnProcessTaskList")]
             [MethodImpl(MethodImplOptions.NoInlining)]
@@ -1233,6 +1232,28 @@ namespace HsMod
                     return false;
                 }
                 else return true;
+            }
+            [HarmonyTranspiler]
+            [HarmonyPatch(typeof(SideQuestSpellController), "OnProcessTaskList")]
+            public static IEnumerable PatchSubSideQuestSpellControllerOnProcessTaskList(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+            {
+                List<CodeInstruction> list = new List<CodeInstruction>(instructions);
+                int num = list.FindIndex((CodeInstruction x) => x.opcode == OpCodes.Callvirt && (x.operand as MethodInfo).Name == "SetSecretTriggered");
+
+                if (num > 0)
+                {
+                    Label label = generator.DefineLabel();
+                    num++;
+                    list.Insert(num++, new CodeInstruction(OpCodes.Call, new Func<ConfigValue>(ConfigValue.Get).Method));
+                    list.Insert(num++, new CodeInstruction(OpCodes.Callvirt, typeof(ConfigValue).GetProperty("IsBgsQuickModeEnableValue", BindingFlags.Instance | BindingFlags.Public).GetGetMethod()));
+                    list.Insert(num++, new CodeInstruction(OpCodes.Brfalse_S, label));
+                    list.Insert(num++, new CodeInstruction(OpCodes.Ldarg_0));
+                    list.Insert(num++, new CodeInstruction(OpCodes.Call, typeof(SpellController).GetMethod("OnProcessTaskList", BindingFlags.Instance | BindingFlags.NonPublic)));
+                    list.Insert(num++, new CodeInstruction(OpCodes.Ret));
+                    list[num].labels.Add(label);
+                }
+
+                return list;
             }
 
         }
@@ -1476,6 +1497,7 @@ namespace HsMod
                 return true;
             }
 
+            // 自动举报
             [HarmonyPostfix]
             [HarmonyPatch(typeof(GameEntity), "ShowEndGameScreen")]
             public static void PatchEndGameScreenShow(ref TAG_PLAYSTATE playState, ref Spell enemyBlowUpSpell, ref Spell friendlyBlowUpSpell)
@@ -1518,6 +1540,19 @@ namespace HsMod
                     Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex);
                     Utils.CacheLastOpponentAccountID = null;
                 }
+            }
+
+            // 手牌追踪
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(Player), "IsRevealed")]
+            public static bool PatchPlayerIsRevealed(ref bool __result)
+            {
+                if (isCardTrackerEnable.Value)
+                {
+                    __result = true;
+                    return false;
+                }
+                return true;
             }
 
         }
@@ -1708,6 +1743,11 @@ namespace HsMod
                     if (opposingSidePlayer != null)
                         opponentCardBackID = opposingSidePlayer.GetCardBackId();
                     int friendlyCardBackID = skinCardBack.Value;
+                    if (GameMgr.Get().IsBattlegrounds())   // FIXME: 酒馆对战中可能无法正常显示对手卡背
+                    {
+                        opponentCardBackID = friendlyCardBackID;
+                    }
+                    
                     CardBackManager.Get().SetGameCardBackIDs(friendlyCardBackID, opponentCardBackID);
                     return false;
                 }

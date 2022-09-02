@@ -39,6 +39,7 @@ namespace HsMod
         public static ConfigEntry<bool> isShowRetireForever;
         public static ConfigEntry<bool> isIdleKickEnable;
 
+        public static ConfigEntry<bool> isCardTrackerEnable;
         public static ConfigEntry<bool> isMoveEnemyCardsEnable;
         public static ConfigEntry<bool> isAutoReportEnable;
         public static ConfigEntry<bool> isFiresideGatheringEnable;
@@ -162,20 +163,21 @@ namespace HsMod
             isAutoReportEnable = config.Bind("好友", "自动举报", false, "对局结束后自动举报对手昵称违规、作弊和脚本、恶意投降");
             // isAutoReportEnable = config.Bind("好友", "自动举报", true, new ConfigDescription("对局结束后自动举报对手昵称违规、作弊和脚本、恶意投降", null, new object[] { "Advanced" }));
             isMoveEnemyCardsEnable = config.Bind("好友", "观战展示卡牌", false, "（尚未测试）在Ob中展示(旋转)对手手中的牌");
-            isFiresideGatheringEnable = config.Bind("好友", "炉边聚会虚拟定位", false, "（尚未测试）是否启用炉边聚会虚拟定位");
+            isFiresideGatheringEnable = config.Bind("好友", "炉边聚会虚拟定位", false, "是否启用炉边聚会虚拟定位");
             firesideGatheringLatitude = config.Bind("好友", "炉边聚会纬度", 0.0, "炉边聚会纬度");
             firesideGatheringLongitude = config.Bind("好友", "炉边聚会经度", 0.0, "炉边聚会经度");
             firesideGatheringGpsAccuracy = config.Bind("好友", "炉边聚会Gps定位精度", 54.0, "炉边聚会定位精度");
 
             isFullnameShow = config.Bind("炉石", "显示全名", false, "是否显示对手战网全名；如果启用该选项，还会允许添加当前对手(启动快捷键时，也允许添加对手)。");
             isOpponentRankInGameShow = config.Bind("炉石", "显示天梯等级", false, "是否在传说前显示对手天梯等级");
+            isCardTrackerEnable = config.Bind("炉石", "手牌追踪", false, "标记对手已使用的卡牌（评价是，效果不如记牌器）");
             isSkipHeroIntro = config.Bind("炉石", "跳过英雄介绍", false, "是否跳过英雄介绍(ShouldSkipMulligan)");
             isExtendedBMEnable = config.Bind("炉石", "表情无冷却", false, "是否允许无限制表情(延迟最低1.5s)");
             isThinkEmotesEnable = config.Bind("炉石", "思考表情", true, "是否允许显示思考表情");
             receiveEnemyEmoteLimit = config.Bind("炉石", "表情数量", -1, new ConfigDescription("游戏内表情数量接收限制，超过自动屏蔽对手表情，0时开局屏蔽，-1不限制（有小bug）", new AcceptableValueRange<int>(-1, 100)));
             isOpponentGoldenCardShow = config.Bind("炉石", "对手卡牌特效", true, "是否显示对手卡牌特效(覆盖ALL配置)");
             goldenCardState = config.Bind("炉石", "金卡特效", Utils.CardState.Default, "强制金卡特效");
-            diamondCardState = config.Bind("炉石", "钻石卡特效", Utils.CardState.Default, "强制钻石卡特效");
+            diamondCardState = config.Bind("炉石", "钻石卡特效", Utils.CardState.Default, "强制钻石卡特效（如果有）");
 
             isAutoRecvMercenaryRewardEnable = config.Bind("佣兵", "自动领奖", false, "是否自动领取佣兵佣兵奖励（屏蔽宝箱）");
             isMercenaryBattleZoom = config.Bind("佣兵", "允许缩放", true, "（可能存在BUG）是否允许佣兵战斗时缩放画面");
@@ -494,6 +496,12 @@ namespace HsMod
             get { return PluginConfig.isAlertPopupShow.Value; }
             set { PluginConfig.isAlertPopupShow.Value = value; }
         }
+
+        public bool IsBgsQuickModeEnableValue
+        {
+            get { return PluginConfig.isBgsQuickModeEnable.Value && GameMgr.Get().IsBattlegrounds(); }
+        }
+
         public bool TimeGearEnable
         {
             get { return PluginConfig.isTimeGearEnable.Value; }
