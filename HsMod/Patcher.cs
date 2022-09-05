@@ -1747,7 +1747,7 @@ namespace HsMod
                     {
                         opponentCardBackID = friendlyCardBackID;
                     }
-                    
+
                     CardBackManager.Get().SetGameCardBackIDs(friendlyCardBackID, opponentCardBackID);
                     return false;
                 }

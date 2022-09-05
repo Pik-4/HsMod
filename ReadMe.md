@@ -117,14 +117,15 @@ If the token becomes obsolete and the game stops opening, then you just need to 
 
 ### **补充说明**
 
-1. 本插件可能与基于`Assembly-CSharp.dll`的修改冲突，修改`Assembly-CSharp.dll`可能导致IL指令定位异常，进而造成相关Patch无法生效；还可能与其他BepInEx插件（例如佣兵、MixMod）冲突，原因是同一个方法可能在两个插件中都存在Patch，当有多个Patch时，运行结果可能会异常，本插件没有检测原方法是否被修改。
-2. 皮肤的配置文件在`Hearthstone\BepInEx\config\HsSkins.cfg`。若无，则在运行游戏后自动创建。
-3. `F4`为固定快捷键，用于获取游戏内部分信息（相关信息存放在`Hearthstone\BepInEx\`目录下）、**更新皮肤配置**、重启Web服务等。其余快捷键均可自定义配置。
-4. 本插件在默认状态下，几乎全部的功能均需要手动开启；插件大部分功能能在配置中找到说明，少部分功能只在Patch中提及（如最小化限制）。
-5. 本插件Web Server（即Showinfo）的默认端口为58744，一般情况下，监听本地所有IP，使用云服务器时，请注意防火墙配置。
-6. 对局统计所使用的log文件是`BepInEx\HsMatch.log`，可在设置中修改。此外对局统计页面适配的佣兵插件为[MercenariesHelper](https://github.com/HearthstonePlugin/Mercenaries)（当MercenariesHelper配合HsMod编译时，其Build4Public值应为false，以忽略与HsMod的相同Patch）。其他佣兵插件暂未做适配。
-7. 出现问题时先尝试删除相关`.cfg`配置文件（一般位于`BepInEx\config\`），进行重新配置；如果依然存在问题，请带上`HsMod.cfg`提交Issues，但不保证及时解答。
-8. `GetHsLib.py`用于更新炉石自有运行库，`install.bat`用于将编译好的`HsMod.dll`复制到默认炉石目录（前提是BepInEx已经配置好）。此外，push或提交PR到Github后，Actions会自动生成相关pre-release。
+1. 插件不可放置在含有中文的目录下，即炉石安装路径不能含有中文。
+2. 本插件可能与基于`Assembly-CSharp.dll`的修改冲突，修改`Assembly-CSharp.dll`可能导致IL指令定位异常，进而造成相关Patch无法生效；还可能与其他BepInEx插件（例如佣兵、MixMod）冲突，原因是同一个方法可能在两个插件中都存在Patch，当有多个Patch时，运行结果可能会异常，本插件没有检测原方法是否被修改。
+3. 皮肤的配置文件在`Hearthstone\BepInEx\config\HsSkins.cfg`。若无，则在运行游戏后自动创建。
+4. `F4`为固定快捷键，用于获取游戏内部分信息（相关信息存放在`Hearthstone\BepInEx\`目录下）、**更新皮肤配置**、重启Web服务等。其余快捷键均可自定义配置。
+5. 本插件在默认状态下，几乎全部的功能均需要手动开启；插件大部分功能能在配置中找到说明，少部分功能只在Patch中提及（如最小化限制）。
+6. 本插件Web Server（即Showinfo）的默认端口为58744，一般情况下，监听本地所有IP，使用云服务器时，请注意防火墙配置。
+7. 对局统计所使用的log文件是`BepInEx\HsMatch.log`，可在设置中修改。此外对局统计页面适配的佣兵插件为[MercenariesHelper](https://github.com/HearthstonePlugin/Mercenaries)（当MercenariesHelper配合HsMod编译时，其Build4Public值应为false，以忽略与HsMod的相同Patch）。其他佣兵插件暂未做适配。
+8. 出现问题时先尝试删除相关`.cfg`配置文件（一般位于`BepInEx\config\`），进行重新配置；如果依然存在问题，请带上`HsMod.cfg`提交Issues，但不保证及时解答。
+9. `GetHsLib.py`用于更新炉石自有运行库，`install.bat`用于将编译好的`HsMod.dll`复制到默认炉石目录（前提是BepInEx已经配置好）。此外，push或提交PR到Github后，Actions会自动生成相关pre-release。
 
 ### client.config
 

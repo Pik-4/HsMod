@@ -182,7 +182,7 @@ namespace HsMod
             isAutoRecvMercenaryRewardEnable = config.Bind("佣兵", "自动领奖", false, "是否自动领取佣兵佣兵奖励（屏蔽宝箱）");
             isMercenaryBattleZoom = config.Bind("佣兵", "允许缩放", true, "（可能存在BUG）是否允许佣兵战斗时缩放画面");
             mercenaryDiamondCardState = config.Bind("佣兵", "钻石皮肤替换", Utils.CardState.Default, "如果可以，是否替换成钻石皮肤（优先级低于炉石-钻石卡特效）");
-            randomMercenarySkinEnable = config.Bind("佣兵", "随机皮肤", Utils.CardState.Default, "随机皮肤（不包含钻皮且钻石特效值不能为disabled）");
+            randomMercenarySkinEnable = config.Bind("佣兵", "随机皮肤", Utils.CardState.Default, "随机皮肤（不包含钻皮且炉石-钻石卡特效值不能为disabled）");
 
             isBgsQuickModeEnable = config.Bind("酒馆", "酒馆快速战斗", false, "是否启用酒馆快速战斗模式");
             isShutUpBobEnable = config.Bind("酒馆", "沉默鲍勃", false, "是否让鲍勃闭嘴");
@@ -224,7 +224,7 @@ namespace HsMod
             buyAdventure = config.Bind("开发", "冒险购买", Utils.BuyAdventureTemplate.DoNothing, "（不建议购买卡拉赞）选择一个冒险进行购买尝试（有概率封号，酌情考虑使用）");
             isKarazhanFixEnable = config.Bind("开发", "卡拉赞修复", false, "（请打完后请关闭，目前无法打序章）卡拉赞黑鸦翱翔修复，也可以用作冒险跳关。（有概率封号，酌情考虑使用）");
             webServerPort = config.Bind("开发", "网站端口", 58744, new ConfigDescription("WebServer端口", new AcceptableValueRange<int>(1, 65535)));
-            webPageBackImg = config.Bind("开发", "网页背景图", "", "网页背景图片");
+            webPageBackImg = config.Bind("开发", "网页背景图", "https://imgapi.cn/cos.php", new ConfigDescription("网页背景图片", null, new object[] { "Advanced" }));
 
             hsMatchLogPath = config.Bind("开发", "对局日志", @"BepInEx\HsMatch.log", "炉石对局日志文件位置（相对于Hearthstone）");
 
@@ -500,6 +500,12 @@ namespace HsMod
         public bool IsBgsQuickModeEnableValue
         {
             get { return PluginConfig.isBgsQuickModeEnable.Value && GameMgr.Get().IsBattlegrounds(); }
+        }
+
+        public bool IsTimeGearEnableValue
+        {
+            get { return PluginConfig.isTimeGearEnable.Value; }
+            set { PluginConfig.isTimeGearEnable.Value = value; }
         }
 
         public bool TimeGearEnable
