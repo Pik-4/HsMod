@@ -1622,18 +1622,27 @@ namespace HsMod
                     }
                 }
                 //string rawCardId = cardId;
-                else if (cardId != null
-                    && __instance.GetCard().GetControllerSide() == global::Player.Side.FRIENDLY
-                    && DefLoader.Get()?.GetEntityDef(cardId)?.GetCardType() == TAG_CARDTYPE.HERO_POWER
-                    && HeroesMapping.Count != 0)
-
+                else if (cardId != null && DefLoader.Get()?.GetEntityDef(cardId)?.GetCardType() == TAG_CARDTYPE.HERO_POWER)
                 {
-                    // Replace HeroPower
-                    //UpdateCardsMappingReal(cardId, Utils.SkinType.HEROPOWER);
-                    Utils.UpdateHeroPowerMapping();
-                    HeroesPowerMapping.TryGetValue(cardId, out string res);
-                    cardId = (res != null && res != "" && res != string.Empty) ? res : cardId;
-                    return;
+                    if (skinHero.Value != -1 && __instance.GetCard().GetControllerSide() == global::Player.Side.FRIENDLY)
+                    {
+                        cardId = GameUtils.GetHeroPowerCardIdFromHero(skinHero.Value);
+                    }
+                    else if (skinOpposingHero.Value != -1 && __instance.GetCard().GetControllerSide() == global::Player.Side.OPPOSING)
+                    {
+                        cardId = GameUtils.GetHeroPowerCardIdFromHero(skinOpposingHero.Value);
+                    }
+
+                    else if (__instance.GetCard().GetControllerSide() == global::Player.Side.FRIENDLY && HeroesMapping.Count != 0)
+
+                    {
+                        // Replace HeroPower
+                        //UpdateCardsMappingReal(cardId, Utils.SkinType.HEROPOWER);
+                        Utils.UpdateHeroPowerMapping();
+                        HeroesPowerMapping.TryGetValue(cardId, out string res);
+                        cardId = (res != null && res != "" && res != string.Empty) ? res : cardId;
+                        return;
+                    }
                 }
 
                 else if (Utils.CheckInfo.IsHero(cardId, out Assets.CardHero.HeroType heroType))
@@ -1666,21 +1675,28 @@ namespace HsMod
                     else if (cardId.Substring(0, 5) == "HERO_"
                         && DefLoader.Get().GetEntityDef(cardId).GetCardType() == TAG_CARDTYPE.HERO
                         && CardsMapping.Count != 0
-                        && __instance.GetCard().GetControllerSide() == Player.Side.FRIENDLY
                         )
                     {
-                        //UpdateCardsMappingReal(cardId, Utils.SkinType.HERO);
-                        if (skinHero.Value != -1)
-                            cardId = GameUtils.TranslateDbIdToCardId(skinHero.Value);
-                        else
+                        if (__instance.GetCard().GetControllerSide() == Player.Side.FRIENDLY)
                         {
-                            //LoadSkinsConfigFromFile();
-                            if (HeroesMapping.TryGetValue(GameUtils.TranslateCardIdToDbId(cardId), out int dbid))
+                            //UpdateCardsMappingReal(cardId, Utils.SkinType.HERO);
+                            if (skinHero.Value != -1)
+                                cardId = GameUtils.TranslateDbIdToCardId(skinHero.Value);
+                            else
                             {
-                                if (Utils.CheckInfo.IsHero(dbid, out Assets.CardHero.HeroType res))
-                                    if (res != Assets.CardHero.HeroType.BATTLEGROUNDS_HERO || res != Assets.CardHero.HeroType.BATTLEGROUNDS_GUIDE)
-                                        cardId = GameUtils.TranslateDbIdToCardId(dbid);
+                                //LoadSkinsConfigFromFile();
+                                if (HeroesMapping.TryGetValue(GameUtils.TranslateCardIdToDbId(cardId), out int dbid))
+                                {
+                                    if (Utils.CheckInfo.IsHero(dbid, out Assets.CardHero.HeroType res))
+                                        if (res != Assets.CardHero.HeroType.BATTLEGROUNDS_HERO || res != Assets.CardHero.HeroType.BATTLEGROUNDS_GUIDE)
+                                            cardId = GameUtils.TranslateDbIdToCardId(dbid);
+                                }
                             }
+                        }
+                        else if (__instance.GetCard().GetControllerSide() == Player.Side.OPPOSING)
+                        {
+                            if (skinOpposingHero.Value != -1)
+                                cardId = GameUtils.TranslateDbIdToCardId(skinOpposingHero.Value);
                         }
                     }
                 }

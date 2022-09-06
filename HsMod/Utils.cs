@@ -709,7 +709,6 @@ namespace HsMod
                     HeroesPowerMapping.Add(rawHeroPower, aimHeroPower);
                     //MyLogger(LogLevel.Debug, "HeroPowerMapping: " + rawHeroPower + " -> " + aimHeroPower);
                 }
-
             }
         }
 

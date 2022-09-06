@@ -88,6 +88,7 @@ namespace HsMod
         public static ConfigEntry<int> skinBgsFinisher;
         public static ConfigEntry<int> skinBob;
         public static ConfigEntry<int> skinHero;
+        public static ConfigEntry<int> skinOpposingHero;
 
         public static ConfigEntry<bool> isShowFPSEnable;
         public static ConfigEntry<bool> isInternalModeEnable;
@@ -193,7 +194,8 @@ namespace HsMod
             skinBgsBoard = config.Bind("皮肤", "酒馆战斗面板", -1, "酒馆战斗面板的偏好ID，-1表示不做修改");
             skinBgsFinisher = config.Bind("皮肤", "酒馆击杀特效", -1, "酒馆击杀的偏好ID，-1表示不做修改");
             skinBob = config.Bind("皮肤", "鲍勃", -1, "鲍勃的偏好ID，-1表示不做修改");
-            skinHero = config.Bind("皮肤", "英雄", -1, "（废弃，不建议使用，建议从文件加载英雄皮肤，修改完后F4更新；如果再对局中，则还需要模拟拔线）英雄的偏好ID，-1表示不做修改");
+            skinHero = config.Bind("皮肤", "英雄", -1, "（慎用，非挂机不建议使用。一般情况下建议从文件加载英雄皮肤，修改完后F4更新；如果再对局中，则还需要模拟拔线）英雄的偏好ID，-1表示不做修改");
+            skinOpposingHero = config.Bind("皮肤", "对手英雄", -1, "（慎用，非挂机不建议使用。）对手英雄的偏好ID，-1表示不做修改");
 
             keyTimeGearUp = config.Bind("快捷键", "齿轮倍率+1", new KeyboardShortcut(KeyCode.UpArrow), "齿轮倍率增加1，默认方向上");
             keyTimeGearDown = config.Bind("快捷键", "齿轮倍率-1", new KeyboardShortcut(KeyCode.DownArrow), "齿轮倍率减少1，默认方向下");
@@ -315,6 +317,11 @@ namespace HsMod
                     isThinkEmotesEnable.Value = false;
                     receiveEnemyEmoteLimit.Value = 0;
                     isOpponentGoldenCardShow.Value = false;
+                    skinCoin.Value = 0;   // 初始幸运币
+                    skinHero.Value = 637; // 吉安娜
+                    skinOpposingHero.Value = 637;  // 吉安娜
+                    mercenaryDiamondCardState.Value = Utils.CardState.Disabled;
+                    randomMercenarySkinEnable.Value = Utils.CardState.Disabled;
                     goldenCardState.Value = Utils.CardState.Disabled;
                     diamondCardState.Value = Utils.CardState.Disabled;
                     configTemplate.Value = Utils.ConfigTemplate.DoNothing;
@@ -337,8 +344,13 @@ namespace HsMod
                     isThinkEmotesEnable.Value = false;
                     receiveEnemyEmoteLimit.Value = 3;
                     isOpponentGoldenCardShow.Value = true;
-                    goldenCardState.Value = Utils.CardState.OnlyMy;
-                    diamondCardState.Value = Utils.CardState.OnlyMy;
+                    skinCoin.Value = -1;
+                    skinHero.Value = -1;
+                    skinOpposingHero.Value = -1;
+                    goldenCardState.Value = Utils.CardState.Default;
+                    diamondCardState.Value = Utils.CardState.Default;
+                    mercenaryDiamondCardState.Value = Utils.CardState.Default;
+                    randomMercenarySkinEnable.Value = Utils.CardState.Default;
                     configTemplate.Value = Utils.ConfigTemplate.DoNothing;
                     return;
             }
