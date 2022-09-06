@@ -316,7 +316,7 @@ namespace HsMod
                     isThinkEmotesEnable.Value = false;
                     receiveEnemyEmoteLimit.Value = 0;
                     isOpponentGoldenCardShow.Value = false;
-                    skinCoin.Value = 0;   // 初始幸运币
+                    skinCoin.Value = 1746;   // 初始幸运币
                     skinHero.Value = 637; // 吉安娜
                     skinOpposingHero.Value = 637;  // 吉安娜
                     mercenaryDiamondCardState.Value = Utils.CardState.Disabled;
