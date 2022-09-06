@@ -1624,7 +1624,11 @@ namespace HsMod
                 //string rawCardId = cardId;
                 else if (cardId != null && DefLoader.Get()?.GetEntityDef(cardId)?.GetCardType() == TAG_CARDTYPE.HERO_POWER)
                 {
-                    if (skinHero.Value != -1 && __instance.GetCard().GetControllerSide() == global::Player.Side.FRIENDLY)
+                    if(skinHero.Value == 637 && skinOpposingHero.Value == 637)    // 防止技能识别错误，待测试、待验证
+                    {
+                        return;
+                    }
+                    else if (skinHero.Value != -1 && __instance.GetCard().GetControllerSide() == global::Player.Side.FRIENDLY)
                     {
                         cardId = GameUtils.GetHeroPowerCardIdFromHero(skinHero.Value);
                     }
