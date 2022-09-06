@@ -136,11 +136,11 @@ namespace HsMod
         {
             config.Clear();
             isPluginEnable = config.Bind("全局", "HsMod状态", false, "是否启用插件（修改该选项后建议重启炉石）");
-            isFakeOpenEnable = config.Bind("全局", "模拟开包状态", false, "是否启用模拟开包（修改该选项后建议重启炉石，启用时可能会导致卡包信息统计异常）");
             configTemplate = config.Bind("全局", "设置模板", Utils.ConfigTemplate.DoNothing, "配置运行模板，当选项为DoNothing时，不修改任何配置。配置修改完成后自动替换回DoNothing");
             isShortcutsEnable = config.Bind("全局", "快捷键状态", false, "是否启用快捷键");
             isTimeGearEnable = config.Bind("全局", "变速齿轮状态", false, "是否启用变速齿轮");
             timeGear = config.Bind("全局", "变速倍率", 0, new ConfigDescription("变速齿轮倍速，1和0倍率相同，负数表示变慢", new AcceptableValueRange<int>(-8, 8)));
+            isShowFPSEnable = config.Bind("全局", "显示FPS", false, "是否显示FPS信息（快捷键：左Crtl+P）");
             targetFrameRate = config.Bind("全局", "游戏帧率", -1, new ConfigDescription("游戏帧率设置，-1表示不做修改", new AcceptableValueRange<int>(-1, 2333)));
             isDynamicFpsEnable = config.Bind("全局", "动态帧率", true, "是否启用动态帧率，修改游戏帧率时，建议禁用该选项");
 
@@ -221,14 +221,13 @@ namespace HsMod
             keyEmoteOops = config.Bind("快捷键", "失误", new KeyboardShortcut(KeyCode.Alpha5), "表情失误，默认数字键5");
             keyEmoteThreaten = config.Bind("快捷键", "威胁", new KeyboardShortcut(KeyCode.Alpha6), "表情威胁，默认数字键6");
 
-            isInternalModeEnable = config.Bind("开发", "内部模式", false, "是否切换到内部模式（需要重启炉石）");
-            isShowFPSEnable = config.Bind("开发", "显示FPS", false, "是否显示FPS信息");
+            hsMatchLogPath = config.Bind("开发", "对局日志", @"BepInEx\HsMatch.log", "炉石对局日志文件位置（相对于Hearthstone）");
+            isFakeOpenEnable = config.Bind("开发", "模拟开包状态", false, "是否启用模拟开包（修改该选项后建议重启炉石，启用时可能会导致卡包信息统计异常）");
             buyAdventure = config.Bind("开发", "冒险购买", Utils.BuyAdventureTemplate.DoNothing, "（不建议购买卡拉赞）选择一个冒险进行购买尝试（有概率封号，酌情考虑使用）");
             isKarazhanFixEnable = config.Bind("开发", "卡拉赞修复", false, "（请打完后请关闭，目前无法打序章）卡拉赞黑鸦翱翔修复，也可以用作冒险跳关。（有概率封号，酌情考虑使用）");
             webServerPort = config.Bind("开发", "网站端口", 58744, new ConfigDescription("WebServer端口", new AcceptableValueRange<int>(1, 65535)));
             webPageBackImg = config.Bind("开发", "网页背景图", "https://imgapi.cn/cos.php", new ConfigDescription("网页背景图片", null, new object[] { "Advanced" }));
-
-            hsMatchLogPath = config.Bind("开发", "对局日志", @"BepInEx\HsMatch.log", "炉石对局日志文件位置（相对于Hearthstone）");
+            isInternalModeEnable = config.Bind("开发", "内部模式", false, "是否切换到内部模式（需要重启炉石）");
 
             fakeDevicePreset = config.Bind("模拟", "设备模拟模板", Utils.DevicePreset.Default, "（重启炉石后生效）模拟设备，用于领取卡包卡背");
             fakeDeviceOs = config.Bind("模拟", "设备模拟系统", OSCategory.PC, "模拟设备操作系统，当设备模拟模板为Custom时有效。");
