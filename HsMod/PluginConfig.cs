@@ -1,4 +1,5 @@
 ﻿using BepInEx.Configuration;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -129,6 +130,7 @@ namespace HsMod
         public static Dictionary<int, int> HeroesMapping = new Dictionary<int, int>();
         public static Dictionary<string, string> HeroesPowerMapping = new Dictionary<string, string>();
 
+        public static long timeKeeper = DateTime.Now.Ticks;
 
         public static List<Utils.CardMapping> CardsMapping = new List<Utils.CardMapping>();    //卡片替换映射，目前暂未使用
         public static IGraphicsManager graphicsManager;
@@ -258,6 +260,7 @@ namespace HsMod
             LoadSkinsConfigFromFile();
             ConfigValueDelegate();
             ConfigTemplateSettingChanged(configTemplate.Value);
+            timeKeeper = DateTime.Now.Ticks;
         }
 
         public static void ConfigValueDelegate()
@@ -531,6 +534,10 @@ namespace HsMod
             set { PluginConfig.timeGear.Value = value; }
         }
 
+        public long RunningTime
+        {
+            get { return (DateTime.Now.Ticks - PluginConfig.timeKeeper) / 10000000; }    // 返回秒
+        }
 
         public string CacheOpponentFullName
         {
