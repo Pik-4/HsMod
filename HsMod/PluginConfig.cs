@@ -539,6 +539,12 @@ namespace HsMod
             get { return (DateTime.Now.Ticks - PluginConfig.timeKeeper) / 10000000; }    // 返回秒
         }
 
+        public string HsMatchLogPathValue
+        {
+            get { return PluginConfig.hsMatchLogPath.Value; }
+            set { PluginConfig.hsMatchLogPath.Value = value; }
+        }
+
         public string CacheOpponentFullName
         {
             get { return Utils.CacheLastOpponentFullName; }
