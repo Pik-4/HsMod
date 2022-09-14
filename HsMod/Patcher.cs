@@ -13,7 +13,6 @@ using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
 using static HsMod.PluginConfig;
-using static Mono.Security.X509.X520;
 
 namespace HsMod
 {
