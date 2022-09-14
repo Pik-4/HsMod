@@ -44,7 +44,25 @@ namespace HsMod
                 Utils.MyLogger(BepInEx.Logging.LogLevel.Error, $"{loadType.Name} => {ex.Message}");
             }
         }
-        public static bool UnPatch(string name)
+		public static void LoadManualPatch()
+		{
+            try
+            {
+                Harmony harmony = new Harmony("com.example.patch");
+                Type targetType = AccessTools.TypeByName("LogArchive");
+				var targetMethod = targetType.GetMethod("get_LogPath");
+				var mPostfix = new HarmonyMethod(typeof(PatchManual).GetMethod("PatchLogPath"));
+				mPostfix.methodType = MethodType.Getter;
+				harmony.Patch(targetMethod, postfix: mPostfix);
+			}
+            catch (Exception ex)
+            {
+                Utils.MyLogger(BepInEx.Logging.LogLevel.Error, $"LoadManualPatch => {ex.Message}");
+            }
+
+		}
+
+		public static bool UnPatch(string name)
         {
 
             for (int i = 0; i < AllHarmonyName.Count; i++)
@@ -191,7 +209,8 @@ namespace HsMod
             LoadPatch(typeof(Patcher.PatchFavorite));
             LoadPatch(typeof(Patcher.PatchFakeDevice));
             LoadPatch(typeof(Patcher.PatchDevOptioins));
-            if (isShowCardLargeCount.Value)
+			LoadManualPatch();
+			if (isShowCardLargeCount.Value)
             {
                 LoadPatch(typeof(Patcher.PatchRealtimeCardNum));
             }
@@ -2825,5 +2844,17 @@ namespace HsMod
             updatePacks?.Invoke(__instance, null);
         }
     }
+
+	//获取炉石日志初始化
+	public static class PatchManual
+	{
+		public static string PatchLogPath(string __result)
+        {
+            if (hsLogPath.Value != __result)
+                hsLogPath.Value = __result;
+            return __result;
+        }
+	}
+
 }
 
