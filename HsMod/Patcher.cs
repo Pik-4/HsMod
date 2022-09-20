@@ -1498,11 +1498,11 @@ namespace HsMod
                 return true;
             }
 
-            // 自动举报
             [HarmonyPostfix]
             [HarmonyPatch(typeof(GameEntity), "ShowEndGameScreen")]
             public static void PatchEndGameScreenShow(ref TAG_PLAYSTATE playState, ref Spell enemyBlowUpSpell, ref Spell friendlyBlowUpSpell)
             {
+                // 自动举报 + 对局记录
                 try
                 {
                     if (!GameMgr.Get().IsSpectator() && (Utils.CacheLastOpponentAccountID != null) && (!String.IsNullOrEmpty(Utils.CacheLastOpponentFullName)))
@@ -1540,6 +1540,13 @@ namespace HsMod
                 {
                     Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex);
                     Utils.CacheLastOpponentAccountID = null;
+                }
+
+                // 自动退出
+                if(autoQuitTimer.Value > 0 && ConfigValue.Get().RunningTime >= autoQuitTimer.Value)
+                {
+                    Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "定时重启！即将退出游戏...");
+                    Application.Quit();
                 }
             }
 
