@@ -1543,7 +1543,7 @@ namespace HsMod
                 }
 
                 // 自动退出
-                if(autoQuitTimer.Value > 0 && ConfigValue.Get().RunningTime >= autoQuitTimer.Value)
+                if (autoQuitTimer.Value > 0 && ConfigValue.Get().RunningTime >= autoQuitTimer.Value)
                 {
                     Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "定时重启！即将退出游戏...");
                     Application.Quit();
