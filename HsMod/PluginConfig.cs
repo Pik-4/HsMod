@@ -174,7 +174,7 @@ namespace HsMod
 
             isFullnameShow = config.Bind("炉石", "显示全名", false, "是否显示对手战网全名；如果启用该选项，还会允许添加当前对手(启动快捷键时，也允许添加对手)。");
             isOpponentRankInGameShow = config.Bind("炉石", "显示天梯等级", false, "是否在传说前显示对手天梯等级");
-            isCardTrackerEnable = config.Bind("炉石", "手牌追踪", false, "标记对手已使用的卡牌（评价是，效果不如记牌器）");
+            isCardTrackerEnable = config.Bind("炉石", "卡牌追踪", false, "标记已知的卡牌（和记牌器五五开）");
             isSkipHeroIntro = config.Bind("炉石", "跳过英雄介绍", false, "是否跳过英雄介绍(ShouldSkipMulligan)");
             isExtendedBMEnable = config.Bind("炉石", "表情无冷却", false, "是否允许无限制表情(延迟最低1.5s)");
             isThinkEmotesEnable = config.Bind("炉石", "思考表情", true, "是否允许显示思考表情");

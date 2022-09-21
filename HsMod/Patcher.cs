@@ -1562,6 +1562,84 @@ namespace HsMod
                 }
                 return true;
             }
+            // 剑圣奥卡尼的选择识别，需要启用Power.log
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(GameState), "DebugPrintTags")]
+            public static void PatchDebugPrintPower(GameState __instance, ref global::Logger logger, ref string callerName, ref string indentation, Network.Entity netEntity)
+            {
+                if (!isCardTrackerEnable.Value)
+                {
+                    return;
+                }
+
+                if (netEntity != null && __instance.GetEntity(netEntity.ID) != null && __instance.GetEntity(netEntity.ID).GetControllerSide() == global::Player.Side.OPPOSING)
+                {
+                    if (netEntity.CardID == "TSC_032t")
+                    {
+                        UIStatus.Get().AddInfo("注意：反制随从！", 30f);
+                        Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "num3test");
+                        return;
+                    }
+                    if (netEntity.CardID == "TSC_032t2")
+                    {
+                        UIStatus.Get().AddInfo("注意：反制法术！", 30f);
+                        Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "num4test");
+                    }
+                }
+
+            }
+            // 变装大师识别，40牌识别
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(MulliganManager), "SetMulliganBannerText", new Type[] { typeof(string), typeof(string) })]
+            public static void PatchSetMulliganBannerText(MulliganManager __instance, ref string title, ref string subtitle, ref bool ___friendlyPlayerGoesFirst)
+            {
+                if (isCardTrackerEnable.Value && !GameMgr.Get().IsBattlegrounds())
+                {
+                    int cardCount = GameState.Get().GetOpposingPlayer().GetController().GetDeckZone().GetCardCount();
+                    int cardCount2 = GameState.Get().GetOpposingPlayer().GetController().GetHandZone().GetCardCount();
+                    int num = 0;
+                    if (___friendlyPlayerGoesFirst)
+                    {
+                        num = cardCount + cardCount2 - 1;
+                    }
+                    else
+                    {
+                        num = cardCount + cardCount2;
+                    }
+                    Map<int, Entity> entityMap = GameState.Get().GetEntityMap();
+                    int num2 = 0;
+                    foreach (KeyValuePair<int, Entity> keyValuePair in entityMap)
+                    {
+                        Entity value = keyValuePair.Value;
+                        if (value != null && value.GetControllerSide() == Player.Side.OPPOSING)
+                        {
+                            num2++;
+                        }
+                    }
+                    bool flag = false;
+                    if (___friendlyPlayerGoesFirst)
+                    {
+                        //if (num2 == 36 || num2 == 46) flag = true;
+                        if (num2 == 37 || num2 == 47) flag = true;
+                    }
+                    else
+                    {
+                        //if (num2 == 35 || num2 == 45) flag = true;
+                        if (num2 == 36 || num2 == 46) flag = true;
+                    }
+                    string text;
+                    if (flag)
+                    {
+                        text = GameStrings.GetClassName(TAG_CLASS.ROGUE);
+                    }
+                    else
+                    {
+                        text = GameStrings.GetClassName(GameState.Get().GetOpposingPlayer().GetHero().GetClass());
+                    }
+                    title = $"对手职业是{text}，套牌{num}张";
+                }
+            }
+
 
         }
 
