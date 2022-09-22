@@ -1619,13 +1619,13 @@ namespace HsMod
                     bool flag = false;
                     if (___friendlyPlayerGoesFirst)
                     {
-                        //if (num2 == 36 || num2 == 46) flag = true;
-                        if (num2 == 37 || num2 == 47) flag = true;
+                        if (num2 == 36 || num2 == 46) flag = true;
+                        //if (num2 == 37 || num2 == 47) flag = true;
                     }
                     else
                     {
-                        //if (num2 == 35 || num2 == 45) flag = true;
-                        if (num2 == 36 || num2 == 46) flag = true;
+                        if (num2 == 35 || num2 == 45) flag = true;
+                        //if (num2 == 36 || num2 == 46) flag = true;
                     }
                     string text;
                     if (flag)
