@@ -1608,24 +1608,26 @@ namespace HsMod
                     }
                     Map<int, Entity> entityMap = GameState.Get().GetEntityMap();
                     int num2 = 0;
+                    int num3 = 0;
                     foreach (KeyValuePair<int, Entity> keyValuePair in entityMap)
                     {
                         Entity value = keyValuePair.Value;
                         if (value != null && value.GetControllerSide() == Player.Side.OPPOSING)
                         {
-                            num2++;
+                            if (value.GetZone() == TAG_ZONE.SETASIDE)
+                            {
+                                num2++;
+                            }
+                            if (value.GetZone() == TAG_ZONE.PLAY)
+                            {
+                                num3++;
+                            }
                         }
                     }
                     bool flag = false;
-                    if (___friendlyPlayerGoesFirst)
+                    if (num2 == 1 && num3 == 4)
                     {
-                        if (num2 == 36 || num2 == 46) flag = true;
-                        //if (num2 == 37 || num2 == 47) flag = true;
-                    }
-                    else
-                    {
-                        if (num2 == 35 || num2 == 45) flag = true;
-                        //if (num2 == 36 || num2 == 46) flag = true;
+                        flag = true;
                     }
                     string text;
                     if (flag)
