@@ -2,6 +2,7 @@
 using Blizzard.T5.Core;
 using Blizzard.T5.Core.Time;
 using HarmonyLib;
+using Hearthstone.Util;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -1567,26 +1568,18 @@ namespace HsMod
             [HarmonyPatch(typeof(GameState), "DebugPrintTags")]
             public static void PatchDebugPrintPower(GameState __instance, ref global::Logger logger, ref string callerName, ref string indentation, Network.Entity netEntity)
             {
-                if (!isCardTrackerEnable.Value)
-                {
-                    return;
-                }
-
-                if (netEntity != null && __instance.GetEntity(netEntity.ID) != null && __instance.GetEntity(netEntity.ID).GetControllerSide() == global::Player.Side.OPPOSING)
+                if (isCardTrackerEnable.Value && netEntity != null && __instance.GetEntity(netEntity.ID) != null && __instance.GetEntity(netEntity.ID).GetControllerSide() == global::Player.Side.OPPOSING)
                 {
                     if (netEntity.CardID == "TSC_032t")
                     {
                         UIStatus.Get().AddInfo("注意：反制随从！", 30f);
-                        Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "num3test");
                         return;
                     }
                     if (netEntity.CardID == "TSC_032t2")
                     {
                         UIStatus.Get().AddInfo("注意：反制法术！", 30f);
-                        Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "num4test");
                     }
                 }
-
             }
             // 变装大师识别，40牌识别
             [HarmonyPrefix]
@@ -1595,20 +1588,14 @@ namespace HsMod
             {
                 if (isCardTrackerEnable.Value && !GameMgr.Get().IsBattlegrounds())
                 {
-                    int cardCount = GameState.Get().GetOpposingPlayer().GetController().GetDeckZone().GetCardCount();
-                    int cardCount2 = GameState.Get().GetOpposingPlayer().GetController().GetHandZone().GetCardCount();
-                    int num = 0;
-                    if (___friendlyPlayerGoesFirst)
-                    {
-                        num = cardCount + cardCount2 - 1;
-                    }
-                    else
-                    {
-                        num = cardCount + cardCount2;
-                    }
+                    int deckCardCount = GameState.Get().GetOpposingPlayer().GetController().GetDeckZone().GetCardCount();
+                    int handCardCount = GameState.Get().GetOpposingPlayer().GetController().GetHandZone().GetCardCount();
+                    int oppoCardCount = deckCardCount + handCardCount;
+                    oppoCardCount = ___friendlyPlayerGoesFirst ? oppoCardCount - 1 : oppoCardCount;
+
+                    int setasideNum = 0;
+                    int playNum = 0;
                     Map<int, Entity> entityMap = GameState.Get().GetEntityMap();
-                    int num2 = 0;
-                    int num3 = 0;
                     foreach (KeyValuePair<int, Entity> keyValuePair in entityMap)
                     {
                         Entity value = keyValuePair.Value;
@@ -1616,29 +1603,50 @@ namespace HsMod
                         {
                             if (value.GetZone() == TAG_ZONE.SETASIDE)
                             {
-                                num2++;
+                                setasideNum++;
                             }
                             if (value.GetZone() == TAG_ZONE.PLAY)
                             {
-                                num3++;
+                                playNum++;
                             }
                         }
                     }
-                    bool flag = false;
-                    if (num2 == 1 && num3 == 4)
+                    bool isRogue = setasideNum == 1 && playNum == 4;
+
+                    string heroClass = isRogue ? GameStrings.GetClassName(TAG_CLASS.ROGUE)
+                                               : GameStrings.GetClassName(GameState.Get().GetOpposingPlayer().GetHero().GetClass());
+                    title = $"对手职业是{heroClass}，套牌{oppoCardCount}张";
+                }
+            }
+            // 生成Power.log
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(Log), "get_ConfigPath")]
+            public static void PatchConfigPath()
+            {
+                bool isLogConfigExist = false;
+                string logConfigPath = string.Format("{0}/{1}", PlatformFilePaths.ExternalDataPath, "log.config");
+                if (!System.IO.File.Exists(logConfigPath))
+                {
+                    logConfigPath = string.Format("{0}/{1}", PlatformFilePaths.PersistentDataPath, "log.config");
+                    if (!System.IO.File.Exists(logConfigPath))
                     {
-                        flag = true;
-                    }
-                    string text;
-                    if (flag)
-                    {
-                        text = GameStrings.GetClassName(TAG_CLASS.ROGUE);
+                        logConfigPath = PlatformFilePaths.GetAssetPath("log.config", false);
+                        isLogConfigExist = System.IO.File.Exists(logConfigPath);
                     }
                     else
                     {
-                        text = GameStrings.GetClassName(GameState.Get().GetOpposingPlayer().GetHero().GetClass());
+                        isLogConfigExist = true;
                     }
-                    title = $"对手职业是{text}，套牌{num}张";
+                }
+                else
+                {
+                    isLogConfigExist = true;
+                }
+
+                if (!isLogConfigExist)
+                {
+                    logConfigPath = string.Format("{0}/{1}", PlatformFilePaths.ExternalDataPath, "log.config");
+                    System.IO.File.WriteAllText(logConfigPath, "[Arena]\r\nLogLevel=1\r\nFilePrinting=True\r\nConsolePrinting=False\r\nScreenPrinting=False\r\nVerbose=False\r\n[Decks]\r\nLogLevel=1\r\nFilePrinting=True\r\nConsolePrinting=False\r\nScreenPrinting=False\r\nVerbose=False\r\n[Power]\r\nLogLevel=1\r\nFilePrinting=True\r\nConsolePrinting=False\r\nScreenPrinting=False\r\nVerbose=True\r\n");
                 }
             }
 
