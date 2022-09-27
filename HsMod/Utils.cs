@@ -381,20 +381,22 @@ namespace HsMod
 
         public static void TryRefundCardDisenchant()
         {
-            int totalSell = 0;
-            Network network = Network.Get();
-            network.RegisterNetHandler(PegasusUtil.BoughtSoldCard.PacketID.ID, new Network.NetHandler(TryRefundCardDisenchantCallback), null);
-            foreach (var record in CollectionManager.Get().GetOwnedCards())
-            {
-                if (record != null && record.IsCraftable && record.IsRefundable && (record.OwnedCount > 0))
-                {
-                    CraftingManager.Get().TryGetCardSellValue(record.CardId, record.PremiumType, out int value);
-                    network.SellCard(record.CardDbId, record.PremiumType, record.OwnedCount, value, record.OwnedCount);
-                    totalSell += record.OwnedCount * value;
-                }
-            }
-            MyLogger(LogLevel.Warning, "尝试分解粉尘：" + totalSell);
-            UIStatus.Get().AddInfo("尝试分解粉尘：" + totalSell);
+            //TellServerAboutWhatUserDid
+
+            //int totalSell = 0;
+            //Network network = Network.Get();
+            //network.RegisterNetHandler(PegasusUtil.BoughtSoldCard.PacketID.ID, new Network.NetHandler(TryRefundCardDisenchantCallback), null);
+            //foreach (var record in CollectionManager.Get().GetOwnedCards())
+            //{
+            //    if (record != null && record.IsCraftable && record.IsRefundable && (record.OwnedCount > 0))
+            //    {
+            //        CraftingManager.Get().TryGetCardSellValue(record.CardId, record.PremiumType, out int value);
+            //        network.card(record.CardDbId, record.PremiumType, record.OwnedCount, value, record.OwnedCount);
+            //        totalSell += record.OwnedCount * value;
+            //    }
+            //}
+            //MyLogger(LogLevel.Warning, "尝试分解粉尘：" + totalSell);
+            //UIStatus.Get().AddInfo("尝试分解粉尘：" + totalSell);
         }
 
 
