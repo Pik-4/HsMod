@@ -515,7 +515,7 @@ namespace HsMod
         }
         public Utils.ConfigTemplate ConfigTemplateValue
         {
-            set {PluginConfig.configTemplate.Value = value; }
+            set { PluginConfig.configTemplate.Value = value; }
         }
         public bool IsBgsQuickModeEnableValue
         {
