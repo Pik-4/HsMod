@@ -513,7 +513,10 @@ namespace HsMod
             get { return PluginConfig.isAlertPopupShow.Value; }
             set { PluginConfig.isAlertPopupShow.Value = value; }
         }
-
+        public Utils.ConfigTemplate ConfigTemplateValue
+        {
+            set {PluginConfig.configTemplate.Value = value; }
+        }
         public bool IsBgsQuickModeEnableValue
         {
             get { return PluginConfig.isBgsQuickModeEnable.Value && GameMgr.Get().IsBattlegrounds(); }
