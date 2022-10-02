@@ -734,6 +734,34 @@ namespace HsMod
         }
 
 
+        public static bool IsMercenaryFullyUpgraded(LettuceMercenary merc)
+        {
+            if (merc == null || !merc.m_owned || !merc.IsMaxLevel())
+            {
+                return false;
+            }
+            else
+            {
+                foreach (var ability in merc.m_abilityList)
+                {
+                    if (ability.GetNextUpgradeCost() <= 0)
+                    {
+                        continue;
+                    }
+                    else return false;
+                }
+                foreach (var equipment in merc.m_equipmentList)
+                {
+                    if (equipment.GetNextUpgradeCost() <= 0)
+                    {
+                        continue;
+                    }
+                    else return false;
+                }
+                return true;
+            }
+        }
+
         public static long CalcMercenaryCoinNeed(LettuceMercenary merc)
         {
             long coinNeed = 0;

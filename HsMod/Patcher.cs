@@ -2,7 +2,6 @@
 using Blizzard.T5.Core;
 using Blizzard.T5.Core.Time;
 using HarmonyLib;
-using Hearthstone.Util;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -1563,21 +1562,32 @@ namespace HsMod
                 }
                 return true;
             }
-            // 剑圣奥卡尼的选择识别，需要启用Power.log
+            // 剑圣奥卡尼的选择识别
             [HarmonyPrefix]
-            [HarmonyPatch(typeof(GameState), "DebugPrintTags")]
-            public static void PatchDebugPrintPower(GameState __instance, ref global::Logger logger, ref string callerName, ref string indentation, Network.Entity netEntity)
+            [HarmonyPatch(typeof(GameState), "OnPowerHistory")]
+            public static void PatchDebugPrintPower(GameState __instance, ref List<Network.PowerHistory> powerList)
             {
-                if (isCardTrackerEnable.Value && netEntity != null && __instance.GetEntity(netEntity.ID) != null && __instance.GetEntity(netEntity.ID).GetControllerSide() == global::Player.Side.OPPOSING)
+                if (isCardTrackerEnable.Value)
                 {
-                    if (netEntity.CardID == "TSC_032t")
+                    foreach (var powerHistory in powerList)
                     {
-                        UIStatus.Get().AddInfo("注意：反制随从！", 30f);
-                        return;
-                    }
-                    if (netEntity.CardID == "TSC_032t2")
-                    {
-                        UIStatus.Get().AddInfo("注意：反制法术！", 30f);
+                        if (powerHistory.Type == Network.PowerType.SHOW_ENTITY)
+                        {
+                            Network.Entity netEntity = ((Network.HistShowEntity)powerHistory).Entity;
+                            if (netEntity != null && __instance.GetEntity(netEntity.ID) != null && __instance.GetEntity(netEntity.ID).GetControllerSide() == global::Player.Side.OPPOSING)
+                            {
+                                if (netEntity.CardID == "TSC_032t")
+                                {
+                                    UIStatus.Get().AddInfo("注意：反制随从！", 30f);
+                                    return;
+                                }
+                                if (netEntity.CardID == "TSC_032t2")
+                                {
+                                    UIStatus.Get().AddInfo("注意：反制法术！", 30f);
+                                    return;
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1618,37 +1628,37 @@ namespace HsMod
                     title = $"对手职业是{heroClass}，套牌{oppoCardCount}张";
                 }
             }
-            // 生成Power.log
-            [HarmonyPrefix]
-            [HarmonyPatch(typeof(Log), "get_ConfigPath")]
-            public static void PatchConfigPath()
-            {
-                bool isLogConfigExist = false;
-                string logConfigPath = string.Format("{0}/{1}", PlatformFilePaths.ExternalDataPath, "log.config");
-                if (!System.IO.File.Exists(logConfigPath))
-                {
-                    logConfigPath = string.Format("{0}/{1}", PlatformFilePaths.PersistentDataPath, "log.config");
-                    if (!System.IO.File.Exists(logConfigPath))
-                    {
-                        logConfigPath = PlatformFilePaths.GetAssetPath("log.config", false);
-                        isLogConfigExist = System.IO.File.Exists(logConfigPath);
-                    }
-                    else
-                    {
-                        isLogConfigExist = true;
-                    }
-                }
-                else
-                {
-                    isLogConfigExist = true;
-                }
+            //// 生成Power.log
+            //[HarmonyPrefix]
+            //[HarmonyPatch(typeof(Log), "get_ConfigPath")]
+            //public static void PatchConfigPath()
+            //{
+            //    bool isLogConfigExist = false;
+            //    string logConfigPath = string.Format("{0}/{1}", PlatformFilePaths.ExternalDataPath, "log.config");
+            //    if (!System.IO.File.Exists(logConfigPath))
+            //    {
+            //        logConfigPath = string.Format("{0}/{1}", PlatformFilePaths.PersistentDataPath, "log.config");
+            //        if (!System.IO.File.Exists(logConfigPath))
+            //        {
+            //            logConfigPath = PlatformFilePaths.GetAssetPath("log.config", false);
+            //            isLogConfigExist = System.IO.File.Exists(logConfigPath);
+            //        }
+            //        else
+            //        {
+            //            isLogConfigExist = true;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        isLogConfigExist = true;
+            //    }
 
-                if (!isLogConfigExist)
-                {
-                    logConfigPath = string.Format("{0}/{1}", PlatformFilePaths.ExternalDataPath, "log.config");
-                    System.IO.File.WriteAllText(logConfigPath, "[Arena]\r\nLogLevel=1\r\nFilePrinting=True\r\nConsolePrinting=False\r\nScreenPrinting=False\r\nVerbose=False\r\n[Decks]\r\nLogLevel=1\r\nFilePrinting=True\r\nConsolePrinting=False\r\nScreenPrinting=False\r\nVerbose=False\r\n[Power]\r\nLogLevel=1\r\nFilePrinting=True\r\nConsolePrinting=False\r\nScreenPrinting=False\r\nVerbose=True\r\n");
-                }
-            }
+            //    if (!isLogConfigExist)
+            //    {
+            //        logConfigPath = string.Format("{0}/{1}", PlatformFilePaths.ExternalDataPath, "log.config");
+            //        System.IO.File.WriteAllText(logConfigPath, "[Arena]\r\nLogLevel=1\r\nFilePrinting=True\r\nConsolePrinting=False\r\nScreenPrinting=False\r\nVerbose=False\r\n[Decks]\r\nLogLevel=1\r\nFilePrinting=True\r\nConsolePrinting=False\r\nScreenPrinting=False\r\nVerbose=False\r\n[Power]\r\nLogLevel=1\r\nFilePrinting=True\r\nConsolePrinting=False\r\nScreenPrinting=False\r\nVerbose=True\r\n");
+            //    }
+            //}
 
 
         }
