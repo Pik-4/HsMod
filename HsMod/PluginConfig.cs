@@ -316,7 +316,6 @@ namespace HsMod
                     isAutoExit.Value = true;
                     isIdleKickEnable.Value = true;
                     isQuickPackOpeningEnable.Value = true;
-                    isQuickModeEnable.Value = true;
                     isAutoRefundCardDisenchantEnable.Value = true;
                     isAutoRecvMercenaryRewardEnable.Value = true;
                     isMercenaryBattleZoom.Value = false;
@@ -343,7 +342,6 @@ namespace HsMod
                     isAutoOpenBoxesRewardEnable.Value = false;
                     isAutoExit.Value = false;
                     isIdleKickEnable.Value = false;
-                    isQuickModeEnable.Value = false;
                     isQuickPackOpeningEnable.Value = true;
                     isAutoRefundCardDisenchantEnable.Value = false;
                     isAutoRecvMercenaryRewardEnable.Value = true;
