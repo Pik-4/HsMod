@@ -1621,7 +1621,7 @@ namespace HsMod
                             }
                         }
                     }
-                    bool isRogue = setasideNum == 1 && playNum == 1;
+                    bool isRogue = setasideNum == 1 && playNum == 4;
 
                     string heroClass = isRogue ? GameStrings.GetClassName(TAG_CLASS.ROGUE)
                                                : GameStrings.GetClassName(GameState.Get().GetOpposingPlayer().GetHero().GetClass());
