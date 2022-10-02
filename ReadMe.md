@@ -153,7 +153,7 @@ https://eu.battle.net/login/en/?app=wtcg
 
 在启用插件后，支持`./Hearthstone.exe VerifyWebCredentials` 命令启动炉石（但需要有`client.config`文件）。
 
-TODO
+### TODO
 
 1. 整理ReadMe，更新Wiki等；整理配置与Patch之间关系；多语言支持
 2. 游戏内一键更换英雄皮肤，目前只能通过模拟掉线更新

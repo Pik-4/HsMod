@@ -21,6 +21,19 @@ namespace HsMod
             [Description("禁用特效")]
             Disabled
         }
+        //public enum QuickMode
+        //{
+        //    [Description("默认（禁用）")]
+        //    Default,
+        //    [Description("酒馆战棋")]
+        //    Battlegrounds,
+        //    [Description("佣兵战纪")]
+        //    Mercenaries,
+        //    [Description("全部模式")]
+        //    AllMode,
+        //    [Description("禁用")]
+        //    Disabled
+        //}
         public enum SkinType
         {
             [Description("卡背")]

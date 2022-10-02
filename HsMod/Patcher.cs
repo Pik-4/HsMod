@@ -1173,7 +1173,7 @@ namespace HsMod
                 return list;
             }
 
-            //快速战斗 - 理论上可以用于所有模式 现只应用于酒馆战旗
+            //快速战斗 - 理论上可以用于所有模式 现只应用于酒馆战旗或佣兵战纪的ai
             [HarmonyReversePatch]
             [HarmonyPatch(typeof(SpellController), "OnProcessTaskList")]
             [MethodImpl(MethodImplOptions.NoInlining)]
@@ -1182,7 +1182,7 @@ namespace HsMod
             [HarmonyPatch(typeof(AttackSpellController), "OnProcessTaskList")]
             public static bool PatchAttackSpellControllerOnProcessTaskList(AttackSpellController __instance)
             {
-                if (isBgsQuickModeEnable.Value && GameMgr.Get().IsBattlegrounds())
+                if (ConfigValue.Get().IsQuickModeEnableValue)
                 {
                     AttackSpellControllerBase(__instance);
                     return false;
@@ -1197,7 +1197,7 @@ namespace HsMod
             [HarmonyPatch(typeof(DeathSpellController), "OnProcessTaskList")]
             public static bool PatchDeathSpellControllerOnProcessTaskList(DeathSpellController __instance)
             {
-                if (isBgsQuickModeEnable.Value && GameMgr.Get().IsBattlegrounds())
+                if (ConfigValue.Get().IsQuickModeEnableValue)
                 {
                     DeathSpellControllerBase(__instance);
                     return false;
@@ -1212,7 +1212,7 @@ namespace HsMod
             [HarmonyPatch(typeof(TriggerSpellController), "OnProcessTaskList")]
             public static bool PatchTriggerSpellControllerOnProcessTaskList(TriggerSpellController __instance)
             {
-                if (isBgsQuickModeEnable.Value && GameMgr.Get().IsBattlegrounds())
+                if (ConfigValue.Get().IsQuickModeEnableValue)
                 {
                     TriggerSpellControllerBase(__instance);
                     return false;
@@ -1227,7 +1227,7 @@ namespace HsMod
             [HarmonyPatch(typeof(SubSpellController), "OnProcessTaskList")]
             public static bool PatchSubSpellControllerOnProcessTaskList(SubSpellController __instance)
             {
-                if (isBgsQuickModeEnable.Value && GameMgr.Get().IsBattlegrounds())
+                if (ConfigValue.Get().IsQuickModeEnableValue)
                 {
                     SubSpellControllerBase(__instance);
                     return false;
@@ -1246,7 +1246,7 @@ namespace HsMod
                     Label label = generator.DefineLabel();
                     num++;
                     list.Insert(num++, new CodeInstruction(OpCodes.Call, new Func<ConfigValue>(ConfigValue.Get).Method));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Callvirt, typeof(ConfigValue).GetProperty("IsBgsQuickModeEnableValue", BindingFlags.Instance | BindingFlags.Public).GetGetMethod()));
+                    list.Insert(num++, new CodeInstruction(OpCodes.Callvirt, typeof(ConfigValue).GetProperty("IsQuickModeEnableValue", BindingFlags.Instance | BindingFlags.Public).GetGetMethod()));
                     list.Insert(num++, new CodeInstruction(OpCodes.Brfalse_S, label));
                     list.Insert(num++, new CodeInstruction(OpCodes.Ldarg_0));
                     list.Insert(num++, new CodeInstruction(OpCodes.Call, typeof(SpellController).GetMethod("OnProcessTaskList", BindingFlags.Instance | BindingFlags.NonPublic)));

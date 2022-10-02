@@ -40,6 +40,8 @@ namespace HsMod
         public static ConfigEntry<bool> isShowRetireForever;
         public static ConfigEntry<bool> isIdleKickEnable;
 
+        //public static ConfigEntry<Utils.QuickMode> quickModeState;
+        public static ConfigEntry<bool> isQuickModeEnable;
         public static ConfigEntry<bool> isCardTrackerEnable;
         public static ConfigEntry<bool> isMoveEnemyCardsEnable;
         public static ConfigEntry<bool> isAutoReportEnable;
@@ -52,7 +54,6 @@ namespace HsMod
         public static ConfigEntry<Utils.CardState> randomMercenarySkinEnable;
 
         public static ConfigEntry<bool> isShutUpBobEnable;
-        public static ConfigEntry<bool> isBgsQuickModeEnable;
 
         public static ConfigEntry<bool> isOpponentGoldenCardShow;
         public static ConfigEntry<Utils.CardState> goldenCardState;
@@ -172,6 +173,7 @@ namespace HsMod
             firesideGatheringLongitude = config.Bind("好友", "炉边聚会经度", 0.0, "炉边聚会经度");
             firesideGatheringGpsAccuracy = config.Bind("好友", "炉边聚会Gps定位精度", 54.0, "炉边聚会定位精度");
 
+            isQuickModeEnable = config.Bind("炉石", "快速战斗", false, "是否启用酒馆或佣兵AI快速战斗模式");
             isFullnameShow = config.Bind("炉石", "显示全名", false, "是否显示对手战网全名；如果启用该选项，还会允许添加当前对手(启动快捷键时，也允许添加对手)。");
             isOpponentRankInGameShow = config.Bind("炉石", "显示天梯等级", false, "是否在传说前显示对手天梯等级");
             isCardTrackerEnable = config.Bind("炉石", "卡牌追踪", false, "标记已知的卡牌（和记牌器五五开）");
@@ -188,7 +190,6 @@ namespace HsMod
             mercenaryDiamondCardState = config.Bind("佣兵", "钻石皮肤替换", Utils.CardState.Default, "如果可以，是否替换成钻石皮肤（优先级低于炉石-钻石卡特效）");
             randomMercenarySkinEnable = config.Bind("佣兵", "随机皮肤", Utils.CardState.Default, "随机皮肤（不包含钻皮且炉石-钻石卡特效值不能为disabled）");
 
-            isBgsQuickModeEnable = config.Bind("酒馆", "酒馆快速战斗", false, "是否启用酒馆快速战斗模式");
             isShutUpBobEnable = config.Bind("酒馆", "沉默鲍勃", false, "是否让鲍勃闭嘴");
             //考虑导出单独配置
             skinCoin = config.Bind("皮肤", "硬币", -1, "幸运币的偏好ID，-1表示不做修改（游戏内模拟拔线可以实时更新）");
@@ -441,7 +442,7 @@ namespace HsMod
 
 
 
-    //对外接口，可用作生成IL指令，似乎可以优化
+    //对外接口，
     public class ConfigValue
     {
         public bool IsOpponentRankInGameShowValue
@@ -517,9 +518,12 @@ namespace HsMod
         {
             set { PluginConfig.configTemplate.Value = value; }
         }
-        public bool IsBgsQuickModeEnableValue
+        public bool IsQuickModeEnableValue
         {
-            get { return PluginConfig.isBgsQuickModeEnable.Value && GameMgr.Get().IsBattlegrounds(); }
+            get
+            {
+                return PluginConfig.isQuickModeEnable.Value && (GameMgr.Get().IsBattlegrounds() || (GameMgr.Get().IsMercenaries() && (GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_VS_AI)));
+            }
         }
 
         public bool IsTimeGearEnableValue
