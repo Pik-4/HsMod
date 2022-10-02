@@ -379,24 +379,43 @@ namespace HsMod
         }
 
 
-        public static void TryRefundCardDisenchant()
+        public static void TryRefundCardDisenchant()    //TellServerAboutWhatUserDid
         {
-            //TellServerAboutWhatUserDid
+            int totalSell = 0;
+            Network network = Network.Get();
+            network.RegisterNetHandler(PegasusUtil.BoughtSoldCard.PacketID.ID, new Network.NetHandler(TryRefundCardDisenchantCallback), null);
+            foreach (var record in CollectionManager.Get().GetOwnedCards())
+            {
+                if (record != null && record.IsCraftable && record.IsRefundable && (record.OwnedCount > 0))
+                {
+                    CraftingManager.Get().TryGetCardSellValue(record.CardId, record.PremiumType, out int value);
 
-            //int totalSell = 0;
-            //Network network = Network.Get();
-            //network.RegisterNetHandler(PegasusUtil.BoughtSoldCard.PacketID.ID, new Network.NetHandler(TryRefundCardDisenchantCallback), null);
-            //foreach (var record in CollectionManager.Get().GetOwnedCards())
-            //{
-            //    if (record != null && record.IsCraftable && record.IsRefundable && (record.OwnedCount > 0))
-            //    {
-            //        CraftingManager.Get().TryGetCardSellValue(record.CardId, record.PremiumType, out int value);
-            //        network.card(record.CardDbId, record.PremiumType, record.OwnedCount, value, record.OwnedCount);
-            //        totalSell += record.OwnedCount * value;
-            //    }
-            //}
-            //MyLogger(LogLevel.Warning, "尝试分解粉尘：" + totalSell);
-            //UIStatus.Get().AddInfo("尝试分解粉尘：" + totalSell);
+                    CraftingPendingTransaction m_pendingClientTransaction = new CraftingPendingTransaction();
+                    //int numNormalCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.NORMAL);
+                    //int numGoldenCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.GOLDEN);
+                    int numNormalCopiesInCollection = (record.PremiumType == TAG_PREMIUM.NORMAL) ? record.OwnedCount : 0;
+                    int numGoldenCopiesInCollection = (record.PremiumType == TAG_PREMIUM.GOLDEN) ? record.OwnedCount : 0;
+
+                    m_pendingClientTransaction.CardID = record.CardId;
+                    m_pendingClientTransaction.Premium = record.PremiumType;
+
+                    if (m_pendingClientTransaction.Premium == TAG_PREMIUM.GOLDEN)
+                    {
+                        //m_pendingClientTransaction.GoldenDisenchantCount = record.DisenchantCount;
+                        m_pendingClientTransaction.GoldenDisenchantCount = record.OwnedCount;
+                    }
+                    else
+                    {
+                        m_pendingClientTransaction.NormalDisenchantCount = record.OwnedCount;
+                    }
+                    network.CraftingTransaction(m_pendingClientTransaction, -value * record.OwnedCount, numNormalCopiesInCollection, numGoldenCopiesInCollection);
+                    m_pendingClientTransaction = null;
+
+                    totalSell += record.OwnedCount * value;
+                }
+            }
+            MyLogger(LogLevel.Warning, "尝试分解粉尘：" + totalSell);
+            UIStatus.Get().AddInfo("尝试分解粉尘：" + totalSell);
         }
 
 
