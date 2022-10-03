@@ -34,7 +34,7 @@ namespace HsMod
             {
                 try
                 {
-                    httpListener.Prefixes.Remove($"http://+:{webServerPort.Value}/");
+                    httpListener.Prefixes.Remove($"http://+:{CommandConfig.webServerPort}/");
                     Start();
                 }
                 catch (Exception ex)
@@ -46,7 +46,7 @@ namespace HsMod
 
         public static void Start()
         {
-            httpListener.Prefixes.Add($"http://+:{webServerPort.Value}/");
+            httpListener.Prefixes.Add($"http://+:{CommandConfig.webServerPort}/");
             httpListener.Start();
             listenerTask = Task.Factory.StartNew(delegate ()
             {

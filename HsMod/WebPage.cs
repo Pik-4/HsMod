@@ -169,7 +169,7 @@ opacity: 0.6;
             btn += @"<a href=""/skins""><button class=""btn_li"">皮肤信息</button><br/></a><br/>";
             btn += @"<a href=""/lettuce""><button class=""btn_li"">佣兵关卡</button><br/></a><br/>";
             btn += @"<a href=""/mercenaries""><button class=""btn_li"">佣兵收藏</button><br/></a><br/>";
-            if (System.IO.File.Exists(hsMatchLogPath.Value)) btn += @"<a href=""/matchlog""><button class=""btn_li"">炉石对局</button><br/></a><br/>";
+            if (System.IO.File.Exists(CommandConfig.hsMatchLogPath)) btn += @"<a href=""/matchlog""><button class=""btn_li"">炉石对局</button><br/></a><br/>";
             btn += @"<a href=""/about""><button class=""btn_li"">关&emsp;&emsp;于</button><br/></a><br/>";
             string body = @"<h1 style=""text-align: center; opacity: 0.6;"">HsMod</h1>";
             body += $@"<div style=""text-align: center; width: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);"">{btn}</div>";
@@ -931,7 +931,7 @@ opacity: 0.6;
         public static StringBuilder MatchLogPage()
         {
             StringBuilder builder = new StringBuilder();
-            if (!System.IO.File.Exists(hsMatchLogPath.Value)) return Template(builder.Append("对局文件不存在！"), "MatchLog");
+            if (!System.IO.File.Exists(CommandConfig.hsMatchLogPath)) return Template(builder.Append("对局文件不存在！"), "MatchLog");
             else builder.Append(@"<h3 style=""text-align: center;"">对局记录</h3>");
 
             try
@@ -946,7 +946,7 @@ opacity: 0.6;
                 temp += "</tr>";
                 builder.Append(temp);
 
-                foreach (string line in System.IO.File.ReadLines(hsMatchLogPath.Value).Reverse())
+                foreach (string line in System.IO.File.ReadLines(CommandConfig.hsMatchLogPath).Reverse())
                 {
                     temp = "";
                     if (line != String.Empty)

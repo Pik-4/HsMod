@@ -132,6 +132,13 @@ namespace HsMod
         public static Dictionary<int, int> HeroesMapping = new Dictionary<int, int>();
         public static Dictionary<string, string> HeroesPowerMapping = new Dictionary<string, string>();
 
+
+        public static class CommandConfig
+        {
+            public static int webServerPort = -1;
+            public static string hsMatchLogPath = "";
+        }
+
         public static long timeKeeper = DateTime.Now.Ticks;
 
         public static List<Utils.CardMapping> CardsMapping = new List<Utils.CardMapping>();    //卡片替换映射，目前暂未使用
@@ -226,12 +233,12 @@ namespace HsMod
             keyEmoteThreaten = config.Bind("快捷键", "威胁", new KeyboardShortcut(KeyCode.Alpha6), "表情威胁，默认数字键6");
 
             hsLogPath = config.Bind("开发", "炉石日志", "", "炉石进程日志文件位置（相对于Hearthstone）");
-            hsMatchLogPath = config.Bind("开发", "对局日志", @"BepInEx\HsMatch.log", "炉石对局日志文件位置（相对于Hearthstone）");
+            hsMatchLogPath = config.Bind("开发", "对局日志", @"BepInEx\HsMatch.log", "炉石对局日志文件位置（相对于Hearthstone），参数最先选用命令行");
             autoQuitTimer = config.Bind("开发", "定时退出", (long)0, "当游戏运行x秒后自动退出，x<=0时该选项无效。");
             isFakeOpenEnable = config.Bind("开发", "模拟开包状态", false, "是否启用模拟开包（修改该选项后建议重启炉石，启用时可能会导致卡包信息统计异常）");
             buyAdventure = config.Bind("开发", "冒险购买", Utils.BuyAdventureTemplate.DoNothing, "（不建议购买卡拉赞）选择一个冒险进行购买尝试（有概率封号，酌情考虑使用）");
             isKarazhanFixEnable = config.Bind("开发", "卡拉赞修复", false, "（请打完后请关闭，目前无法打序章）卡拉赞黑鸦翱翔修复，也可以用作冒险跳关。（有概率封号，酌情考虑使用）");
-            webServerPort = config.Bind("开发", "网站端口", 58744, new ConfigDescription("WebServer端口", new AcceptableValueRange<int>(1, 65535)));
+            webServerPort = config.Bind("开发", "网站端口", 58744, new ConfigDescription("WebServer端口，参数最先选用命令行", new AcceptableValueRange<int>(1, 65535)));
             webPageBackImg = config.Bind("开发", "网页背景图", "https://imgapi.cn/cos.php", new ConfigDescription("网页背景图片", null, new object[] { "Advanced" }));
             isInternalModeEnable = config.Bind("开发", "内部模式", false, "是否切换到内部模式（需要重启炉石）");
 
@@ -265,6 +272,11 @@ namespace HsMod
             ConfigValueDelegate();
             ConfigTemplateSettingChanged(configTemplate.Value);
             timeKeeper = DateTime.Now.Ticks;
+
+
+            if (CommandConfig.hsMatchLogPath == string.Empty) CommandConfig.hsMatchLogPath = hsMatchLogPath.Value;
+            if (CommandConfig.webServerPort == 0) CommandConfig.webServerPort = webServerPort.Value;
+
         }
 
         public static void ConfigValueDelegate()
@@ -552,8 +564,12 @@ namespace HsMod
 
         public string HsMatchLogPathValue
         {
-            get { return PluginConfig.hsMatchLogPath.Value; }
-            set { PluginConfig.hsMatchLogPath.Value = value; }
+            get { return PluginConfig.CommandConfig.hsMatchLogPath; }
+            set
+            {
+                PluginConfig.hsMatchLogPath.Value = value; 
+                PluginConfig.CommandConfig.hsMatchLogPath = value;
+            }
         }
 
         public string CacheOpponentFullName

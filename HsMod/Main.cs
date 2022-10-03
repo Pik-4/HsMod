@@ -14,21 +14,29 @@ namespace HsMod
         private void Awake()
         {
             string hsUnitID = "";
-            Regex regex = new Regex(@"^hsunitid:(.*)$");
-            foreach (string argument in Environment.GetCommandLineArgs())
-            {
-                Match match = regex.Match(argument);
-                if (match.Groups.Count == 2)
-                {
-                    hsUnitID = match.Groups[1].Value;
-                    break;
-                }
-            }
+            if (UtilsArgu.Instance.Exists("hsunitid"))
+                hsUnitID = UtilsArgu.Instance.Single("hsunitid");
             if (hsUnitID.Length <= 0)
                 ConfigBind(base.Config);
             else
                 ConfigBind(new BepInEx.Configuration.ConfigFile(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BepInEx/config", hsUnitID, PluginInfo.PLUGIN_GUID + ".cfg"), false,
                     new BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)));
+
+            if (UtilsArgu.Instance.Exists("port"))
+                if (int.TryParse(UtilsArgu.Instance.Single("port"), out int port))
+                    if (port > 0 && port < 65535)
+                        CommandConfig.webServerPort = port;
+
+            if (UtilsArgu.Instance.Exists("matchPath")) CommandConfig.hsMatchLogPath = UtilsArgu.Instance.Single("matchPath");
+
+            if (UtilsArgu.Instance.Exists("afk")) 
+                if (bool.TryParse(UtilsArgu.Instance.Single("afk"),out bool afk))
+                    if (afk)
+                    {
+                        isPluginEnable.Value = true;
+                        configTemplate.Value = Utils.ConfigTemplate.AwayFromKeyboard;
+                    }    
+
 
             //Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
             if (isPluginEnable.Value)
