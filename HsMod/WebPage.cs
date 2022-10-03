@@ -801,7 +801,8 @@ opacity: 0.6;
 
                 foreach (var merc in CollectionManager.Get().FindOrderedMercenaries(null, null, null, null, null).m_mercenaries
                                     .OrderByDescending(x => x.m_owned)
-                                    .ThenByDescending(x => Utils.IsMercenaryFullyUpgraded(x))
+                                    //.ThenByDescending(x => Utils.IsMercenaryFullyUpgraded(x))
+                                    .ThenByDescending(x => x.m_isFullyUpgraded)
                                     .ThenByDescending(x => x.m_level)
                                     .ThenByDescending(x => Utils.CalcMercenaryCoinNeed(x))
                                     .ThenByDescending(x => x.m_currencyAmount)
@@ -834,7 +835,8 @@ opacity: 0.6;
                         {
                             temp += "<td>" + ((merc.GetCraftingCost() - merc.m_currencyAmount > 0) ? $"制作需要{merc.GetCraftingCost() - merc.m_currencyAmount}硬币" : "可制作！") + "</td>";
                         }
-                        else if (Utils.IsMercenaryFullyUpgraded(merc))
+                        //else if (Utils.IsMercenaryFullyUpgraded(merc))
+                        else if (merc.m_isFullyUpgraded)
                         {
                             temp += "<td>全满！(+1+5)</td>";
                         }

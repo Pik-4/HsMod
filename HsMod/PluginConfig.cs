@@ -155,7 +155,7 @@ namespace HsMod
             targetFrameRate = config.Bind("全局", "游戏帧率", -1, new ConfigDescription("游戏帧率设置，-1表示不做修改", new AcceptableValueRange<int>(-1, 2333)));
             isDynamicFpsEnable = config.Bind("全局", "动态帧率", true, "是否启用动态帧率，修改游戏帧率时，建议禁用该选项");
 
-            isIGMMessageShow = config.Bind("优化", "游戏内消息", true, "（牌店无法打开时，可以尝试关闭该选项）是否显示游戏内消息（广告推销、削弱补丁、天梯结算信息等）");
+            isIGMMessageShow = config.Bind("优化", "游戏内消息", true, "（牌店无法打开时，可以尝试设置该选项为开启状态）是否显示游戏内消息（广告推销、削弱补丁、天梯结算信息等）");
             isAlertPopupShow = config.Bind("优化", "弹出消息", true, "是否显示弹窗");
             responseAlertPopup = config.Bind("优化", "弹出响应", Utils.AlertPopupResponse.DONOTHING, "在屏蔽弹出消息时，如何回应弹窗");
             isOnApplicationFocus = config.Bind("优化", "应用焦点", true, "isOnApplicationFocus");
