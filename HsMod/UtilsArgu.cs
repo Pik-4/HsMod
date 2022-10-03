@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace HsMod
@@ -35,30 +34,6 @@ namespace HsMod
                 }
                 return dictionary[parameter];
             }
-        }
-
-        private static string[] smethod_0(string string_1)
-        {
-            StringBuilder stringBuilder = new StringBuilder(string_1);
-            bool flag = false;
-            for (int i = 0; i < stringBuilder.Length; i++)
-            {
-                if (stringBuilder[i] == '"')
-                {
-                    flag = !flag;
-                }
-                if (stringBuilder[i] == ' ' && !flag)
-                {
-                    stringBuilder[i] = '\n';
-                }
-            }
-            string[] array = stringBuilder.ToString().Split(
-                new char[1] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            for (int j = 0; j < array.Length; j++)
-            {
-                array[j] = RemoveQuotes(array[j]);
-            }
-            return array;
         }
 
         private static string RemoveQuotes(string argueValue)
@@ -148,14 +123,6 @@ namespace HsMod
             }
             dictionary.Add(key, new Collection<string>());
             dictionary[key].Add(value);
-        }
-
-        private void method_5(string string_1)
-        {
-            if (dictionary.ContainsKey(string_1))
-            {
-                dictionary.Remove(string_1);
-            }
         }
 
         public bool IsTrue(string argueKey)

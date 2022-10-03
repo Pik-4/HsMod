@@ -883,6 +883,10 @@ opacity: 0.6;
             temp += "<th>已开</th>";
             temp += "<th>剩余</th>";
             temp += "</tr>";
+
+            int totalOpened = 0;
+            int totalRemain = 0;
+
             try
             {
                 foreach (var booster in GameDbf.Booster.GetRecords().OrderBy(x => x.ID).ToList())
@@ -910,12 +914,15 @@ opacity: 0.6;
                         temp += $"<td>{name}</td>";
                         int opened = BoosterPackUtils.GetBoosterOpenedCount((int)booster.ID);
                         int remainCount = BoosterPackUtils.GetBoosterCount((int)booster.ID);
+                        totalOpened += opened;
+                        totalRemain += remainCount;
                         temp += "<td>" + ((opened == 0) ? "-" : opened.ToString()) + "</td>";
                         temp += "<td>" + ((remainCount == 0) ? "-" : remainCount.ToString()) + "</td>";
                         temp += "</tr>";
                     }
                 }
                 body += temp;
+                body += $"</table><br /><p>您一共开了{totalOpened}包，目前还有{totalRemain}包未开。</p>";
             }
             catch (Exception ex)
             {
