@@ -29,8 +29,8 @@ namespace HsMod
             if (UtilsArgu.Instance.Exists("matchPath")) CommandConfig.hsMatchLogPath = UtilsArgu.Instance.Single("matchPath");
 
             if (UtilsArgu.Instance.Exists("afk"))
-                if (bool.TryParse(UtilsArgu.Instance.Single("afk"), out bool afk))
-                    if (afk)
+                if (int.TryParse(UtilsArgu.Instance.Single("afk"), out int afk))
+                    if (afk == 1)
                     {
                         isPluginEnable.Value = true;
                         configTemplate.Value = Utils.ConfigTemplate.AwayFromKeyboard;
