@@ -275,7 +275,7 @@ namespace HsMod
 
 
             if (CommandConfig.hsMatchLogPath == string.Empty) CommandConfig.hsMatchLogPath = hsMatchLogPath.Value;
-            if (CommandConfig.webServerPort == 0) CommandConfig.webServerPort = webServerPort.Value;
+            if (CommandConfig.webServerPort == -1) CommandConfig.webServerPort = webServerPort.Value;
 
         }
 
@@ -567,7 +567,7 @@ namespace HsMod
             get { return PluginConfig.CommandConfig.hsMatchLogPath; }
             set
             {
-                PluginConfig.hsMatchLogPath.Value = value; 
+                PluginConfig.hsMatchLogPath.Value = value;
                 PluginConfig.CommandConfig.hsMatchLogPath = value;
             }
         }

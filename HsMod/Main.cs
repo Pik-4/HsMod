@@ -1,7 +1,6 @@
 ﻿using BepInEx;
 using System;
 using System.Linq;
-using System.Text.RegularExpressions;
 using UnityEngine;
 using static HsMod.PluginConfig;
 
@@ -29,13 +28,13 @@ namespace HsMod
 
             if (UtilsArgu.Instance.Exists("matchPath")) CommandConfig.hsMatchLogPath = UtilsArgu.Instance.Single("matchPath");
 
-            if (UtilsArgu.Instance.Exists("afk")) 
-                if (bool.TryParse(UtilsArgu.Instance.Single("afk"),out bool afk))
+            if (UtilsArgu.Instance.Exists("afk"))
+                if (bool.TryParse(UtilsArgu.Instance.Single("afk"), out bool afk))
                     if (afk)
                     {
                         isPluginEnable.Value = true;
                         configTemplate.Value = Utils.ConfigTemplate.AwayFromKeyboard;
-                    }    
+                    }
 
 
             //Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
