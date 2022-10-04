@@ -2063,44 +2063,33 @@ namespace HsMod
                 }
             }
 
-            //[HarmonyPrefix]
-            //[HarmonyPatch(typeof(Hearthstone.InGameMessage.ViewCountController), "GetViewCount")]
-            //public static bool PatchGetViewCount(ref int __result, string uid)
-            //{
-            //    if (isIGMMessageShow.Value) return true;
-            //    __result = 0;
-            //    return false;
-            //}
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(Hearthstone.InGameMessage.ViewCountController), "GetViewCount")]
+            public static bool PatchGetViewCount(ref int __result, string uid)
+            {
+                if (isIGMMessageShow.Value) return true;
+                __result = 0;
+                return false;
+            }
 
-            //[HarmonyPrefix]
-            //[HarmonyPatch(typeof(Hearthstone.InGameMessage.UI.MessagePopupDisplay), "GetMessageCount")]
-            //public static bool PatchGetMessageCount(ref int __result, Hearthstone.InGameMessage.UI.PopupEvent eventID)
-            //{
-            //    if (isIGMMessageShow.Value) return true;
-            //    __result = 0;
-            //    return false;
-            //}
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(Hearthstone.InGameMessage.UI.MessagePopupDisplay), "GetMessageCount")]
+            public static bool PatchGetMessageCount(ref int __result, Hearthstone.InGameMessage.UI.PopupEvent eventID)
+            {
+                if (isIGMMessageShow.Value) return true;
+                __result = 0;
+                return false;
+            }
 
-            //[HarmonyPrefix]
-            //[HarmonyPatch(typeof(Hearthstone.InGameMessage.ViewCountController), "Serialize")]
-            //[HarmonyPatch(typeof(Hearthstone.InGameMessage.ViewCountController), "Deserialize")]
-            //public static bool PatchViewCountController()
-            //{
-            //    if (isIGMMessageShow.Value) return true;
-            //    return false;
-            //}
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(Hearthstone.InGameMessage.ViewCountController), "Serialize")]
+            [HarmonyPatch(typeof(Hearthstone.InGameMessage.ViewCountController), "Deserialize")]
+            public static bool PatchViewCountController()
+            {
+                if (isIGMMessageShow.Value) return true;
+                return false;
+            }
 
-            //[HarmonyPrefix]
-            //[HarmonyPatch(typeof(Hearthstone.InGameMessage.UI.MessagePopupDisplay), "CanDisplayShopMessages")]
-            //public static bool PatchCanDisplayShopMessages(ref bool __result)
-            //{
-            //    if (isIGMMessageShow.Value) return true;
-            //    else
-            //    {
-            //        __result = false;
-            //        return false;
-            //    }
-            //}
 
             [HarmonyPostfix]
             [HarmonyPatch(typeof(Hearthstone.InGameMessage.UI.MessagePopupDisplay), "DisplayIGMMessage")]
@@ -2154,77 +2143,6 @@ namespace HsMod
                 }
                 else return true;
             }
-            //无效Patch
-            //[HarmonyPrefix]
-            //[HarmonyPatch(typeof(RewardPopups), "ShowNextMercenariesSeasonRewards")]
-            //public static bool PatchShowNextMercenariesSeasonRewards(ref bool __result, ref RewardPopups __instance)
-            //{
-            //    if (isAutoRecvMercenaryRewardEnable.Value)
-            //    {
-            //        if (SceneMgr.Get().GetMode() != SceneMgr.Mode.LOGIN)
-            //        {
-            //            __result = false;
-            //            return false;
-            //        }                    
-            //        NetCache.ProfileNoticeMercenariesSeasonRewards nextMercenariesSeasonRewardsNotice = (NetCache.ProfileNoticeMercenariesSeasonRewards)Traverse.Create(__instance).Field("GetNextMercenariesSeasonRewardsNotice").GetValue();
-            //        if (nextMercenariesSeasonRewardsNotice == null)
-            //        {
-            //            __result = false;
-            //            return false;
-            //        }
-            //        Network.Get().AckNotice(nextMercenariesSeasonRewardsNotice.NoticeID);
-            //        __result = false;
-            //        return false;
-            //    }
-            //    else return true;
-            //}
-
-            // 可以屏蔽天梯等级奖励箱子，但是有异常
-            //[HarmonyPrefix]
-            //[HarmonyPatch(typeof(RewardPopups), "GetNextMercenariesSeasonRewardsNotice")]
-            //public static bool PatchGetNextMercenariesSeasonRewardsNotice(ref NetCache.ProfileNoticeMercenariesSeasonRewards __result)
-            //{
-            //    if (isAutoRecvMercenaryRewardEnable.Value)
-            //    {
-            //            foreach (NetCache.ProfileNotice profileNotice in NetCache.Get().GetNetObject<NetCache.NetCacheProfileNotices>().Notices)
-            //            {
-            //                if (profileNotice.Type == NetCache.ProfileNotice.NoticeType.MERCENARIES_SEASON_REWARDS)
-            //                {
-            //                    // NetCache.ProfileNoticeMercenariesSeasonRewards;
-            //                    Network.Get().AckNotice(profileNotice.NoticeID);
-            //                }
-            //            }
-            //        __result = null;
-            //        return false;
-            //    }
-            //    return true;
-            //}
-            //[HarmonyPrefix]
-            //[HarmonyPatch(typeof(RewardPopups), "HasUnAckedRewards")]
-            //public static bool PatchHasUnAckedRewards(ref List<Reward> ___m_rewards,ref bool __result)
-            //{
-            //    if (isAutoRecvMercenaryRewardEnable.Value)
-            //    {
-            //        foreach (Reward reward in ___m_rewards)
-            //        {
-            //            RewardData rewardData = reward.Data;
-            //            Reward.Type rewardType = reward.RewardType;
-            //            if(rewardType - Reward.Type.MERCENARY_EXP > 2)
-            //            {
-            //                rewardData.AcknowledgeNotices();
-            //                ___m_rewards.Remove(reward);
-            //            }
-            //            if(rewardType - Reward.Type.MERCENARY_EXP > 1)
-            //            {
-            //                rewardData.AcknowledgeNotices();
-            //                ___m_rewards.Remove(reward);
-            //            }
-            //        }
-            //        __result = false;
-            //        return false;
-            //    }
-            //    return true;
-            //}
 
             //不显示佣兵宝箱奖励
             [HarmonyPrefix]
