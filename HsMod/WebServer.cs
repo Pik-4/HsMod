@@ -55,10 +55,14 @@ namespace HsMod
                     HttpListenerContext httpListenerContext = httpListener.GetContext();
                     HttpListenerRequest httpListenerRequest = httpListenerContext.Request;
                     httpListenerContext.Response.StatusCode = 200;
+                    string rawUrLower = httpListenerRequest.RawUrl.ToString().ToLower();
 
-                    if (httpListenerRequest.RawUrl.ToString().ToLower().EndsWith(".js"))
+
+                    if (rawUrLower.EndsWith(".js"))
                         httpListenerContext.Response.ContentType = "text/javascript; charset=UTF-8";
-                    else if (httpListenerRequest.RawUrl.ToString().ToLower() == "/webshell")
+                    else if (rawUrLower.EndsWith(".jpg") || rawUrLower.EndsWith(".jpge"))
+                        httpListenerContext.Response.ContentType = "image/jpeg";
+                    else if (rawUrLower == "/webshell")
                     {
                         try
                         {
@@ -88,10 +92,20 @@ namespace HsMod
 
                     Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, httpListenerRequest.RawUrl);
                     Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, httpListenerRequest.Url);
-                    using (StreamWriter streamWriter = new StreamWriter(httpListenerContext.Response.OutputStream))
+
+                    if (File.Exists("website/" + rawUrLower.Substring(1)))   // 用于移除/ ，优先查找本地文件
                     {
-                        streamWriter.WriteLine(Route(httpListenerRequest.RawUrl.ToString().ToLower()));
-                        streamWriter.Close();
+                        var file = File.ReadAllBytes("website/" + rawUrLower.Substring(1));
+                        httpListenerContext.Response.OutputStream.Write(file, 0, file.Length);
+                        file = null;
+                    }
+                    else
+                    {
+                        using (StreamWriter streamWriter = new StreamWriter(httpListenerContext.Response.OutputStream))
+                        {
+                            streamWriter.WriteLine(Route(rawUrLower));
+                            streamWriter.Close();
+                        }
                     }
                 }
             });
@@ -99,11 +113,6 @@ namespace HsMod
 
         public static StringBuilder Route(string url = "")
         {
-            if (File.Exists("website/" + url.Substring(1)))   // 用于移除/ ，优先查找本地文件
-            {
-                return new StringBuilder(File.ReadAllText("website/" + url.Substring(1)));
-            }
-
             switch (url)
             {
                 case "/info":

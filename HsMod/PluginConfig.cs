@@ -321,7 +321,7 @@ namespace HsMod
                     isShortcutsEnable.Value = false;
                     isIGMMessageShow.Value = false;
                     isAlertPopupShow.Value = false;
-                    responseAlertPopup.Value = Utils.AlertPopupResponse.DONOTHING;
+                    responseAlertPopup.Value = Utils.AlertPopupResponse.YES;
                     isOnApplicationFocus.Value = false;
                     isEndGameScreenShow.Value = false;
                     isAutoOpenBoxesRewardEnable.Value = true;

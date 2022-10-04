@@ -352,11 +352,17 @@ namespace HsMod
             //是否拦截弹窗
             [HarmonyPrefix]
             [HarmonyPatch(typeof(AlertPopup), "Show")]
-            public static bool PatchAlertPopupShow(ref UIBButton ___m_okayButton, ref UIBButton ___m_confirmButton, ref UIBButton ___m_cancelButton)
+            public static bool PatchAlertPopupShow(ref AlertPopup __instance, ref UIBButton ___m_okayButton, ref UIBButton ___m_confirmButton, ref UIBButton ___m_cancelButton, ref AlertPopup.PopupInfo ___m_popupInfo)
             {
                 if (isAlertPopupShow.Value) return true;
                 else
                 {
+                    if (___m_popupInfo.m_text == "你的上一局对战由于断线而中断。正在重新连接……")
+                    {
+                        Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "断线重连");
+                        return true;
+                    }
+
                     switch (responseAlertPopup.Value)
                     {
                         case Utils.AlertPopupResponse.OK:
