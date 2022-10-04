@@ -546,11 +546,12 @@ opacity: 0.6;
                 {
                     if (record != null)
                     {
+                        bool isComplete = MercenariesDataUtil.IsBountyComplete(record.ID);
                         temp = "<tr>";
-                        temp += $"<td>{record.ID}</td>";
-                        temp += $"<td>{record.BountySetRecord.Name.GetString()}</td>";
-                        temp += $"<td>{LettuceVillageDataUtil.GetBountyBossName(record)}</td>";
-                        temp += (record.Heroic ? "<td style=\"color:#FF4136\">英雄" : "<td>普通") + "</td>";
+                        temp += (isComplete ? "<td>" : "<td style=\"color:#FF4136\">") + $"{record.ID}</td>";
+                        temp += (isComplete ? "<td>" : "<td style=\"color:#FF4136\">") + $"{record.BountySetRecord.Name.GetString()}</td>";
+                        temp += (isComplete ? "<td>" : "<td style=\"color:#FF4136\">") + $"{LettuceVillageDataUtil.GetBountyBossName(record)}</td>";
+                        temp += (isComplete ? "<td>" : "<td style=\"color:#FF4136\">") + (record.Heroic ? "英雄" : "普通") + "</td>";
 
                         foreach (var finalReward in record.FinalBossRewards)
                         {
