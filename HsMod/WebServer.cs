@@ -99,17 +99,9 @@ namespace HsMod
 
         public static StringBuilder Route(string url = "")
         {
-
-            if (url.EndsWith(".html") || url.EndsWith(".css"))
+            if (File.Exists("website/" + url.Substring(1)))   // 用于移除/ ，优先查找本地文件
             {
-                if (File.Exists(url.Substring(1)))   // 用于移除/
-                {
-                    return new StringBuilder(File.ReadAllText(url.Substring(1)));
-                }
-                else
-                {
-                    return new StringBuilder();
-                }
+                return new StringBuilder(File.ReadAllText("website/" + url.Substring(1)));
             }
 
             switch (url)
