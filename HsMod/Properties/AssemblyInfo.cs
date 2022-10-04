@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany(HsMod.PluginInfo.PLUGIN_AUTHOR)]
 [assembly: AssemblyProduct("HsMod")]
-[assembly: AssemblyCopyright("Copyright © "+ HsMod.PluginInfo.PLUGIN_AUTHOR)]
+[assembly: AssemblyCopyright("Copyright © " + HsMod.PluginInfo.PLUGIN_AUTHOR)]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
