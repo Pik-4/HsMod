@@ -2116,6 +2116,47 @@ namespace HsMod
         //与佣兵挂机插件可能会冲突 故单独写出
         public class PatchMercenariesReward
         {
+            // 屏蔽+1+5提示
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(RewardPopups), "ShowMercenariesFullyUpgraded")]
+            public static bool PatchShowMercenariesFullyUpgraded(ref Action doneCallback, ref bool __result, ref RewardPopups __instance, ref Action ___OnPopupClosed)
+            {
+                if (isAutoRecvMercenaryRewardEnable.Value)
+                {
+                    NetCache.ProfileNoticeMercenariesMercenaryFullyUpgraded upgradeNotice = (NetCache.ProfileNoticeMercenariesMercenaryFullyUpgraded)Traverse.Create(__instance).Field("GetNextMercenaryFullUpgradedToShow")?.GetValue();
+
+                    if (upgradeNotice != null)
+                    {
+                        Network.Get().AckNotice(upgradeNotice.NoticeID);
+                        doneCallback?.Invoke();
+                        ___OnPopupClosed?.Invoke();
+                    }
+                    __result = false;
+                    return false;
+                }
+                else return true;
+            }
+
+            // 屏蔽佣兵冒险解锁提示
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(RewardPopups), "ShowMercenariesZoneUnlockPopup")]
+            public static bool PatchShowMercenariesZoneUnlockPopup(ref Action onPopupCompleteCallback, ref bool __result, ref RewardPopups __instance, ref Action ___OnPopupClosed)
+            {
+                if (isAutoRecvMercenaryRewardEnable.Value)
+                {
+                    NetCache.ProfileNoticeMercenariesZoneUnlock zoneNotice = (NetCache.ProfileNoticeMercenariesZoneUnlock)Traverse.Create(__instance).Field("GetNextMercenariesZoneUnlockToShow")?.GetValue();
+                    if (zoneNotice != null)
+                    {
+                        Network.Get().AckNotice(zoneNotice.NoticeID);
+                        onPopupCompleteCallback?.Invoke();
+                        ___OnPopupClosed?.Invoke();
+                    }
+                    __result = false;
+                    return false;
+                }
+                else return true;
+            }
+
             //天梯奖励
             [HarmonyPrefix]
             [HarmonyPatch(typeof(MercenariesSeasonRewardsDialog), "Show")]
