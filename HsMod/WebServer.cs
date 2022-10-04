@@ -56,7 +56,7 @@ namespace HsMod
                     HttpListenerRequest httpListenerRequest = httpListenerContext.Request;
                     httpListenerContext.Response.StatusCode = 200;
 
-                    if (httpListenerRequest.RawUrl.ToString().ToLower() == "/jquery.min.js")
+                    if (httpListenerRequest.RawUrl.ToString().ToLower().EndsWith(".js"))
                         httpListenerContext.Response.ContentType = "text/javascript; charset=UTF-8";
                     else if (httpListenerRequest.RawUrl.ToString().ToLower() == "/webshell")
                     {

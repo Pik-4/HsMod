@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("HsMod")]
-[assembly: AssemblyDescription("HsMod")]
+[assembly: AssemblyDescription("Hearthstone Modify Based on BepInEx")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany(HsMod.PluginInfo.PLUGIN_AUTHOR)]
 [assembly: AssemblyProduct("HsMod")]
-[assembly: AssemblyCopyright("Copyright ©  2022")]
+[assembly: AssemblyCopyright("Copyright © "+ HsMod.PluginInfo.PLUGIN_AUTHOR)]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion(HsMod.PluginInfo.PLUGIN_VERSION)]
+[assembly: AssemblyFileVersion(HsMod.PluginInfo.PLUGIN_VERSION)]

@@ -30,11 +30,17 @@ namespace HsMod
 
             if (UtilsArgu.Instance.Exists("afk"))
                 if (int.TryParse(UtilsArgu.Instance.Single("afk"), out int afk))
+                {
                     if (afk == 1)
                     {
                         isPluginEnable.Value = true;
                         configTemplate.Value = Utils.ConfigTemplate.AwayFromKeyboard;
                     }
+                    else if (afk == 2)
+                    {
+                        configTemplate.Value = Utils.ConfigTemplate.AntiAwayFromKeyboard;
+                    }
+                }
 
 
             //Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
