@@ -797,6 +797,12 @@ opacity: 0.6;
                 temp += "<th>等级</th>";
                 temp += "<th>硬币</th>";
                 temp += "<th>状态</th>";
+                temp += "<th>技能1</th>";
+                temp += "<th>技能2</th>";
+                temp += "<th>技能3</th>";
+                temp += "<th>装备1</th>";
+                temp += "<th>装备2</th>";
+                temp += "<th>装备3</th>";
                 temp += "</tr>";
                 builder.Append(temp);
 
@@ -848,20 +854,24 @@ opacity: 0.6;
                                 temp += $"<td>距离全满还需硬币：{coinNeed}</td>";
                             else
                             {
-                                string tmp = "";
-                                for (int k = 0; k < merc.m_equipmentList.Count; k++)
-                                {
-                                    if (!merc.m_equipmentList[k].Owned)
-                                    {
-                                        tmp = $"<br />（存在装备{k + 1}-{merc.m_equipmentList[k].GetCurrentTierRecord().CardRecord.Name.GetString()}未解锁）";
-                                    }
-                                }
-                                temp += $"<td>可升级至全满！{tmp}</td>";
+                                temp += $"<td>可升级至全满！</td>";
                             }
                         }
 
-                        temp += "</tr>";
+                        foreach (var ability in merc.m_abilityList)
+                        {
+                            if (ability != null)
+                                temp += "<td>" + ability.GetCardName() + "</td>";
+                        }
+                        foreach (var equipment in merc.m_equipmentList)
+                        {
+                            if (equipment != null)
+                                temp += (equipment.Owned ? "<td>" : "<td style=\"color:#FF4136\">") + equipment.GetCardName() + "</td>";
+                        }
+
                         builder.Append(temp);
+
+                        builder.Append("</tr>");
                     }
                 }
                 builder.Append("</table>");
