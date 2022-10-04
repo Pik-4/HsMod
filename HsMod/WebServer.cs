@@ -97,6 +97,7 @@ namespace HsMod
                     {
                         var file = File.ReadAllBytes("website/" + rawUrLower.Substring(1));
                         httpListenerContext.Response.OutputStream.Write(file, 0, file.Length);
+                        httpListenerContext.Response.OutputStream.Close();
                         file = null;
                     }
                     else
