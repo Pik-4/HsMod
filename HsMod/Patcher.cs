@@ -1227,7 +1227,7 @@ namespace HsMod
             [HarmonyPatch(typeof(SubSpellController), "OnProcessTaskList")]
             public static bool PatchSubSpellControllerOnProcessTaskList(SubSpellController __instance)
             {
-                if (ConfigValue.Get().IsQuickModeEnableValue)
+                if (isQuickModeEnable.Value && GameMgr.Get().IsBattlegrounds())
                 {
                     SubSpellControllerBase(__instance);
                     return false;
