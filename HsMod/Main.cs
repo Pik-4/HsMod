@@ -31,17 +31,27 @@ namespace HsMod
             if (UtilsArgu.Instance.Exists("afk"))
                 if (int.TryParse(UtilsArgu.Instance.Single("afk"), out int afk))
                 {
+                    timeGear.Value = 0;    //齿轮置零
                     if (afk == 1)
                     {
-                        isPluginEnable.Value = true;
-                        isTimeGearEnable.Value = true;
-                        timeGear.Value = 0;
-                        configTemplate.Value = Utils.ConfigTemplate.AwayFromKeyboard;
+                        isPluginEnable.Value = true;    //启用插件
+                        isTimeGearEnable.Value = true;  //启用齿轮
+                        configTemplate.Value = Utils.ConfigTemplate.AwayFromKeyboard;    //设置挂机模板
+                    }
+                    else if (afk == 0)
+                    {
+                        isPluginEnable.Value = false;
+                        isTimeGearEnable.Value = false;
                     }
                     else if (afk == 2)
                     {
-                        timeGear.Value = 0;
                         configTemplate.Value = Utils.ConfigTemplate.AntiAwayFromKeyboard;
+                        isShortcutsEnable.Value = false;
+                    }
+                    else if (afk == 3)
+                    {
+                        isPluginEnable.Value = true;
+                        isTimeGearEnable.Value = false;
                     }
                 }
 
