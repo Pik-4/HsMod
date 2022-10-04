@@ -350,7 +350,7 @@ namespace HsMod
                     isAlertPopupShow.Value = true;
                     responseAlertPopup.Value = Utils.AlertPopupResponse.DONOTHING;
                     isOnApplicationFocus.Value = false;
-                    isEndGameScreenShow.Value = false;
+                    isEndGameScreenShow.Value = true;
                     isAutoOpenBoxesRewardEnable.Value = false;
                     isAutoExit.Value = false;
                     isIdleKickEnable.Value = false;

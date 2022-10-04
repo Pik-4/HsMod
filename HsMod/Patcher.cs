@@ -444,11 +444,12 @@ namespace HsMod
             //战令、成就等奖励领取提示
             [HarmonyPrefix]
             [HarmonyPatch(typeof(Hearthstone.Progression.RewardTrack), "UpdateStatus")]
-            public static bool OOOOO(int rewardTrackId, int level, Hearthstone.Progression.RewardTrack.RewardStatus status, bool forPaidTrack, List<PegasusUtil.RewardItemOutput> rewardItemOutput)      //隐藏通行证奖励
+            public static bool PatchUpdateStatus(int rewardTrackId, int level, Hearthstone.Progression.RewardTrack.RewardStatus status, bool forPaidTrack, List<PegasusUtil.RewardItemOutput> rewardItemOutput)      //隐藏通行证奖励
             {
                 if (!isEndGameScreenShow.Value && status == Hearthstone.Progression.RewardTrack.RewardStatus.GRANTED)
                 {
-                    Hearthstone.Progression.RewardTrackManager.Get().GetCurrentRewardTrack(Assets.Global.RewardTrackType.GLOBAL).AckReward(rewardTrackId, level, forPaidTrack);
+                    Hearthstone.Progression.RewardTrackManager.Get().GetCurrentRewardTrack(Assets.Global.RewardTrackType.GLOBAL)?.AckReward(rewardTrackId, level, forPaidTrack);
+                    Hearthstone.Progression.RewardTrackManager.Get().GetCurrentRewardTrack(Assets.Global.RewardTrackType.BATTLEGROUNDS)?.AckReward(rewardTrackId, level, forPaidTrack);
                     return false;
                 }
                 else return true;
