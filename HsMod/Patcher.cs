@@ -2028,32 +2028,32 @@ namespace HsMod
                 }
             }
 
-            [HarmonyPrefix]
-            [HarmonyPatch(typeof(Hearthstone.InGameMessage.ViewCountController), "GetViewCount")]
-            public static bool PatchGetViewCount(ref int __result, string uid)
-            {
-                if (isIGMMessageShow.Value) return true;
-                __result = 0;
-                return false;
-            }
+            //[HarmonyPrefix]
+            //[HarmonyPatch(typeof(Hearthstone.InGameMessage.ViewCountController), "GetViewCount")]
+            //public static bool PatchGetViewCount(ref int __result, string uid)
+            //{
+            //    if (isIGMMessageShow.Value) return true;
+            //    __result = 0;
+            //    return false;
+            //}
 
-            [HarmonyPrefix]
-            [HarmonyPatch(typeof(Hearthstone.InGameMessage.UI.MessagePopupDisplay), "GetMessageCount")]
-            public static bool PatchGetMessageCount(ref int __result, Hearthstone.InGameMessage.UI.PopupEvent eventID)
-            {
-                if (isIGMMessageShow.Value) return true;
-                __result = 0;
-                return false;
-            }
+            //[HarmonyPrefix]
+            //[HarmonyPatch(typeof(Hearthstone.InGameMessage.UI.MessagePopupDisplay), "GetMessageCount")]
+            //public static bool PatchGetMessageCount(ref int __result, Hearthstone.InGameMessage.UI.PopupEvent eventID)
+            //{
+            //    if (isIGMMessageShow.Value) return true;
+            //    __result = 0;
+            //    return false;
+            //}
 
-            [HarmonyPrefix]
-            [HarmonyPatch(typeof(Hearthstone.InGameMessage.ViewCountController), "Serialize")]
-            [HarmonyPatch(typeof(Hearthstone.InGameMessage.ViewCountController), "Deserialize")]
-            public static bool PatchViewCountController()
-            {
-                if (isIGMMessageShow.Value) return true;
-                return false;
-            }
+            //[HarmonyPrefix]
+            //[HarmonyPatch(typeof(Hearthstone.InGameMessage.ViewCountController), "Serialize")]
+            //[HarmonyPatch(typeof(Hearthstone.InGameMessage.ViewCountController), "Deserialize")]
+            //public static bool PatchViewCountController()
+            //{
+            //    if (isIGMMessageShow.Value) return true;
+            //    return false;
+            //}
 
             //[HarmonyPrefix]
             //[HarmonyPatch(typeof(Hearthstone.InGameMessage.UI.MessagePopupDisplay), "CanDisplayShopMessages")]
