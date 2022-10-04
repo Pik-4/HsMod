@@ -352,14 +352,22 @@ namespace HsMod
             //是否拦截弹窗
             [HarmonyPrefix]
             [HarmonyPatch(typeof(AlertPopup), "Show")]
-            public static bool PatchAlertPopupShow(ref AlertPopup __instance, ref UIBButton ___m_okayButton, ref UIBButton ___m_confirmButton, ref UIBButton ___m_cancelButton, ref AlertPopup.PopupInfo ___m_popupInfo)
+            public static bool PatchAlertPopupShow(ref UIBButton ___m_okayButton, ref UIBButton ___m_confirmButton, ref UIBButton ___m_cancelButton, ref AlertPopup.PopupInfo ___m_popupInfo)
             {
                 if (isAlertPopupShow.Value) return true;
                 else
                 {
-                    if (___m_popupInfo.m_text == "你的上一局对战由于断线而中断。正在重新连接……")
+                    //Logger.LogWarning(GameStrings.Get("GLOBAL_RECONNECT_RECONNECTING_HEADER"));
+                    //Logger.LogWarning(GameStrings.Get("GLOBAL_RECONNECT_RECONNECTING_LOGIN"));
+                    //Logger.LogWarning(GameStrings.Get("GLOBAL_RECONNECT_RECONNECTING"));
+                    //Logger.LogWarning(GameStrings.Get("GLOBAL_RECONNECT_RECONNECTED_HEADER"));
+                    //Logger.LogWarning(GameStrings.Get("GLOBAL_RECONNECT_RECONNECTED_LOGIN"));
+                    //Logger.LogWarning(GameStrings.Get("GLOBAL_RECONNECT_RECONNECTED"));
+                    //Logger.LogWarning(GameStrings.Get("GLOBAL_RECONNECT_RECONNECTED_LOGIN"));
+
+                    if (___m_popupInfo.m_text == GameStrings.Get("GLOBAL_RECONNECT_RECONNECTING_LOGIN"))
                     {
-                        Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "断线重连");
+                        Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, ___m_popupInfo.m_text);
                         return true;
                     }
 
@@ -392,6 +400,27 @@ namespace HsMod
                             }
                     }
                     return false;
+                }
+            }
+            //处理断线重连
+            [HarmonyPostfix]
+            [HarmonyPatch(typeof(AlertPopup), "UpdateInfo")]
+            public static void PatchAlertPopupUpdateInfo(ref AlertPopup.PopupInfo info, ref UIBButton ___m_okayButton, ref UIBButton ___m_confirmButton, ref UIBButton ___m_cancelButton, ref AlertPopup.PopupInfo ___m_popupInfo)
+            {
+                if (isAlertPopupShow.Value) return;
+                else if (info.m_text == GameStrings.Get("GLOBAL_RECONNECT_TIMEOUT") || ___m_popupInfo.m_text == GameStrings.Get("GLOBAL_RECONNECT_TIMEOUT"))
+                {
+                    Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, info.m_text);
+                    if (___m_confirmButton.gameObject.activeSelf)
+                    {
+                        ___m_confirmButton.TriggerPress();
+                        ___m_confirmButton.TriggerRelease();
+                    }
+                    else
+                    {
+                        ___m_okayButton.TriggerPress();
+                        ___m_okayButton.TriggerRelease();
+                    }
                 }
             }
 
