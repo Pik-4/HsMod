@@ -97,9 +97,22 @@ namespace HsMod
             });
         }
 
-        public static StringBuilder Route(string uri = "")
+        public static StringBuilder Route(string url = "")
         {
-            switch (uri)
+
+            if (url.EndsWith(".html") || url.EndsWith(".css"))
+            {
+                if (File.Exists(url.Substring(1)))   // 用于移除/
+                {
+                    return new StringBuilder(File.ReadAllText(url.Substring(1)));
+                }
+                else
+                {
+                    return new StringBuilder();
+                }
+            }
+
+            switch (url)
             {
                 case "/info":
                     return WebPage.InfoPage();
@@ -119,14 +132,11 @@ namespace HsMod
                     return WebPage.AlivePage();
                 case "":
                 case "/":
-                case "/home.html":
                 case "/home":
                     return WebPage.HomePage();
                 case "/about":
-                case "/about.html":
                     return WebPage.AboutPage();
                 case "/shell":
-                case "/shell.html":
                     return WebPage.ShellPage();
                 case "/webshell":
                     return WebPage.Webshell();
