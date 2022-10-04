@@ -34,10 +34,13 @@ namespace HsMod
                     if (afk == 1)
                     {
                         isPluginEnable.Value = true;
+                        isTimeGearEnable.Value = true;
+                        timeGear.Value = 0;
                         configTemplate.Value = Utils.ConfigTemplate.AwayFromKeyboard;
                     }
                     else if (afk == 2)
                     {
+                        timeGear.Value = 0;
                         configTemplate.Value = Utils.ConfigTemplate.AntiAwayFromKeyboard;
                     }
                 }
