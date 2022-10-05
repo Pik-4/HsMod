@@ -234,7 +234,7 @@ namespace HsMod
 
             hsLogPath = config.Bind("开发", "炉石日志", "", "炉石进程日志文件位置（相对于Hearthstone）");
             hsMatchLogPath = config.Bind("开发", "对局日志", @"BepInEx\HsMatch.log", "炉石对局日志文件位置（相对于Hearthstone），参数最先选用命令行");
-            autoQuitTimer = config.Bind("开发", "定时退出", (long)0, "当游戏运行x秒后自动退出，x<=0时该选项无效。");
+            autoQuitTimer = config.Bind("开发", "定时退出", (long)0, "当游戏运行x秒后（在对局结束时）自动退出，x<=0时该选项无效。");
             isFakeOpenEnable = config.Bind("开发", "模拟开包状态", false, "是否启用模拟开包（修改该选项后建议重启炉石，启用时可能会导致卡包信息统计异常）");
             buyAdventure = config.Bind("开发", "冒险购买", Utils.BuyAdventureTemplate.DoNothing, "（不建议购买卡拉赞）选择一个冒险进行购买尝试（有概率封号，酌情考虑使用）");
             isKarazhanFixEnable = config.Bind("开发", "卡拉赞修复", false, "（请打完后请关闭，目前无法打序章）卡拉赞黑鸦翱翔修复，也可以用作冒险跳关。（有概率封号，酌情考虑使用）");

@@ -1568,7 +1568,7 @@ namespace HsMod
                             }
                             finalResult = $"{String.Join("<br />", DateTime.Now.ToString().Split(' '))},{finalResult},-,{GameMgr.Get().GetGameType()},{Utils.CacheLastOpponentFullName},";
                             finalResult += $"High:{Utils.CacheLastOpponentAccountID.High}+Low:{Utils.CacheLastOpponentAccountID.Low} => 已举报";
-                            System.IO.File.AppendAllText(hsMatchLogPath.Value, finalResult + "\n");
+                            System.IO.File.AppendAllText(CommandConfig.hsMatchLogPath, finalResult + "\n");
                             Utils.CacheLastOpponentAccountID = null;
                         }
                     }
