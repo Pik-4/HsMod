@@ -43,26 +43,30 @@ namespace HsMod
                 if (int.TryParse(UtilsArgu.Instance.Single("afk"), out int afk))
                 {
                     timeGear.Value = 0;    //齿轮置零
-                    if (afk == 1)
+                    switch (afk)
                     {
-                        isPluginEnable.Value = true;    //启用插件
-                        isTimeGearEnable.Value = true;  //启用齿轮
-                        configTemplate.Value = Utils.ConfigTemplate.AwayFromKeyboard;    //设置挂机模板
-                    }
-                    else if (afk == 0)
-                    {
-                        isPluginEnable.Value = false;
-                        isTimeGearEnable.Value = false;
-                    }
-                    else if (afk == 2)
-                    {
-                        configTemplate.Value = Utils.ConfigTemplate.AntiAwayFromKeyboard;
-                        isShortcutsEnable.Value = false;
-                    }
-                    else if (afk == 3)
-                    {
-                        isPluginEnable.Value = true;
-                        isTimeGearEnable.Value = false;
+                        case 0:    //禁用
+                            isPluginEnable.Value = false;
+                            isTimeGearEnable.Value = false;
+                            break;
+                        case 1:    //正常挂机启用
+                            isPluginEnable.Value = true;    //启用插件
+                            isTimeGearEnable.Value = true;  //启用齿轮
+                            configTemplate.Value = Utils.ConfigTemplate.AwayFromKeyboard;    //设置挂机模板
+                            break;
+                        case 2:    //反挂机但是禁用快捷键
+                            isPluginEnable.Value = true;
+                            configTemplate.Value = Utils.ConfigTemplate.AntiAwayFromKeyboard;
+                            isShortcutsEnable.Value = false;
+                            break;
+                        case 3:    //启用但是禁止齿轮
+                            isPluginEnable.Value = true;
+                            isTimeGearEnable.Value = false;
+                            break;
+                        case 4:    //反挂机
+                            isPluginEnable.Value = true;
+                            configTemplate.Value = Utils.ConfigTemplate.AntiAwayFromKeyboard;
+                            break;
                     }
                 }
 
