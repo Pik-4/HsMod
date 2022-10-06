@@ -4,7 +4,7 @@
 
 ### 已实现的功能
 
-1. 支持齿轮快慢8倍速
+1. 支持齿轮快慢8倍速（设置中允许扩展到快慢32倍）
 2. 允许使用VerifyWebCredentials登录（亦支持命令行启动，不需要启动战网）。
 3. 屏蔽错误报告，当发生异常时，不会向暴雪报告错误信息。
 4. 禁用掉线，允许长时间无操作
@@ -53,6 +53,8 @@
 47. 支持金币购买纳克萨玛斯、黑石山、探险者协会等冒险（也支持卡拉赞，但无法打序章）
 48. 允许强开卡拉赞（不能打序章，未通关前不能跳关）
 49. 支持信息展示（showinfo，需要启用插件，默认HTTP，端口58744）；支持显示佣兵养成进度、开包历史信息等。
+50. 支持接收炉石启动参数，如指定分辨率大小等。
+51. 支持Webshell
 
 ### 安装说明
 
@@ -122,10 +124,12 @@ If the token becomes obsolete and the game stops opening, then you just need to 
 3. 皮肤的配置文件在`Hearthstone\BepInEx\config\HsSkins.cfg`。若无，则在运行游戏后自动创建。
 4. `F4`为固定快捷键，用于获取游戏内部分信息（相关信息存放在`Hearthstone\BepInEx\`目录下）、**更新皮肤配置**、重启Web服务等。其余快捷键均可自定义配置。
 5. 本插件在默认状态下，几乎全部的功能均需要手动开启；插件大部分功能能在配置中找到说明，少部分功能只在Patch中提及（如最小化限制）。
-6. 本插件Web Server（即Showinfo）的默认端口为58744，一般情况下，监听本地所有IP，使用云服务器时，请注意防火墙配置。
-7. 对局统计所使用的log文件是`BepInEx\HsMatch.log`，可在设置中修改。此外对局统计页面适配的佣兵插件为[MercenariesHelper](https://github.com/HearthstonePlugin/Mercenaries)（当MercenariesHelper配合HsMod编译时，其Build4Public值应为false，以忽略与HsMod的相同Patch）。其他佣兵插件暂未做适配。
+6. 本插件Web Server（即Showinfo）的默认端口为58744，一般情况下，监听本地所有IP，使用云服务器时，请注意防火墙、安全组等配置。
+7. 对局统计所使用的log文件是`BepInEx\HsMatch.log`，可在设置中修改。~~此外对局统计页面适配的佣兵插件为[MercenariesHelper](https://github.com/HearthstonePlugin/Mercenaries)（当MercenariesHelper配合HsMod编译时，其Build4Public值应为false，以忽略与HsMod的相同Patch）。其他佣兵插件暂未做适配。~~
 8. 出现问题时先尝试删除相关`.cfg`配置文件（一般位于`BepInEx\config\`），进行重新配置；如果依然存在问题，请带上`HsMod.cfg`提交Issues，但不保证及时解答。
 9. `GetHsLib.py`用于更新炉石自有运行库，`install.bat`用于将编译好的`HsMod.dll`复制到默认炉石目录（前提是BepInEx已经配置好）。此外，push或提交PR到Github后，Actions会自动生成相关pre-release。
+10. 如果使用过AwayFromKeyboard配置，游戏双方的英雄会替换成**吉安娜**，如果想换回配置，请修改该对应设置为AntiAwayFromKeyboard。对应设置在`全局`-`设置模板`。
+11. 如果修改设置无法保存，请检查是否启用其他炉石插件。
 
 ### client.config
 
@@ -157,6 +161,7 @@ https://eu.battle.net/login/en/?app=wtcg
 
 1. 整理ReadMe，更新Wiki等；整理配置与Patch之间关系；多语言支持
 2. 游戏内一键更换英雄皮肤，目前只能通过模拟掉线更新
+3. 重构Showinfo相关Web页面。
 
 ### 参考
 
