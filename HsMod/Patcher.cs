@@ -1863,21 +1863,28 @@ namespace HsMod
                     {
                         if (isSkinDefalutHeroEnable.Value)
                         {
-                            TAG_CLASS tagClass = DefLoader.Get().GetEntityDef(cardId).GetClass();
-                            switch (tagClass)
+                            try
                             {
-                                case TAG_CLASS.DEMONHUNTER:
-                                case TAG_CLASS.DRUID:
-                                case TAG_CLASS.HUNTER:
-                                case TAG_CLASS.MAGE:
-                                case TAG_CLASS.PALADIN:
-                                case TAG_CLASS.PRIEST:
-                                case TAG_CLASS.ROGUE:
-                                case TAG_CLASS.SHAMAN:
-                                case TAG_CLASS.WARLOCK:
-                                case TAG_CLASS.WARRIOR:
-                                    cardId = GameUtils.TranslateDbIdToCardId(Enumerable.FirstOrDefault(Enumerable.Where(GameDbf.CardHero.GetRecords().OrderBy(x => x.CardId).ToList(), (CardHeroDbfRecord x) => DefLoader.Get().GetEntityDef(x.CardId).GetClass() == tagClass)).CardId);
-                                    return;
+                                TAG_CLASS tagClass = DefLoader.Get().GetEntityDef(cardId).GetClass();
+                                switch (tagClass)
+                                {
+                                    case TAG_CLASS.DEMONHUNTER:
+                                    case TAG_CLASS.DRUID:
+                                    case TAG_CLASS.HUNTER:
+                                    case TAG_CLASS.MAGE:
+                                    case TAG_CLASS.PALADIN:
+                                    case TAG_CLASS.PRIEST:
+                                    case TAG_CLASS.ROGUE:
+                                    case TAG_CLASS.SHAMAN:
+                                    case TAG_CLASS.WARLOCK:
+                                    case TAG_CLASS.WARRIOR:
+                                        cardId = GameUtils.TranslateDbIdToCardId(Enumerable.FirstOrDefault(Enumerable.Where(GameDbf.CardHero.GetRecords().OrderBy(x => x.CardId).ToList(), (CardHeroDbfRecord x) => DefLoader.Get().GetEntityDef(x.CardId).GetClass() == tagClass)).CardId);
+                                        return;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex);
                             }
                         }
 
