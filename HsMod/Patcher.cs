@@ -1804,11 +1804,20 @@ namespace HsMod
                 //string rawCardId = cardId;
                 else if (cardId != null && DefLoader.Get()?.GetEntityDef(cardId)?.GetCardType() == TAG_CARDTYPE.HERO_POWER)
                 {
-                    if (skinHero.Value == 637 && skinOpposingHero.Value == 637)    // 防止技能识别错误，待测试、待验证
+                    if (isSkinDefalutHeroEnable.Value)
                     {
-                        return;
+                        try
+                        {
+                            TAG_CLASS tagClass = DefLoader.Get().GetEntityDef(cardId).GetClass();
+                            cardId = GameUtils.GetHeroPowerCardIdFromHero(Enumerable.FirstOrDefault(Enumerable.Where(GameDbf.CardHero.GetRecords().OrderBy(x => x.CardId).ToList(), (CardHeroDbfRecord x) => DefLoader.Get().GetEntityDef(x.CardId).GetClass() == tagClass)).CardId);
+                            return;
+                        }
+                        catch (Exception ex)
+                        {
+                            Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex);
+                        }
                     }
-                    else if (skinHero.Value != -1 && __instance.GetCard().GetControllerSide() == global::Player.Side.FRIENDLY)
+                    if (skinHero.Value != -1 && __instance.GetCard().GetControllerSide() == global::Player.Side.FRIENDLY)
                     {
                         cardId = GameUtils.GetHeroPowerCardIdFromHero(skinHero.Value);
                     }
