@@ -1301,16 +1301,14 @@ namespace HsMod
                 if (num > 0)
                 {
                     Label label = generator.DefineLabel();
-                    num++;
+                    list[++num].labels.Add(label);
                     list.Insert(num++, new CodeInstruction(OpCodes.Call, new Func<ConfigValue>(ConfigValue.Get).Method));
                     list.Insert(num++, new CodeInstruction(OpCodes.Callvirt, typeof(ConfigValue).GetProperty("IsQuickModeEnableValue", BindingFlags.Instance | BindingFlags.Public).GetGetMethod()));
                     list.Insert(num++, new CodeInstruction(OpCodes.Brfalse_S, label));
                     list.Insert(num++, new CodeInstruction(OpCodes.Ldarg_0));
                     list.Insert(num++, new CodeInstruction(OpCodes.Call, typeof(SpellController).GetMethod("OnProcessTaskList", BindingFlags.Instance | BindingFlags.NonPublic)));
                     list.Insert(num++, new CodeInstruction(OpCodes.Ret));
-                    list[num].labels.Add(label);
                 }
-
                 return list;
             }
 

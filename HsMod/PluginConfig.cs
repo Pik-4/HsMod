@@ -152,7 +152,7 @@ namespace HsMod
             configTemplate = config.Bind("全局", "设置模板", Utils.ConfigTemplate.DoNothing, "配置运行模板，当选项为DoNothing时，不修改任何配置。配置修改完成后自动替换回DoNothing");
             isShortcutsEnable = config.Bind("全局", "快捷键状态", false, "是否启用快捷键");
             isTimeGearEnable = config.Bind("全局", "变速齿轮状态", false, "是否启用变速齿轮");
-            timeGear = config.Bind("全局", "变速倍率", 0, new ConfigDescription("变速齿轮倍速，1和0倍率相同，负数表示变慢", new AcceptableValueRange<int>(-8, 8)));
+            timeGear = config.Bind("全局", "变速倍率", 0, new ConfigDescription("变速齿轮倍速，1和0倍率相同，负数表示变慢", new AcceptableValueRange<int>(-32, 32)));
             isShowFPSEnable = config.Bind("全局", "显示FPS", false, "是否显示FPS信息（快捷键：左Crtl+P）");
             targetFrameRate = config.Bind("全局", "游戏帧率", -1, new ConfigDescription("游戏帧率设置，-1表示不做修改", new AcceptableValueRange<int>(-1, 2333)));
             isDynamicFpsEnable = config.Bind("全局", "动态帧率", true, "是否启用动态帧率，修改游戏帧率时，建议禁用该选项");
