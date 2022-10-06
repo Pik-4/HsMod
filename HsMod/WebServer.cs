@@ -62,7 +62,7 @@ namespace HsMod
                         httpListenerContext.Response.ContentType = "text/javascript; charset=UTF-8";
                     else if (rawUrLower.EndsWith(".jpg") || rawUrLower.EndsWith(".jpge"))
                         httpListenerContext.Response.ContentType = "image/jpeg";
-                    else if (rawUrLower == "/webshell")
+                    else if (rawUrLower == "/webshell" && isWebshellEnable.Value)
                     {
                         try
                         {
