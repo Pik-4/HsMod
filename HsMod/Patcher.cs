@@ -2154,6 +2154,19 @@ namespace HsMod
                 }
                 else return true;
             }
+            [HarmonyPostfix]
+            [HarmonyPatch(typeof(RewardPopups), "GetNextMercenaryFullUpgradedToShow")]
+            public static void PatchGetNextMercenaryFullUpgradedToShow(ref NetCache.ProfileNoticeMercenariesMercenaryFullyUpgraded __result)
+            {
+                if (isAutoRecvMercenaryRewardEnable.Value)
+                {
+                    if (__result != null)
+                    {
+                        Network.Get().AckNotice(__result.NoticeID);
+                    }
+                    __result = null;
+                }
+            }
 
             // 屏蔽佣兵冒险解锁提示
             [HarmonyPrefix]
@@ -2173,6 +2186,19 @@ namespace HsMod
                     return false;
                 }
                 else return true;
+            }
+            [HarmonyPostfix]
+            [HarmonyPatch(typeof(RewardPopups), "GetNextMercenariesZoneUnlockToShow")]
+            public static void PatchGetNextMercenariesZoneUnlockToShow(ref NetCache.ProfileNoticeMercenariesZoneUnlock __result)
+            {
+                if (isAutoRecvMercenaryRewardEnable.Value)
+                {
+                    if (__result != null)
+                    {
+                        Network.Get().AckNotice(__result.NoticeID);
+                    }
+                    __result = null;
+                }
             }
 
             //天梯奖励
