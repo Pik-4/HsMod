@@ -105,6 +105,10 @@
     <Reference Include="Blizzard.T5.MiniJSON">
       <HintPath>LibHearthstone\Blizzard.T5.MiniJSON.dll</HintPath>
     </Reference>
+    <Reference Include="Blizzard.T5.PlayMaker.Runtime, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>LibHearthstone\Blizzard.T5.PlayMaker.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="Blizzard.T5.ServiceLocator">
       <HintPath>LibHearthstone\Blizzard.T5.ServiceLocator.dll</HintPath>
     </Reference>

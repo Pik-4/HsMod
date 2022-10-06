@@ -137,6 +137,8 @@ namespace HsMod
         {
             public static int webServerPort = -1;
             public static string hsMatchLogPath = "";
+            public static int width = -1;
+            public static int height = -1;
         }
 
         public static long timeKeeper = DateTime.Now.Ticks;

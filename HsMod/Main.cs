@@ -12,6 +12,7 @@ namespace HsMod
     {
         private void Awake()
         {
+            // 处理命令行参数
             string hsUnitID = "";
             if (UtilsArgu.Instance.Exists("hsunitid"))
                 hsUnitID = UtilsArgu.Instance.Single("hsunitid");
@@ -25,6 +26,16 @@ namespace HsMod
                 if (int.TryParse(UtilsArgu.Instance.Single("port"), out int port))
                     if (port > 0 && port < 65535)
                         CommandConfig.webServerPort = port;
+
+            if (UtilsArgu.Instance.Exists("width"))
+                if (int.TryParse(UtilsArgu.Instance.Single("width"), out int width))
+                    if (width > 0 && width < 65535)
+                        CommandConfig.width = width;
+
+            if (UtilsArgu.Instance.Exists("height"))
+                if (int.TryParse(UtilsArgu.Instance.Single("height"), out int height))
+                    if (height > 0 && height < 65535)
+                        CommandConfig.height = height;
 
             if (UtilsArgu.Instance.Exists("matchPath")) CommandConfig.hsMatchLogPath = UtilsArgu.Instance.Single("matchPath");
 
@@ -55,7 +66,7 @@ namespace HsMod
                     }
                 }
 
-
+            // 处理插件状态
             //Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
             if (isPluginEnable.Value)
             {
@@ -97,6 +108,14 @@ namespace HsMod
                 graphicsManager = Blizzard.T5.Services.ServiceManager.Get<IGraphicsManager>();
                 graphicsManager.UpdateTargetFramerate(targetFrameRate.Value, isDynamicFpsEnable.Value);
             }
+
+            //设置命令行的分辨率 位于patch之后，防止炉石自动修改
+            if (CommandConfig.width > 0 && CommandConfig.height > 0)
+            {
+                Screen.SetResolution(CommandConfig.width, CommandConfig.height, false);
+            }
+
+            //启动web服务
             WebServer.Start();
             //InactivePlayerKicker.Get().SetShouldCheckForInactivity(isIdleKickEnable.Value);
         }

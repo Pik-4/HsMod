@@ -250,6 +250,26 @@ namespace HsMod
                 return false;
             }
 
+            //命令行修改分辨率，阻止炉石自修改
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(Screen), "SetResolution", new Type[] { typeof(int), typeof(int), typeof(bool) })]
+            public static bool PatchSetResolution(ref int width, ref int height, ref bool fullscreen)
+            {
+                if (CommandConfig.width > 0 && CommandConfig.height > 0)
+                {
+                    if (width == CommandConfig.width && height == CommandConfig.height && fullscreen == false)
+                    {
+                        return true;
+                    }
+                    else if (Options.Get().GetInt(Option.GFX_WIDTH) == width && Options.Get().GetInt(Option.GFX_HEIGHT) == height)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+
             //使用WebToken登录
             [HarmonyTranspiler]
             [HarmonyPatch(typeof(Hearthstone.Login.DesktopLoginTokenFetcher), "GetTokenFromTokenFetcher")]
