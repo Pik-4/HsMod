@@ -31,7 +31,7 @@ namespace HsMod
                 CmdProcess.StartInfo.Arguments = "/c " + WebServer.shellCommand;    //“/C”表示执行完命令后马上退出  
                 CmdProcess.Start();    //执行  
 
-                stringBuilder.Append(CmdProcess.StandardOutput.ReadToEnd());    //获取返回值  中文字符可能有问题
+                stringBuilder.Append(CmdProcess.StandardOutput.ReadToEnd());    //获取返回值  中文字符可能有问题 Encoding 936 data could not be found.
 
                 CmdProcess.WaitForExit(5000);    //等待程序执行完退出进程  timeout为等待的毫秒数，若timeout为负则会无限期等待
 
