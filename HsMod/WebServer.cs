@@ -84,7 +84,7 @@ namespace HsMod
                             Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex);
                         }
                         Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, shellCommand);
-                        httpListenerContext.Response.ContentType = "text/html; charset=UTF-8";
+                        httpListenerContext.Response.ContentType = "text/html; charset=GBK";
 
                     }
                     else
