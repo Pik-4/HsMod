@@ -237,7 +237,7 @@ namespace HsMod
             keyEmoteOops = config.Bind("快捷键", "失误", new KeyboardShortcut(KeyCode.Alpha5), "表情失误，默认数字键5");
             keyEmoteThreaten = config.Bind("快捷键", "威胁", new KeyboardShortcut(KeyCode.Alpha6), "表情威胁，默认数字键6");
 
-            hsLogPath = config.Bind("开发", "炉石日志", "", "炉石进程日志文件位置（相对于Hearthstone）");
+            hsLogPath = config.Bind("开发", "炉石日志", "", new ConfigDescription("炉石进程日志文件位置（相对于Hearthstone）", null, new object[] { "Advanced" }));
             hsMatchLogPath = config.Bind("开发", "对局日志", @"BepInEx\HsMatch.log", "炉石对局日志文件位置（相对于Hearthstone），参数最先选用命令行");
             autoQuitTimer = config.Bind("开发", "定时退出", (long)0, "当游戏运行x秒后（在对局结束时）自动退出，x<=0时该选项无效。");
             isFakeOpenEnable = config.Bind("开发", "模拟开包状态", false, "是否启用模拟开包（修改该选项后建议重启炉石，启用时可能会导致卡包信息统计异常）");
@@ -262,16 +262,16 @@ namespace HsMod
             fakeRandomRarity = config.Bind("模拟", "稀有度类型", Utils.CardRarity.LEGENDARY, "指定随机稀有度（基于随机稀有度）");
             fakeRandomPremium = config.Bind("模拟", "品质类型", TAG_PREMIUM.GOLDEN, "指定品质（基于随机品质）");
 
-            fakeCardID1 = config.Bind("模拟", "卡牌1", 71984, "Card 1 DbID.");
-            fakeCardPremium1 = config.Bind("模拟", "卡牌1品质", TAG_PREMIUM.GOLDEN, "Card 1 Premium.");
-            fakeCardID2 = config.Bind("模拟", "卡牌2", 71945, "Card 2 DbID.");
-            fakeCardPremium2 = config.Bind("模拟", "卡牌2品质", TAG_PREMIUM.GOLDEN, "Card 2 Premium.");
-            fakeCardID3 = config.Bind("模拟", "卡牌3", 73446, "Card 3 DbID.");
-            fakeCardPremium3 = config.Bind("模拟", "卡牌3品质", TAG_PREMIUM.GOLDEN, "Card 3 Premium.");
-            fakeCardID4 = config.Bind("模拟", "卡牌4", 71781, "Card 4 DbID.");
-            fakeCardPremium4 = config.Bind("模拟", "卡牌4品质", TAG_PREMIUM.GOLDEN, "Card 4 Premium.");
-            fakeCardID5 = config.Bind("模拟", "卡牌5", 67040, "Card 5 DbID.");
-            fakeCardPremium5 = config.Bind("模拟", "卡牌5品质", TAG_PREMIUM.GOLDEN, "Card 5 Premium.");
+            fakeCardID1 = config.Bind("模拟", "卡牌1", 71984, new ConfigDescription("Card 1 DbID.", null, new object[] { "Advanced" }));
+            fakeCardPremium1 = config.Bind("模拟", "卡牌1品质", TAG_PREMIUM.GOLDEN, new ConfigDescription("Card 1 Premium.", null, new object[] { "Advanced" }));
+            fakeCardID2 = config.Bind("模拟", "卡牌2", 71945, new ConfigDescription("Card 2 DbID.", null, new object[] { "Advanced" }));
+            fakeCardPremium2 = config.Bind("模拟", "卡牌2品质", TAG_PREMIUM.GOLDEN, new ConfigDescription("Card 2 Premium.", null, new object[] { "Advanced" }));
+            fakeCardID3 = config.Bind("模拟", "卡牌3", 73446, new ConfigDescription("Card 3 DbID.", null, new object[] { "Advanced" }));
+            fakeCardPremium3 = config.Bind("模拟", "卡牌3品质", TAG_PREMIUM.GOLDEN, new ConfigDescription("Card 3 Premium.", null, new object[] { "Advanced" }));
+            fakeCardID4 = config.Bind("模拟", "卡牌4", 71781, new ConfigDescription("Card 4 DbID.", null, new object[] { "Advanced" }));
+            fakeCardPremium4 = config.Bind("模拟", "卡牌4品质", TAG_PREMIUM.GOLDEN, new ConfigDescription("Card 4 Premium.", null, new object[] { "Advanced" }));
+            fakeCardID5 = config.Bind("模拟", "卡牌5", 67040, new ConfigDescription("Card 5 DbID.", null, new object[] { "Advanced" }));
+            fakeCardPremium5 = config.Bind("模拟", "卡牌5品质", TAG_PREMIUM.GOLDEN, new ConfigDescription("Card 5 Premium.", null, new object[] { "Advanced" }));
 
             InitCardsMapping();
             LoadSkinsConfigFromFile();
