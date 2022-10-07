@@ -1584,7 +1584,16 @@ namespace HsMod
                                 default:
                                     break;
                             }
-                            finalResult = $"{String.Join("<br />", DateTime.Now.ToString().Split(' '))},{finalResult},-,{GameMgr.Get().GetGameType()},{Utils.CacheLastOpponentFullName},";
+
+                            string gameType = (GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_RANKED) ? GameMgr.Get().GetFormatType().ToString() : GameMgr.Get().GetGameType().ToString();
+                            string gameRank = "-";
+                            //if (GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_RANKED && GameMgr.Get().GetFormatType() != PegasusShared.FormatType.FT_UNKNOWN)
+                            //{
+                            //    var currentMedal = RankMgr.Get().GetLocalPlayerMedalInfo().GetCurrentMedalForCurrentFormatType();
+                            //    gameRank = Utils.RankIdxToString(currentMedal.starLevel);
+                            //    gameRank = (gameRank == "传说") ? "传说" + currentMedal.legendIndex.ToString() : gameRank + "-" + currentMedal.earnedStars.ToString();
+                            //}
+                            finalResult = $"{String.Join("<br />", DateTime.Now.ToString().Split(' '))},{finalResult},{gameRank},{gameType},{Utils.CacheLastOpponentFullName},";
                             finalResult += $"High:{Utils.CacheLastOpponentAccountID.High}+Low:{Utils.CacheLastOpponentAccountID.Low} => 已举报";
                             System.IO.File.AppendAllText(CommandConfig.hsMatchLogPath, finalResult + "\n");
                             Utils.CacheLastOpponentAccountID = null;
