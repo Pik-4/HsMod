@@ -578,7 +578,17 @@ namespace HsMod
 
         public string CacheOpponentFullName
         {
-            get { return Utils.CacheLastOpponentFullName; }
+            get
+            {
+                if (!String.IsNullOrEmpty(Utils.CacheLastOpponentFullName))
+                    return Utils.CacheLastOpponentFullName;
+                else if (!String.IsNullOrEmpty(BnetPresenceMgr.Get()?.GetPlayer(GameState.Get()?.GetOpposingSidePlayer()?.GetGameAccountId())?.GetFullName()))
+                {
+                    return BnetPresenceMgr.Get()?.GetPlayer(GameState.Get()?.GetOpposingSidePlayer()?.GetGameAccountId())?.GetFullName();
+                }
+
+                return "";
+            }
         }
 
         public static ConfigValue Get()
