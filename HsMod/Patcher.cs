@@ -1813,7 +1813,7 @@ namespace HsMod
                 //string rawCardId = cardId;
                 else if (cardId != null && DefLoader.Get()?.GetEntityDef(cardId)?.GetCardType() == TAG_CARDTYPE.HERO_POWER)
                 {
-                    if (isSkinDefalutHeroEnable.Value)
+                    if (isSkinDefalutHeroEnable.Value && !GameMgr.Get().IsBattlegrounds())
                     {
                         try
                         {
@@ -1879,10 +1879,10 @@ namespace HsMod
                     }
                     else if (cardId.Substring(0, 5) == "HERO_"
                         && DefLoader.Get().GetEntityDef(cardId).GetCardType() == TAG_CARDTYPE.HERO
-                        && CardsMapping.Count != 0
+                        && CardsMapping.Count != 0    // FIXME: 检查是否有问题有问题
                         )
                     {
-                        if (isSkinDefalutHeroEnable.Value)
+                        if (isSkinDefalutHeroEnable.Value && !GameMgr.Get().IsBattlegrounds())
                         {
                             try
                             {
