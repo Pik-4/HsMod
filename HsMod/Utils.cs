@@ -281,7 +281,7 @@ namespace HsMod
             Network.CardSaleResult cardSaleResult = Network.Get().GetCardSaleResult();
             if (cardSaleResult.Action != Network.CardSaleResult.SaleResult.CARD_WAS_SOLD)
             {
-                MyLogger(LogLevel.Warning, "分解失败");
+                MyLogger(LogLevel.Warning, $"分解失败：{cardSaleResult.Action}");
                 UIStatus.Get().AddInfo("分解失败");
             }
             else
@@ -399,41 +399,26 @@ namespace HsMod
             network.RegisterNetHandler(PegasusUtil.BoughtSoldCard.PacketID.ID, new Network.NetHandler(TryRefundCardDisenchantCallback), null);
             foreach (var record in CollectionManager.Get().GetOwnedCards())
             {
-                if (record != null && record.IsCraftable && record.IsRefundable && (record.OwnedCount > 0))
+                if (record != null && record.IsCraftable && record.IsRefundable && (record.OwnedCount > 0))    // 金卡和普卡会分别触发一次，但是一次性分完
                 {
                     CraftingManager.Get().TryGetCardSellValue(record.CardId, record.PremiumType, out int value);
+                    totalSell += record.OwnedCount * value;
 
                     CraftingManager.Get().TryGetCardSellValue(record.CardId, TAG_PREMIUM.NORMAL, out int normalValue);
                     CraftingManager.Get().TryGetCardSellValue(record.CardId, TAG_PREMIUM.GOLDEN, out int goldenValue);
 
-                    CraftingPendingTransaction m_pendingClientTransaction = new CraftingPendingTransaction();
                     int numNormalCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.NORMAL);
                     int numGoldenCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.GOLDEN);
-                    //int numNormalCopiesInCollection = (record.PremiumType == TAG_PREMIUM.NORMAL) ? record.OwnedCount : 0;
-                    //int numGoldenCopiesInCollection = (record.PremiumType == TAG_PREMIUM.GOLDEN) ? record.OwnedCount : 0;
 
+                    CraftingPendingTransaction m_pendingClientTransaction = new CraftingPendingTransaction();
                     m_pendingClientTransaction.CardID = record.CardId;
                     m_pendingClientTransaction.Premium = record.PremiumType;
+                    m_pendingClientTransaction.NormalDisenchantCount = numNormalCopiesInCollection;
+                    m_pendingClientTransaction.GoldenDisenchantCount = numGoldenCopiesInCollection;
 
-                    if (numNormalCopiesInCollection > 0)
-                    {
-                        //m_pendingClientTransaction.GoldenDisenchantCount = record.DisenchantCount;
-                        m_pendingClientTransaction.GoldenDisenchantCount = numNormalCopiesInCollection;
-                    }
-                    if (numGoldenCopiesInCollection > 0)
-                    {
-                        m_pendingClientTransaction.NormalDisenchantCount = numGoldenCopiesInCollection;
-                    }
-
-                    MyLogger(LogLevel.Warning, normalValue);
-                    MyLogger(LogLevel.Warning, numNormalCopiesInCollection);
-                    MyLogger(LogLevel.Warning, goldenValue);
-                    MyLogger(LogLevel.Warning, numGoldenCopiesInCollection);
-                    MyLogger(LogLevel.Warning, -(normalValue * numNormalCopiesInCollection + goldenValue * numGoldenCopiesInCollection));
-                    network.CraftingTransaction(m_pendingClientTransaction, -(normalValue * numNormalCopiesInCollection + goldenValue * numGoldenCopiesInCollection), numNormalCopiesInCollection, numGoldenCopiesInCollection);
+                    value = -(normalValue * numNormalCopiesInCollection + goldenValue * numGoldenCopiesInCollection);
+                    network.CraftingTransaction(m_pendingClientTransaction, value, numNormalCopiesInCollection, numGoldenCopiesInCollection);
                     m_pendingClientTransaction = null;
-
-                    totalSell += record.OwnedCount * value;
                 }
             }
             MyLogger(LogLevel.Warning, "尝试分解粉尘：" + totalSell);
