@@ -403,25 +403,34 @@ namespace HsMod
                 {
                     CraftingManager.Get().TryGetCardSellValue(record.CardId, record.PremiumType, out int value);
 
+                    CraftingManager.Get().TryGetCardSellValue(record.CardId, TAG_PREMIUM.NORMAL, out int normalValue);
+                    CraftingManager.Get().TryGetCardSellValue(record.CardId, TAG_PREMIUM.GOLDEN, out int goldenValue);
+
                     CraftingPendingTransaction m_pendingClientTransaction = new CraftingPendingTransaction();
-                    //int numNormalCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.NORMAL);
-                    //int numGoldenCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.GOLDEN);
-                    int numNormalCopiesInCollection = (record.PremiumType == TAG_PREMIUM.NORMAL) ? record.OwnedCount : 0;
-                    int numGoldenCopiesInCollection = (record.PremiumType == TAG_PREMIUM.GOLDEN) ? record.OwnedCount : 0;
+                    int numNormalCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.NORMAL);
+                    int numGoldenCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.GOLDEN);
+                    //int numNormalCopiesInCollection = (record.PremiumType == TAG_PREMIUM.NORMAL) ? record.OwnedCount : 0;
+                    //int numGoldenCopiesInCollection = (record.PremiumType == TAG_PREMIUM.GOLDEN) ? record.OwnedCount : 0;
 
                     m_pendingClientTransaction.CardID = record.CardId;
                     m_pendingClientTransaction.Premium = record.PremiumType;
 
-                    if (m_pendingClientTransaction.Premium == TAG_PREMIUM.GOLDEN)
+                    if (numNormalCopiesInCollection > 0)
                     {
                         //m_pendingClientTransaction.GoldenDisenchantCount = record.DisenchantCount;
-                        m_pendingClientTransaction.GoldenDisenchantCount = record.OwnedCount;
+                        m_pendingClientTransaction.GoldenDisenchantCount = numNormalCopiesInCollection;
                     }
-                    else
+                    if (numGoldenCopiesInCollection > 0)
                     {
-                        m_pendingClientTransaction.NormalDisenchantCount = record.OwnedCount;
+                        m_pendingClientTransaction.NormalDisenchantCount = numGoldenCopiesInCollection;
                     }
-                    network.CraftingTransaction(m_pendingClientTransaction, -value * record.OwnedCount, numNormalCopiesInCollection, numGoldenCopiesInCollection);
+
+                    MyLogger(LogLevel.Warning, normalValue);
+                    MyLogger(LogLevel.Warning, numNormalCopiesInCollection);
+                    MyLogger(LogLevel.Warning, goldenValue);
+                    MyLogger(LogLevel.Warning, numGoldenCopiesInCollection);
+                    MyLogger(LogLevel.Warning, -(normalValue * numNormalCopiesInCollection + goldenValue * numGoldenCopiesInCollection));
+                    network.CraftingTransaction(m_pendingClientTransaction, -(normalValue * numNormalCopiesInCollection + goldenValue * numGoldenCopiesInCollection), numNormalCopiesInCollection, numGoldenCopiesInCollection);
                     m_pendingClientTransaction = null;
 
                     totalSell += record.OwnedCount * value;
