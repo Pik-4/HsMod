@@ -231,7 +231,7 @@ text-decoration: none;
             btn += @"<a href=""/about""><button class=""btn_li"">关&emsp;&emsp;于</button><br/></a><br/>";
             string body = @"<h1 style=""text-align: center; opacity: 0.6;"">HsMod</h1>";
             body += $@"<div style=""text-align: center; width: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);"">{btn}</div>";
-            return Template("index", body).Remove(108, 126);
+            return Template("index", body);
         }
 
         public static StringBuilder AboutPage()
@@ -942,7 +942,7 @@ text-decoration: none;
             {
                 builder.Append("<br />");
             }
-            return Template(builder, "Mercenaries");
+            return Template(builder, "Mercenaries").Remove(108, 126);
         }
 
         public static StringBuilder PackPage()
