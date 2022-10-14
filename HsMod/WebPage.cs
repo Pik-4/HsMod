@@ -48,7 +48,7 @@ namespace HsMod
         public static StringBuilder Template(string title = "", string body = "")
         {
             StringBuilder builder = new StringBuilder();
-            string nav = (System.IO.File.Exists(CommandConfig.hsMatchLogPath)) ? "<li class=\"nav_li\"><a href=\"/matchlog\"><button class=\"btn_li\">炉石对局</button></a></li>" : "";
+            string nav = (System.IO.File.Exists(CommandConfig.hsMatchLogPath) && title != "index") ? "<li class=\"nav_li\"><a href=\"/matchlog\"><button class=\"btn_li\">炉石对局</button></a></li>" : "";
             if (title != "index")
             {
                 nav = $@"<center>
@@ -111,7 +111,7 @@ ul{{
 list-style-type: none;
 margin: 0 auto;
 overflow: hidden;
-display: flow-root;
+display: table;
 }}
 .nav_li {{
 float: left;
@@ -135,7 +135,7 @@ text-decoration: none;
         public static StringBuilder Template(StringBuilder body, string title = "")
         {
             StringBuilder builder = new StringBuilder();
-            string nav = (System.IO.File.Exists(CommandConfig.hsMatchLogPath)) ? "<li class=\"nav_li\"><a href=\"/matchlog\"><button class=\"btn_li\">炉石对局</button></a></li>" : "";
+            string nav = (System.IO.File.Exists(CommandConfig.hsMatchLogPath) && title != "index") ? "<li class=\"nav_li\"><a href=\"/matchlog\"><button class=\"btn_li\">炉石对局</button></a></li>" : "";
             if (title != "index")
             {
                 nav = $@"<center>
@@ -198,7 +198,7 @@ ul{{
 list-style-type: none;
 margin: 0 auto;
 overflow: hidden;
-display: flow-root;
+display: table;
 }}
 .nav_li {{
 float: left;
@@ -231,7 +231,7 @@ text-decoration: none;
             btn += @"<a href=""/about""><button class=""btn_li"">关&emsp;&emsp;于</button><br/></a><br/>";
             string body = @"<h1 style=""text-align: center; opacity: 0.6;"">HsMod</h1>";
             body += $@"<div style=""text-align: center; width: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);"">{btn}</div>";
-            return Template("index", body);
+            return Template("index", body).Remove(108, 126);
         }
 
         public static StringBuilder AboutPage()
