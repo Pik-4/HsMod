@@ -48,6 +48,21 @@ namespace HsMod
         public static StringBuilder Template(string title = "", string body = "")
         {
             StringBuilder builder = new StringBuilder();
+            string nav = (System.IO.File.Exists(CommandConfig.hsMatchLogPath)) ? "<li class=\"nav_li\"><a href=\"/matchlog\"><button class=\"btn_li\">炉石对局</button></a></li>" : "";
+            if (title != "index")
+            {
+                nav = $@"<center>
+<ul class=""nav_ui"">
+<li class=""nav_li""><a href=""/info""><button class=""btn_li"">主要信息</button></a></li>
+<li class=""nav_li""><a href=""/pack""><button class=""btn_li"">卡包信息</button></a></li>
+<li class=""nav_li""><a href=""/collection""><button class=""btn_li"">卡牌收藏</button></a></li>
+<li class=""nav_li""><a href=""/skins""><button class=""btn_li"">皮肤信息</button></a></li>
+<li class=""nav_li""><a href=""/lettuce""><button class=""btn_li"">佣兵关卡</button></a></li>
+<li class=""nav_li""><a href=""/mercenaries""><button class=""btn_li"">佣兵收藏</button></a></li>
+{nav}
+<li class=""nav_li""><a href=""/about""><button class=""btn_li"">关&emsp;&emsp;于</button></a></li>
+</ul></center><br />";
+            }
             builder.Append($@"
 <!DOCTYPE html>
 <html lang=""zh"">
@@ -92,11 +107,25 @@ background-color: #66CCFF;
 color: white;
 opacity: 0.6;
 }}
+ul{{
+list-style-type: none;
+margin: 0 auto;
+overflow: hidden;
+display: flow-root;
+}}
+.nav_li {{
+float: left;
+display: block;
+color: white;
+text-align: center;
+margin:0 auto;
+text-decoration: none;
+}}
 </style>
 <title>{PluginInfo.PLUGIN_GUID} - {title}</title>
 </head>
-<body>"
-).Append(body).Append(@"
+<body>
+{nav}").Append(body).Append(@"
 </body>
 </html>
 ");
@@ -106,6 +135,21 @@ opacity: 0.6;
         public static StringBuilder Template(StringBuilder body, string title = "")
         {
             StringBuilder builder = new StringBuilder();
+            string nav = (System.IO.File.Exists(CommandConfig.hsMatchLogPath)) ? "<li class=\"nav_li\"><a href=\"/matchlog\"><button class=\"btn_li\">炉石对局</button></a></li>" : "";
+            if (title != "index")
+            {
+                nav = $@"<center>
+<ul class=""nav_ui"">
+<li class=""nav_li""><a href=""/info""><button class=""btn_li"">主要信息</button></a></li>
+<li class=""nav_li""><a href=""/pack""><button class=""btn_li"">卡包信息</button></a></li>
+<li class=""nav_li""><a href=""/collection""><button class=""btn_li"">卡牌收藏</button></a></li>
+<li class=""nav_li""><a href=""/skins""><button class=""btn_li"">皮肤信息</button></a></li>
+<li class=""nav_li""><a href=""/lettuce""><button class=""btn_li"">佣兵关卡</button></a></li>
+<li class=""nav_li""><a href=""/mercenaries""><button class=""btn_li"">佣兵收藏</button></a></li>
+{nav}
+<li class=""nav_li""><a href=""/about""><button class=""btn_li"">关&emsp;&emsp;于</button></a></li>
+</ul></center><br />";
+            }
             builder.Append($@"
 <!DOCTYPE html>
 <html lang=""zh"">
@@ -150,11 +194,25 @@ background-color: #66CCFF;
 color: white;
 opacity: 0.6;
 }}
+ul{{
+list-style-type: none;
+margin: 0 auto;
+overflow: hidden;
+display: flow-root;
+}}
+.nav_li {{
+float: left;
+display: block;
+color: white;
+text-align: center;
+margin:0 auto;
+text-decoration: none;
+}}
 </style>
 <title>{PluginInfo.PLUGIN_GUID} - {title}</title>
 </head>
-<body>"
-).Append(body).Append(@"
+<body>
+{nav}").Append(body).Append(@"
 </body>
 </html>
 ");
