@@ -475,6 +475,32 @@ namespace HsMod
                 else return true;
             }
 
+            //测试补丁，屏蔽奖励显示
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(Hearthstone.Progression.RewardPresenter), "ShowNextReward")]
+            public static bool PatchRewardPresenterShowNextReward(Hearthstone.Progression.RewardPresenter __instance,ref Action onHiddenCallback)
+            {
+                Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "ShowNextReward");
+                if (!isEndGameScreenShow.Value)
+                {
+                    onHiddenCallback?.Invoke();
+                    __instance.Clear();
+
+                    var notices = NetCache.Get().GetNetObject<NetCache.NetCacheProfileNotices>().Notices;
+                    for (int i = 0; i < notices.Count; i++)
+                    {
+                        var notice = notices[i];
+                        if (notice != null)
+                        {
+                            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"NetCacheProfileNotices {notice.Origin} {notice.Type} {notice.NoticeID}");
+                            Network.Get().AckNotice(notice.NoticeID);
+                        }
+                    }
+                    NetCache.Get().GetNetObject<NetCache.NetCacheProfileNotices>().Notices.Clear();
+                }
+                return true;
+            }
+
             //清空自动分解的Handler
             [HarmonyPrefix]
             [HarmonyPatch(typeof(CollectionManager), "RegisterCollectionNetHandlers")]
@@ -2177,11 +2203,23 @@ namespace HsMod
             {
                 if (isAutoRecvMercenaryRewardEnable.Value)
                 {
-                    NetCache.ProfileNoticeMercenariesMercenaryFullyUpgraded upgradeNotice = (NetCache.ProfileNoticeMercenariesMercenaryFullyUpgraded)Traverse.Create(__instance).Field("GetNextMercenaryFullUpgradedToShow")?.GetValue();
+                    var notices = NetCache.Get().GetNetObject<NetCache.NetCacheProfileNotices>().Notices;
+                    for (int i = 0; i < notices.Count; i++)
+                    {
+                        var notice = notices[i];
+                        if (notice != null)
+                        {
+                            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"NetCacheProfileNotices {notice.Origin} {notice.Type} {notice.NoticeID}");
+                            Network.Get().AckNotice(notice.NoticeID);
+                        }
+                    }
+                    NetCache.Get().GetNetObject<NetCache.NetCacheProfileNotices>().Notices.Clear();
 
+                    NetCache.ProfileNoticeMercenariesMercenaryFullyUpgraded upgradeNotice = (NetCache.ProfileNoticeMercenariesMercenaryFullyUpgraded)Traverse.Create(__instance).Field("GetNextMercenaryFullUpgradedToShow")?.GetValue();
                     if (upgradeNotice != null)
                     {
                         Network.Get().AckNotice(upgradeNotice.NoticeID);
+                        Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"ShowMercenariesFullyUpgraded {upgradeNotice.NoticeID}");
                         doneCallback?.Invoke();
                         ___OnPopupClosed?.Invoke();
                     }
@@ -2199,8 +2237,21 @@ namespace HsMod
                     if (__result != null)
                     {
                         Network.Get().AckNotice(__result.NoticeID);
+                        Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"GetNextMercenaryFullUpgradedToShow {__result.NoticeID}");
                     }
                     __result = null;
+
+                    var notices = NetCache.Get().GetNetObject<NetCache.NetCacheProfileNotices>().Notices;
+                    for (int i = 0; i < notices.Count; i++)
+                    {
+                        var notice = notices[i];
+                        if (notice != null)
+                        {
+                            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"NetCacheProfileNotices {notice.Origin} {notice.Type} {notice.NoticeID}");
+                            Network.Get().AckNotice(notice.NoticeID);
+                        }
+                    }
+                    NetCache.Get().GetNetObject<NetCache.NetCacheProfileNotices>().Notices.Clear();
                 }
             }
 
@@ -2211,10 +2262,23 @@ namespace HsMod
             {
                 if (isAutoRecvMercenaryRewardEnable.Value)
                 {
+                    var notices = NetCache.Get().GetNetObject<NetCache.NetCacheProfileNotices>().Notices;
+                    for (int i = 0; i < notices.Count; i++)
+                    {
+                        var notice = notices[i];
+                        if (notice != null)
+                        {
+                            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"NetCacheProfileNotices {notice.Origin} {notice.Type} {notice.NoticeID}");
+                            Network.Get().AckNotice(notice.NoticeID);
+                        }
+                    }
+                    NetCache.Get().GetNetObject<NetCache.NetCacheProfileNotices>().Notices.Clear();
+
                     NetCache.ProfileNoticeMercenariesZoneUnlock zoneNotice = (NetCache.ProfileNoticeMercenariesZoneUnlock)Traverse.Create(__instance).Field("GetNextMercenariesZoneUnlockToShow")?.GetValue();
                     if (zoneNotice != null)
                     {
                         Network.Get().AckNotice(zoneNotice.NoticeID);
+                        Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"ShowMercenariesZoneUnlockPopup {zoneNotice.NoticeID}");
                         onPopupCompleteCallback?.Invoke();
                         ___OnPopupClosed?.Invoke();
                     }
@@ -2232,8 +2296,21 @@ namespace HsMod
                     if (__result != null)
                     {
                         Network.Get().AckNotice(__result.NoticeID);
+                        Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"GetNextMercenariesZoneUnlockToShow {__result.NoticeID}");
                     }
                     __result = null;
+
+                    var notices = NetCache.Get().GetNetObject<NetCache.NetCacheProfileNotices>().Notices;
+                    for (int i = 0; i < notices.Count; i++)
+                    {
+                        var notice = notices[i];
+                        if (notice != null)
+                        {
+                            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"NetCacheProfileNotices {notice.Origin} {notice.Type} {notice.NoticeID}");
+                            Network.Get().AckNotice(notice.NoticeID);
+                        }
+                    }
+                    NetCache.Get().GetNetObject<NetCache.NetCacheProfileNotices>().Notices.Clear();
                 }
             }
 
