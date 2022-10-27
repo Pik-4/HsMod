@@ -483,8 +483,8 @@ namespace HsMod
                 Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "ShowNextReward");
                 if (!isEndGameScreenShow.Value)
                 {
-                    onHiddenCallback?.Invoke();
                     __instance.Clear();
+                    //onHiddenCallback?.Invoke();
 
                     var notices = NetCache.Get().GetNetObject<NetCache.NetCacheProfileNotices>().Notices;
                     for (int i = 0; i < notices.Count; i++)
