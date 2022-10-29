@@ -3,6 +3,7 @@ using PegasusUtil;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using static HsMod.PluginConfig;
 
@@ -920,6 +921,21 @@ namespace HsMod
 
         }
 
+
+        public static void DeleteFolder(string dir)
+        {
+            if (Directory.Exists(dir))
+            {
+                foreach (string d in Directory.GetFileSystemEntries(dir))
+                {
+                    if (File.Exists(d))
+                        File.Delete(d);                     
+                    else
+                        DeleteFolder(d);
+                }
+                Directory.Delete(dir, true);              
+            }
+        }
 
         public static class LeakInfo
         {

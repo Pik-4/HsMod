@@ -12,6 +12,14 @@ namespace HsMod
     {
         private void Awake()
         {
+            // 清除炉石缓存，暂不设置清空判断条件
+            if (true == true)
+            {
+                Utils.DeleteFolder(Hearthstone.Util.PlatformFilePaths.ExternalDataPath + "/Cache");
+                Utils.DeleteFolder(Hearthstone.Util.PlatformFilePaths.PersistentDataPath + "/Cache");
+            }
+
+
             // 处理命令行参数
             string hsUnitID = "";
             if (UtilsArgu.Instance.Exists("hsunitid"))
@@ -137,6 +145,25 @@ namespace HsMod
                 UIStatus.Get().AddInfo($"[{allPatchNum}]插件状态：" + (isPluginEnable.Value ? "运行" : "停止"));
                 InactivePlayerKicker.Get().SetShouldCheckForInactivity(isIdleKickEnable.Value);
                 WebServer.Restart();
+
+                //List<AchievementDbfRecord> records = GameDbf.Achievement.GetRecords((AchievementDbfRecord x) => x.AchievementSection == 327, -1);
+                //AchievementManager achievementManager = AchievementManager.Get();
+                //List<AchievementDataModel> list = new List<AchievementDataModel>();
+                //foreach (AchievementDbfRecord achievementDbfRecord in records)
+                //{
+                //    list.Add(achievementManager.GetAchievementDataModel(achievementDbfRecord.ID));
+                //}
+                //foreach (AchievementDataModel achievementDataModel in list)
+                //{
+                //    bool flag = achievementDataModel.Status == AchievementManager.AchievementStatus.COMPLETED;
+                //    if (flag)
+                //    {
+                //        Utils.MyLogger(LogLevel.Warning, achievementDataModel.ID);
+                //        Network.Get().ClaimAchievementReward(achievementDataModel.ID);
+                //        //achievementManager.ClaimAchievementReward(achievementDataModel.ID, 0);
+                //    }
+                //}
+
             }
 
             if (!isPluginEnable.Value) return;
