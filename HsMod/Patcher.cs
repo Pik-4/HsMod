@@ -289,8 +289,13 @@ namespace HsMod
             private static readonly MethodInfo findEntry = typeof(Blizzard.T5.Configuration.ConfigFile).GetMethod("FindEntry", BindingFlags.Instance | BindingFlags.NonPublic);
             [HarmonyPostfix]
             [HarmonyPatch(typeof(Blizzard.T5.Configuration.ConfigFile), "Load", new Type[] { typeof(string), typeof(bool) })]
-            public static void PatchLoad(string path, bool ignoreUselessLines, Blizzard.T5.Configuration.ConfigFile __instance)
+            public static void PatchLoad(ref string path, ref bool ignoreUselessLines, Blizzard.T5.Configuration.ConfigFile __instance)
             {
+                if (!System.IO.File.Exists(path))
+                {
+                    return;    // TODO: 制造一个虚假文件。Prefix时完成创建。
+                }
+
                 Blizzard.T5.Configuration.ConfigFile.Line token = (Blizzard.T5.Configuration.ConfigFile.Line)findEntry.Invoke(__instance, new object[] { "Aurora.VerifyWebCredentials" }); ;
 
                 if (token != null)
