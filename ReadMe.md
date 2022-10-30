@@ -156,7 +156,7 @@ https://us.battle.net/login/en/?app=wtcg
 https://eu.battle.net/login/en/?app=wtcg
 ```
 
-在启用插件后，支持`./Hearthstone.exe VerifyWebCredentials` 命令启动炉石（但需要有`client.config`文件）。
+在启用插件后，支持`./Hearthstone.exe VerifyWebCredentials` 命令启动炉石（~~但需要有client.config文件~~，现在不需要了！）。
 
 ### TODO
 

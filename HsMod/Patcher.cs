@@ -286,29 +286,61 @@ namespace HsMod
                 });
                 return list;
             }
-            private static readonly MethodInfo findEntry = typeof(Blizzard.T5.Configuration.ConfigFile).GetMethod("FindEntry", BindingFlags.Instance | BindingFlags.NonPublic);
-            [HarmonyPostfix]
-            [HarmonyPatch(typeof(Blizzard.T5.Configuration.ConfigFile), "Load", new Type[] { typeof(string), typeof(bool) })]
-            public static void PatchLoad(ref string path, ref bool ignoreUselessLines, Blizzard.T5.Configuration.ConfigFile __instance)
+            [HarmonyPrefix, HarmonyPatch(typeof(Blizzard.T5.Configuration.ConfigFile), "Load", new Type[] { typeof(string), typeof(bool) })]
+            public static void PatchPreConfigFileLoad(ref string path,
+                                                      ref bool ignoreUselessLines,
+                                                      Blizzard.T5.Configuration.ConfigFile __instance,
+                                                      out string __state)
             {
-                if (!System.IO.File.Exists(path))
+                __state = null;
+                string pattern = @"(CN|KR|TW|EU|US)\-[a-f0-9]{32}\-\d+";    // Country-Token-AccountID.Low
+                string argv = String.Join(" ", Environment.GetCommandLineArgs());
+                var res = System.Text.RegularExpressions.Regex.Match(argv, pattern);
+                if (res.Success)
                 {
-                    return;    // TODO: 制造一个虚假文件。Prefix时完成创建。
-                }
-
-                Blizzard.T5.Configuration.ConfigFile.Line token = (Blizzard.T5.Configuration.ConfigFile.Line)findEntry.Invoke(__instance, new object[] { "Aurora.VerifyWebCredentials" }); ;
-
-                if (token != null)
-                {
-                    string pattern = @"(CN|KR|TW|EU|US)\-[a-f0-9]{32}\-\d+";    // Country-Token-AccountID.Low
-                    string argv = String.Join(" ", Environment.GetCommandLineArgs());
-                    var res = System.Text.RegularExpressions.Regex.Match(argv, pattern);
-                    if (res.Success)
+                    __state = res.Value;
+                    if (System.IO.File.Exists(path))
                     {
-                        __instance.Set("Aurora.VerifyWebCredentials", res.Value);
-                        __instance.Set("Aurora.Env", res.Value.Substring(0, 2).ToLower() + ".actual.battle.net");
+                        string configText = System.IO.File.ReadAllText(path);
+                        if (!String.IsNullOrEmpty(configText) && configText.Contains("Aurora") && configText.Contains("VerifyWebCredentials") && configText.Contains("Env"))
+                            return;
                     }
+
+                    string configPath = "";
+                    if (System.IO.Directory.Exists(Hearthstone.Util.PlatformFilePaths.ExternalDataPath + "/Cache/"))
+                    {
+                        configPath = Hearthstone.Util.PlatformFilePaths.ExternalDataPath + "/Cache/";
+                    }
+                    else if (System.IO.Directory.Exists(Hearthstone.Util.PlatformFilePaths.PersistentDataPath + "/Cache/"))
+                    {
+                        configPath = Hearthstone.Util.PlatformFilePaths.PersistentDataPath + "/Cache/";
+                    }
+                    else if (System.IO.Directory.Exists("./BepInEx/config/"))
+                    {
+                        configPath = "./BepInEx/config/";
+                    }
+                    else
+                    {
+                        configPath = "./";
+                    }
+                    path = configPath + "HsClient.config";
+                    System.IO.File.WriteAllText(path, "[Config]\r\nVersion = 3\r\n[Aurora]\r\nVerifyWebCredentials = \"token\"\r\nClientCheck = 0\r\nEnv.Override = 1\r\nEnv = cn.actual.battle.net\r\n");
+
                 }
+            }
+            [HarmonyPostfix, HarmonyPatch(typeof(Blizzard.T5.Configuration.ConfigFile), "Load", new Type[] { typeof(string), typeof(bool) })]
+            public static void PatchPostConfigFileLoad(ref string path,
+                                                       ref bool ignoreUselessLines,
+                                                       Blizzard.T5.Configuration.ConfigFile __instance,
+                                                       string __state)
+            {
+                if (String.IsNullOrEmpty(__state))
+                {
+                    return;
+                }
+
+                __instance.Set("Aurora.VerifyWebCredentials", __state);
+                __instance.Set("Aurora.Env", __state.Substring(0, 2).ToLower() + ".actual.battle.net");
             }
 
             //禁止发送错误报告
@@ -483,7 +515,7 @@ namespace HsMod
             //测试补丁，屏蔽奖励显示
             [HarmonyPrefix]
             [HarmonyPatch(typeof(Hearthstone.Progression.RewardPresenter), "ShowNextReward")]
-            public static bool PatchRewardPresenterShowNextReward(Hearthstone.Progression.RewardPresenter __instance,ref Action onHiddenCallback)
+            public static bool PatchRewardPresenterShowNextReward(Hearthstone.Progression.RewardPresenter __instance, ref Action onHiddenCallback)
             {
                 Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "ShowNextReward");
                 if (!isEndGameScreenShow.Value)
