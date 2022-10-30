@@ -929,11 +929,11 @@ namespace HsMod
                 foreach (string d in Directory.GetFileSystemEntries(dir))
                 {
                     if (File.Exists(d))
-                        File.Delete(d);                     
+                        File.Delete(d);
                     else
                         DeleteFolder(d);
                 }
-                Directory.Delete(dir, true);              
+                Directory.Delete(dir, true);
             }
         }
 

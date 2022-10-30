@@ -1720,7 +1720,7 @@ namespace HsMod
                                     if (entityDef != null && entityDef.GetCardType() != TAG_CARDTYPE.ENCHANTMENT && !entityDef.IsQuestline())
                                     {
                                         string name = entityDef.GetName();
-                                        if (String.IsNullOrEmpty(name))
+                                        if (!String.IsNullOrEmpty(name))
                                         {
                                             UIStatus.Get().AddInfo($"注意：{name}！", 30f);
                                         }
