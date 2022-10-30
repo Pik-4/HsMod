@@ -1689,29 +1689,42 @@ namespace HsMod
                 }
                 return true;
             }
-            // 剑圣奥卡尼的选择识别
+            // 剑圣奥卡尼的选择识别（对手抉择提示）
             [HarmonyPrefix]
             [HarmonyPatch(typeof(GameState), "OnPowerHistory")]
             public static void PatchDebugPrintPower(GameState __instance, ref List<Network.PowerHistory> powerList)
             {
-                if (isCardTrackerEnable.Value)
+                if (isCardTrackerEnable.Value && !GameMgr.Get().IsBattlegrounds())
                 {
                     foreach (var powerHistory in powerList)
                     {
                         if (powerHistory.Type == Network.PowerType.SHOW_ENTITY)
                         {
                             Network.Entity netEntity = ((Network.HistShowEntity)powerHistory).Entity;
-                            if (netEntity != null && __instance.GetEntity(netEntity.ID) != null && __instance.GetEntity(netEntity.ID).GetControllerSide() == global::Player.Side.OPPOSING)
+                            Entity entity = __instance?.GetEntity(netEntity.ID);
+                            if (entity != null && entity.GetControllerSide() == global::Player.Side.OPPOSING)
                             {
                                 if (netEntity.CardID == "TSC_032t")
                                 {
                                     UIStatus.Get().AddInfo("注意：反制随从！", 30f);
                                     return;
                                 }
-                                if (netEntity.CardID == "TSC_032t2")
+                                else if (netEntity.CardID == "TSC_032t2")
                                 {
                                     UIStatus.Get().AddInfo("注意：反制法术！", 30f);
                                     return;
+                                }
+                                else if (entity?.GetZone() == TAG_ZONE.SETASIDE)
+                                {
+                                    EntityDef entityDef = DefLoader.Get().GetEntityDef(netEntity.CardID);
+                                    if (entityDef != null && entityDef.GetCardType() != TAG_CARDTYPE.ENCHANTMENT && !entityDef.IsQuestline())
+                                    {
+                                        string name = entityDef.GetName();
+                                        if (String.IsNullOrEmpty(name))
+                                        {
+                                            UIStatus.Get().AddInfo($"注意：{name}！", 30f);
+                                        }
+                                    }
                                 }
                             }
                         }
