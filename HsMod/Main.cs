@@ -146,24 +146,6 @@ namespace HsMod
                 InactivePlayerKicker.Get().SetShouldCheckForInactivity(isIdleKickEnable.Value);
                 WebServer.Restart();
 
-                //List<AchievementDbfRecord> records = GameDbf.Achievement.GetRecords((AchievementDbfRecord x) => x.AchievementSection == 327, -1);
-                //AchievementManager achievementManager = AchievementManager.Get();
-                //List<AchievementDataModel> list = new List<AchievementDataModel>();
-                //foreach (AchievementDbfRecord achievementDbfRecord in records)
-                //{
-                //    list.Add(achievementManager.GetAchievementDataModel(achievementDbfRecord.ID));
-                //}
-                //foreach (AchievementDataModel achievementDataModel in list)
-                //{
-                //    bool flag = achievementDataModel.Status == AchievementManager.AchievementStatus.COMPLETED;
-                //    if (flag)
-                //    {
-                //        Utils.MyLogger(LogLevel.Warning, achievementDataModel.ID);
-                //        Network.Get().ClaimAchievementReward(achievementDataModel.ID);
-                //        //achievementManager.ClaimAchievementReward(achievementDataModel.ID, 0);
-                //    }
-                //}
-
             }
 
             if (!isPluginEnable.Value) return;
