@@ -360,6 +360,20 @@ namespace HsMod
                 Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "message:" + message + "\tstackTrace" + stackTrace);
                 return false;
             }
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(Blizzard.BlizzardErrorMobile.ExceptionReporter), "ReportExceptions")]
+            public static bool PatchExceptionReporterReportExceptions()
+            {
+                return false;
+            }
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(Blizzard.BlizzardErrorMobile.ExceptionReporter), "SetSettings")]
+            public static bool PatchExceptionReporterSetSettings(ref Blizzard.BlizzardErrorMobile.ExceptionSettings settings, ref bool __result)
+            {
+                settings = null;
+                __result = false;
+                return false;
+            }
 
             //禁用掉线
             [HarmonyPrefix]
@@ -2092,6 +2106,7 @@ namespace HsMod
             //酒馆对战面板
             [HarmonyPrefix]
             [HarmonyPatch(typeof(BaconBoard), "OnBoardSkinChosen")]
+            [HarmonyPatch(typeof(BaconBoard), "LoadInitialTavernBoard")]
             public static void PatchOnBoardSkinChosen(ref int chosenBoardSkinId)
             {
                 if (skinBgsBoard.Value != 0 && Utils.CheckInfo.IsBgsBoard())
