@@ -126,10 +126,10 @@ If the token becomes obsolete and the game stops opening, then you just need to 
 4. `F4`为固定快捷键，用于获取游戏内部分信息（相关信息存放在`Hearthstone\BepInEx\`目录下）、**更新皮肤配置**、重启Web服务等。其余快捷键均可自定义配置。
 5. 本插件在默认状态下，几乎全部的功能均需要手动开启；插件大部分功能能在配置中找到说明，少部分功能只在Patch中提及（如最小化限制）。
 6. 本插件Web Server（即Showinfo）的默认端口为58744，一般情况下，监听本地所有IP，使用云服务器时，请注意防火墙、安全组等配置。
-7. 对局统计所使用的log文件是`BepInEx\HsMatch.log`，可在设置中修改。此外对局统计页面适配的佣兵插件为~~[MercenariesHelper](https://github.com/HearthstonePlugin/Mercenaries)~~（当MercenariesHelper配合HsMod编译时，其Build4Public值应为false，以忽略与HsMod的相同Patch）。~~其他佣兵插件暂未做适配。~~
+7. 对局统计所使用的log文件是`BepInEx\HsMatch.log`，可在设置中修改。（字段以`,`分隔）
 8. 出现问题时先尝试删除相关`.cfg`配置文件（一般位于`BepInEx\config\`），进行重新配置；如果依然存在问题，请带上`HsMod.cfg`提交[Issues](https://github.com/Pik-4/HsMod/issues)，但不保证及时解答。
 9. `GetHsLib.py`用于更新炉石自有运行库，`install.bat`用于将编译好的`HsMod.dll`复制到默认炉石目录（前提是BepInEx已经配置好）。此外，push或提交PR到Github后，Actions会自动生成相关pre-[release](https://github.com/Pik-4/HsMod/releases)。
-10. ~~如果使用过AwayFromKeyboard配置，游戏双方的英雄会替换成**吉安娜**，如果想换回配置，请修改该对应设置为AntiAwayFromKeyboard。对应设置在`全局`-`设置模板`。~~如果出现皮肤显示异常，请检查`HsSkins.cfg`，并尝试删除`HsMod.cfg`重新进行配置。
+10. 如果出现皮肤显示异常，请检查`HsSkins.cfg`，并尝试删除`HsMod.cfg`重新进行配置。
 11. 如果修改设置无法保存，请检查是否启用其他炉石插件。
 
 ### client.config
@@ -163,6 +163,7 @@ https://eu.battle.net/login/en/?app=wtcg
 1. 整理ReadMe，更新Wiki等；整理配置与Patch之间关系；多语言支持
 2. 游戏内一键更换英雄皮肤，目前只能通过模拟掉线更新
 3. 重构Showinfo相关Web页面。
+4. 适配Mac
 
 ### 参考
 
