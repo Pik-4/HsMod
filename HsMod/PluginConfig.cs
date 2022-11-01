@@ -25,7 +25,7 @@ namespace HsMod
         //public static ConfigEntry<bool> isAutoRestart;
         public static ConfigEntry<bool> isAlertPopupShow;
         public static ConfigEntry<Utils.AlertPopupResponse> responseAlertPopup;
-        public static ConfigEntry<bool> isEndGameScreenShow;
+        public static ConfigEntry<bool> isRewardToastShow;
         public static ConfigEntry<bool> isAutoOpenBoxesRewardEnable;
         public static ConfigEntry<bool> isFullnameShow;
         public static ConfigEntry<bool> isOpponentRankInGameShow;
@@ -156,14 +156,13 @@ namespace HsMod
             isTimeGearEnable = config.Bind("全局", "变速齿轮状态", false, "是否启用变速齿轮");
             timeGear = config.Bind("全局", "变速倍率", 0, new ConfigDescription("变速齿轮倍速，1和0倍率相同，负数表示变慢", new AcceptableValueRange<int>(-32, 32)));
             isShowFPSEnable = config.Bind("全局", "显示FPS", false, "是否显示FPS信息（快捷键：左Crtl+P）");
-            targetFrameRate = config.Bind("全局", "游戏帧率", -1, new ConfigDescription("游戏帧率设置，-1表示不做修改", new AcceptableValueRange<int>(-1, 2333)));
-            isDynamicFpsEnable = config.Bind("全局", "动态帧率", true, "是否启用动态帧率，修改游戏帧率时，建议禁用该选项");
+            targetFrameRate = config.Bind("全局", "游戏帧率", -1, new ConfigDescription("游戏帧率设置，-1表示不做修改或恢复默认值（默认值可能为30）", new AcceptableValueRange<int>(-1, 2333)));
 
             isIGMMessageShow = config.Bind("优化", "游戏内消息", true, "（牌店无法打开时，可以尝试设置该选项为开启状态）是否显示游戏内消息（广告推销、削弱补丁、天梯结算信息等）");
             isAlertPopupShow = config.Bind("优化", "弹出消息", true, "是否显示弹窗");
             responseAlertPopup = config.Bind("优化", "弹出响应", Utils.AlertPopupResponse.DONOTHING, "在屏蔽弹出消息时，如何回应弹窗");
             isOnApplicationFocus = config.Bind("优化", "应用焦点", true, "isOnApplicationFocus");
-            isEndGameScreenShow = config.Bind("优化", "结算展示", true, "是否展示结算任务、升级提示（可能导致领取奖励时无提示）");
+            isRewardToastShow = config.Bind("优化", "结算展示", true, "是否展示结算任务、成就奖励、升级提示等（可能导致领取奖励时无提示）");
             isAutoOpenBoxesRewardEnable = config.Bind("优化", "自动开盒", false, "是否自动打开竞技场（对决、佣兵等）结算宝箱");
             isAutoExit = config.Bind("优化", "报错退出", false, "遇到错误是否自动退出");
             //isAutoRestart = config.Bind("优化", "退出时重启", false, "（可能无效）遇到错误是否自动重启");
@@ -329,7 +328,7 @@ namespace HsMod
                     isAlertPopupShow.Value = false;
                     responseAlertPopup.Value = Utils.AlertPopupResponse.YES;
                     isOnApplicationFocus.Value = false;
-                    isEndGameScreenShow.Value = false;
+                    isRewardToastShow.Value = false;
                     isAutoOpenBoxesRewardEnable.Value = true;
                     isAutoExit.Value = true;
                     isIdleKickEnable.Value = true;
@@ -355,7 +354,7 @@ namespace HsMod
                     isAlertPopupShow.Value = true;
                     responseAlertPopup.Value = Utils.AlertPopupResponse.DONOTHING;
                     isOnApplicationFocus.Value = false;
-                    isEndGameScreenShow.Value = true;
+                    isRewardToastShow.Value = true;
                     isAutoOpenBoxesRewardEnable.Value = false;
                     isAutoExit.Value = false;
                     isIdleKickEnable.Value = false;

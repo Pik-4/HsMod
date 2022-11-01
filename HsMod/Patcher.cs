@@ -103,24 +103,23 @@ namespace HsMod
             targetFrameRate.SettingChanged += delegate
             {
                 graphicsManager = Blizzard.T5.Services.ServiceManager.Get<IGraphicsManager>();
-                if (targetFrameRate.Value > 0 && Options.Get().GetInt(Option.GFX_TARGET_FRAME_RATE) != targetFrameRate.Value)
-                    graphicsManager.UpdateTargetFramerate(targetFrameRate.Value, isDynamicFpsEnable.Value);
-                else if (targetFrameRate.Value <= 0)
-                {
-
-                    graphicsManager.UpdateTargetFramerate(30, true);
-                }
-            };
-            isDynamicFpsEnable.SettingChanged += delegate
-            {
-                graphicsManager = Blizzard.T5.Services.ServiceManager.Get<IGraphicsManager>();
-                if (targetFrameRate.Value > 0 && Options.Get().GetInt(Option.GFX_TARGET_FRAME_RATE) != targetFrameRate.Value)
-                    graphicsManager.UpdateTargetFramerate(targetFrameRate.Value, isDynamicFpsEnable.Value);
+                if (targetFrameRate.Value > 0 && Options.Get().GetInt(Option.GFX_TARGET_FRAME_RATE, 0) != targetFrameRate.Value)
+                    graphicsManager.UpdateTargetFramerate(targetFrameRate.Value, false);
                 else if (targetFrameRate.Value <= 0)
                 {
                     graphicsManager.UpdateTargetFramerate(30, true);
                 }
             };
+            //isDynamicFpsEnable.SettingChanged += delegate
+            //{
+            //    graphicsManager = Blizzard.T5.Services.ServiceManager.Get<IGraphicsManager>();
+            //    if (targetFrameRate.Value > 0 && Options.Get().GetInt(Option.GFX_TARGET_FRAME_RATE) != targetFrameRate.Value)
+            //        graphicsManager.UpdateTargetFramerate(targetFrameRate.Value, isDynamicFpsEnable.Value);
+            //    else if (targetFrameRate.Value <= 0)
+            //    {
+            //        graphicsManager.UpdateTargetFramerate(30, true);
+            //    }
+            //};
             isAutoRecvMercenaryRewardEnable.SettingChanged += delegate
             {
                 if (isAutoRecvMercenaryRewardEnable.Value)
@@ -269,6 +268,25 @@ namespace HsMod
                 return true;
             }
 
+            // 帧率修改
+            [HarmonyPrefix, HarmonyPatch(typeof(Options), nameof(Options.GetInt), new Type[] { typeof(Option) })]
+            public static bool PatchOptionsGetInt(ref Option option, ref int __result)
+            {
+                if (option == Option.GFX_TARGET_FRAME_RATE && targetFrameRate.Value > 0)
+                {
+                    __result = targetFrameRate.Value;
+                    return false;
+                }
+                else return true;
+            }
+            //[HarmonyPrefix, HarmonyPatch(typeof(GraphicsManager), "UpdateFramerateSettings")]
+            //public static void PatchGraphicsManagerUpdateFramerateSettings()
+            //{
+            //    if (targetFrameRate.Value > 0)
+            //    {
+            //        Options.Get()?.SetInt(Option.GFX_TARGET_FRAME_RATE, targetFrameRate.Value); ;
+            //    }
+            //}
 
             //使用WebToken登录
             [HarmonyTranspiler]
@@ -350,6 +368,7 @@ namespace HsMod
             public static void PatchExceptionReporterControl()
             {
                 Blizzard.BlizzardErrorMobile.ExceptionReporter.Get().SendExceptions = false;
+                //Vars.Key("Application.SendExceptions")
             }
 
             //屏蔽错误报告
@@ -509,7 +528,7 @@ namespace HsMod
             [HarmonyPatch(typeof(EndGameScreen), "ShowMercenariesExperienceRewards")]
             public static bool PatchEndGameScreen()
             {
-                return isEndGameScreenShow.Value;
+                return isRewardToastShow.Value;
             }
 
             //战令、成就等奖励领取提示
@@ -517,7 +536,7 @@ namespace HsMod
             [HarmonyPatch(typeof(Hearthstone.Progression.RewardTrack), "UpdateStatus")]
             public static bool PatchUpdateStatus(int rewardTrackId, int level, Hearthstone.Progression.RewardTrack.RewardStatus status, bool forPaidTrack, List<PegasusUtil.RewardItemOutput> rewardItemOutput)      //隐藏通行证奖励
             {
-                if (!isEndGameScreenShow.Value && status == Hearthstone.Progression.RewardTrack.RewardStatus.GRANTED)
+                if (!isRewardToastShow.Value && status == Hearthstone.Progression.RewardTrack.RewardStatus.GRANTED)
                 {
                     Hearthstone.Progression.RewardTrackManager.Get().GetCurrentRewardTrack(Assets.Global.RewardTrackType.GLOBAL)?.AckReward(rewardTrackId, level, forPaidTrack);
                     Hearthstone.Progression.RewardTrackManager.Get().GetCurrentRewardTrack(Assets.Global.RewardTrackType.BATTLEGROUNDS)?.AckReward(rewardTrackId, level, forPaidTrack);
@@ -532,7 +551,7 @@ namespace HsMod
             public static bool PatchRewardPresenterShowNextReward(Hearthstone.Progression.RewardPresenter __instance, ref Action onHiddenCallback)
             {
                 Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "ShowNextReward");
-                if (!isEndGameScreenShow.Value)
+                if (!isRewardToastShow.Value)
                 {
                     __instance.Clear();
                     //onHiddenCallback?.Invoke();

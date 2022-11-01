@@ -115,10 +115,10 @@ namespace HsMod
             {
                 showFPS.enabled = true;
             }
-            if (targetFrameRate.Value > 0 && Options.Get().GetInt(Option.GFX_TARGET_FRAME_RATE) != targetFrameRate.Value)
+            if (targetFrameRate.Value > 0 && Options.Get()?.GetInt(Option.GFX_TARGET_FRAME_RATE) != targetFrameRate.Value)
             {
                 graphicsManager = Blizzard.T5.Services.ServiceManager.Get<IGraphicsManager>();
-                graphicsManager?.UpdateTargetFramerate(targetFrameRate.Value, isDynamicFpsEnable.Value);
+                graphicsManager?.UpdateTargetFramerate(targetFrameRate.Value, false);
             }
 
             //设置命令行的分辨率 位于patch之后，防止炉石自动修改
