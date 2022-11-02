@@ -376,19 +376,19 @@ text-decoration: none;
                 {
                     if (item != null)
                     {
-                        if (item.QuestId > 0)
+                        if (item?.QuestId > 0)
                         {
                             result += "<li>";
-                            result += $@"{item.Status} {item.Name}：{item.Description}<br />进度：{item.ProgressMessage}<br />";
+                            result += $@"{item?.Status} {item?.Name}：{item?.Description}<br />进度：{item?.ProgressMessage}<br />";
 
-                            result += $@"经验奖励：{item.RewardTrackXp}";
-                            result += (item.RerollCount > 0) ? "（可刷新）" : "";
+                            result += $@"经验奖励：{item?.RewardTrackXp}";
+                            result += (item?.RerollCount > 0) ? "（可刷新）" : "";
                             result += "</li><br />";
                         }
                         else
                         {
                             result += "<li>";
-                            result += $@"{item.TimeUntilNextQuest}";
+                            result += $@"{item?.TimeUntilNextQuest}";
                             result += "</li>";
                             break;
                         }
@@ -408,49 +408,77 @@ text-decoration: none;
                 {
                     if (item != null)
                     {
-                        if (item.QuestId > 0)
+                        if (item?.QuestId > 0)
                         {
                             result += "<li>";
-                            result += $@"{item.Status} {item.Name}：{item.Description}<br />进度：{item.ProgressMessage}<br />";
+                            result += $@"{item?.Status} {item?.Name}：{item?.Description}<br />进度：{item?.ProgressMessage}<br />";
 
-                            result += $@"经验奖励：{item.RewardTrackXp}";
-                            result += (item.RerollCount > 0) ? "（可刷新）" : "";
+                            result += $@"经验奖励：{item?.RewardTrackXp}";
+                            result += (item?.RerollCount > 0) ? "（可刷新）" : "";
                             result += "</li><br />";
                         }
                         else
                         {
                             result += "<li>";
-                            result += $@"{item.TimeUntilNextQuest}";
+                            result += $@"{item?.TimeUntilNextQuest}";
                             result += "</li>";
                             break;
                         }
                     }
                 }
 
-                foreach (Hearthstone.DataModels.QuestDataModel item in Hearthstone.Progression.QuestManager.Get().CreateActiveQuestsDataModel(Assets.QuestPool.QuestPoolType.NONE, QuestPool.RewardTrackType.GLOBAL, true).Quests)
+                foreach (var questsType in (QuestPool.RewardTrackType[])Enum.GetValues(typeof(QuestPool.RewardTrackType)))
                 {
-                    if (item == null || specialQuestListDataModel.Quests.Count > 4)
+                    foreach (Hearthstone.DataModels.QuestDataModel item in Hearthstone.Progression.QuestManager.Get().CreateActiveQuestsDataModel(Assets.QuestPool.QuestPoolType.NONE, questsType, true)?.Quests)
                     {
-                        break;
+                        if (item == null)
+                        {
+                            continue;
+                        }
+                        specialQuestListDataModel.Quests.Add(item);
                     }
-                    specialQuestListDataModel.Quests.Add(item);
+                    foreach (Hearthstone.DataModels.QuestDataModel item in Hearthstone.Progression.QuestManager.Get().CreateActiveQuestsDataModel(Assets.QuestPool.QuestPoolType.EVENT, questsType, true)?.Quests)
+                    {
+                        if (item == null)
+                        {
+                            continue;
+                        }
+                        specialQuestListDataModel.Quests.Add(item);
+                    }
                 }
+
                 if (specialQuestListDataModel.Quests.Count >= 1 && specialQuestListDataModel.Quests[0].QuestId > 0)
                 {
 
                     result += @"<h4>活动任务</h4>";
-                    foreach (Hearthstone.DataModels.QuestDataModel item in specialQuestListDataModel.Quests)
+                    foreach (Hearthstone.DataModels.QuestDataModel item in specialQuestListDataModel.Quests.ToList().Where((x, i) => specialQuestListDataModel.Quests.ToList().FindIndex(z => z.QuestId == x.QuestId) == i).ToList())
                     {
                         if (item != null)
                         {
-                            if (item.QuestId > 0)
+                            if (item?.QuestId > 0)
                             {
                                 result += "<li>";
-                                result += $@"{item.Status} {item.Name}：{item.Description}<br />";
-                                result += $@"奖励：{item.Rewards.Description}<br />";
-                                result += $@"经验：{item.RewardTrackXp}<br />进度：{item.ProgressMessage}<br />";
-                                result += $@"距离活动结束还剩：{item.TimeUntilExpiration}";
+                                result += $@"{item.PoolType} {item?.Status} {item?.Name}：{item?.Description}<br />";
+                                result += $@"奖励：{item?.Rewards?.Description}<br />";
+                                result += $@"经验：{item?.RewardTrackXp}<br />进度：{item?.ProgressMessage}<br />";
+                                if (item.NextInChain != 0)
+                                {
+                                    int nextQuestID = item.NextInChain;
+                                    result += "任务链：<br />";
+                                    while (nextQuestID != 0)
+                                    {
+                                        var nextQuest = GameDbf.Quest.GetRecord(nextQuestID);
+                                        if (nextQuest == null) break;
+                                        result += "<li>";
+                                        result += $@"{nextQuestID} {nextQuest?.Name?.GetString()}：{nextQuest?.Description?.GetString()}<br />";
+                                        result += "</li>";
+                                        nextQuestID = nextQuest.NextInChain;
+                                    }
+                                }
+                                result += $@"距离活动结束还剩：" + (!String.IsNullOrEmpty(item.TimeUntilExpiration) ? item.TimeUntilExpiration.ToString() : "未知");
+                                result += " ";
                                 result += item.Abandonable ? "（可放弃）" : "";
+                                result += (item?.RerollCount > 0) ? "(可刷新）" : "";
                                 result += "</li><br />";
                             }
                             else
@@ -474,19 +502,19 @@ text-decoration: none;
                 {
                     if (item != null)
                     {
-                        if (item.QuestId > 0)
+                        if (item?.QuestId > 0)
                         {
                             result += "<li>";
-                            result += $@"{item.Status} {item.Name}：{item.Description}<br />进度：{item.ProgressMessage}<br />";
+                            result += $@"{item?.Status} {item?.Name}：{item?.Description}<br />进度：{item?.ProgressMessage}<br />";
 
-                            result += $@"经验奖励：{item.RewardTrackXp}";
-                            result += (item.RerollCount > 0) ? "（可刷新）" : "";
+                            result += $@"经验奖励：{item?.RewardTrackXp}";
+                            result += (item?.RerollCount > 0) ? "（可刷新）" : "";
                             result += "</li><br />";
                         }
                         else
                         {
                             result += "<li>";
-                            result += $@"{item.TimeUntilNextQuest}";
+                            result += $@"{item?.TimeUntilNextQuest}";
                             result += "</li>";
                             break;
                         }
@@ -500,7 +528,7 @@ text-decoration: none;
 
                     result += "<li>";
 
-                    result += $"[{mercenaryVillageTaskItemDataModel.MercenaryName}]&emsp;";
+                    result += $"[{mercenaryVillageTaskItemDataModel.TaskType}] [{mercenaryVillageTaskItemDataModel.MercenaryName}]&emsp;";
                     if (mercenaryVillageTaskItemDataModel.TaskType == Assets.MercenaryVisitor.VillageVisitorType.STANDARD)
                     {
                         result += $@"任务{mercenaryVillageTaskItemDataModel.TaskChainIndex + 1} - ";
