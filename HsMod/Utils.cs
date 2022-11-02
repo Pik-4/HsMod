@@ -326,7 +326,7 @@ namespace HsMod
             if ((SceneMgr.Get()?.GetMode() == SceneMgr.Mode.LETTUCE_COLLECTION) || (SceneMgr.Get().GetMode() == SceneMgr.Mode.LETTUCE_PACK_OPENING)) // 执行后，需要重新进入佣兵收藏
             {
                 List<PegasusLettuce.MercenaryAcknowledgeData> m_mercenaryAcknowledgements = new List<PegasusLettuce.MercenaryAcknowledgeData>();
-                foreach (var merc in CollectionManager.Get().FindOrderedMercenaries(null, true, null, null, null).m_mercenaries)
+                foreach (var merc in CollectionManager.Get().FindMercenaries(null, true, null, null, null).m_mercenaries)
                 {
                     foreach (var ability in merc.m_abilityList)
                     {

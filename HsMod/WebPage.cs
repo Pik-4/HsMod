@@ -296,10 +296,10 @@ text-decoration: none;
             result += @"<h3 style=""text-align: center;"">战令信息</h3>";
             try
             {
-                Hearthstone.DataModels.RewardTrackDataModel trackDataModel = Hearthstone.Progression.RewardTrackManager.Get().GetCurrentRewardTrack(Global.RewardTrackType.GLOBAL).TrackDataModel;
+                Hearthstone.DataModels.RewardTrackDataModel trackDataModel = Hearthstone.Progression.RewardTrackManager.Get().GetRewardTrack(Global.RewardTrackType.GLOBAL).TrackDataModel;
                 result += $"炉石：{trackDataModel.Level}&emsp;&emsp;";
                 result += "进度：" + ((trackDataModel.Level == trackDataModel.LevelHardCap && trackDataModel.Xp == 0) ? "已满级！" : trackDataModel.XpProgress) + "<br />";
-                trackDataModel = Hearthstone.Progression.RewardTrackManager.Get().GetCurrentRewardTrack(Global.RewardTrackType.BATTLEGROUNDS).TrackDataModel;
+                trackDataModel = Hearthstone.Progression.RewardTrackManager.Get().GetRewardTrack(Global.RewardTrackType.BATTLEGROUNDS).TrackDataModel;
                 result += $"酒馆：{trackDataModel.Level}&emsp;&emsp;";
                 result += "进度：" + ((trackDataModel.Level == trackDataModel.LevelHardCap && trackDataModel.Xp == 0) ? "已满级！" : trackDataModel.XpProgress) + "<br />";
             }
@@ -496,7 +496,7 @@ text-decoration: none;
                 result += @"<h4>佣兵任务</h4>";
                 foreach (PegasusLettuce.MercenariesVisitorState mercenariesVisitorState in NetCache.Get().GetNetObject<NetCache.NetCacheMercenariesVillageVisitorInfo>().VisitorStates)
                 {
-                    Hearthstone.DataModels.MercenaryVillageTaskItemDataModel mercenaryVillageTaskItemDataModel = LettuceVillageDataUtil.CreateTaskModelByTaskState(mercenariesVisitorState.ActiveTaskState, null, false, false);
+                    Hearthstone.DataModels.MercenaryVillageTaskItemDataModel mercenaryVillageTaskItemDataModel = LettuceVillageDataUtil.CreateTaskModelFromTaskState(mercenariesVisitorState.ActiveTaskState, null);
 
                     result += "<li>";
 
@@ -864,7 +864,7 @@ text-decoration: none;
                 temp += "</tr>";
                 builder.Append(temp);
 
-                foreach (var merc in CollectionManager.Get().FindOrderedMercenaries(null, null, null, null, null).m_mercenaries
+                foreach (var merc in CollectionManager.Get().FindMercenaries(null, null, null, null, null).m_mercenaries
                                     .OrderByDescending(x => x.m_owned)
                                     //.ThenByDescending(x => Utils.IsMercenaryFullyUpgraded(x))
                                     .ThenByDescending(x => x.m_isFullyUpgraded)

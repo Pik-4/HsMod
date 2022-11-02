@@ -533,13 +533,13 @@ namespace HsMod
 
             //战令、成就等奖励领取提示
             [HarmonyPrefix]
-            [HarmonyPatch(typeof(Hearthstone.Progression.RewardTrack), "UpdateStatus")]
-            public static bool PatchUpdateStatus(int rewardTrackId, int level, Hearthstone.Progression.RewardTrack.RewardStatus status, bool forPaidTrack, List<PegasusUtil.RewardItemOutput> rewardItemOutput)      //隐藏通行证奖励
+            [HarmonyPatch(typeof(Hearthstone.Progression.RewardTrack), "HandleRewardGranted")]
+            public static bool PatchHandleRewardGranted(int rewardTrackId, int level, bool forPaidTrack, List<PegasusUtil.RewardItemOutput> rewardItemOutput)      //隐藏通行证奖励
             {
-                if (!isRewardToastShow.Value && status == Hearthstone.Progression.RewardTrack.RewardStatus.GRANTED)
+                if (!isRewardToastShow.Value)
                 {
-                    Hearthstone.Progression.RewardTrackManager.Get().GetCurrentRewardTrack(Assets.Global.RewardTrackType.GLOBAL)?.AckReward(rewardTrackId, level, forPaidTrack);
-                    Hearthstone.Progression.RewardTrackManager.Get().GetCurrentRewardTrack(Assets.Global.RewardTrackType.BATTLEGROUNDS)?.AckReward(rewardTrackId, level, forPaidTrack);
+                    Hearthstone.Progression.RewardTrackManager.Get().GetRewardTrack(Assets.Global.RewardTrackType.GLOBAL)?.AckReward(rewardTrackId, level, forPaidTrack);
+                    Hearthstone.Progression.RewardTrackManager.Get().GetRewardTrack(Assets.Global.RewardTrackType.BATTLEGROUNDS)?.AckReward(rewardTrackId, level, forPaidTrack);
                     return false;
                 }
                 else return true;
