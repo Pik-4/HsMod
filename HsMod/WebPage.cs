@@ -1,7 +1,6 @@
 ﻿using Assets;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using static HsMod.PluginConfig;
@@ -19,7 +18,7 @@ namespace HsMod
             StringBuilder stringBuilder = new StringBuilder();
             try
             {
-                Process CmdProcess = new Process();
+                System.Diagnostics.Process CmdProcess = new System.Diagnostics.Process();
                 CmdProcess.StartInfo.FileName = "cmd.exe";
                 CmdProcess.StartInfo.CreateNoWindow = true;         // 不创建新窗口    
                 CmdProcess.StartInfo.UseShellExecute = false;       //不启用shell启动进程  
@@ -256,63 +255,57 @@ text-decoration: none;
 
         public static StringBuilder InfoPage()
         {
-            string result = "";
-            result += @"<h3 style=""text-align: center;"">进程信息</h3>";
-            result += "PID：";
-            result += System.Diagnostics.Process.GetCurrentProcess()?.Id.ToString();
-            result += "<br />";
-            result += "<hr />";
+            StringBuilder builder = new StringBuilder();
 
-
-            result += @"<h3 style=""text-align: center;"">基本信息</h3>";
+            builder.Append(@"<h3 style=""text-align: center;"">进程信息</h3>");
+            builder.Append("PID：");
+            builder.Append(System.Diagnostics.Process.GetCurrentProcess()?.Id.ToString());
+            builder.Append("<br />");
+            builder.Append("<hr />");
+            builder.Append(@"<h3 style=""text-align: center;"">基本信息</h3>");
             NetCache netCache = NetCache.Get();
             try
             {
-                result += "账号：";
-                result += BnetPresenceMgr.Get()?.GetMyPlayer()?.GetBattleTag()?.ToString();
-                result += "<br />";
-
-                result += "金币：";
-                result += netCache?.GetGoldBalance().ToString();
-                result += "<br />";
-
-                result += "奥数之尘：";
-                result += netCache?.GetArcaneDustBalance().ToString();
-                result += "<br />";
-
-                result += "竞技场门票：";
-                result += netCache?.GetArenaTicketBalance().ToString();
-                result += "<br />";
+                builder.Append("账号：");
+                builder.Append(BnetPresenceMgr.Get()?.GetMyPlayer()?.GetBattleTag()?.ToString());
+                builder.Append("<br />");
+                builder.Append("金币：");
+                builder.Append(netCache?.GetGoldBalance().ToString());
+                builder.Append("<br />");
+                builder.Append("奥数之尘：");
+                builder.Append(netCache?.GetArcaneDustBalance().ToString());
+                builder.Append("<br />");
+                builder.Append("竞技场门票：");
+                builder.Append(netCache?.GetArenaTicketBalance().ToString());
+                builder.Append("<br />");
             }
             catch (Exception ex)
             {
-                result += $@"基本信息获取异常<br /><p style=""white-space: pre-line;"">{ex}</p><br />";
+                builder.Append($@"基本信息获取异常<br /><p style=""white-space: pre-line;"">{ex}</p><br />");
             }
             finally
             {
-                result += "<hr />";
+                builder.Append("<hr />");
             }
-
-            result += @"<h3 style=""text-align: center;"">战令信息</h3>";
+            builder.Append(@"<h3 style=""text-align: center;"">战令信息</h3>");
             try
             {
                 Hearthstone.DataModels.RewardTrackDataModel trackDataModel = Hearthstone.Progression.RewardTrackManager.Get().GetRewardTrack(Global.RewardTrackType.GLOBAL).TrackDataModel;
-                result += $"炉石：{trackDataModel.Level}&emsp;&emsp;";
-                result += "进度：" + ((trackDataModel.Level == trackDataModel.LevelHardCap && trackDataModel.Xp == 0) ? "已满级！" : trackDataModel.XpProgress) + "<br />";
+                builder.Append($"炉石：{trackDataModel.Level}&emsp;&emsp;");
+                builder.Append("进度：" + ((trackDataModel.Level == trackDataModel.LevelHardCap && trackDataModel.Xp == 0) ? "已满级！" : trackDataModel.XpProgress) + "<br />");
                 trackDataModel = Hearthstone.Progression.RewardTrackManager.Get().GetRewardTrack(Global.RewardTrackType.BATTLEGROUNDS).TrackDataModel;
-                result += $"酒馆：{trackDataModel.Level}&emsp;&emsp;";
-                result += "进度：" + ((trackDataModel.Level == trackDataModel.LevelHardCap && trackDataModel.Xp == 0) ? "已满级！" : trackDataModel.XpProgress) + "<br />";
+                builder.Append($"酒馆：{trackDataModel.Level}&emsp;&emsp;");
+                builder.Append("进度：" + ((trackDataModel.Level == trackDataModel.LevelHardCap && trackDataModel.Xp == 0) ? "已满级！" : trackDataModel.XpProgress) + "<br />");
             }
             catch (Exception ex)
             {
-                result += $@"战令信息获取异常<br /><p style=""white-space: pre-line;"">{ex}</p><br />";
+                builder.Append($@"战令信息获取异常<br /><p style=""white-space: pre-line;"">{ex}</p><br />");
             }
             finally
             {
-                result += "<hr />";
+                builder.Append("<hr />");
             }
-
-            result += @"<h3 style=""text-align: center;"">天梯信息</h3>";
+            builder.Append(@"<h3 style=""text-align: center;"">天梯信息</h3>");
             try
             {
                 MedalInfoTranslator localPlayerMedalInfo = RankMgr.Get().GetLocalPlayerMedalInfo();
@@ -337,25 +330,24 @@ text-decoration: none;
                     }
                     string rankName = Utils.RankIdxToString(currentMedal.starLevel);
                     string detail = (rankName == "传说") ? currentMedal.legendIndex.ToString() + " 名" : currentMedal.earnedStars.ToString() + " 星";
-                    result += $@"{rankMode}：{rankName}&emsp;{detail}&emsp;&emsp;";
-                    result += $@"赛季场次：{currentMedal.seasonWins}胜 - {currentMedal.seasonGames}场";
-                    result += $@"（{string.Format("{0:P1}", (float)currentMedal.seasonWins / (float)currentMedal.seasonGames)}）<br />";
+                    builder.Append($@"{rankMode}：{rankName}&emsp;{detail}&emsp;&emsp;");
+                    builder.Append($@"赛季场次：{currentMedal.seasonWins}胜 - {currentMedal.seasonGames}场");
+                    builder.Append($@"（{string.Format("{0:P1}", (float)currentMedal.seasonWins / (float)currentMedal.seasonGames)}）<br />");
                 }
                 NetCache.NetCacheMercenariesPlayerInfo mercenariesPlayerInfo = NetCache.Get()?.GetNetObject<NetCache.NetCacheMercenariesPlayerInfo>();
-                result += $@"佣兵 PvP 分数：{mercenariesPlayerInfo.PvpRating}（当前）- {mercenariesPlayerInfo.PvpSeasonHighestRating}（最高）&emsp;&emsp;";
-                result += $@"宝箱进度：{mercenariesPlayerInfo.PvpRewardChestWinsProgress}/{mercenariesPlayerInfo.PvpRewardChestWinsRequired} <br />";
+                builder.Append($@"佣兵 PvP 分数：{mercenariesPlayerInfo.PvpRating}（当前）- {mercenariesPlayerInfo.PvpSeasonHighestRating}（最高）&emsp;&emsp;");
+                builder.Append($@"宝箱进度：{mercenariesPlayerInfo.PvpRewardChestWinsProgress}/{mercenariesPlayerInfo.PvpRewardChestWinsRequired} <br />");
             }
             catch (Exception ex)
             {
-                result += $@"天梯信息获取异常<br /><p style=""white-space: pre-line;"">{ex}</p><br />";
+                builder.Append($@"天梯信息获取异常<br /><p style=""white-space: pre-line;"">{ex}</p><br />");
 
             }
             finally
             {
-                result += "<hr />";
+                builder.Append("<hr />");
             }
-
-            result += @"<h3 style=""text-align: center;"">任务信息</h3>";
+            builder.Append(@"<h3 style=""text-align: center;"">任务信息</h3>");
             try
             {
                 Hearthstone.DataModels.QuestListDataModel dailyQuestListDataModel = new Hearthstone.DataModels.QuestListDataModel();
@@ -371,25 +363,24 @@ text-decoration: none;
                     }
                     dailyQuestListDataModel.Quests.Add(item);
                 }
-                result += @"<h4>日常任务</h4>";
+                builder.Append(@"<h4>日常任务</h4>");
                 foreach (Hearthstone.DataModels.QuestDataModel item in dailyQuestListDataModel.Quests)
                 {
                     if (item != null)
                     {
                         if (item?.QuestId > 0)
                         {
-                            result += "<li>";
-                            result += $@"{item?.Status} {item?.Name}：{item?.Description}<br />进度：{item?.ProgressMessage}<br />";
-
-                            result += $@"经验奖励：{item?.RewardTrackXp}";
-                            result += (item?.RerollCount > 0) ? "（可刷新）" : "";
-                            result += "</li><br />";
+                            builder.Append("<li>");
+                            builder.Append($@"{item?.Status} {item?.Name}：{item?.Description}<br />进度：{item?.ProgressMessage}<br />");
+                            builder.Append($@"经验奖励：{item?.RewardTrackXp}");
+                            builder.Append((item?.RerollCount > 0) ? "（可刷新）" : "");
+                            builder.Append("</li><br />");
                         }
                         else
                         {
-                            result += "<li>";
-                            result += $@"{item?.TimeUntilNextQuest}";
-                            result += "</li>";
+                            builder.Append("<li>");
+                            builder.Append($@"{item?.TimeUntilNextQuest}");
+                            builder.Append("</li>");
                             break;
                         }
                     }
@@ -403,25 +394,24 @@ text-decoration: none;
                     }
                     weeklyQuestListDataModel.Quests.Add(item);
                 }
-                result += @"<h4>每周任务</h4>";
+                builder.Append(@"<h4>每周任务</h4>");
                 foreach (Hearthstone.DataModels.QuestDataModel item in weeklyQuestListDataModel.Quests)
                 {
                     if (item != null)
                     {
                         if (item?.QuestId > 0)
                         {
-                            result += "<li>";
-                            result += $@"{item?.Status} {item?.Name}：{item?.Description}<br />进度：{item?.ProgressMessage}<br />";
-
-                            result += $@"经验奖励：{item?.RewardTrackXp}";
-                            result += (item?.RerollCount > 0) ? "（可刷新）" : "";
-                            result += "</li><br />";
+                            builder.Append("<li>");
+                            builder.Append($@"{item?.Status} {item?.Name}：{item?.Description}<br />进度：{item?.ProgressMessage}<br />");
+                            builder.Append($@"经验奖励：{item?.RewardTrackXp}");
+                            builder.Append((item?.RerollCount > 0) ? "（可刷新）" : "");
+                            builder.Append("</li><br />");
                         }
                         else
                         {
-                            result += "<li>";
-                            result += $@"{item?.TimeUntilNextQuest}";
-                            result += "</li>";
+                            builder.Append("<li>");
+                            builder.Append($@"{item?.TimeUntilNextQuest}");
+                            builder.Append("</li>");
                             break;
                         }
                     }
@@ -449,37 +439,36 @@ text-decoration: none;
 
                 if (specialQuestListDataModel.Quests.Count >= 1 && specialQuestListDataModel.Quests[0].QuestId > 0)
                 {
-
-                    result += @"<h4>活动任务</h4>";
+                    builder.Append(@"<h4>活动任务</h4>");
                     foreach (Hearthstone.DataModels.QuestDataModel item in specialQuestListDataModel.Quests.ToList().Where((x, i) => specialQuestListDataModel.Quests.ToList().FindIndex(z => z.QuestId == x.QuestId) == i).ToList())
                     {
                         if (item != null)
                         {
                             if (item?.QuestId > 0)
                             {
-                                result += "<li>";
-                                result += $@"{item.PoolType} {item?.Status} {item?.Name}：{item?.Description}<br />";
-                                result += $@"奖励：{item?.Rewards?.Description}<br />";
-                                result += $@"经验：{item?.RewardTrackXp}<br />进度：{item?.ProgressMessage}<br />";
+                                builder.Append("<li>");
+                                builder.Append($@"{item.PoolType} {item?.Status} {item?.Name}：{item?.Description}<br />");
+                                builder.Append($@"奖励：{item?.Rewards?.Description}<br />");
+                                builder.Append($@"经验：{item?.RewardTrackXp}<br />进度：{item?.ProgressMessage}<br />");
                                 if (item.NextInChain != 0)
                                 {
                                     int nextQuestID = item.NextInChain;
-                                    result += "任务链：<br />";
+                                    builder.Append("任务链：<br />");
                                     while (nextQuestID != 0)
                                     {
                                         var nextQuest = GameDbf.Quest.GetRecord(nextQuestID);
                                         if (nextQuest == null) break;
-                                        result += "<li>";
-                                        result += $@"{nextQuestID} {nextQuest?.Name?.GetString()}：{nextQuest?.Description?.GetString()}<br />";
-                                        result += "</li>";
+                                        builder.Append("<li>");
+                                        builder.Append($@"{nextQuestID} {nextQuest?.Name?.GetString()}：{nextQuest?.Description?.GetString()}<br />");
+                                        builder.Append("</li>");
                                         nextQuestID = nextQuest.NextInChain;
                                     }
                                 }
-                                result += $@"距离活动结束还剩：" + (!String.IsNullOrEmpty(item.TimeUntilExpiration) ? item.TimeUntilExpiration.ToString() : "未知");
-                                result += " ";
-                                result += item.Abandonable ? "（可放弃）" : "";
-                                result += (item?.RerollCount > 0) ? "(可刷新）" : "";
-                                result += "</li><br />";
+                                builder.Append($@"距离活动结束还剩：" + (!String.IsNullOrEmpty(item.TimeUntilExpiration) ? item.TimeUntilExpiration.ToString() : "未知"));
+                                builder.Append(" ");
+                                builder.Append(item.Abandonable ? "（可放弃）" : "");
+                                builder.Append((item?.RerollCount > 0) ? "(可刷新）" : "");
+                                builder.Append("</li><br />");
                             }
                             else
                             {
@@ -497,63 +486,58 @@ text-decoration: none;
                     }
                     battlegroundsQuestListDataModel.Quests.Add(item);
                 }
-                result += @"<h4>每周酒馆</h4>";
+                builder.Append(@"<h4>每周酒馆</h4>");
                 foreach (Hearthstone.DataModels.QuestDataModel item in battlegroundsQuestListDataModel.Quests)
                 {
                     if (item != null)
                     {
                         if (item?.QuestId > 0)
                         {
-                            result += "<li>";
-                            result += $@"{item?.Status} {item?.Name}：{item?.Description}<br />进度：{item?.ProgressMessage}<br />";
-
-                            result += $@"经验奖励：{item?.RewardTrackXp}";
-                            result += (item?.RerollCount > 0) ? "（可刷新）" : "";
-                            result += "</li><br />";
+                            builder.Append("<li>");
+                            builder.Append($@"{item?.Status} {item?.Name}：{item?.Description}<br />进度：{item?.ProgressMessage}<br />");
+                            builder.Append($@"经验奖励：{item?.RewardTrackXp}");
+                            builder.Append((item?.RerollCount > 0) ? "（可刷新）" : "");
+                            builder.Append("</li><br />");
                         }
                         else
                         {
-                            result += "<li>";
-                            result += $@"{item?.TimeUntilNextQuest}";
-                            result += "</li>";
+                            builder.Append("<li>");
+                            builder.Append($@"{item?.TimeUntilNextQuest}");
+                            builder.Append("</li>");
                             break;
                         }
                     }
                 }
-
-                result += @"<h4>佣兵任务</h4>";
+                builder.Append(@"<h4>佣兵任务</h4>");
                 foreach (PegasusLettuce.MercenariesVisitorState mercenariesVisitorState in NetCache.Get().GetNetObject<NetCache.NetCacheMercenariesVillageVisitorInfo>().VisitorStates)
                 {
                     Hearthstone.DataModels.MercenaryVillageTaskItemDataModel mercenaryVillageTaskItemDataModel = LettuceVillageDataUtil.CreateTaskModelFromTaskState(mercenariesVisitorState.ActiveTaskState, null);
-
-                    result += "<li>";
-
-                    result += $"[{mercenaryVillageTaskItemDataModel.TaskType}] [{mercenaryVillageTaskItemDataModel.MercenaryName}]&emsp;";
+                    builder.Append("<li>");
+                    builder.Append($"[{mercenaryVillageTaskItemDataModel.TaskType}] [{mercenaryVillageTaskItemDataModel.MercenaryName}]&emsp;");
                     if (mercenaryVillageTaskItemDataModel.TaskType == Assets.MercenaryVisitor.VillageVisitorType.STANDARD)
                     {
-                        result += $@"任务{mercenaryVillageTaskItemDataModel.TaskChainIndex + 1} - ";
+                        builder.Append($@"任务{mercenaryVillageTaskItemDataModel.TaskChainIndex + 1} - ");
                     }
-                    result += $"{mercenaryVillageTaskItemDataModel.Title}<br />{mercenaryVillageTaskItemDataModel.Description}<br />";
-                    result += $"任务奖励：{mercenaryVillageTaskItemDataModel.RewardList.Description}<br />";
-                    result += $"任务进度：{mercenaryVillageTaskItemDataModel.ProgressMessage}";
+                    builder.Append($"{mercenaryVillageTaskItemDataModel.Title}<br />{mercenaryVillageTaskItemDataModel.Description}<br />");
+                    builder.Append($"任务奖励：{mercenaryVillageTaskItemDataModel.RewardList.Description}<br />");
+                    builder.Append($"任务进度：{mercenaryVillageTaskItemDataModel.ProgressMessage}");
                     if (mercenaryVillageTaskItemDataModel.IsTimedEvent)
-                        result += $"<br />剩余时间：{mercenaryVillageTaskItemDataModel.RemainingEventTime}<br />";
-                    result += "</li><br />";
+                        builder.Append($"<br />剩余时间：{mercenaryVillageTaskItemDataModel.RemainingEventTime}<br />");
+                    builder.Append("</li><br />");
                 }
 
 
             }
             catch (Exception ex)
             {
-                result += $@"任务信息获取异常<br /><p style=""white-space: pre-line;"">{ex}</p><br />";
+                builder.Append($@"任务信息获取异常<br /><p style=""white-space: pre-line;"">{ex}</p><br />");
             }
             finally
             {
-                result += "<hr />";
+                builder.Append("<hr />");
             }
 
-
-            return Template("Info", result);
+            return Template(builder, "Info");
         }
 
         public static StringBuilder CollectionPage()

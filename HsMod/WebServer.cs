@@ -93,9 +93,18 @@ namespace HsMod
                     Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, httpListenerRequest.RawUrl);
                     Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, httpListenerRequest.Url);
 
-                    if (File.Exists("website/" + rawUrLower.Substring(1)))   // 用于移除/ ，优先查找本地文件
+                    string preUrl = rawUrLower.Substring(1);
+                    switch (preUrl)
                     {
-                        var file = File.ReadAllBytes("website/" + rawUrLower.Substring(1));
+                        case "hslog": preUrl = hsLogPath.Value; break;
+                        // case "beplog": preUrl = "BepInEx/LogOutput.log"; break;
+                        default: preUrl = "website/" + rawUrLower.Substring(1); break;
+                    }
+
+
+                    if (File.Exists(preUrl))   // 用于移除/ ，优先查找本地文件
+                    {
+                        var file = File.ReadAllBytes(preUrl);
                         httpListenerContext.Response.OutputStream.Write(file, 0, file.Length);
                         httpListenerContext.Response.OutputStream.Close();
                         file = null;
