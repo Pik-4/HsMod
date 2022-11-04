@@ -57,7 +57,7 @@ namespace HsMod
 
         public static ConfigEntry<bool> isOpponentGoldenCardShow;
         public static ConfigEntry<Utils.CardState> goldenCardState;
-        public static ConfigEntry<Utils.CardState> diamondCardState;
+        public static ConfigEntry<Utils.CardState> maxCardState;
 
         public static ConfigEntry<KeyboardShortcut> keyTimeGearUp;
         public static ConfigEntry<KeyboardShortcut> keyTimeGearDown;
@@ -113,7 +113,7 @@ namespace HsMod
         public static ConfigEntry<bool> isFakeRandomResult;
         public static ConfigEntry<bool> isFakeRandomRarity;
         public static ConfigEntry<bool> isFakeRandomPremium;
-        public static ConfigEntry<bool> isFakeRandomDiamond;
+        public static ConfigEntry<bool> isFakeAtypicalRandomPremium;
         public static ConfigEntry<TAG_PREMIUM> fakeRandomPremium;
         public static ConfigEntry<Utils.CardRarity> fakeRandomRarity;
         public static ConfigEntry<int> fakeCardID1;
@@ -193,11 +193,11 @@ namespace HsMod
             receiveEnemyEmoteLimit = config.Bind("炉石", "表情数量", -1, new ConfigDescription("游戏内表情数量接收限制，超过自动屏蔽对手表情，0时开局屏蔽，-1不限制（有小bug）", new AcceptableValueRange<int>(-1, 100)));
             isOpponentGoldenCardShow = config.Bind("炉石", "对手卡牌特效", true, "是否显示对手卡牌特效(覆盖ALL配置)");
             goldenCardState = config.Bind("炉石", "金卡特效", Utils.CardState.Default, "强制金卡特效");
-            diamondCardState = config.Bind("炉石", "钻石卡特效", Utils.CardState.Default, "强制钻石卡特效（如果有）");
+            maxCardState = config.Bind("炉石", "卡牌最高特效", Utils.CardState.Default, "强制卡牌最高特效特效（如果有钻石等）");
 
             isAutoRecvMercenaryRewardEnable = config.Bind("佣兵", "自动领奖", false, "是否自动领取佣兵佣兵奖励（屏蔽宝箱）");
             isMercenaryBattleZoom = config.Bind("佣兵", "允许缩放", true, "（可能存在BUG）是否允许佣兵战斗时缩放画面");
-            mercenaryDiamondCardState = config.Bind("佣兵", "钻石皮肤替换", Utils.CardState.Default, "如果可以，是否替换成钻石皮肤（优先级低于炉石-钻石卡特效）");
+            mercenaryDiamondCardState = config.Bind("佣兵", "钻石皮肤替换", Utils.CardState.Default, "如果可以，是否替换成钻石皮肤（优先级低于炉石-卡牌最高特效）");
             randomMercenarySkinEnable = config.Bind("佣兵", "随机皮肤", Utils.CardState.Default, "随机皮肤（不包含钻皮且炉石-钻石卡特效值不能为disabled）");
 
             isShutUpBobEnable = config.Bind("酒馆", "沉默鲍勃", false, "是否让鲍勃闭嘴");
@@ -257,7 +257,7 @@ namespace HsMod
             isFakeRandomResult = config.Bind("模拟", "随机结果", false, "是否启用随机结果");
             isFakeRandomRarity = config.Bind("模拟", "随机稀有度", false, "是否随机稀有度（基于随机结果）");
             isFakeRandomPremium = config.Bind("模拟", "随机品质", false, "是否随机品质（基于随机结果）");
-            isFakeRandomDiamond = config.Bind("模拟", "随机钻石", false, "随机品质中包括钻石（基于随机品质）");
+            isFakeAtypicalRandomPremium = config.Bind("模拟", "随机其他特效", false, "随机品质中包括钻石或异画等（基于随机品质）");
             fakeRandomRarity = config.Bind("模拟", "稀有度类型", Utils.CardRarity.LEGENDARY, "指定随机稀有度（基于随机稀有度）");
             fakeRandomPremium = config.Bind("模拟", "品质类型", TAG_PREMIUM.GOLDEN, "指定品质（基于随机品质）");
 
@@ -345,7 +345,7 @@ namespace HsMod
                     mercenaryDiamondCardState.Value = Utils.CardState.Disabled;
                     randomMercenarySkinEnable.Value = Utils.CardState.Disabled;
                     goldenCardState.Value = Utils.CardState.Disabled;
-                    diamondCardState.Value = Utils.CardState.Disabled;
+                    maxCardState.Value = Utils.CardState.Disabled;
                     configTemplate.Value = Utils.ConfigTemplate.DoNothing;
                     return;
                 case Utils.ConfigTemplate.AntiAwayFromKeyboard:
@@ -369,7 +369,7 @@ namespace HsMod
                     skinCoin.Value = -1;
                     isSkinDefalutHeroEnable.Value = false;
                     goldenCardState.Value = Utils.CardState.Default;
-                    diamondCardState.Value = Utils.CardState.Default;
+                    maxCardState.Value = Utils.CardState.Default;
                     mercenaryDiamondCardState.Value = Utils.CardState.Default;
                     randomMercenarySkinEnable.Value = Utils.CardState.Default;
                     configTemplate.Value = Utils.ConfigTemplate.DoNothing;

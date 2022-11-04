@@ -1417,11 +1417,19 @@ namespace HsMod
             [HarmonyPatch(typeof(Entity), "GetPremiumType")]
             public static bool PatchGetPremiumType(Entity __instance, ref TAG_PREMIUM __result)
             {
-                if (GameMgr.Get() != null && !GameMgr.Get().IsBattlegrounds() && GameState.Get() != null && GameState.Get().IsGameCreatedOrCreating())
+                if (GameMgr.Get() != null && GameState.Get() != null && GameState.Get().IsGameCreatedOrCreating())
                 {
-                    Utils.CardState mGolden = goldenCardState.Value;
-                    Utils.CardState mDiamond = diamondCardState.Value;
+                    //跳过酒馆随从
+                    if (GameMgr.Get().IsBattlegrounds())
+                    {
+                        if (__instance.IsMinion() || __instance.IsQuest())
+                            return true;
+                    }
 
+                    Utils.CardState mGolden = goldenCardState.Value;
+                    Utils.CardState mMaxState = maxCardState.Value;
+
+                    //佣兵镀金
                     int dbid = GameUtils.TranslateCardIdToDbId(__instance.GetCardId());
                     bool mercDiamond = false;
                     bool isMerc = false;
@@ -1434,7 +1442,7 @@ namespace HsMod
                         }
                     }
 
-
+                    //屏蔽对手特效
                     if (__instance.IsControlledByOpposingSidePlayer() && (!isOpponentGoldenCardShow.Value))
                     {
                         __result = TAG_PREMIUM.NORMAL;
@@ -1447,19 +1455,33 @@ namespace HsMod
                     }
 
 
-                    if (__instance.HasTag(GAME_TAG.HAS_DIAMOND_QUALITY) || mercDiamond)
+                    //其他品质
+                    if (__instance.HasTag(GAME_TAG.HAS_DIAMOND_QUALITY) || __instance.HasTag(GAME_TAG.HAS_SIGNATURE_QUALITY) || mercDiamond)
                     {
-                        if (mDiamond == Utils.CardState.All || (mDiamond == Utils.CardState.OnlyMy && __instance.IsControlledByFriendlySidePlayer()))
+                        if (__instance.HasTag(GAME_TAG.HAS_DIAMOND_QUALITY) || mercDiamond)
                         {
-                            if (mercDiamond)
+                            if (mMaxState == Utils.CardState.All || (mMaxState == Utils.CardState.OnlyMy && __instance.IsControlledByFriendlySidePlayer()))
                             {
-                                __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.DIAMOND);
-                                __instance.SetTag(GAME_TAG.HAS_DIAMOND_QUALITY, true);
+                                if (mercDiamond)
+                                {
+                                    __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.DIAMOND);
+                                    __instance.SetTag(GAME_TAG.HAS_DIAMOND_QUALITY, true);
+                                }
+                                __result = TAG_PREMIUM.DIAMOND;
+                                return false;
                             }
-                            __result = TAG_PREMIUM.DIAMOND;
-                            return false;
                         }
-                        if ((mDiamond == Utils.CardState.Disabled) && (mGolden == Utils.CardState.Disabled))
+
+                        if (__instance.HasTag(GAME_TAG.HAS_SIGNATURE_QUALITY))
+                        {
+                            if (mMaxState == Utils.CardState.All || (mMaxState == Utils.CardState.OnlyMy && __instance.IsControlledByFriendlySidePlayer()))
+                            {
+                                __result = TAG_PREMIUM.SIGNATURE;
+                                return false;
+                            }
+                        }
+
+                        if ((mMaxState == Utils.CardState.Disabled) && (mGolden == Utils.CardState.Disabled))
                         {
                             __result = TAG_PREMIUM.NORMAL;
                             if (isMerc)
@@ -1470,11 +1492,13 @@ namespace HsMod
                             return false;
                         }
                     }
+                    //金卡特效
                     if (mGolden == Utils.CardState.All || (mGolden == Utils.CardState.OnlyMy && __instance.IsControlledByFriendlySidePlayer()))
                     {
                         __result = TAG_PREMIUM.GOLDEN;
                         return false;
                     }
+                    //禁用特效
                     if (mGolden == Utils.CardState.Disabled)
                     {
                         __result = TAG_PREMIUM.NORMAL;
@@ -1864,12 +1888,12 @@ namespace HsMod
                 if (cardId != null
                     && Utils.CheckInfo.IsMercenarySkin(cardId, out Utils.MercenarySkin skin))
                 {
-                    if ((goldenCardState.Value == Utils.CardState.Disabled) && (diamondCardState.Value == Utils.CardState.Disabled))
+                    if ((goldenCardState.Value == Utils.CardState.Disabled) && (maxCardState.Value == Utils.CardState.Disabled))
                     {
                         cardId = GameUtils.TranslateDbIdToCardId(skin.Default);
                         return;
                     }
-                    if ((diamondCardState.Value == Utils.CardState.Disabled) || (mercenaryDiamondCardState.Value == Utils.CardState.Disabled))
+                    if ((maxCardState.Value == Utils.CardState.Disabled) || (mercenaryDiamondCardState.Value == Utils.CardState.Disabled))
                     {
                         if (GameUtils.TranslateCardIdToDbId(cardId) == skin.Diamond)
                         {
@@ -1885,7 +1909,7 @@ namespace HsMod
                             return;
                         }
                     }
-                    if ((diamondCardState.Value == Utils.CardState.All) || (mercenaryDiamondCardState.Value == Utils.CardState.All))
+                    if ((maxCardState.Value == Utils.CardState.All) || (mercenaryDiamondCardState.Value == Utils.CardState.All))
                     {
                         if (skin.hasDiamond)
                         {
@@ -1893,7 +1917,7 @@ namespace HsMod
                             return;
                         }
                     }
-                    if ((diamondCardState.Value == Utils.CardState.OnlyMy) || (mercenaryDiamondCardState.Value == Utils.CardState.OnlyMy))
+                    if ((maxCardState.Value == Utils.CardState.OnlyMy) || (mercenaryDiamondCardState.Value == Utils.CardState.OnlyMy))
                     {
                         if (skin.hasDiamond && (__instance.GetCard().GetControllerSide() == global::Player.Side.FRIENDLY))
                         {

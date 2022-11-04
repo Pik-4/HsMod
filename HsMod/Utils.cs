@@ -480,9 +480,9 @@ namespace HsMod
             {
                 if (premiumRandom)
                 {
-                    if (!isFakeRandomDiamond.Value)
+                    if (!isFakeAtypicalRandomPremium.Value)
                     {
-                        premium = (TAG_PREMIUM)UnityEngine.Random.Range(0, Enum.GetValues(typeof(TAG_PREMIUM)).Length - 1);
+                        premium = (TAG_PREMIUM)UnityEngine.Random.Range(0, 2);
                     }
                     else premium = (TAG_PREMIUM)UnityEngine.Random.Range(0, Enum.GetValues(typeof(TAG_PREMIUM)).Length);
                 }
