@@ -1305,6 +1305,14 @@ namespace HsMod
                 }
                 return list;
             }
+            [HarmonyPostfix, HarmonyPatch(typeof(TB_BaconShop), "GetBobActor")]
+            public static void PatchGetBobActor(ref Actor __result)
+            {
+                if (__result != null && HsMod.ConfigValue.Get().IsShutUpBobEnableValue && GameMgr.Get().IsBattlegrounds())
+                {
+                    __result.ActivateSpellBirthState(SpellType.HERO_EMOTE_SILENCED);
+                }
+            }
             [HarmonyTranspiler]
             [HarmonyPatch(typeof(TB_BaconShop), "HandleGameOverWithTiming", MethodType.Enumerator)]
             public static IEnumerable<CodeInstruction> PatchHandleGameOverWithTiming(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
