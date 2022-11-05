@@ -1430,7 +1430,7 @@ namespace HsMod
                     //跳过酒馆随从
                     if (GameMgr.Get().IsBattlegrounds())
                     {
-                        if (__instance.IsMinion() || __instance.IsQuest())
+                        if (!isBgsGoldenEnable.Value || __instance.IsMinion() || __instance.IsQuest())
                             return true;
                     }
 

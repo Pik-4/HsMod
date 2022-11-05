@@ -54,6 +54,7 @@ namespace HsMod
         public static ConfigEntry<Utils.CardState> randomMercenarySkinEnable;
 
         public static ConfigEntry<bool> isShutUpBobEnable;
+        public static ConfigEntry<bool> isBgsGoldenEnable;
 
         public static ConfigEntry<bool> isOpponentGoldenCardShow;
         public static ConfigEntry<Utils.CardState> goldenCardState;
@@ -201,6 +202,7 @@ namespace HsMod
             randomMercenarySkinEnable = config.Bind("佣兵", "随机皮肤", Utils.CardState.Default, "随机皮肤（不包含钻皮且炉石-钻石卡特效值不能为disabled）");
 
             isShutUpBobEnable = config.Bind("酒馆", "沉默鲍勃", false, "是否让鲍勃闭嘴");
+            isBgsGoldenEnable = config.Bind("酒馆", "酒馆镀金", false, "（测试，需要在炉石卡牌特效开启金卡特效）是否镀金酒馆。该镀金不会镀金随从和任务线。");
             //考虑导出单独配置
             skinCoin = config.Bind("皮肤", "硬币", -1, "幸运币的偏好ID，-1表示不做修改（游戏内模拟拔线可以实时更新）");
             skinCardBack = config.Bind("皮肤", "卡背", -1, "卡背的偏好ID，-1表示不做修改（实时生效）");
@@ -437,7 +439,7 @@ namespace HsMod
                             if (!HeroesMapping.ContainsKey(int.Parse(parts[0])))
                             {
                                 string[] skins = parts[1].Split(',');
-                                HeroesMapping.Add(int.Parse(parts[0]), int.Parse(skins[new System.Random().Next(skins.Length)]));
+                                HeroesMapping.Add(int.Parse(parts[0].Trim()), int.Parse(skins[new System.Random().Next(skins.Length)].Trim()));
                             }
                         }
                     }
@@ -448,6 +450,7 @@ namespace HsMod
                 string newConfigFile = "# 皮肤映射表\n";
                 newConfigFile += "# 说明：主要用作英雄（酒馆、对战）类皮肤替换；按下F4会在BepInEx目录下生成当前全部皮肤信息；\n";
                 newConfigFile += "# 格式：原始皮肤:替换皮肤（:为半角字符）；下一行是一个样例(玛法里奥·怒风替换成大导师玛法里奥)，可以删除\n";
+                newConfigFile += "#      亦支持a:b,c,d这种多值映射，实现随机皮肤。\n";
                 newConfigFile += "274:57761\n\n";
                 File.WriteAllText(file, newConfigFile);
             }
