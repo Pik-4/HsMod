@@ -218,7 +218,7 @@ namespace HsMod
             keyTimeGearDown = config.Bind("快捷键", "齿轮倍率-1", new KeyboardShortcut(KeyCode.DownArrow), "齿轮倍率减少1，默认方向下");
             keyTimeGearDefault = config.Bind("快捷键", "齿轮倍率归零", new KeyboardShortcut(KeyCode.LeftArrow), "恢复默认齿轮倍率，默认方向左");
             keyTimeGearMax = config.Bind("快捷键", "齿轮倍率最大", new KeyboardShortcut(KeyCode.RightArrow), "齿轮倍率小于4时变为4，大于4时变为8，默认方向右");
-            keySimulateDisconnect = config.Bind("快捷键", "模拟拔线", new KeyboardShortcut(KeyCode.D, KeyCode.LeftControl), "模拟掉线重连，默认左Ctrl+D");
+            keySimulateDisconnect = config.Bind("快捷键", "模拟拔线", new KeyboardShortcut(KeyCode.D, KeyCode.LeftControl), "模拟掉线重连，注意需要禁用报错退出并允许弹出消息，默认左Ctrl+D");
             keyCopyBattleTag = config.Bind("快捷键", "复制对手战网标签", new KeyboardShortcut(KeyCode.C, KeyCode.LeftControl), "复制游戏内对手战网ID，默认左Ctrl+C");
             keyCopySelectBattleTag = config.Bind("快捷键", "复制所选对手战网标签", new KeyboardShortcut(KeyCode.Mouse0), "复制酒馆内所选对手战网ID，默认鼠标左键");
             keyConcede = config.Bind("快捷键", "投降", new KeyboardShortcut(KeyCode.Space, KeyCode.LeftControl), "投降，默认左Ctrl+空格");
