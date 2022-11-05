@@ -436,7 +436,8 @@ namespace HsMod
                         {
                             if (!HeroesMapping.ContainsKey(int.Parse(parts[0])))
                             {
-                                HeroesMapping.Add(int.Parse(parts[0]), int.Parse(parts[1]));
+                                string[] skins = parts[1].Split(',');
+                                HeroesMapping.Add(int.Parse(parts[0]), int.Parse(skins[new System.Random().Next(skins.Length)]));
                             }
                         }
                     }
