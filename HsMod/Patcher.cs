@@ -1524,7 +1524,7 @@ namespace HsMod
             }
             // 强制加载金卡动画
             private static readonly MethodInfo loadGolden = typeof(CardTextureLoader).GetMethod("LoadGolden", BindingFlags.Static | BindingFlags.NonPublic);
-            [HarmonyPostfix, HarmonyPatch(typeof(CardTextureLoader),nameof(CardTextureLoader.Load))]
+            [HarmonyPostfix, HarmonyPatch(typeof(CardTextureLoader), nameof(CardTextureLoader.Load))]
             public static void PatchCardTextureLoaderLoad(ref CardDef cardDef, CardPortraitQuality quality, bool prohibitRecursion, ref bool __result)
             {
                 if ((goldenCardState.Value != Utils.CardState.Disabled) && (goldenCardState.Value != Utils.CardState.Default))
