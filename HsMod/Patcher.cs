@@ -1522,15 +1522,26 @@ namespace HsMod
                 }
                 return true;
             }
-            [HarmonyPrefix, HarmonyPatch(typeof(Entity), "SetRealTimePremium")]
-            public static void PatchSetRealTimePremium(ref TAG_PREMIUM premium, Entity __instance)
+            // 强制加载金卡动画
+            private static readonly MethodInfo loadGolden = typeof(CardTextureLoader).GetMethod("LoadGolden", BindingFlags.Static | BindingFlags.NonPublic);
+            [HarmonyPostfix, HarmonyPatch(typeof(CardTextureLoader),nameof(CardTextureLoader.Load))]
+            public static void PatchCardTextureLoaderLoad(ref CardDef cardDef, CardPortraitQuality quality, bool prohibitRecursion, ref bool __result)
             {
-                if (__instance != null)
+                if ((goldenCardState.Value != Utils.CardState.Disabled) && (goldenCardState.Value != Utils.CardState.Default))
                 {
-                    premium = __instance.GetPremiumType();
-                    //___m_realTimePremium = __instance.GetPremiumType();
+                    loadGolden.Invoke(null, new object[] { cardDef });   // TODO: FIXME: 检查加载条件，检查是否存在内存泄露
+                    __result = true;
                 }
             }
+            //[HarmonyPrefix, HarmonyPatch(typeof(Entity), "SetRealTimePremium")]
+            //public static void PatchSetRealTimePremium(ref TAG_PREMIUM premium, Entity __instance)
+            //{
+            //    if (__instance != null)
+            //    {
+            //        premium = __instance.GetPremiumType();
+            //        //___m_realTimePremium = __instance.GetPremiumType();
+            //    }
+            //}
             //[HarmonyPrefix, HarmonyPatch(typeof(CardPortraitQuality), MethodType.Constructor, new Type[] {typeof(int),typeof(TAG_PREMIUM)})]
             //public static void PatchCardPortraitQuality(ref int quality, ref TAG_PREMIUM premiumType)
             //{
