@@ -1485,6 +1485,7 @@ namespace HsMod
                             if (mMaxState == Utils.CardState.All || (mMaxState == Utils.CardState.OnlyMy && __instance.IsControlledByFriendlySidePlayer()))
                             {
                                 __result = TAG_PREMIUM.SIGNATURE;
+                                __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.SIGNATURE);
                                 return false;
                             }
                         }
@@ -1503,6 +1504,7 @@ namespace HsMod
                     //金卡特效
                     if (mGolden == Utils.CardState.All || (mGolden == Utils.CardState.OnlyMy && __instance.IsControlledByFriendlySidePlayer()))
                     {
+                        __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.GOLDEN);
                         __result = TAG_PREMIUM.GOLDEN;
                         return false;
                     }
@@ -1520,6 +1522,20 @@ namespace HsMod
                 }
                 return true;
             }
+            [HarmonyPrefix, HarmonyPatch(typeof(Entity), "SetRealTimePremium")]
+            public static void PatchSetRealTimePremium(ref TAG_PREMIUM premium, Entity __instance)
+            {
+                if (__instance != null)
+                {
+                    premium = __instance.GetPremiumType();
+                    //___m_realTimePremium = __instance.GetPremiumType();
+                }
+            }
+            //[HarmonyPrefix, HarmonyPatch(typeof(CardPortraitQuality), MethodType.Constructor, new Type[] {typeof(int),typeof(TAG_PREMIUM)})]
+            //public static void PatchCardPortraitQuality(ref int quality, ref TAG_PREMIUM premiumType)
+            //{
+            //    premiumType = TAG_PREMIUM.GOLDEN;
+            //}
 
 
             //设置下个对手、用于获取战网标签
@@ -2739,7 +2755,7 @@ namespace HsMod
 
             private static string GetMD5(string message)
             {
-                byte[] array = new MD5CryptoServiceProvider().ComputeHash(Encoding.Default.GetBytes(message));
+                byte[] array = MD5.Create().ComputeHash(Encoding.Default.GetBytes(message));
                 StringBuilder stringBuilder = new StringBuilder();
                 for (int i = 0; i < array.Length; i++)
                 {
