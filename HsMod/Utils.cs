@@ -463,7 +463,7 @@ namespace HsMod
                     }
                     else
                     {
-                        webPageBackImg.Value = res + "images/end.jpg";
+                        webPageBackImg.Value = res + "images/end.jpg?safeimg";
                     }
                 }
                 else
