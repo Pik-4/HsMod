@@ -245,7 +245,7 @@ namespace HsMod
             buyAdventure = config.Bind("开发", "冒险购买", Utils.BuyAdventureTemplate.DoNothing, "（不建议购买卡拉赞）选择一个冒险进行购买尝试（有概率封号，酌情考虑使用）");
             isKarazhanFixEnable = config.Bind("开发", "卡拉赞修复", false, "（请打完后请关闭，目前无法打序章）卡拉赞黑鸦翱翔修复，也可以用作冒险跳关。（有概率封号，酌情考虑使用）");
             webServerPort = config.Bind("开发", "网站端口", 58744, new ConfigDescription("WebServer端口，参数最先选用命令行", new AcceptableValueRange<int>(1, 65535)));
-            webPageBackImg = config.Bind("开发", "网页背景图", "https://imgapi.cn/cos.php", new ConfigDescription("网页背景图片", null, new object[] { "Advanced" }));
+            webPageBackImg = config.Bind("开发", "网页背景图", "", new ConfigDescription("网页背景图片", null, new object[] { "Advanced" }));
             isWebshellEnable = config.Bind("开发", "Webshell", false, "Webshell开关");
             isInternalModeEnable = config.Bind("开发", "内部模式", false, "是否切换到内部模式（需要重启炉石）");
 

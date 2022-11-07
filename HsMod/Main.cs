@@ -127,6 +127,12 @@ namespace HsMod
                 Screen.SetResolution(CommandConfig.width, CommandConfig.height, false);
             }
 
+            //绿色健康
+            if (string.IsNullOrEmpty(webPageBackImg.Value) || webPageBackImg.Value.EndsWith("/safeimg"))
+            {
+                Utils.TryGetSafeImg();
+            }
+
             //启动web服务
             WebServer.Start();
             //InactivePlayerKicker.Get().SetShouldCheckForInactivity(isIdleKickEnable.Value);
@@ -145,7 +151,7 @@ namespace HsMod
                 UIStatus.Get().AddInfo($"[{allPatchNum}]插件状态：" + (isPluginEnable.Value ? "运行" : "停止"));
                 InactivePlayerKicker.Get().SetShouldCheckForInactivity(isIdleKickEnable.Value);
                 WebServer.Restart();
-
+                Utils.TryGetSafeImg();
             }
 
             if (!isPluginEnable.Value) return;

@@ -60,7 +60,7 @@ namespace HsMod
 
                     if (rawUrLower.EndsWith(".js"))
                         httpListenerContext.Response.ContentType = "text/javascript; charset=UTF-8";
-                    else if (rawUrLower.EndsWith(".jpg") || rawUrLower.EndsWith(".jpge"))
+                    else if (rawUrLower.EndsWith(".jpg") || rawUrLower.EndsWith(".jpge") || rawUrLower == "/safeimg")
                         httpListenerContext.Response.ContentType = "image/jpeg";
                     else if (rawUrLower == "/webshell" && isWebshellEnable.Value)
                     {
@@ -109,8 +109,19 @@ namespace HsMod
                         httpListenerContext.Response.OutputStream.Close();
                         file = null;
                     }
+                    else if (rawUrLower == "/safeimg")
+                    {
+                        var safeimg = Convert.FromBase64String(WebPage.SafeImg);
+                        httpListenerContext.Response.OutputStream.Write(safeimg, 0, safeimg.Length);
+                        httpListenerContext.Response.OutputStream.Close();
+                    }
                     else
                     {
+                        if (string.IsNullOrEmpty(webPageBackImg.Value))
+                        {
+                            webPageBackImg.Value = $"http://{httpListenerRequest.UserHostName}/safeimg";
+                        }
+
                         using (StreamWriter streamWriter = new StreamWriter(httpListenerContext.Response.OutputStream))
                         {
                             streamWriter.WriteLine(Route(rawUrLower));
