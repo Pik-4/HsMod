@@ -992,7 +992,7 @@ namespace HsMod
 
         public static class LeakInfo
         {
-            public static void Mercenaries(string savePath = @"BepInEx\HsMercenaries.log")
+            public static void Mercenaries(string savePath = @"BepInEx/HsMercenaries.log")
             {
                 //List<LettuceTeam> teams = CollectionManager.Get().GetTeams();
                 //System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到您的队伍如下：\n");
@@ -1012,7 +1012,7 @@ namespace HsMod
                     }
                 }
             }
-            public static void MyCards(string savePath = @"BepInEx\HsRefundCards.log")
+            public static void MyCards(string savePath = @"BepInEx/HsRefundCards.log")
             {
                 System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到全额分解卡牌情况如下：\n");
                 System.IO.File.AppendAllText(savePath, "[Name]\t[PremiumType]\t[Rarity]\t[CardId]\t[CardDbId]\t[OwnedCount]\n");
@@ -1028,7 +1028,7 @@ namespace HsMod
                     }
                 }
             }
-            public static void Skins(string savePath = @"BepInEx\HsSkins.log")
+            public static void Skins(string savePath = "BepInEx/HsSkins.log")
             {
                 System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到硬币皮肤如下：\n");
                 System.IO.File.AppendAllText(savePath, "[CARD_ID]\t[Name]\n");
