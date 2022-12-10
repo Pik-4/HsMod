@@ -130,7 +130,7 @@ Mac上首次运行可能会提示战网登录错误，请找到HsMod.cfg，修�
 6. 本插件Web Server（即Showinfo）的默认端口为58744，一般情况下，监听本地所有IP，使用云服务器时，请注意防火墙、安全组等配置。
 7. 对局统计所使用的log文件是`BepInEx\HsMatch.log`，可在设置中修改。（字段以`,`分隔）
 8. 出现问题时先尝试删除相关`.cfg`配置文件（一般位于`BepInEx\config\`），进行重新配置；如果依然存在问题，请带上`HsMod.cfg`提交[Issues](https://github.com/Pik-4/HsMod/issues)，但不保证及时解答。
-9. `GetHsLib.py`用于更新炉石自有运行库，`install.bat`用于将编译好的`HsMod.dll`复制到默认炉石目录（前提是BepInEx已经配置好）。此外，push或提交PR到Github后，Actions会自动生成相关pre-[release](https://github.com/Pik-4/HsMod/releases)。
+9. `GetHsLib.py`用于更新炉石自有运行库，`install.bat`用于将编译好的`HsMod.dll`复制到默认炉石目录（前提是BepInEx已经配置好）。此外，在push修改版本号后（PluginInfo.cs发生变化后），会自动生成[release](https://github.com/Pik-4/HsMod/releases)。
 10. 如果出现皮肤显示异常，请检查`HsSkins.cfg`，并尝试删除`HsMod.cfg`重新进行配置。
 11. 如果修改设置无法保存，请检查是否启用其他炉石插件。
 
