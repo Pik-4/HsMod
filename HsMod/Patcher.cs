@@ -1806,48 +1806,55 @@ namespace HsMod
             [HarmonyPatch(typeof(GameState), "OnPowerHistory")]
             public static void PatchDebugPrintPower(GameState __instance, ref List<Network.PowerHistory> powerList)
             {
-                if (isCardTrackerEnable.Value && !GameMgr.Get().IsBattlegrounds() && !GameMgr.Get().IsMercenaries())
+                try
                 {
-                    List<string> hintList = new List<string>();
-                    for (int i = 0; i < powerList.Count; i++)
+                    if (isCardTrackerEnable.Value && !GameMgr.Get().IsBattlegrounds() && !GameMgr.Get().IsMercenaries())
                     {
-                        Network.PowerHistory powerHistory = powerList[i];
-                        if (powerHistory.Type == Network.PowerType.SHOW_ENTITY)
+                        List<string> hintList = new List<string>();
+                        for (int i = 0; i < powerList.Count; i++)
                         {
-                            Network.Entity netEntity = ((Network.HistShowEntity)powerHistory).Entity;
-                            Entity entity = __instance?.GetEntity(netEntity.ID);
-                            if (entity != null && entity.GetControllerSide() == global::Player.Side.OPPOSING && entity.GetZone() == TAG_ZONE.SETASIDE && entity.GetCardType() != TAG_CARDTYPE.ENCHANTMENT)
+                            Network.PowerHistory powerHistory = powerList[i];
+                            if (powerHistory.Type == Network.PowerType.SHOW_ENTITY)
                             {
-                                EntityDef entityDef = DefLoader.Get().GetEntityDef(netEntity.CardID);
-                                if (entityDef != null && entityDef.GetCardType() != TAG_CARDTYPE.ENCHANTMENT && !entityDef.IsQuestline())
+                                Network.Entity netEntity = ((Network.HistShowEntity)powerHistory).Entity;
+                                Entity entity = __instance?.GetEntity(netEntity.ID);
+                                if (entity != null && entity.GetControllerSide() == global::Player.Side.OPPOSING && entity.GetZone() == TAG_ZONE.SETASIDE && entity.GetCardType() != TAG_CARDTYPE.ENCHANTMENT)
                                 {
-                                    string hintText = entityDef.GetName();
-                                    if (hintText != null)
+                                    EntityDef entityDef = DefLoader.Get().GetEntityDef(netEntity.CardID);
+                                    if (entityDef != null && entityDef.GetCardType() != TAG_CARDTYPE.ENCHANTMENT && !entityDef.IsQuestline())
                                     {
-                                        hintText = hintText + "\n" + entityDef.GetCardTextInHand();
-                                        UIStatus.Get().AddInfo($"注意: {hintText}", 15f);
+                                        string hintText = entityDef.GetName();
+                                        if (hintText != null)
+                                        {
+                                            hintText = hintText + "\n" + entityDef.GetCardTextInHand();
+                                            UIStatus.Get().AddInfo($"注意: {hintText}", 15f);
+                                        }
+                                    }
+                                }
+                            }
+                            if (powerHistory.Type == Network.PowerType.FULL_ENTITY)
+                            {
+                                Network.Entity entity3 = ((Network.HistFullEntity)powerHistory).Entity;
+                                for (int j = 0; j < entity3.Tags.Count; j++)
+                                {
+                                    if (entity3.Tags[j].Name == 49 && entity3.Tags[j].Value == 4)
+                                    {
+                                        EntityDef entityDef2 = DefLoader.Get().GetEntityDef(entity3.CardID);
+                                        hintList.Add(entityDef2.GetName());
                                     }
                                 }
                             }
                         }
-                        if (powerHistory.Type == Network.PowerType.FULL_ENTITY)
+                        string hintText2 = string.Join(" ", hintList);
+                        if (hintText2 != "")
                         {
-                            Network.Entity entity3 = ((Network.HistFullEntity)powerHistory).Entity;
-                            for (int j = 0; j < entity3.Tags.Count; j++)
-                            {
-                                if (entity3.Tags[j].Name == 49 && entity3.Tags[j].Value == 4)
-                                {
-                                    EntityDef entityDef2 = DefLoader.Get().GetEntityDef(entity3.CardID);
-                                    hintList.Add(entityDef2.GetName());
-                                }
-                            }
+                            UIStatus.Get().AddInfo($"注意: {hintText2}", 15f);
                         }
                     }
-                    string hintText2 = string.Join(" ", hintList);
-                    if (hintText2 != "")
-                    {
-                        UIStatus.Get().AddInfo($"注意: {hintText2}", 15f);
-                    }
+                }
+                catch (Exception e)
+                {
+                    Utils.MyLogger(BepInEx.Logging.LogLevel.Error, e);
                 }
             }
             // 变装大师识别，40牌识别
