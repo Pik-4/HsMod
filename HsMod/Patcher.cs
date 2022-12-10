@@ -393,6 +393,13 @@ namespace HsMod
                 __result = false;
                 return false;
             }
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(Blizzard.BlizzardErrorMobile.ExceptionReporter), "get_SubmitURL")]
+            public static bool PatchExceptionReporterSubmitURLGetter(ref string __result)
+            {
+                __result = "";
+                return false;
+            }
 
             //禁用掉线
             [HarmonyPrefix]
@@ -1415,6 +1422,17 @@ namespace HsMod
                 }
                 return list;
             }
+            [HarmonyPrefix, HarmonyPatch(typeof(GameState), "IsUsingFastActorTriggers")]
+            public static bool PatchGameStateIsUsingFastActorTriggers(bool __result)
+            {
+                if (ConfigValue.Get().IsQuickModeEnableValue)
+                {
+                    __result = true;
+                    return false;
+                }
+                else return true;
+            }
+
 
         }
 
@@ -1451,7 +1469,7 @@ namespace HsMod
                     }
 
                     //屏蔽对手特效
-                    if (__instance.IsControlledByOpposingSidePlayer() && (!isOpponentGoldenCardShow.Value))
+                    if (__instance.IsControlledByOpposingSidePlayer() && (!isOpponentGoldenCardShow.Value) && (!GameMgr.Get().IsBattlegrounds()))
                     {
                         __result = TAG_PREMIUM.NORMAL;
                         if (isMerc)
@@ -1527,7 +1545,9 @@ namespace HsMod
             [HarmonyPostfix, HarmonyPatch(typeof(CardTextureLoader), nameof(CardTextureLoader.Load))]
             public static void PatchCardTextureLoaderLoad(ref CardDef cardDef, CardPortraitQuality quality, bool prohibitRecursion, ref bool __result)
             {
-                if ((goldenCardState.Value != Utils.CardState.Disabled) && (goldenCardState.Value != Utils.CardState.Default))
+                if ((goldenCardState.Value != Utils.CardState.Disabled)
+                    && (goldenCardState.Value != Utils.CardState.Default)
+                    && (!((SceneMgr.Get().GetMode() == SceneMgr.Mode.COLLECTIONMANAGER) || (SceneMgr.Get().GetMode() == SceneMgr.Mode.PACKOPENING))))
                 {
                     loadGolden.Invoke(null, new object[] { cardDef });   // TODO: FIXME: 检查加载条件，检查是否存在内存泄露
                     __result = true;
@@ -1781,45 +1801,52 @@ namespace HsMod
                 }
                 return true;
             }
-            // 剑圣奥卡尼的选择识别（对手抉择提示）
+            // 选择识别（对手抉择提示）
             [HarmonyPrefix]
             [HarmonyPatch(typeof(GameState), "OnPowerHistory")]
             public static void PatchDebugPrintPower(GameState __instance, ref List<Network.PowerHistory> powerList)
             {
-                if (isCardTrackerEnable.Value && !GameMgr.Get().IsBattlegrounds())
+                if (isCardTrackerEnable.Value && !GameMgr.Get().IsBattlegrounds() && !GameMgr.Get().IsMercenaries())
                 {
-                    foreach (var powerHistory in powerList)
+                    List<string> hintList = new List<string>();
+                    for (int i = 0; i < powerList.Count; i++)
                     {
+                        Network.PowerHistory powerHistory = powerList[i];
                         if (powerHistory.Type == Network.PowerType.SHOW_ENTITY)
                         {
                             Network.Entity netEntity = ((Network.HistShowEntity)powerHistory).Entity;
                             Entity entity = __instance?.GetEntity(netEntity.ID);
-                            if (entity != null && entity.GetControllerSide() == global::Player.Side.OPPOSING)
+                            if (entity != null && entity.GetControllerSide() == global::Player.Side.OPPOSING && entity.GetZone() == TAG_ZONE.SETASIDE && entity.GetCardType() != TAG_CARDTYPE.ENCHANTMENT)
                             {
-                                if (netEntity.CardID == "TSC_032t")
+                                EntityDef entityDef = DefLoader.Get().GetEntityDef(netEntity.CardID);
+                                if (entityDef != null && entityDef.GetCardType() != TAG_CARDTYPE.ENCHANTMENT && !entityDef.IsQuestline())
                                 {
-                                    UIStatus.Get().AddInfo("注意：反制随从！", 30f);
-                                    return;
-                                }
-                                else if (netEntity.CardID == "TSC_032t2")
-                                {
-                                    UIStatus.Get().AddInfo("注意：反制法术！", 30f);
-                                    return;
-                                }
-                                else if (entity?.GetZone() == TAG_ZONE.SETASIDE)
-                                {
-                                    EntityDef entityDef = DefLoader.Get().GetEntityDef(netEntity.CardID);
-                                    if (entityDef != null && entityDef.GetCardType() != TAG_CARDTYPE.ENCHANTMENT && !entityDef.IsQuestline())
+                                    string hintText = entityDef.GetName();
+                                    if (hintText != null)
                                     {
-                                        string name = entityDef.GetName();
-                                        if (!String.IsNullOrEmpty(name))
-                                        {
-                                            UIStatus.Get().AddInfo($"注意：{name}！", 30f);
-                                        }
+                                        hintText = hintText + "\n" + entityDef.GetCardTextInHand();
+                                        UIStatus.Get().AddInfo($"注意: {hintText}", 15f);
                                     }
                                 }
                             }
                         }
+                        if (powerHistory.Type == Network.PowerType.FULL_ENTITY)
+                        {
+                            Network.Entity entity3 = ((Network.HistFullEntity)powerHistory).Entity;
+                            for (int j = 0; j < entity3.Tags.Count; j++)
+                            {
+                                if (entity3.Tags[j].Name == 49 && entity3.Tags[j].Value == 4)
+                                {
+                                    EntityDef entityDef2 = DefLoader.Get().GetEntityDef(entity3.CardID);
+                                    hintList.Add(entityDef2.GetName());
+                                }
+                            }
+                        }
+                    }
+                    string hintText2 = string.Join(" ", hintList);
+                    if (hintText2 != "")
+                    {
+                        UIStatus.Get().AddInfo($"注意: {hintText2}", 15f);
                     }
                 }
             }
