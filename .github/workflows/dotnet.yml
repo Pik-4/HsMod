@@ -3,8 +3,8 @@ name: .NET
 on:
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    paths:
+      - '**PluginInfo.cs'
 
 jobs:
   build:
