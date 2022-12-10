@@ -75,7 +75,7 @@
 
 4. 安装BepInEx配置管理[BepInExConfigManager.Mono](https://github.com/sinai-dev/BepInExConfigManager/releases)，解压到`Hearthstone\BepInEx\`即可；进入游戏后`F5`进行相关控制。
 
-#### Mac (尚未测试)
+#### Mac
 
 1. Download the latest version of [BepInEx_unix](https://github.com/BepInEx/BepInEx/releases) and extract it to `Hearthstone\`
 
@@ -117,6 +117,8 @@
 Now the game needs to be launched only through `./run_bepinex.sh`
 
 If the token becomes obsolete and the game stops opening, then you just need to update it in the `client.config`.
+
+Mac上首次运行可能会提示战网登录错误，请找到HsMod.cfg，修改激活插件即可，详细可参考 [#8](https://github.com/Pik-4/HsMod/issues/8#issuecomment-1344470389)。
 
 ### **补充说明**
 
