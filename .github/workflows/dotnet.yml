@@ -39,7 +39,7 @@ jobs:
             by `${{ github.event.head_commit.author.name }}`
             See commit detail [here](${{ github.event.head_commit.url }})
         draft: false
-        prerelease: true
+        prerelease: false
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
