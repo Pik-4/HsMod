@@ -367,9 +367,8 @@ namespace HsMod
                         {
                             PegasusLettuce.MercenaryAcknowledgeData mercenaryAcknowledgeData = new PegasusLettuce.MercenaryAcknowledgeData
                             {
-                                Type = PegasusLettuce.MercenaryAcknowledgeData.AcknowledgeType.ACKNOWLEDGE_MERC_ART_VARIATION_ACQUIRED,
+                                Type = PegasusLettuce.MercenaryAcknowledgeData.AcknowledgeType.ACKNOWLEDGE_MERC_PORTRAIT_ACQUIRED,
                                 AssetId = artVariation.m_record.ID,
-                                Premium = (uint)artVariation.m_premium,
                                 Acknowledged = true,
                                 MercenaryId = merc.ID
                             };
