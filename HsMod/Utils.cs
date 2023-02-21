@@ -1006,7 +1006,7 @@ namespace HsMod
                     string saveString;
                     if (record != null)
                     {
-                        saveString = record.ID.ToString() + (record.Heroic ? " Heroic " : " ") + record.BountySetRecord.Name.GetString() + " " + LettuceVillageDataUtil.GetBountyBossName(record);
+                        saveString = record.ID.ToString() + (record.Heroic ? " Heroic " : " ") + record.BountySetRecord.Name.GetString() + " " + LettuceVillageDataUtil.GeneratePosterName(record);
                         System.IO.File.AppendAllText(savePath, saveString + "\n");
                     }
                 }

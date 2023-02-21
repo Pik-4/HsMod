@@ -624,7 +624,7 @@ text-decoration: none;
                         temp = "<tr>";
                         temp += (isComplete ? "<td>" : "<td style=\"color:#FF4136\">") + $"{record.ID}</td>";
                         temp += (isComplete ? "<td>" : "<td style=\"color:#FF4136\">") + $"{record.BountySetRecord.Name.GetString()}</td>";
-                        temp += (isComplete ? "<td>" : "<td style=\"color:#FF4136\">") + $"{LettuceVillageDataUtil.GetBountyBossName(record)}</td>";
+                        temp += (isComplete ? "<td>" : "<td style=\"color:#FF4136\">") + $"{LettuceVillageDataUtil.GenerateBountyName(record)}</td>";
                         temp += (isComplete ? "<td>" : "<td style=\"color:#FF4136\">") + (record.Heroic ? "英雄" : "普通") + "</td>";
 
                         foreach (var finalReward in record.FinalBossRewards)
