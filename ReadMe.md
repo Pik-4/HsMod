@@ -133,6 +133,7 @@ Mac上首次运行可能会提示战网登录错误，请找到HsMod.cfg，修�
 9. `GetHsLib.py`用于更新炉石自有运行库，`install.bat`用于将编译好的`HsMod.dll`复制到默认炉石目录（前提是BepInEx已经配置好）。此外，在push修改版本号后（PluginInfo.cs发生变化后），会自动生成[release](https://github.com/Pik-4/HsMod/releases)。
 10. 如果出现皮肤显示异常，请检查`HsSkins.cfg`，并尝试删除`HsMod.cfg`重新进行配置。
 11. 如果修改设置无法保存，请检查是否启用其他炉石插件。
+12. BepInEx请选择**BepInEx 5**，由于BepInEx 6目前还在pre-release，暂时不做适配。
 
 ### client.config
 
@@ -166,6 +167,7 @@ https://eu.battle.net/login/en/?app=wtcg
 2. 游戏内一键更换英雄皮肤，目前只能通过模拟掉线更新
 3. 重构Showinfo相关Web页面。
 4. 适配Mac
+5. 修复佣兵相关功能
 
 ### 参考
 
