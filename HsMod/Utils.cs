@@ -261,8 +261,10 @@ namespace HsMod
 
         public static void TryReportOpponent()
         {
-            List<Blizzard.GameService.SDK.Client.Integration.ReportType.SubcomplaintType> subcomplaintTypes = new List<Blizzard.GameService.SDK.Client.Integration.ReportType.SubcomplaintType>();
-            subcomplaintTypes.Add(Blizzard.GameService.SDK.Client.Integration.ReportType.SubcomplaintType.BATTLETAG);
+            List<Blizzard.GameService.SDK.Client.Integration.ReportType.SubcomplaintType> subcomplaintTypes = new List<Blizzard.GameService.SDK.Client.Integration.ReportType.SubcomplaintType>
+            {
+                Blizzard.GameService.SDK.Client.Integration.ReportType.SubcomplaintType.BATTLETAG
+            };
 
             Blizzard.GameService.SDK.Client.Integration.BattleNet.Get().SubmitReport(Utils.CacheLastOpponentAccountID, Blizzard.GameService.SDK.Client.Integration.ReportType.ComplaintType.INAPPROPRIATE_NAME, subcomplaintTypes);
             subcomplaintTypes.Clear();
@@ -411,15 +413,19 @@ namespace HsMod
 
                     int numNormalCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.NORMAL);
                     int numGoldenCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.GOLDEN);
+                    int numSignatureCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.SIGNATURE);
 
-                    CraftingPendingTransaction m_pendingClientTransaction = new CraftingPendingTransaction();
-                    m_pendingClientTransaction.CardID = record.CardId;
-                    m_pendingClientTransaction.Premium = record.PremiumType;
-                    m_pendingClientTransaction.NormalDisenchantCount = numNormalCopiesInCollection;
-                    m_pendingClientTransaction.GoldenDisenchantCount = numGoldenCopiesInCollection;
+                    CraftingPendingTransaction m_pendingClientTransaction = new CraftingPendingTransaction
+                    {
+                        CardID = record.CardId,
+                        Premium = record.PremiumType,
+                        NormalDisenchantCount = numNormalCopiesInCollection,
+                        GoldenDisenchantCount = numGoldenCopiesInCollection,
+                        SignatureDisenchantCount = numSignatureCopiesInCollection
+                    };
 
                     value = -(normalValue * numNormalCopiesInCollection + goldenValue * numGoldenCopiesInCollection);
-                    network.CraftingTransaction(m_pendingClientTransaction, value, numNormalCopiesInCollection, numGoldenCopiesInCollection);
+                    network.CraftingTransaction(m_pendingClientTransaction, value, numNormalCopiesInCollection, numGoldenCopiesInCollection, numSignatureCopiesInCollection);
                     m_pendingClientTransaction = null;
                 }
             }
