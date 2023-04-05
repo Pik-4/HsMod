@@ -120,6 +120,17 @@ If the token becomes obsolete and the game stops opening, then you just need to 
 
 Mac上首次运行可能会提示战网登录错误，请找到HsMod.cfg，修改激活插件即可，详细可参考 [#8](https://github.com/Pik-4/HsMod/issues/8#issuecomment-1344470389)。
 
+### 版本说明
+
+如HsMod版本`3.0.0.0`：
+
+第一位 3 => 炉石大版本。例如： 3 => 26
+第二位 0 => 炉石在该版本更新次数，不与炉石小版本对应；此外，当炉石发生更新，但`Assembly-CSharp.dll`等文件没有变化时，该数字不会更新。例如：0 => 26.x.y.z
+第三位 0 => 当HsMod在该炉石大版本有新功能时，此数字+1
+第四位 0 => 编译版本。主要记录修复bug次数，与第三位对应。
+
+炉石版本更新不一定会导致HsMod失效，如果HsMod插件功能正常，可以不随Release更新。HsMod更新特性可参考commit记录。
+
 ### **补充说明**
 
 1. 插件不可放置在含有中文的目录下，即炉石安装路径不能含有中文。
