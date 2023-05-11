@@ -67,7 +67,7 @@
 
    2.1. 下载[BepInEx_x86](https://github.com/BepInEx/BepInEx/releases)，并将其解压到炉石根目录`Hearthstone\`下。
 
-   2.2. 创建一个目录`Hearthstone\BepInEx\unstripped_corlib\`；下载[Mono](https://unity.bepinex.dev/corlibs/2019.4.37.zip)和[Unity](https://unity.bepinex.dev/libraries/2019.4.37.zip)，并将其解压在该目录。 
+   2.2. 创建一个目录`Hearthstone\BepInEx\unstripped_corlib\`；~~下载[Mono](https://unity.bepinex.dev/corlibs/2021.3.19.zip)和[Unity](https://unity.bepinex.dev/libraries/2021.3.19.zip)，并将其解压在该目录~~；将项目目录HsMod/LibUnityMono下所有dll复制到unstripped_corlib目录下。 
 
    2.3. 修改`Hearthstone\doorstop_config.ini`，将`dllSearchPathOverride=` 替换成`dllSearchPathOverride=BepInEx\unstripped_corlib`
 
@@ -79,7 +79,7 @@
 
 1. Download the latest version of [BepInEx_unix](https://github.com/BepInEx/BepInEx/releases) and extract it to `Hearthstone\`
 
-2. Download original [Mono](https://unity.bepinex.dev/corlibs/2019.4.37.zip) and [Unity](https://unity.bepinex.dev/libraries/2019.4.37.zip) libraries and unpack to `Hearthstone\BepInEx\unstripped_corlib\`. ( PS. Mono and Unity version must same as Hearthstone )
+2. ~~Download original [Mono](https://unity.bepinex.dev/corlibs/2021.3.19.zip) and [Unity](https://unity.bepinex.dev/libraries/2021.3.19.zip) libraries and unpack to Hearthstone\BepInEx\unstripped_corlib\~~. Copy all `dll` which under the project folder `HsMod/LibUnityMono` (`cp HsMod/LibUnityMono/*  Hearthstone/BepInEx/unstripped_corlib/   ` ). ( PS. Mono and Unity version must same as Hearthstone ).
 
 3. Edit the `run_bepinex.sh` file replacing the line `export DOORSTOP_CORLIB_OVERRIDE_PATH=""`with `DOORSTOP_CORLIB_OVERRIDE_PATH="$BASEDIR/BepInEx/unstripped_corlib"`
 
@@ -112,7 +112,7 @@
 
 8. Download the HsMod [Releases](https://github.com/Pik-4/HsMod/releases) and unzip to `Hearthstone\BepInEx\plugins`
 
-9. Download the [BepInExConfigManager.Mono](https://github.com/sinai-dev/BepInExConfigManager/releases) and unzip to `Hearthstone\BepInEx`, After entering the game, press `F5` to control HsMod.
+9. Download the [BepInExConfigManager.Mono](https://github.com/sinai-dev/BepInExConfigManager/releases) and unzip to `Hearthstone\BepInEx`After entering the game, press `F5` to control HsMod.
 
 Now the game needs to be launched only through `./run_bepinex.sh`
 
@@ -125,8 +125,11 @@ Mac上首次运行可能会提示战网登录错误，请找到HsMod.cfg，修�
 如HsMod版本`3.0.0.0`：
 
 第一位 3 => 炉石大版本。例如： 3 => 26
+
 第二位 0 => 炉石在该版本更新次数，不与炉石小版本对应；此外，当炉石发生更新，但`Assembly-CSharp.dll`等文件没有变化时，该数字不会更新。例如：0 => 26.x.y.z
+
 第三位 0 => 当HsMod在该炉石大版本有新功能时，此数字+1
+
 第四位 0 => 编译版本。主要记录修复bug次数，与第三位对应。
 
 炉石版本更新不一定会导致HsMod失效，如果HsMod插件功能正常，可以不随Release更新。HsMod更新特性可参考commit记录。
