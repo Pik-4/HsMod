@@ -79,7 +79,7 @@
 
 1. Download the latest version of [BepInEx_unix](https://github.com/BepInEx/BepInEx/releases) and extract it to `Hearthstone\`
 
-2. ~~Download original [Mono](https://unity.bepinex.dev/corlibs/2021.3.19.zip) and [Unity](https://unity.bepinex.dev/libraries/2021.3.19.zip) libraries and unpack to Hearthstone\BepInEx\unstripped_corlib\~~. Copy all `dll` which under the project folder `HsMod/LibUnityMono` (`cp HsMod/LibUnityMono/*  Hearthstone/BepInEx/unstripped_corlib/   ` ). ( PS. Mono and Unity version must same as Hearthstone ).
+2. ~~Download original [Mono](https://unity.bepinex.dev/corlibs/2021.3.19.zip) and [Unity](https://unity.bepinex.dev/libraries/2021.3.19.zip) libraries and unpack to Hearthstone\BepInEx\unstripped_corlib~~. Copy all `dll` which under the project folder `HsMod/LibUnityMonoMacOs` (`cp HsMod/LibUnityMonoMacOs/*  Hearthstone/BepInEx/unstripped_corlib/   ` ). ( PS. Mono and Unity version must same as Hearthstone ).
 
 3. Edit the `run_bepinex.sh` file replacing the line `export DOORSTOP_CORLIB_OVERRIDE_PATH=""`with `DOORSTOP_CORLIB_OVERRIDE_PATH="$BASEDIR/BepInEx/unstripped_corlib"`
 
@@ -185,10 +185,11 @@ https://eu.battle.net/login/en/?app=wtcg
 
 ### 参考
 
-1. [MixMod](https://4pda.to/forum/index.php?showtopic=870696&st=4780#entry114865283)
-2. [Hearthstone Advanced Mod](https://hearthmod.com/)
-3. [从0开始教你使用BepInEx为unity游戏制作插件Mod](https://mod.3dmgame.com/read/3)
-4. [BepInEx Docs](https://docs.bepinex.dev/)
-5. [Harmony](https://harmony.pardeike.net/articles/intro.html)
-6. [List of CIL instructions](https://en.wikipedia.org/wiki/List_of_CIL_instructions)
+1. [MixMod_4pda](https://4pda.to/forum/index.php?showtopic=870696&st=4780#entry114865283)
+2. [MixMod_github](https://github.com/DeNcHiK3713/MixMod)
+3. [Hearthstone Advanced Mod](https://finalmod.com/)
+4. [从0开始教你使用BepInEx为unity游戏制作插件Mod](https://mod.3dmgame.com/read/3)
+5. [BepInEx Docs](https://docs.bepinex.dev/)
+6. [Harmony](https://harmony.pardeike.net/articles/intro.html)
+7. [List of CIL instructions](https://en.wikipedia.org/wiki/List_of_CIL_instructions)
 
