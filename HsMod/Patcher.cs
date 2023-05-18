@@ -1443,72 +1443,93 @@ namespace HsMod
             [HarmonyPatch(typeof(Entity), "GetPremiumType")]
             public static bool PatchGetPremiumType(Entity __instance, ref TAG_PREMIUM __result)
             {
-                if (GameMgr.Get() != null && GameState.Get() != null && GameState.Get().IsGameCreatedOrCreating())
+                try
                 {
-                    //跳过酒馆随从
-                    if (GameMgr.Get().IsBattlegrounds())
+                    if (GameMgr.Get() != null && GameState.Get() != null && GameState.Get().IsGameCreatedOrCreating())
                     {
-                        if (!isBgsGoldenEnable.Value || __instance.IsMinion() || __instance.IsQuest())
-                            return true;
-                    }
-
-                    Utils.CardState mGolden = goldenCardState.Value;
-                    Utils.CardState mMaxState = maxCardState.Value;
-
-                    //佣兵镀金
-                    int dbid = GameUtils.TranslateCardIdToDbId(__instance.GetCardId());
-                    bool mercDiamond = false;
-                    bool isMerc = false;
-                    if (Utils.CheckInfo.IsMercenarySkin(__instance.GetCardId(), out Utils.MercenarySkin skin))
-                    {
-                        isMerc = true;
-                        if (dbid == skin.Diamond)
+                        //跳过酒馆随从
+                        if (GameMgr.Get().IsBattlegrounds())
                         {
-                            mercDiamond = true;
+                            if (!isBgsGoldenEnable.Value || __instance.IsMinion() || __instance.IsQuest())
+                                return true;
                         }
-                    }
 
-                    //屏蔽对手特效
-                    if (__instance.IsControlledByOpposingSidePlayer() && (!isOpponentGoldenCardShow.Value) && (!GameMgr.Get().IsBattlegrounds()))
-                    {
-                        __result = TAG_PREMIUM.NORMAL;
-                        if (isMerc)
+                        Utils.CardState mGolden = goldenCardState.Value;
+                        Utils.CardState mMaxState = maxCardState.Value;
+
+                        //佣兵镀金
+                        int dbid = GameUtils.TranslateCardIdToDbId(__instance.GetCardId());
+                        bool mercDiamond = false;
+                        bool isMerc = false;
+                        if (Utils.CheckInfo.IsMercenarySkin(__instance.GetCardId(), out Utils.MercenarySkin skin))
                         {
-                            __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.NORMAL);
-                            __instance.SetTag(GAME_TAG.HAS_DIAMOND_QUALITY, false);
-                        }
-                        return false;
-                    }
-
-
-                    //其他品质
-                    if (__instance.HasTag(GAME_TAG.HAS_DIAMOND_QUALITY) || __instance.HasTag(GAME_TAG.HAS_SIGNATURE_QUALITY) || mercDiamond)
-                    {
-                        if (__instance.HasTag(GAME_TAG.HAS_DIAMOND_QUALITY) || mercDiamond)
-                        {
-                            if (mMaxState == Utils.CardState.All || (mMaxState == Utils.CardState.OnlyMy && __instance.IsControlledByFriendlySidePlayer()))
+                            isMerc = true;
+                            if (dbid == skin.Diamond)
                             {
-                                if (mercDiamond)
+                                mercDiamond = true;
+                            }
+                        }
+
+                        //屏蔽对手特效
+                        if (__instance.IsControlledByOpposingSidePlayer() && (!isOpponentGoldenCardShow.Value) && (!GameMgr.Get().IsBattlegrounds()))
+                        {
+                            __result = TAG_PREMIUM.NORMAL;
+                            if (isMerc)
+                            {
+                                __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.NORMAL);
+                                __instance.SetTag(GAME_TAG.HAS_DIAMOND_QUALITY, false);
+                            }
+                            return false;
+                        }
+
+
+                        //其他品质
+                        if (__instance.HasTag(GAME_TAG.HAS_DIAMOND_QUALITY) || __instance.HasTag(GAME_TAG.HAS_SIGNATURE_QUALITY) || mercDiamond)
+                        {
+                            if (__instance.HasTag(GAME_TAG.HAS_DIAMOND_QUALITY) || mercDiamond)
+                            {
+                                if (mMaxState == Utils.CardState.All || (mMaxState == Utils.CardState.OnlyMy && __instance.IsControlledByFriendlySidePlayer()))
                                 {
-                                    __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.DIAMOND);
-                                    __instance.SetTag(GAME_TAG.HAS_DIAMOND_QUALITY, true);
+                                    if (mercDiamond)
+                                    {
+                                        __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.DIAMOND);
+                                        __instance.SetTag(GAME_TAG.HAS_DIAMOND_QUALITY, true);
+                                    }
+                                    __result = TAG_PREMIUM.DIAMOND;
+                                    return false;
                                 }
-                                __result = TAG_PREMIUM.DIAMOND;
-                                return false;
                             }
-                        }
 
-                        if (__instance.HasTag(GAME_TAG.HAS_SIGNATURE_QUALITY) && isSignatureCardStateEnable.Value)
-                        {
-                            if (mMaxState == Utils.CardState.All || (mMaxState == Utils.CardState.OnlyMy && __instance.IsControlledByFriendlySidePlayer()))
+                            if (__instance.HasTag(GAME_TAG.HAS_SIGNATURE_QUALITY) && isSignatureCardStateEnable.Value)
                             {
-                                __result = TAG_PREMIUM.SIGNATURE;
-                                __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.SIGNATURE);
+                                if (mMaxState == Utils.CardState.All || (mMaxState == Utils.CardState.OnlyMy && __instance.IsControlledByFriendlySidePlayer()))
+                                {
+                                    __result = TAG_PREMIUM.SIGNATURE;
+                                    __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.SIGNATURE);
+                                    return false;
+                                }
+                            }
+
+                            if ((mMaxState == Utils.CardState.Disabled) && (mGolden == Utils.CardState.Disabled))
+                            {
+                                __result = TAG_PREMIUM.NORMAL;
+                                if (isMerc)
+                                {
+                                    __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.NORMAL);
+                                    __instance.SetTag(GAME_TAG.HAS_DIAMOND_QUALITY, false);
+                                }
                                 return false;
                             }
                         }
-                            
-                        if ((mMaxState == Utils.CardState.Disabled) && (mGolden == Utils.CardState.Disabled))
+                        //金卡特效
+                        if (mGolden == Utils.CardState.All || (mGolden == Utils.CardState.OnlyMy && __instance.IsControlledByFriendlySidePlayer()))
+                        {
+                            __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.GOLDEN);
+                            __result = TAG_PREMIUM.GOLDEN;
+                            return false;
+                        }
+                        //禁用特效
+                        if (mGolden == Utils.CardState.Disabled)
                         {
                             __result = TAG_PREMIUM.NORMAL;
                             if (isMerc)
@@ -1519,24 +1540,11 @@ namespace HsMod
                             return false;
                         }
                     }
-                    //金卡特效
-                    if (mGolden == Utils.CardState.All || (mGolden == Utils.CardState.OnlyMy && __instance.IsControlledByFriendlySidePlayer()))
-                    {
-                        __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.GOLDEN);
-                        __result = TAG_PREMIUM.GOLDEN;
-                        return false;
-                    }
-                    //禁用特效
-                    if (mGolden == Utils.CardState.Disabled)
-                    {
-                        __result = TAG_PREMIUM.NORMAL;
-                        if (isMerc)
-                        {
-                            __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.NORMAL);
-                            __instance.SetTag(GAME_TAG.HAS_DIAMOND_QUALITY, false);
-                        }
-                        return false;
-                    }
+                }
+                catch (Exception ex)
+                {
+                    Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex);
+                    Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex.StackTrace);
                 }
                 return true;
             }
@@ -2106,8 +2114,9 @@ namespace HsMod
                     cardId = GameUtils.TranslateDbIdToCardId(skinCoin.Value);
                 }
             LoadCardEnd:
-                return;
                 __instance?.SetRealTimePremium(__instance.GetPremiumType());
+
+                //return;
             }
 
             //鲍勃替换语音
