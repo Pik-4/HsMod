@@ -57,6 +57,7 @@ namespace HsMod
         public static ConfigEntry<bool> isBgsGoldenEnable;
 
         public static ConfigEntry<bool> isOpponentGoldenCardShow;
+        public static ConfigEntry<bool> isSignatureCardStateEnable;
         public static ConfigEntry<Utils.CardState> goldenCardState;
         public static ConfigEntry<Utils.CardState> maxCardState;
 
@@ -193,8 +194,9 @@ namespace HsMod
             isThinkEmotesEnable = config.Bind("炉石", "思考表情", true, "是否允许显示思考表情");
             receiveEnemyEmoteLimit = config.Bind("炉石", "表情数量", -1, new ConfigDescription("游戏内表情数量接收限制，超过自动屏蔽对手表情，0时开局屏蔽，-1不限制（有小bug）", new AcceptableValueRange<int>(-1, 100)));
             isOpponentGoldenCardShow = config.Bind("炉石", "对手卡牌特效", true, "是否显示对手卡牌特效(覆盖ALL配置)");
+            isSignatureCardStateEnable = config.Bind("炉石", "异画特效", true, "是否在卡牌最高特效中显示异画（仅影响卡牌最高特效）");
             goldenCardState = config.Bind("炉石", "金卡特效", Utils.CardState.Default, "强制金卡特效");
-            maxCardState = config.Bind("炉石", "卡牌最高特效", Utils.CardState.Default, "强制卡牌最高特效特效（如果有钻石等）");
+            maxCardState = config.Bind("炉石", "卡牌最高特效", Utils.CardState.Default, "强制卡牌最高特效特效（目前优先级：钻石、异画、金卡、普通）");
 
             isAutoRecvMercenaryRewardEnable = config.Bind("佣兵", "自动领奖", false, "是否自动领取佣兵佣兵奖励（屏蔽宝箱）");
             isMercenaryBattleZoom = config.Bind("佣兵", "允许缩放", true, "（可能存在BUG）是否允许佣兵战斗时缩放画面");

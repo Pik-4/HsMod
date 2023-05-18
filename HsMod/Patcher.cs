@@ -1498,7 +1498,7 @@ namespace HsMod
                             }
                         }
 
-                        if (__instance.HasTag(GAME_TAG.HAS_SIGNATURE_QUALITY))
+                        if (__instance.HasTag(GAME_TAG.HAS_SIGNATURE_QUALITY) && isSignatureCardStateEnable.Value)
                         {
                             if (mMaxState == Utils.CardState.All || (mMaxState == Utils.CardState.OnlyMy && __instance.IsControlledByFriendlySidePlayer()))
                             {
@@ -1507,7 +1507,7 @@ namespace HsMod
                                 return false;
                             }
                         }
-
+                            
                         if ((mMaxState == Utils.CardState.Disabled) && (mGolden == Utils.CardState.Disabled))
                         {
                             __result = TAG_PREMIUM.NORMAL;
@@ -1540,33 +1540,6 @@ namespace HsMod
                 }
                 return true;
             }
-            // 强制加载金卡动画
-            private static readonly MethodInfo loadGolden = typeof(CardTextureLoader).GetMethod("LoadGolden", BindingFlags.Static | BindingFlags.NonPublic);
-            [HarmonyPostfix, HarmonyPatch(typeof(CardTextureLoader), nameof(CardTextureLoader.Load))]
-            public static void PatchCardTextureLoaderLoad(ref CardDef cardDef, CardPortraitQuality quality, bool prohibitRecursion, ref bool __result)
-            {
-                if ((goldenCardState.Value != Utils.CardState.Disabled)
-                    && (goldenCardState.Value != Utils.CardState.Default)
-                    && (!((SceneMgr.Get().GetMode() == SceneMgr.Mode.COLLECTIONMANAGER) || (SceneMgr.Get().GetMode() == SceneMgr.Mode.PACKOPENING))))
-                {
-                    loadGolden.Invoke(null, new object[] { cardDef });   // TODO: FIXME: 检查加载条件，检查是否存在内存泄露
-                    __result = true;
-                }
-            }
-            //[HarmonyPrefix, HarmonyPatch(typeof(Entity), "SetRealTimePremium")]
-            //public static void PatchSetRealTimePremium(ref TAG_PREMIUM premium, Entity __instance)
-            //{
-            //    if (__instance != null)
-            //    {
-            //        premium = __instance.GetPremiumType();
-            //        //___m_realTimePremium = __instance.GetPremiumType();
-            //    }
-            //}
-            //[HarmonyPrefix, HarmonyPatch(typeof(CardPortraitQuality), MethodType.Constructor, new Type[] {typeof(int),typeof(TAG_PREMIUM)})]
-            //public static void PatchCardPortraitQuality(ref int quality, ref TAG_PREMIUM premiumType)
-            //{
-            //    premiumType = TAG_PREMIUM.GOLDEN;
-            //}
 
 
             //设置下个对手、用于获取战网标签
@@ -1960,14 +1933,14 @@ namespace HsMod
                     if ((goldenCardState.Value == Utils.CardState.Disabled) && (maxCardState.Value == Utils.CardState.Disabled))
                     {
                         cardId = GameUtils.TranslateDbIdToCardId(skin.Default);
-                        return;
+                        goto LoadCardEnd;
                     }
                     if ((maxCardState.Value == Utils.CardState.Disabled) || (mercenaryDiamondCardState.Value == Utils.CardState.Disabled))
                     {
                         if (GameUtils.TranslateCardIdToDbId(cardId) == skin.Diamond)
                         {
                             cardId = GameUtils.TranslateDbIdToCardId(skin.Default);
-                            return;
+                            goto LoadCardEnd;
                         }
                     }
                     if (!isOpponentGoldenCardShow.Value)
@@ -1975,7 +1948,7 @@ namespace HsMod
                         if (__instance.GetCard().GetControllerSide() == global::Player.Side.OPPOSING)
                         {
                             cardId = GameUtils.TranslateDbIdToCardId(skin.Default);
-                            return;
+                            goto LoadCardEnd;
                         }
                     }
                     if ((maxCardState.Value == Utils.CardState.All) || (mercenaryDiamondCardState.Value == Utils.CardState.All))
@@ -1983,7 +1956,7 @@ namespace HsMod
                         if (skin.hasDiamond)
                         {
                             cardId = GameUtils.TranslateDbIdToCardId(skin.Diamond);
-                            return;
+                            goto LoadCardEnd;
                         }
                     }
                     if ((maxCardState.Value == Utils.CardState.OnlyMy) || (mercenaryDiamondCardState.Value == Utils.CardState.OnlyMy))
@@ -1991,7 +1964,7 @@ namespace HsMod
                         if (skin.hasDiamond && (__instance.GetCard().GetControllerSide() == global::Player.Side.FRIENDLY))
                         {
                             cardId = GameUtils.TranslateDbIdToCardId(skin.Diamond);
-                            return;
+                            goto LoadCardEnd;
                         }
                     }
                     if ((randomMercenarySkinEnable.Value == Utils.CardState.OnlyMy) || (randomMercenarySkinEnable.Value == Utils.CardState.All))
@@ -2005,11 +1978,11 @@ namespace HsMod
                             if (__instance.GetCard().GetControllerSide() == global::Player.Side.FRIENDLY)
                             {
                                 cardId = GameUtils.TranslateDbIdToCardId(dbid);
-                                return;
+                                goto LoadCardEnd;
                             }
                         }
                         cardId = GameUtils.TranslateDbIdToCardId(dbid);
-                        return;
+                        goto LoadCardEnd;
                     }
                 }
                 //string rawCardId = cardId;
@@ -2023,7 +1996,7 @@ namespace HsMod
                             if (GameUtils.ORDERED_HERO_CLASSES.Contains(tagClass))
                             {
                                 cardId = GameUtils.GetHeroPowerCardIdFromHero(Enumerable.FirstOrDefault(Enumerable.Where(GameDbf.CardHero.GetRecords().OrderBy(x => x.CardId).ToList(), (CardHeroDbfRecord x) => DefLoader.Get().GetEntityDef(x.CardId).GetClass() == tagClass)).CardId);
-                                return;
+                                goto LoadCardEnd;
                             }
                         }
                         catch (Exception ex)
@@ -2048,7 +2021,7 @@ namespace HsMod
                         Utils.UpdateHeroPowerMapping();
                         HeroesPowerMapping.TryGetValue(cardId, out string res);
                         cardId = (res != null && res != "" && res != string.Empty) ? res : cardId;
-                        return;
+                        goto LoadCardEnd;
                     }
                 }
 
@@ -2090,7 +2063,7 @@ namespace HsMod
                                 if (GameUtils.ORDERED_HERO_CLASSES.Contains(tagClass))
                                 {
                                     cardId = GameUtils.TranslateDbIdToCardId(Enumerable.FirstOrDefault(Enumerable.Where(GameDbf.CardHero.GetRecords().OrderBy(x => x.CardId).ToList(), (CardHeroDbfRecord x) => DefLoader.Get().GetEntityDef(x.CardId).GetClass() == tagClass)).CardId);
-                                    return;
+                                    goto LoadCardEnd;
                                 }
                             }
                             catch (Exception ex)
@@ -2132,6 +2105,8 @@ namespace HsMod
                     //UpdateCardsMappingReal(cardId, Utils.SkinType.COIN);
                     cardId = GameUtils.TranslateDbIdToCardId(skinCoin.Value);
                 }
+            LoadCardEnd:
+                __instance?.SetRealTimePremium(__instance.GetPremiumType());
             }
 
             //鲍勃替换语音
