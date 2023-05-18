@@ -2106,6 +2106,7 @@ namespace HsMod
                     cardId = GameUtils.TranslateDbIdToCardId(skinCoin.Value);
                 }
             LoadCardEnd:
+                return;
                 __instance?.SetRealTimePremium(__instance.GetPremiumType());
             }
 
