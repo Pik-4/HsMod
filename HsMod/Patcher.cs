@@ -1917,7 +1917,7 @@ namespace HsMod
             [HarmonyTargetMethod]
             private static MethodInfo PublicLogArchiveLogPath()
             {
-                return AccessTools.TypeByName("LogArchive").GetMethod("get_LogPath"); ;
+                return AccessTools.TypeByName("Log").GetMethod("get_LogsPath"); ;
             }
 
             [HarmonyPostfix]
