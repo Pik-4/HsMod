@@ -43,6 +43,7 @@ namespace HsMod
         //public static ConfigEntry<Utils.QuickMode> quickModeState;
         public static ConfigEntry<bool> isQuickModeEnable;
         public static ConfigEntry<bool> isCardTrackerEnable;
+        public static ConfigEntry<bool> isCardRevealedEnable;
         public static ConfigEntry<bool> isMoveEnemyCardsEnable;
         public static ConfigEntry<bool> isAutoReportEnable;
         public static ConfigEntry<bool> isFiresideGatheringEnable;
@@ -188,7 +189,8 @@ namespace HsMod
             isQuickModeEnable = config.Bind("炉石", "快速战斗", false, "是否启用酒馆或佣兵AI快速战斗模式");
             isFullnameShow = config.Bind("炉石", "显示全名", false, "是否显示对手战网全名；如果启用该选项，还会允许添加当前对手(启动快捷键时，也允许添加对手)。");
             isOpponentRankInGameShow = config.Bind("炉石", "显示天梯等级", false, "是否在传说前显示对手天梯等级");
-            isCardTrackerEnable = config.Bind("炉石", "卡牌追踪", false, "标记已知的卡牌（和记牌器五五开）");
+            isCardTrackerEnable = config.Bind("炉石", "卡牌追踪", false, "推测对手卡牌，并给出提示（例如：抉择等，有概率识别错误）");
+            isCardRevealedEnable = config.Bind("炉石", "卡牌揭示", false, "以明牌方式展示已知的卡牌（有概率导致炉石自动断线重连）");
             isSkipHeroIntro = config.Bind("炉石", "跳过英雄介绍", false, "是否跳过英雄介绍(ShouldSkipMulligan)");
             isExtendedBMEnable = config.Bind("炉石", "表情无冷却", false, "是否允许无限制表情(延迟最低1.5s)");
             isThinkEmotesEnable = config.Bind("炉石", "思考表情", true, "是否允许显示思考表情");

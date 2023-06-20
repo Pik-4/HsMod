@@ -1775,11 +1775,11 @@ namespace HsMod
             [HarmonyPatch(typeof(Player), "IsRevealed")]
             public static bool PatchPlayerIsRevealed(ref bool __result)
             {
-                if (isCardTrackerEnable.Value)
-                {
-                    __result = true;
-                    return false;
-                }
+                //if (isCardTrackerEnable.Value)
+                //{
+                //    __result = true;
+                //    return false;
+                //}
                 return true;
             }
             // 选择识别（对手抉择提示）
@@ -1791,17 +1791,21 @@ namespace HsMod
                 {
                     if (isCardTrackerEnable.Value && !GameMgr.Get().IsBattlegrounds() && !GameMgr.Get().IsMercenaries())
                     {
+                        if (powerList == null) return;
                         List<string> hintList = new List<string>();
-                        for (int i = 0; i < powerList.Count; i++)
+                        int i = 0;
+                        foreach (Network.PowerHistory pl in powerList)
                         {
-                            Network.PowerHistory powerHistory = powerList[i];
+                            i++;
+                            if (pl == null) continue;
+                            Network.PowerHistory powerHistory = pl;
                             if (powerHistory.Type == Network.PowerType.SHOW_ENTITY)
                             {
                                 Network.Entity netEntity = ((Network.HistShowEntity)powerHistory).Entity;
                                 Entity entity = __instance?.GetEntity(netEntity.ID);
                                 if (entity != null && entity.GetControllerSide() == global::Player.Side.OPPOSING && entity.GetZone() == TAG_ZONE.SETASIDE && entity.GetCardType() != TAG_CARDTYPE.ENCHANTMENT)
                                 {
-                                    EntityDef entityDef = DefLoader.Get().GetEntityDef(netEntity.CardID);
+                                    EntityDef entityDef = DefLoader.Get()?.GetEntityDef(netEntity.CardID);
                                     if (entityDef != null && entityDef.GetCardType() != TAG_CARDTYPE.ENCHANTMENT && !entityDef.IsQuestline())
                                     {
                                         string hintText = entityDef.GetName();
@@ -1816,12 +1820,14 @@ namespace HsMod
                             if (powerHistory.Type == Network.PowerType.FULL_ENTITY)
                             {
                                 Network.Entity entity3 = ((Network.HistFullEntity)powerHistory).Entity;
-                                for (int j = 0; j < entity3.Tags.Count; j++)
+                                int j = 0;
+                                foreach (Network.Entity.Tag tg in entity3.Tags)
                                 {
-                                    if (entity3.Tags[j].Name == 49 && entity3.Tags[j].Value == 4)
+                                    j++;
+                                    if (tg.Name == 49 && tg.Value == 4)
                                     {
                                         EntityDef entityDef2 = DefLoader.Get().GetEntityDef(entity3.CardID);
-                                        hintList.Add(entityDef2.GetName());
+                                        hintList.Add(entityDef2?.GetName());
                                     }
                                 }
                             }
@@ -1833,11 +1839,11 @@ namespace HsMod
                         }
                     }
                 }
-                catch (Exception e)
-                {
-                    Utils.MyLogger(BepInEx.Logging.LogLevel.Error, e);
+                catch (Exception ex) {
+                    Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex);
                 }
             }
+
             // 变装大师识别，40牌识别
             [HarmonyPrefix]
             [HarmonyPatch(typeof(MulliganManager), "SetMulliganBannerText", new Type[] { typeof(string), typeof(string) })]
