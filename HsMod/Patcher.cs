@@ -1775,11 +1775,11 @@ namespace HsMod
             [HarmonyPatch(typeof(Player), "IsRevealed")]
             public static bool PatchPlayerIsRevealed(ref bool __result)
             {
-                //if (isCardTrackerEnable.Value)
-                //{
-                //    __result = true;
-                //    return false;
-                //}
+                if (isCardRevealedEnable.Value)
+                {
+                    __result = true;
+                    return false;
+                }
                 return true;
             }
             // 选择识别（对手抉择提示）
