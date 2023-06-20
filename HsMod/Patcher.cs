@@ -2132,7 +2132,7 @@ namespace HsMod
             }
 
             //判断存在异画是否存在，缓解异画问题 Signature frame for RLK_Prologue_RLK_653 not found.
-            private static readonly MethodInfo getSignatureActor = typeof(ActorNames).GetMethod("GetSignatureActor", BindingFlags.Instance | BindingFlags.NonPublic);
+            //private static readonly MethodInfo getSignatureActor = typeof(ActorNames).GetMethod("GetSignatureActor", BindingFlags.Instance | BindingFlags.NonPublic);
             [HarmonyPostfix]
             [HarmonyPatch(typeof(ActorNames), "GetNameWithPremiumType")]
             public static void PatchGetNameWithPremiumType(ActorNames __instance, ref string __result,
