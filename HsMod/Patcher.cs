@@ -1935,6 +1935,7 @@ namespace HsMod
             [HarmonyPatch(typeof(Entity), "LoadCard")]
             public static void PatchLoadCard(Entity __instance, ref string cardId, ref Entity.LoadCardData data)
             {
+                string rawCardID = cardId;
                 if (cardId != null
                     && Utils.CheckInfo.IsMercenarySkin(cardId, out Utils.MercenarySkin skin))
                 {
@@ -2113,11 +2114,63 @@ namespace HsMod
                     //UpdateCardsMappingReal(cardId, Utils.SkinType.COIN);
                     cardId = GameUtils.TranslateDbIdToCardId(skinCoin.Value);
                 }
-            LoadCardEnd:
-                __instance?.SetRealTimePremium(__instance.GetPremiumType());
+            LoadCardEnd:    // todo: check Signature
+                try
+                {
+                    __instance?.SetCardId(cardId);
+                    __instance?.SetRealTimePremium(__instance.GetPremiumType());
+                }
+                catch (Exception ex)
+                {
+                    Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex);
+                    cardId = rawCardID;
+                    __instance?.SetCardId(rawCardID);
+                    __instance?.SetRealTimePremium(__instance.GetPremiumType());
 
+                }
                 //return;
             }
+
+            //判断存在异画是否存在，缓解异画问题 Signature frame for RLK_Prologue_RLK_653 not found.
+            private static readonly MethodInfo getSignatureActor = typeof(ActorNames).GetMethod("GetSignatureActor", BindingFlags.Instance | BindingFlags.NonPublic);
+            [HarmonyPostfix]
+            [HarmonyPatch(typeof(ActorNames), "GetNameWithPremiumType")]
+            public static void PatchGetNameWithPremiumType(ActorNames __instance, ref string __result,
+                                                            ref ActorNames.ACTOR_ASSET actorName, ref TAG_PREMIUM premiumType, ref string cardId)
+            {
+                if (__result != null)
+                {
+                    return;
+                }
+                string text = null;
+                Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"Function return null\nGetNameWithPremiumType(ActorNames.ACTOR_ASSET {actorName}, TAG_PREMIUM {premiumType}, string {cardId});");
+                if (String.IsNullOrEmpty(__result))
+                {
+                    //ActorNames.s_diamondActorAssets.TryGetValue(actorName, out text);
+                    //if (!String.IsNullOrEmpty(text))
+                    //{
+                    //    goto PatchGetNameWithPremiumTypeEnd;
+                    //}
+                    //ActorNames.s_actorAssets.TryGetValue(actorName, out text);
+                    //if (!String.IsNullOrEmpty(text))
+                    //{
+                    //    goto PatchGetNameWithPremiumTypeEnd;
+                    //}
+                    //text = (string)getSignatureActor?.Invoke(__instance, new object[] { cardId, actorName });
+                    //if (!String.IsNullOrEmpty(text))
+                    //{
+                    //    goto PatchGetNameWithPremiumTypeEnd;
+                    //}
+                    ActorNames.s_premiumActorAssets.TryGetValue(actorName, out text);
+                    if (!String.IsNullOrEmpty(text))
+                    {
+                        goto PatchGetNameWithPremiumTypeEnd;
+                    }
+                }
+            PatchGetNameWithPremiumTypeEnd:
+                __result = text;
+            }
+
 
             //鲍勃替换语音
             [HarmonyPrefix]
