@@ -1,5 +1,6 @@
 ﻿using BepInEx;
 using System;
+using System.ComponentModel;
 using System.Linq;
 using UnityEngine;
 using static HsMod.PluginConfig;
@@ -151,6 +152,22 @@ namespace HsMod
                 UIStatus.Get().AddInfo($"[{allPatchNum}]插件状态：" + (isPluginEnable.Value ? "运行" : "停止"));
                 InactivePlayerKicker.Get().SetShouldCheckForInactivity(isIdleKickEnable.Value);
                 WebServer.Restart();
+
+                //foreach (var ety in ZoneMgr.Get()?.FindZoneOfType<ZonePlay>(global::Player.Side.FRIENDLY).GetCards())
+                //{
+                //    Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, ety.ToString());
+                //    ety.RefreshActor();
+                //    //ety.ForceLoadHandActor();
+                //    ety.GetActor().SetCard(ety);
+                //    ety.GetActor().SetCardDefFromEntity(ety.GetEntity());
+                //    ety.GetActor().SetEntity(ety.GetEntity());
+                //    ety.GetActor().UpdateAllComponents();
+                //    //ety.UpdateActorComponents();
+                //    //ety.RefreshActor();
+                //    //ety.HideCard();
+                //    ety.ShowCard();
+                //    ety.RefreshActor();
+                //}
 
             }
 

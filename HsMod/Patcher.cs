@@ -2137,6 +2137,18 @@ namespace HsMod
                 //return;
             }
 
+            //刷新卡牌画面，解决进化、退化异常
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(Card), "RefreshActor")]
+            public static void RefreshActor(Card __instance)
+            {
+                __instance?.GetActor()?.SetCard(__instance);
+                __instance?.GetActor()?.SetCardDefFromEntity(__instance.GetEntity());
+                __instance?.GetActor()?.SetEntity(__instance.GetEntity());
+                __instance?.GetActor()?.UpdateAllComponents();
+            }
+
+
             //判断存在异画是否存在，缓解异画问题 Signature frame for RLK_Prologue_RLK_653 not found.
             //private static readonly MethodInfo getSignatureActor = typeof(ActorNames).GetMethod("GetSignatureActor", BindingFlags.Instance | BindingFlags.NonPublic);
             [HarmonyPostfix]
