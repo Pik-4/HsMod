@@ -1839,7 +1839,8 @@ namespace HsMod
                         }
                     }
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex);
                 }
             }

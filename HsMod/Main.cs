@@ -1,6 +1,5 @@
 ﻿using BepInEx;
 using System;
-using System.ComponentModel;
 using System.Linq;
 using UnityEngine;
 using static HsMod.PluginConfig;
@@ -153,21 +152,21 @@ namespace HsMod
                 InactivePlayerKicker.Get().SetShouldCheckForInactivity(isIdleKickEnable.Value);
                 WebServer.Restart();
 
-                //foreach (var ety in ZoneMgr.Get()?.FindZoneOfType<ZonePlay>(global::Player.Side.FRIENDLY).GetCards())
-                //{
-                //    Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, ety.ToString());
-                //    ety.RefreshActor();
-                //    //ety.ForceLoadHandActor();
-                //    ety.GetActor().SetCard(ety);
-                //    ety.GetActor().SetCardDefFromEntity(ety.GetEntity());
-                //    ety.GetActor().SetEntity(ety.GetEntity());
-                //    ety.GetActor().UpdateAllComponents();
-                //    //ety.UpdateActorComponents();
-                //    //ety.RefreshActor();
-                //    //ety.HideCard();
-                //    ety.ShowCard();
-                //    ety.RefreshActor();
-                //}
+                foreach (Player.Side playerSide in (Player.Side[])Enum.GetValues(typeof(Player.Side)))
+                {
+                    foreach (Card card in ZoneMgr.Get()?.FindZoneOfType<ZonePlay>(global::Player.Side.FRIENDLY)?.GetCards())
+                    {
+                        if (card != null)
+                        {
+                            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, card.ToString());
+                            //card?.GetActor()?.SetCard(card);
+                            //card?.GetActor()?.SetCardDefFromEntity(card.GetEntity());
+                            //card?.GetActor()?.SetEntity(card.GetEntity());
+                            //card?.GetActor()?.UpdateAllComponents();
+                            card?.RefreshActor();
+                        }
+                    }
+                }
 
             }
 
