@@ -1716,6 +1716,8 @@ namespace HsMod
                 // 自动举报 + 对局记录
                 try
                 {
+                    LoadSkinsConfigFromFile(); // 更新皮肤映射
+
                     if (!GameMgr.Get().IsSpectator() && (Utils.CacheLastOpponentAccountID != null) && (!String.IsNullOrEmpty(Utils.CacheLastOpponentFullName)))
                     {
                         if (isAutoReportEnable.Value)
@@ -2143,10 +2145,20 @@ namespace HsMod
             [HarmonyPatch(typeof(Card), "RefreshActor")]
             public static void RefreshActor(Card __instance)
             {
-                __instance?.GetActor()?.SetCard(__instance);
-                __instance?.GetActor()?.SetCardDefFromEntity(__instance.GetEntity());
-                __instance?.GetActor()?.SetEntity(__instance.GetEntity());
-                __instance?.GetActor()?.UpdateAllComponents();
+                try
+                {
+                    if (__instance?.GetEntity()?.GetZone() == TAG_ZONE.PLAY)
+                    {
+                        __instance?.GetActor()?.SetCard(__instance);
+                        __instance?.GetActor()?.SetCardDefFromEntity(__instance.GetEntity());
+                        __instance?.GetActor()?.SetEntity(__instance.GetEntity());
+                        __instance?.GetActor()?.UpdateAllComponents();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex);
+                }
             }
 
 
