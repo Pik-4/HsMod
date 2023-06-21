@@ -1716,10 +1716,11 @@ namespace HsMod
                 // 自动举报 + 对局记录
                 try
                 {
-                    LoadSkinsConfigFromFile(); // 更新皮肤映射
-
                     if (!GameMgr.Get().IsSpectator() && (Utils.CacheLastOpponentAccountID != null) && (!String.IsNullOrEmpty(Utils.CacheLastOpponentFullName)))
                     {
+                        LoadSkinsConfigFromFile(); // 更新皮肤映射
+                        Utils.CacheRawHeroCardId = null;
+
                         if (isAutoReportEnable.Value)
                         {
                             Utils.TryReportOpponent();
@@ -2092,6 +2093,7 @@ namespace HsMod
 
                         if (__instance.GetCard().GetControllerSide() == Player.Side.FRIENDLY)
                         {
+                            Utils.CacheRawHeroCardId = rawCardID;
                             //UpdateCardsMappingReal(cardId, Utils.SkinType.HERO);
                             if (skinHero.Value != -1)
                                 cardId = GameUtils.TranslateDbIdToCardId(skinHero.Value);

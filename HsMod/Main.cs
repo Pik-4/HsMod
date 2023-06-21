@@ -151,23 +151,6 @@ namespace HsMod
                 UIStatus.Get().AddInfo($"[{allPatchNum}]插件状态：" + (isPluginEnable.Value ? "运行" : "停止"));
                 InactivePlayerKicker.Get().SetShouldCheckForInactivity(isIdleKickEnable.Value);
                 WebServer.Restart();
-
-                foreach (Player.Side playerSide in (Player.Side[])Enum.GetValues(typeof(Player.Side)))
-                {
-                    foreach (Card card in ZoneMgr.Get()?.FindZoneOfType<ZonePlay>(global::Player.Side.FRIENDLY)?.GetCards())
-                    {
-                        if (card != null)
-                        {
-                            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, card.ToString());
-                            //card?.GetActor()?.SetCard(card);
-                            //card?.GetActor()?.SetCardDefFromEntity(card.GetEntity());
-                            //card?.GetActor()?.SetEntity(card.GetEntity());
-                            //card?.GetActor()?.UpdateAllComponents();
-                            card?.RefreshActor();
-                        }
-                    }
-                }
-
             }
 
             if (!isPluginEnable.Value) return;

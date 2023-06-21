@@ -657,6 +657,7 @@ namespace HsMod
         public static List<int> CacheBgsFinisher = new List<int>();
         public static Dictionary<int, Assets.CardHero.HeroType> CacheHeroes = new Dictionary<int, Assets.CardHero.HeroType>();
         public static string CacheLastOpponentFullName;
+        public static string CacheRawHeroCardId;
         public static Blizzard.GameService.SDK.Client.Integration.BnetAccountId CacheLastOpponentAccountID;
         public static List<MercenarySkin> CacheMercenarySkin = new List<MercenarySkin>();
 
