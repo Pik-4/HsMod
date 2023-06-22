@@ -779,7 +779,7 @@ namespace HsMod
             {
                 if (isShowRetireForever.Value)
                 {
-                    ___m_retireButton.SetActive(true);
+                    ___m_retireButton?.SetActive(true);
                 }
             }
 
@@ -2149,7 +2149,8 @@ namespace HsMod
             {
                 try
                 {
-                    if (__instance?.GetEntity()?.GetZone() == TAG_ZONE.PLAY)
+                    // Todo: 添加更细致化的判断条件。目前，手牌有变色龙时，游戏会轻微卡顿。
+                    if ((__instance?.GetEntity()?.GetZone() == TAG_ZONE.PLAY) || (__instance?.GetEntity()?.GetZone() == TAG_ZONE.HAND))
                     {
                         __instance?.GetActor()?.SetCard(__instance);
                         __instance?.GetActor()?.SetCardDefFromEntity(__instance.GetEntity());
