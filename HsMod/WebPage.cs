@@ -312,7 +312,7 @@ text-decoration: none;
                 MedalInfoTranslator localPlayerMedalInfo = RankMgr.Get().GetLocalPlayerMedalInfo();
                 TranslatedMedalInfo currentMedal = null;
                 string rankMode = "";
-                for (int i = 1; i <= 3; i++)
+                for (int i = 1; i <= 4; i++)
                 {
                     switch (i)
                     {
@@ -327,6 +327,10 @@ text-decoration: none;
                         case 3:
                             currentMedal = localPlayerMedalInfo.GetCurrentMedal(PegasusShared.FormatType.FT_WILD);
                             rankMode = "狂野";
+                            break;
+                        case 4:
+                            currentMedal = localPlayerMedalInfo.GetCurrentMedal(PegasusShared.FormatType.FT_TWIST);
+                            rankMode = "幻变";
                             break;
                     }
                     string rankName = Utils.RankIdxToString(currentMedal.starLevel);
