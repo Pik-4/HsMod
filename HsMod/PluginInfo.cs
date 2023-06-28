@@ -5,6 +5,6 @@
         public const string PLUGIN_GUID = "HsMod";
         public const string PLUGIN_NAME = "HsMod";
         public const string PLUGIN_AUTHOR = "Pik_4";
-        public const string PLUGIN_VERSION = "3.2.2.1";
+        public const string PLUGIN_VERSION = "3.3.0.0";
     }
 }
