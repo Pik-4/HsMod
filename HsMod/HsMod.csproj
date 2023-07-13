@@ -57,9 +57,6 @@
     <Reference Include="blizzard.bgssdk">
       <HintPath>LibHearthstone\blizzard.bgssdk.dll</HintPath>
     </Reference>
-    <Reference Include="Blizzard.Commerce">
-      <HintPath>LibHearthstone\Blizzard.Commerce.dll</HintPath>
-    </Reference>
     <Reference Include="Blizzard.T5.AppsFlyer">
       <HintPath>LibHearthstone\Blizzard.T5.AppsFlyer.dll</HintPath>
     </Reference>
@@ -246,10 +243,7 @@
       <HintPath>LibUnityMono\System.Xml.Linq.dll</HintPath>
     </Reference>
     <Reference Include="UniTask">
-      <HintPath>LibHearthstone\UniTask.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.ScriptableBuildPipeline">
-      <HintPath>LibHearthstone\Unity.ScriptableBuildPipeline.dll</HintPath>
+      <HintPath>LibUnityMono\UniTask.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
       <HintPath>LibHearthstone\Unity.Timeline.dll</HintPath>
@@ -271,9 +265,6 @@
     </Reference>
     <Reference Include="UnityEngine.AnimationModule">
       <HintPath>LibUnityMono\UnityEngine.AnimationModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.ARModule">
-      <HintPath>LibUnityMono\UnityEngine.ARModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
       <HintPath>LibUnityMono\UnityEngine.AssetBundleModule.dll</HintPath>
@@ -371,8 +362,9 @@
     <Reference Include="UnityEngine.TerrainPhysicsModule">
       <HintPath>LibUnityMono\UnityEngine.TerrainPhysicsModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.TextCoreModule">
-      <HintPath>LibUnityMono\UnityEngine.TextCoreModule.dll</HintPath>
+    <Reference Include="UnityEngine.TextCoreTextEngineModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>LibUnityMono\UnityEngine.TextCoreTextEngineModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
       <HintPath>LibUnityMono\UnityEngine.TextRenderingModule.dll</HintPath>
