@@ -95,6 +95,7 @@
    https://us.battle.net/login/en/?app=wtcg
    https://tw.battle.net/login/zh/?app=wtcg
    https://kr.battle.net/login/zh/?app=wtcg
+   https://eu.battle.net/login/zh/?app=wtcg
    ...
    ```
 
