@@ -1114,7 +1114,7 @@ namespace HsMod
                     newInstructions.Insert(index++, new CodeInstruction(OpCodes.Div));
                     newInstructions.Insert(index++, new CodeInstruction(OpCodes.Ldloc_1));
                     newInstructions.Insert(index++, new CodeInstruction(OpCodes.Brtrue_S, l3));
-                    newInstructions.Insert(index, new CodeInstruction(OpCodes.Ldc_R4, 0f));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Ldc_R4, 0f));
                     newInstructions.Insert(index++, new CodeInstruction(OpCodes.Br_S, l4));
                     newInstructions.Insert(index, new CodeInstruction(OpCodes.Ldc_R4, 1f));
                     newInstructions[index++].labels.Add(l3);
