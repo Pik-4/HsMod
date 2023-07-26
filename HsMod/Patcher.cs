@@ -1082,45 +1082,53 @@ namespace HsMod
             })]
             public static IEnumerable<CodeInstruction> PatchZoneHandGetCardPosition(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
             {
-                List<CodeInstruction> list = new List<CodeInstruction>(instructions);
-                int num = list.FindLastIndex((CodeInstruction x) => x.opcode == OpCodes.Callvirt && (x.operand as MethodInfo).Name == "IsRevealed");
-                if (num > 0)
+                List<CodeInstruction> newInstructions = new List<CodeInstruction>(instructions);
+                int index = newInstructions.FindLastIndex(x => x.opcode == OpCodes.Callvirt && (x.operand as MethodInfo).Name == "IsRevealed");
+                if (index > 0)
                 {
-                    num++;
-                    object operand = list[num++].operand;
-                    Label label = generator.DefineLabel();
-                    list[num].labels.Add(label);
-                    list.Insert(num++, new CodeInstruction(OpCodes.Call, new Func<ConfigValue>(ConfigValue.Get).Method));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Callvirt, typeof(ConfigValue).GetProperty("IsMoveEnemyCardsEnableValue", BindingFlags.Instance | BindingFlags.Public).GetGetMethod()));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Brfalse_S, label));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Ldarg_0));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Ldflda, typeof(ZoneHand).GetField("centerOfHand", BindingFlags.Instance | BindingFlags.NonPublic)));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Ldfld, typeof(Vector3).GetField("z", BindingFlags.Instance | BindingFlags.Public)));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Ldarg_1));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Ldloc_3));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Ldc_I4_2));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Div));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Sub));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Call, new Func<int, int>(Mathf.Abs).Method));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Conv_R4));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Ldc_R4, 2f));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Call, new Func<float, float, float>(Mathf.Pow).Method));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Ldc_I4_4));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Ldloc_3));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Mul));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Conv_R4));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Div));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Ldloc_2));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Mul));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Sub));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Ldloc_S, (byte)6));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Sub));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Ldc_R4, 0.6f));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Sub));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Stloc_S, (byte)9));
-                    list.Insert(num, new CodeInstruction(OpCodes.Br_S, operand));
+                    index++;
+                    var l1 = newInstructions[index++].operand;
+                    var l2 = generator.DefineLabel();
+                    var l3 = generator.DefineLabel();
+                    var l4 = generator.DefineLabel();
+                    newInstructions[index].labels.Add(l2);
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Call, new Func<ConfigValue>(ConfigValue.Get).Method));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Callvirt, typeof(ConfigValue).GetProperty("IsMoveEnemyCardsEnableValue", BindingFlags.Instance | BindingFlags.Public).GetGetMethod()));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Brfalse_S, l2));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Ldarg_0));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Ldflda, typeof(ZoneHand).GetField("m_centerOfHand", BindingFlags.NonPublic | BindingFlags.Instance)));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Ldfld, typeof(Vector3).GetField("z", BindingFlags.Public | BindingFlags.Instance)));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Ldarg_1));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Ldloc_0));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Ldc_I4_2));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Div));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Sub));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Call, ((Func<int, int>)Mathf.Abs).Method));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Conv_R4));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Ldc_R4, 2f));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Call, ((Func<float, float, float>)Mathf.Pow).Method));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Ldc_I4_4));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Ldloc_0));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Mul));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Conv_R4));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Div));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Ldloc_1));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Brtrue_S, l3));
+                    newInstructions.Insert(index, new CodeInstruction(OpCodes.Ldc_R4, 0f));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Br_S, l4));
+                    newInstructions.Insert(index, new CodeInstruction(OpCodes.Ldc_R4, 1f));
+                    newInstructions[index++].labels.Add(l3);
+                    newInstructions.Insert(index, new CodeInstruction(OpCodes.Mul));
+                    newInstructions[index++].labels.Add(l4);
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Sub));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Ldloc_S, (byte)6));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Sub));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Ldc_R4, 0.6f));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Sub));
+                    newInstructions.Insert(index++, new CodeInstruction(OpCodes.Stloc_S, (byte)5));
+                    newInstructions.Insert(index, new CodeInstruction(OpCodes.Br_S, l1));
                 }
-                return list;
+                return newInstructions;
             }
         }
 
