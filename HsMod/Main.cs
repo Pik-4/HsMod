@@ -352,7 +352,7 @@ namespace HsMod
 
         private void OnDestroy()
         {
-            PatchManager.UnPatchAll();
+            // PatchManager.UnPatchAll();
         }
 
     }

@@ -617,7 +617,7 @@ namespace HsMod
                     for (int i = 16; i <= 20; i++)
                     {
                         wingID = i;
-                        if (StoreManager.GetProductItemOwnershipStatus(productType, wingID, out string _) != ItemOwnershipStatus.OWNED)
+                        if (StoreManager.GetStaticProductItemOwnershipStatus(productType, wingID, out string _) != ItemOwnershipStatus.OWNED)
                         {
                             break;
                         }
@@ -628,7 +628,7 @@ namespace HsMod
                     }
                 }
 
-                if (StoreManager.GetProductItemOwnershipStatus(productType, wingID, out string failReason) == ItemOwnershipStatus.OWNED)
+                if (StoreManager.GetStaticProductItemOwnershipStatus(productType, wingID, out string failReason) == ItemOwnershipStatus.OWNED)
                 {
                     Utils.MyLogger(LogLevel.Warning, $"{adventure}：冒险已拥有！");
                     UIStatus.Get().AddInfo("所选冒险已拥有！");

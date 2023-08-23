@@ -78,6 +78,12 @@
     <Reference Include="Blizzard.T5.FontService">
       <HintPath>LibHearthstone\Blizzard.T5.FontService.dll</HintPath>
     </Reference>
+    <Reference Include="Blizzard.T5.FXBuilder">
+      <HintPath>LibHearthstone\Blizzard.T5.FXBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="Blizzard.T5.Game">
+      <HintPath>LibHearthstone\Blizzard.T5.Game.dll</HintPath>
+    </Reference>
     <Reference Include="Blizzard.T5.GameStringsInterface">
       <HintPath>LibHearthstone\Blizzard.T5.GameStringsInterface.dll</HintPath>
     </Reference>
