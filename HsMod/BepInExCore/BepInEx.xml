@@ -4,6 +4,78 @@
         <name>BepInEx</name>
     </assembly>
     <members>
+        <member name="T:BepInEx.UnityInput">
+            <summary>
+                Abstraction layer over Unity's input systems for use in universal plugins that need to use hotkeys.
+                It can use either Input or Unity.InputSystem, depending on what's available. Input is preferred.
+                WARNING: Use only inside of Unity's main thread!
+            </summary>
+        </member>
+        <member name="P:BepInEx.UnityInput.Current">
+            <summary>
+                Best currently supported input system.
+            </summary>
+        </member>
+        <member name="P:BepInEx.UnityInput.LegacyInputSystemAvailable">
+            <summary>
+                True if the Input class is not disabled.
+            </summary>
+        </member>
+        <member name="T:BepInEx.IInputSystem">
+            <summary>
+                Generic input system interface. Just barely good enough for hotkeys.
+            </summary>
+        </member>
+        <member name="P:BepInEx.IInputSystem.mousePosition">
+            <inheritdoc cref="P:UnityEngine.Input.mousePosition" />
+        </member>
+        <member name="P:BepInEx.IInputSystem.mouseScrollDelta">
+            <inheritdoc cref="P:UnityEngine.Input.mouseScrollDelta" />
+        </member>
+        <member name="P:BepInEx.IInputSystem.mousePresent">
+            <inheritdoc cref="P:UnityEngine.Input.mousePresent" />
+        </member>
+        <member name="P:BepInEx.IInputSystem.anyKey">
+            <inheritdoc cref="P:UnityEngine.Input.anyKey" />
+        </member>
+        <member name="P:BepInEx.IInputSystem.anyKeyDown">
+            <inheritdoc cref="P:UnityEngine.Input.anyKeyDown" />
+        </member>
+        <member name="P:BepInEx.IInputSystem.SupportedKeyCodes">
+            <summary>
+                All KeyCodes supported by the current input system.
+            </summary>
+        </member>
+        <member name="M:BepInEx.IInputSystem.GetKey(System.String)">
+            <inheritdoc cref="M:UnityEngine.Input.GetKey(System.String)" />
+        </member>
+        <member name="M:BepInEx.IInputSystem.GetKey(UnityEngine.KeyCode)">
+            <inheritdoc cref="M:UnityEngine.Input.GetKey(UnityEngine.KeyCode)" />
+        </member>
+        <member name="M:BepInEx.IInputSystem.GetKeyDown(System.String)">
+            <inheritdoc cref="M:UnityEngine.Input.GetKeyDown(System.String)" />
+        </member>
+        <member name="M:BepInEx.IInputSystem.GetKeyDown(UnityEngine.KeyCode)">
+            <inheritdoc cref="M:UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode)" />
+        </member>
+        <member name="M:BepInEx.IInputSystem.GetKeyUp(System.String)">
+            <inheritdoc cref="M:UnityEngine.Input.GetKeyUp(System.String)" />
+        </member>
+        <member name="M:BepInEx.IInputSystem.GetKeyUp(UnityEngine.KeyCode)">
+            <inheritdoc cref="M:UnityEngine.Input.GetKeyUp(UnityEngine.KeyCode)" />
+        </member>
+        <member name="M:BepInEx.IInputSystem.GetMouseButton(System.Int32)">
+            <inheritdoc cref="M:UnityEngine.Input.GetMouseButton(System.Int32)" />
+        </member>
+        <member name="M:BepInEx.IInputSystem.GetMouseButtonDown(System.Int32)">
+            <inheritdoc cref="M:UnityEngine.Input.GetMouseButtonDown(System.Int32)" />
+        </member>
+        <member name="M:BepInEx.IInputSystem.GetMouseButtonUp(System.Int32)">
+            <inheritdoc cref="M:UnityEngine.Input.GetMouseButtonUp(System.Int32)" />
+        </member>
+        <member name="M:BepInEx.IInputSystem.ResetInputAxes">
+            <inheritdoc cref="M:UnityEngine.Input.ResetInputAxes" />
+        </member>
         <member name="T:BepInEx.Configuration.AcceptableValueBase">
             <summary>
             Base type of all classes representing and enforcing acceptable values of config settings.
@@ -1143,6 +1215,14 @@
             </summary>
             <param name="sourceName">Name of the log source to create.</param>
             <returns>An instance of <see cref="T:BepInEx.Logging.ManualLogSource"/> that allows to write logs.</returns>
+        </member>
+        <member name="T:BepInEx.Logging.Logger.ThreadSafeCollection`1">
+            <summary>
+            Simple thread safe list that prioritizes read speed over write speed.
+            Read is the same as a normal list, while write locks and allocates a copy of the list.
+            Logger lists are rarely updated so this tradeoff should be fine.
+            </summary>
+            <inheritdoc />
         </member>
         <member name="T:BepInEx.Logging.LogLevel">
             <summary>
