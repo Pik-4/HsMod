@@ -181,7 +181,6 @@ namespace HsMod
         {
             LoadPatch(typeof(Patcher));
             LoadPatch(typeof(Patcher.PatchMisc));
-            LoadPatch(typeof(Patcher.PatchFiresideGathering));
             LoadPatch(typeof(Patcher.PatchEmote));
             LoadPatch(typeof(Patcher.PatchIGMMessage));
             LoadPatch(typeof(Patcher.PatchMercenaries));
@@ -1132,62 +1131,6 @@ namespace HsMod
             }
         }
 
-        public class PatchFiresideGathering
-        {
-
-            //炉边聚会
-            [HarmonyPrefix]
-            [HarmonyPatch(typeof(FiresideGatheringManager), "RequestNearbyFSGs")]
-            public static bool PatchRequestNearbyFSGs(ref bool ___m_isRequestNearbyFSGsPending)
-            {
-                if (isFiresideGatheringEnable.Value)
-                {
-                    ___m_isRequestNearbyFSGsPending = true;
-                    Network.Get().RequestNearbyFSGs(firesideGatheringLatitude.Value, firesideGatheringLongitude.Value, firesideGatheringGpsAccuracy.Value, null);
-                    return false;
-                }
-                return true;
-            }
-            [HarmonyTranspiler]
-            [HarmonyPatch(typeof(FiresideGatheringManager), "OnFSGAllowed")]
-            public static IEnumerable<CodeInstruction> PatchOnFSGAllowed(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
-            {
-                List<CodeInstruction> list = new List<CodeInstruction>(instructions);
-                int num = list.FindLastIndex((CodeInstruction x) => x.opcode == OpCodes.Callvirt && (x.operand as MethodInfo).Name == "get_GPSOrWifiServicesAvailable");
-                if (num > 0)
-                {
-                    num++;
-                    object operand = list[num].operand;
-                    list.Insert(num++, new CodeInstruction(OpCodes.Brtrue_S, operand));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Call, new Func<ConfigValue>(ConfigValue.Get).Method));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Callvirt, typeof(ConfigValue).GetProperty("IsFiresideGatheringEnableValue", BindingFlags.Instance | BindingFlags.Public).GetGetMethod()));
-                }
-                return list;
-            }
-
-            private static readonly MethodInfo ChangeStateInfo = typeof(FiresideGatheringLocationHelperDialog).GetMethod("ChangeState", BindingFlags.Instance | BindingFlags.NonPublic);
-            [HarmonyTranspiler]
-            [HarmonyPatch(typeof(FiresideGatheringLocationHelperDialog), "Start")]
-            public static IEnumerable<CodeInstruction> PatchFiresideGatheringLocationHelperDialogStart(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
-            {
-                List<CodeInstruction> list = new List<CodeInstruction>(instructions);
-                int num = list.FindLastIndex((CodeInstruction x) => x.opcode == OpCodes.Ldfld && (x.operand as FieldInfo).Name == "m_isCheckInFailure");
-                if (num > 0)
-                {
-                    num--;
-                    list.Insert(num++, new CodeInstruction(OpCodes.Call, new Func<ConfigValue>(ConfigValue.Get).Method));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Callvirt, typeof(ConfigValue).GetProperty("IsFiresideGatheringEnableValue", BindingFlags.Instance | BindingFlags.Public).GetGetMethod()));
-                    Label label = generator.DefineLabel();
-                    list[num].labels.Add(label);
-                    list.Insert(num++, new CodeInstruction(OpCodes.Brfalse_S, label));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Ldarg_0));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Ldc_I4_3));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Call, ChangeStateInfo));
-                    list.Insert(num++, new CodeInstruction(OpCodes.Ret));
-                }
-                return list;
-            }
-        }
 
         //表情相关的Patch
         public class PatchEmote
@@ -2736,6 +2679,7 @@ namespace HsMod
             [HarmonyPrefix]
             [HarmonyPatch(typeof(PackOpening), "OpenBooster")]
             public static bool PatchOpenBooster(ref UnopenedPack pack,
+                                                ref int numPacks,
                                                 ref PackOpening __instance,
                                                 ref float ___m_packOpeningStartTime,
                                                 ref int ___m_packOpeningId,
@@ -2757,7 +2701,7 @@ namespace HsMod
                     num = pack.GetBoosterId();
                     ___m_packOpeningStartTime = Time.realtimeSinceStartup;
                     ___m_packOpeningId = num;
-                    BoosterPackUtils.OpenBooster(num);
+                    BoosterPackUtils.OpenBooster(num, numPacks);
                 }
                 ___m_InputBlocker.SetActive(true);
                 if (___m_autoOpenPackCoroutine != null)
@@ -2776,7 +2720,7 @@ namespace HsMod
                 {
                     onBoosterOpened?.Invoke(__instance, null);
                 }
-                ___m_UnopenedPackScroller.Pause(true);
+                ___m_UnopenedPackScroller.Pause(pause: true);
                 return false;
             }
             // 开包结果替换

@@ -46,8 +46,6 @@ namespace HsMod
         public static ConfigEntry<bool> isCardRevealedEnable;
         public static ConfigEntry<bool> isMoveEnemyCardsEnable;
         public static ConfigEntry<bool> isAutoReportEnable;
-        public static ConfigEntry<bool> isFiresideGatheringEnable;
-        public static ConfigEntry<double> firesideGatheringLatitude, firesideGatheringLongitude, firesideGatheringGpsAccuracy;
 
         public static ConfigEntry<bool> isAutoRecvMercenaryRewardEnable;
         public static ConfigEntry<bool> isMercenaryBattleZoom;
@@ -181,10 +179,7 @@ namespace HsMod
             isAutoReportEnable = config.Bind("好友", "自动举报", false, "对局结束后自动举报对手昵称违规、作弊和脚本、恶意投降");
             // isAutoReportEnable = config.Bind("好友", "自动举报", true, new ConfigDescription("对局结束后自动举报对手昵称违规、作弊和脚本、恶意投降", null, new object[] { "Advanced" }));
             isMoveEnemyCardsEnable = config.Bind("好友", "观战展示卡牌", false, "（尚未测试）在Ob中展示(旋转)对手手中的牌");
-            isFiresideGatheringEnable = config.Bind("好友", "炉边聚会虚拟定位", false, "是否启用炉边聚会虚拟定位");
-            firesideGatheringLatitude = config.Bind("好友", "炉边聚会纬度", 0.0, "炉边聚会纬度");
-            firesideGatheringLongitude = config.Bind("好友", "炉边聚会经度", 0.0, "炉边聚会经度");
-            firesideGatheringGpsAccuracy = config.Bind("好友", "炉边聚会Gps定位精度", 54.0, "炉边聚会定位精度");
+
 
             isQuickModeEnable = config.Bind("炉石", "快速战斗", false, "是否启用酒馆或佣兵AI快速战斗模式");
             isFullnameShow = config.Bind("炉石", "显示全名", false, "是否显示对手战网全名；如果启用该选项，还会允许添加当前对手(启动快捷键时，也允许添加对手)。");
@@ -501,26 +496,6 @@ namespace HsMod
         {
             get { return PluginConfig.isMoveEnemyCardsEnable.Value; }
             set { PluginConfig.isMoveEnemyCardsEnable.Value = value; }
-        }
-        public bool IsFiresideGatheringEnableValue
-        {
-            get { return PluginConfig.isFiresideGatheringEnable.Value; }
-            set { PluginConfig.isFiresideGatheringEnable.Value = value; }
-        }
-        public double FiresideGatheringLatitudeValue
-        {
-            get { return PluginConfig.firesideGatheringLatitude.Value; }
-            set { PluginConfig.firesideGatheringLatitude.Value = value; }
-        }
-        public double FiresideGatheringLongitudeValue
-        {
-            get { return PluginConfig.firesideGatheringLongitude.Value; }
-            set { PluginConfig.firesideGatheringLongitude.Value = value; }
-        }
-        public double FiresideGatheringGpsAccuracyValue
-        {
-            get { return PluginConfig.firesideGatheringGpsAccuracy.Value; }
-            set { PluginConfig.firesideGatheringGpsAccuracy.Value = value; }
         }
         public bool IsShowFPSEnableValue
         {
