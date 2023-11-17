@@ -2782,7 +2782,7 @@ namespace HsMod
                         }
                 }
             };
-                ___m_director.OnBoosterOpened(cards);
+                ___m_director.OnBoosterOpened(cards,false);
                 return false;
             }
         }
