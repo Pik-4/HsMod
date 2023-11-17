@@ -117,6 +117,7 @@ namespace HsMod
         public static ConfigEntry<bool> isFakeAtypicalRandomPremium;
         public static ConfigEntry<TAG_PREMIUM> fakeRandomPremium;
         public static ConfigEntry<Utils.CardRarity> fakeRandomRarity;
+        public static ConfigEntry<int> fakeCatchupCount;
         public static ConfigEntry<int> fakeCardID1;
         public static ConfigEntry<TAG_PREMIUM> fakeCardPremium1;
         public static ConfigEntry<int> fakeCardID2;
@@ -262,6 +263,7 @@ namespace HsMod
             fakeRandomRarity = config.Bind("模拟", "稀有度类型", Utils.CardRarity.LEGENDARY, "指定随机稀有度（基于随机稀有度）");
             fakeRandomPremium = config.Bind("模拟", "品质类型", TAG_PREMIUM.GOLDEN, "指定品质（基于随机品质）");
 
+            fakeCatchupCount = config.Bind("模拟", "追赶包卡牌数量，小于5时，数量随机", -1, new ConfigDescription("Catchup card num", null, new object[] { "Advanced" }));
             fakeCardID1 = config.Bind("模拟", "卡牌1", 71984, new ConfigDescription("Card 1 DbID.", null, new object[] { "Advanced" }));
             fakeCardPremium1 = config.Bind("模拟", "卡牌1品质", TAG_PREMIUM.GOLDEN, new ConfigDescription("Card 1 Premium.", null, new object[] { "Advanced" }));
             fakeCardID2 = config.Bind("模拟", "卡牌2", 71945, new ConfigDescription("Card 2 DbID.", null, new object[] { "Advanced" }));

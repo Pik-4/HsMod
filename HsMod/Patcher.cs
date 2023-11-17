@@ -2758,7 +2758,7 @@ namespace HsMod
                 ___m_autoOpenPending = false;
                 bool isCatchup = (bool)(GameDbf.Booster?.GetRecord(___m_lastOpenedBoosterId)?.IsCatchupPack);
                 //List<NetCache.BoosterCard> list = Network.Get().OpenedBooster();
-                if (isFakeRandomResult.Value && !isCatchup)
+                if (isFakeRandomResult.Value)
                 {
                     Utils.GenerateRandomCard(isFakeRandomRarity.Value, isFakeRandomPremium.Value);
                 }
@@ -2804,12 +2804,13 @@ namespace HsMod
 
                 if (isCatchup)
                 {
-                    int catchupCount = UnityEngine.Random.Range(5, 94);
+                    int catchupCount = UnityEngine.Random.Range(0, 999);
+                    catchupCount = fakeCatchupCount.Value < 5 ? catchupCount : fakeCatchupCount.Value - 5;
                     for (int i = 0; i < catchupCount; i++)
                     {
                         cards.Add(Utils.GenerateRandomACard(isFakeRandomRarity.Value, isFakeRandomPremium.Value));
                     }
-                    Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, cards.Count);
+
                 }
                 ___m_director.OnBoosterOpened(cards, isCatchup);
                 return false;
