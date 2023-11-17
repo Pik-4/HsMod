@@ -2694,6 +2694,7 @@ namespace HsMod
                 {
                     return true;
                 }
+
                 Hearthstone.Progression.AchievementManager.Get().PauseToastNotifications();
                 int num = (int)fakeBoosterDbId.Value;
                 if (!GameUtils.IsFakePackOpeningEnabled())
@@ -2724,26 +2725,44 @@ namespace HsMod
                 return false;
             }
             // 开包结果替换
+            private static readonly MethodInfo triggerHooverDeath = typeof(PackOpening).GetMethod("TriggerHooverDeath", BindingFlags.Instance | BindingFlags.NonPublic);
             [HarmonyPrefix]
             [HarmonyPatch(typeof(PackOpening), "OnBoosterOpened")]
             public static bool PatchOnBoosterOpened(ref float ___m_packOpeningStartTime,
                                                ref PackOpeningDirector ___m_director,
                                                ref int ___m_lastOpenedBoosterId,
                                                ref int ___m_packOpeningId,
-                                               ref bool ___m_autoOpenPending)
+                                               ref bool ___m_autoOpenPending,
+                                               ref UnopenedPack ___m_draggedPack,
+                                               ref UnopenedPack ___m_selectedPack,
+                                               ref GameObject ___m_centerPack,
+                                               ref PackOpening __instance)
             {
                 if (isFakeOpenEnable.Value == false)
                 {
                     return true;
                 }
+
+                triggerHooverDeath?.Invoke(__instance, null);
+
                 float timeToRegisterPackOpening = Time.realtimeSinceStartup - ___m_packOpeningStartTime;
+
+                if (___m_centerPack != null)
+                {
+                    UnityEngine.Object.Destroy(___m_centerPack);
+                    ___m_centerPack = null;
+                }
+
                 ___m_director.Play(___m_lastOpenedBoosterId, timeToRegisterPackOpening, ___m_packOpeningId);
+                ___m_director.SetNumPacksOpened(1);
                 ___m_autoOpenPending = false;
+                bool isCatchup = (bool)(GameDbf.Booster?.GetRecord(___m_lastOpenedBoosterId)?.IsCatchupPack);
                 //List<NetCache.BoosterCard> list = Network.Get().OpenedBooster();
-                if (isFakeRandomResult.Value)
+                if (isFakeRandomResult.Value && !isCatchup)
                 {
                     Utils.GenerateRandomCard(isFakeRandomRarity.Value, isFakeRandomPremium.Value);
                 }
+
                 List<NetCache.BoosterCard> cards = new List<NetCache.BoosterCard>
             {
                 new NetCache.BoosterCard
@@ -2782,10 +2801,21 @@ namespace HsMod
                         }
                 }
             };
-                ___m_director.OnBoosterOpened(cards,false);
+
+                if (isCatchup)
+                {
+                    int catchupCount = UnityEngine.Random.Range(5, 94);
+                    for (int i = 0; i < catchupCount; i++)
+                    {
+                        cards.Add(Utils.GenerateRandomACard(isFakeRandomRarity.Value, isFakeRandomPremium.Value));
+                    }
+                    Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, cards.Count);
+                }
+                ___m_director.OnBoosterOpened(cards, isCatchup);
                 return false;
             }
         }
+
 
         public class PatchFakeDevice
         {

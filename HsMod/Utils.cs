@@ -523,6 +523,32 @@ namespace HsMod
             return dbid;
         }
 
+
+        public static NetCache.BoosterCard GenerateRandomACard(bool rarityRandom = false, bool premiumRandom = false, TAG_RARITY rarity = TAG_RARITY.LEGENDARY, TAG_PREMIUM premium = TAG_PREMIUM.GOLDEN)
+        {
+            if (!rarityRandom) rarity = (TAG_RARITY)fakeRandomRarity.Value;
+            if (!premiumRandom) premium = fakeRandomPremium.Value;
+            if (fakeBoosterDbId.Value.ToString().Substring(0, 7) == "GOLDEN_")
+            {
+                premiumRandom = false;
+                premium = TAG_PREMIUM.GOLDEN;
+            }
+            List<int> dbids = GetCardsDbId();
+            if (premiumRandom)
+            {
+                if (!isFakeAtypicalRandomPremium.Value)
+                {
+                    premium = (TAG_PREMIUM)UnityEngine.Random.Range(0, 2);
+                }
+                else premium = (TAG_PREMIUM)UnityEngine.Random.Range(0, Enum.GetValues(typeof(TAG_PREMIUM)).Length);
+            }
+            NetCache.BoosterCard card = new NetCache.BoosterCard();
+            card.Def.Name = GameUtils.TranslateDbIdToCardId(rarityRandom ? dbids[UnityEngine.Random.Range(0, dbids.Count)] : GetRandomCardID(rarity));
+            card.Def.Premium = premium;
+            return card;
+        }
+
+
         //虚假结果
         public static void GenerateRandomCard(bool rarityRandom = false, bool premiumRandom = false, TAG_RARITY rarity = TAG_RARITY.LEGENDARY, TAG_PREMIUM premium = TAG_PREMIUM.GOLDEN)
         {
