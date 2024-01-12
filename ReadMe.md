@@ -127,9 +127,9 @@ Mac上首次运行可能会提示战网登录错误，请找到HsMod.cfg，修�
 
 2. 参考[0xf4b1/hearthstone-linux](https://github.com/0xf4b1/hearthstone-linux)安装Linux版Hearthstone。（理论上此时会配置好client.config）
 
-3. 下载 [BepInEx_unix](https://github.com/BepInEx/BepInEx/releases)（注：目前采用BepInEx5）并将其解压到炉石根目录`Hearthstone/`下。
+3. 下载 [BepInEx_unix](https://github.com/BepInEx/BepInEx/releases)（注：目前采用BepInEx5）并将其解压到炉石根目录`hearthstone/`下。
 
-4. 创建一个目录`Hearthstone/BepInEx/unstripped_corlib/`；(注：也可直接将项目目录`HsMod/LibUnityMonoUnix`下所有`.dll`复制到该目录下)
+4. 创建一个目录`hearthstone/BepInEx/unstripped_corlib/`；
 
    1. 下载[Mono](https://unity.bepinex.dev/corlibs/2021.3.25.zip)和[Unity](https://unity.bepinex.dev/libraries/2021.3.25.zip)，解压提取dll，将所有dll复制到该目录下目录下。
 
@@ -138,6 +138,8 @@ Mac上首次运行可能会提示战网登录错误，请找到HsMod.cfg，修�
       ````sh
       cp HsMod/LibUnityMonoUnix/UniTask* hearthstone/BepInEx/unstripped_corlib/
       ````
+
+   注：也可直接将项目目录`HsMod/LibUnityMonoUnix`下所有`.dll`复制到该目录下
 
 5. 修改`unix_bepinex.sh`
 
@@ -171,7 +173,7 @@ Mac上首次运行可能会提示战网登录错误，请找到HsMod.cfg，修�
 
 7. 如果未配置`client.config`，参考MacOS安装说明中6-7步，配置client.config
 
-8. 将`HsMod.dll`存放在`hearthstone/BepInEx/plugins`。
+8. 将`HsMod.dll`存放在`hearthstone/BepInEx/plugins`目录下（如果plugins目录不存在，需要手动创建）。
 
 9. 安装BepInEx配置管理[BepInExConfigManager.Mono](https://github.com/sinai-dev/BepInExConfigManager/releases)，解压到`hearthstone/BepInEx/`即可；进入游戏后`F5`进行相关控制。
 
