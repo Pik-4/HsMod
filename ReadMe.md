@@ -67,7 +67,7 @@
 
    2.1. 下载[BepInEx_x86](https://github.com/BepInEx/BepInEx/releases)，并将其解压到炉石根目录`Hearthstone\`下。
 
-   2.2. 创建一个目录`Hearthstone\BepInEx\unstripped_corlib\`；~~下载[Mono](https://unity.bepinex.dev/corlibs/2021.3.19.zip)和[Unity](https://unity.bepinex.dev/libraries/2021.3.19.zip)，并将其解压在该目录~~；将项目目录HsMod/LibUnityMono下所有dll复制到unstripped_corlib目录下。 
+   2.2. 创建一个目录`Hearthstone\BepInEx\unstripped_corlib\`；~~下载[Mono](https://unity.bepinex.dev/corlibs/2021.3.25.zip)和[Unity](https://unity.bepinex.dev/libraries/2021.3.25.zip)，并将其解压在该目录~~；将项目目录HsMod/LibUnityMono下所有dll复制到unstripped_corlib目录下。 
 
    2.3. 修改`Hearthstone\doorstop_config.ini`，将`dllSearchPathOverride=` 替换成`dllSearchPathOverride=BepInEx\unstripped_corlib`
 
@@ -79,7 +79,7 @@
 
 1. Download the latest version of [BepInEx_unix](https://github.com/BepInEx/BepInEx/releases) and extract it to `Hearthstone/`
 
-2. ~~Download original [Mono](https://unity.bepinex.dev/corlibs/2021.3.19.zip) and [Unity](https://unity.bepinex.dev/libraries/2021.3.19.zip) libraries and unpack to Hearthstone/BepInEx/unstripped_corlib~~. Copy all `dll` which under the project folder `HsMod/LibUnityMonoUnix` (`cp HsMod/LibUnityMonoUnix/*  Hearthstone/BepInEx/unstripped_corlib/   ` ). ( PS. Mono and Unity version must same as Hearthstone ).
+2. ~~Download original [Mono](https://unity.bepinex.dev/corlibs/2021.3.25.zip) and [Unity](https://unity.bepinex.dev/libraries/2021.3.25.zip) libraries and unpack to Hearthstone/BepInEx/unstripped_corlib~~. Copy all `dll` which under the project folder `HsMod/LibUnityMonoUnix` (`cp HsMod/LibUnityMonoUnix/*  Hearthstone/BepInEx/unstripped_corlib/   ` ). ( PS. Mono and Unity version must same as Hearthstone ).
 
 3. Edit the `run_bepinex.sh` file replacing the line `export DOORSTOP_CORLIB_OVERRIDE_PATH=""`with `DOORSTOP_CORLIB_OVERRIDE_PATH="$BASEDIR/BepInEx/unstripped_corlib"`
 
