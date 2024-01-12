@@ -77,9 +77,9 @@
 
 #### Mac
 
-1. Download the latest version of [BepInEx_unix](https://github.com/BepInEx/BepInEx/releases) and extract it to `Hearthstone\`
+1. Download the latest version of [BepInEx_unix](https://github.com/BepInEx/BepInEx/releases) and extract it to `Hearthstone/`
 
-2. ~~Download original [Mono](https://unity.bepinex.dev/corlibs/2021.3.19.zip) and [Unity](https://unity.bepinex.dev/libraries/2021.3.19.zip) libraries and unpack to Hearthstone\BepInEx\unstripped_corlib~~. Copy all `dll` which under the project folder `HsMod/LibUnityMonoMacOs` (`cp HsMod/LibUnityMonoMacOs/*  Hearthstone/BepInEx/unstripped_corlib/   ` ). ( PS. Mono and Unity version must same as Hearthstone ).
+2. ~~Download original [Mono](https://unity.bepinex.dev/corlibs/2021.3.19.zip) and [Unity](https://unity.bepinex.dev/libraries/2021.3.19.zip) libraries and unpack to Hearthstone/BepInEx/unstripped_corlib~~. Copy all `dll` which under the project folder `HsMod/LibUnityMonoUnix` (`cp HsMod/LibUnityMonoUnix/*  Hearthstone/BepInEx/unstripped_corlib/   ` ). ( PS. Mono and Unity version must same as Hearthstone ).
 
 3. Edit the `run_bepinex.sh` file replacing the line `export DOORSTOP_CORLIB_OVERRIDE_PATH=""`with `DOORSTOP_CORLIB_OVERRIDE_PATH="$BASEDIR/BepInEx/unstripped_corlib"`
 
@@ -111,15 +111,77 @@
    Env = cn.actual.battle.net
    ```
 
-8. Download the HsMod [Releases](https://github.com/Pik-4/HsMod/releases) and unzip to `Hearthstone\BepInEx\plugins`
+8. Download the HsMod [Releases](https://github.com/Pik-4/HsMod/releases) and unzip to `Hearthstone/BepInEx/plugins`
 
-9. Download the [BepInExConfigManager.Mono](https://github.com/sinai-dev/BepInExConfigManager/releases) and unzip to `Hearthstone\BepInEx`After entering the game, press `F5` to control HsMod.
+9. Download the [BepInExConfigManager.Mono](https://github.com/sinai-dev/BepInExConfigManager/releases) and unzip to `Hearthstone/BepInEx`After entering the game, press `F5` to control HsMod.
 
 Now the game needs to be launched only through `./run_bepinex.sh`
 
 If the token becomes obsolete and the game stops opening, then you just need to update it in the `client.config`.
 
 Mac上首次运行可能会提示战网登录错误，请找到HsMod.cfg，修改激活插件即可，详细可参考 [#8](https://github.com/Pik-4/HsMod/issues/8#issuecomment-1344470389)。
+
+#### Linux
+
+1. 编译`HsMod`或从`Releases`下载`HsMod.dll`。
+
+2. 参考[0xf4b1/hearthstone-linux](https://github.com/0xf4b1/hearthstone-linux)安装Linux版Hearthstone。（理论上此时会配置好client.config）
+
+3. 下载 [BepInEx_unix](https://github.com/BepInEx/BepInEx/releases)（注：目前采用BepInEx5）并将其解压到炉石根目录`Hearthstone/`下。
+
+4. 创建一个目录`Hearthstone/BepInEx/unstripped_corlib/`；(注：也可直接将项目目录`HsMod/LibUnityMonoUnix`下所有`.dll`复制到该目录下)
+
+   1. 下载[Mono](https://unity.bepinex.dev/corlibs/2021.3.25.zip)和[Unity](https://unity.bepinex.dev/libraries/2021.3.25.zip)，解压提取dll，将所有dll复制到该目录下目录下。
+
+   2. 将项目目录`HsMod/LibUnityMonoUnix`下所有`UniTask`开头的.dll复制到该目录下
+
+      ````sh
+      cp HsMod/LibUnityMonoUnix/UniTask* hearthstone/BepInEx/unstripped_corlib/
+      ````
+
+5. 修改`unix_bepinex.sh`
+
+   1. 替换 `export DOORSTOP_CORLIB_OVERRIDE_PATH=""`为 `DOORSTOP_CORLIB_OVERRIDE_PATH="$BASEDIR/BepInEx/unstripped_corlib"`
+   2. 替换`executable_name=""` 为 `executable_name="Bin/Hearthstone.x86_64"`
+   3. 替换完成后，执行`sed -i "s/\r/ /g" ./run_bepinex.sh`修改文件结尾换行符，以匹配Linux文件系统。
+
+6. 如果配置正确，此时目录结构应该如下。
+
+   ```
+   hsmod@hsmod:~/hearthstone-linux/hearthstone$ ls -alh
+   drwxrwxr-x 9 a a 4.0K Jan 12 12:07 .
+   drwxrwxr-x 9 a a 4.0K Jan 12 09:27 ..
+   drwxrwxr-x 4 a a 4.0K Jan 12 11:52 BepInEx
+   drwxrwxr-x 3 a a 4.0K Jan 12 12:07 Bin
+   -rw-rw-r-- 1 a a 1.4K Aug 30 02:53 changelog.txt
+   -rw-rw-r-- 1 a a  103 Jan 12 11:16 client.config
+   drwxrwxr-x 3 a a 4.0K Jan 12 10:46 Data
+   drwxrwxr-x 2 a a 4.0K Jan 12 11:46 doorstop_libs
+   -rw-rw-r-- 1 a a    5 Jan 12 09:27 .locale
+   -rwxrwxr-x 1 a a 295K Jan 12 11:16 login
+   drwxrwxr-x 7 a a 4.0K Jan 12 12:07 Logs
+   drwxrwxr-x 5 a a 4.0K Jan 12 09:27 .ngdp
+   -rw-rw-r-- 1 a a    3 Jan 12 09:27 .region
+   -rwxrwxr-x 1 a a 4.8K Jan 12 12:07 run_bepinex.sh
+   drwxrwxr-x 3 a a 4.0K Jan 12 10:47 Strings
+   -rw-rw-r-- 1 a a   48 Jan 12 11:23 token
+   -rw-rw-r-- 1 a a   12 Jan 12 11:16 .unity
+   -rw-rw-r-- 1 a a   21 Jan 12 10:47 .version
+   ```
+
+7. 如果未配置`client.config`，参考MacOS安装说明中6-7步，配置client.config
+
+8. 将`HsMod.dll`存放在`hearthstone/BepInEx/plugins`。
+
+9. 安装BepInEx配置管理[BepInExConfigManager.Mono](https://github.com/sinai-dev/BepInExConfigManager/releases)，解压到`hearthstone/BepInEx/`即可；进入游戏后`F5`进行相关控制。
+
+10. 为`run_bepinex.sh`赋予执行权限
+
+    ```sh
+    chmod u+x run_bepinex.sh
+    ```
+
+11. 执行`./run_bepinex.sh`，享受炉石吧。
 
 ### 版本说明
 
@@ -188,9 +250,10 @@ https://eu.battle.net/login/en/?app=wtcg
 
 1. [MixMod_4pda](https://4pda.to/forum/index.php?showtopic=870696&st=4780#entry114865283)
 2. [MixMod_github](https://github.com/DeNcHiK3713/MixMod)
-3. [Hearthstone Advanced Mod](https://finalmod.com/)
+3. [Hearthstone Advanced Mod](https://hearthmod.com/)
 4. [从0开始教你使用BepInEx为unity游戏制作插件Mod](https://mod.3dmgame.com/read/3)
 5. [BepInEx Docs](https://docs.bepinex.dev/)
 6. [Harmony](https://harmony.pardeike.net/articles/intro.html)
 7. [List of CIL instructions](https://en.wikipedia.org/wiki/List_of_CIL_instructions)
+8. [hearthstone-linux](https://github.com/0xf4b1/hearthstone-linux)
 
