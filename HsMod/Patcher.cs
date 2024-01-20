@@ -95,6 +95,17 @@ namespace HsMod
                     UnPatch("PatchRealtimeCardNum");
                 }
             };
+            isDeckShareCodeCheckEnable.SettingChanged += delegate
+            {
+                if (isDeckShareCodeCheckEnable.Value)
+                {
+                    LoadPatch(typeof(Patcher.PatchDeckShareCode));
+                }
+                else
+                {
+                    UnPatch("PatchDeckShareCode");
+                }
+            };
             isIdleKickEnable.SettingChanged += delegate
             {
                 //Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"SetShouldCheckForInactivity: {isIdleKickEnable.Value}");
@@ -193,6 +204,10 @@ namespace HsMod
             if (isShowCardLargeCount.Value)
             {
                 LoadPatch(typeof(Patcher.PatchRealtimeCardNum));
+            }
+            if (isDeckShareCodeCheckEnable.Value)
+            {
+                LoadPatch(typeof(Patcher.PatchDeckShareCode));
             }
             if (isMoveEnemyCardsEnable.Value)
             {
@@ -808,7 +823,7 @@ namespace HsMod
                 else return true;
             }
 
-            //未知变速修改
+            //toast变速修改
             [HarmonyTranspiler]
             [HarmonyPatch(typeof(SocialToastMgr), "AddToast", new Type[]
             {
@@ -975,6 +990,66 @@ namespace HsMod
             }
         }
 
+        public class PatchDeckShareCode
+        {
+            //移除卡组代码检测
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(CollectionManagerDisplay), "IsValidHeroClassesForCollectionDeck")]
+            public static bool PatchIsValidHeroClassesForCollectionDeck(ref List<TAG_CLASS> heroClasses, ref CollectionDeck deck, ref bool __result)
+            {
+                if (isDeckShareCodeCheckEnable.Value)
+                {
+                    __result = true;
+                    return false;
+                }
+                return true;
+            }
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(CollectionManagerDisplay), "CanPasteShareableDeck", new Type[] { typeof(ShareableDeck) ,typeof(string)}, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Out })]
+            public static bool PatchCanPasteShareableDeck(ShareableDeck shareableDeck, out string alertMessage, ref bool __result)
+            {
+                alertMessage = string.Empty;
+                if (isDeckShareCodeCheckEnable.Value)
+                {
+                    __result = true;
+                    return false;
+                }
+                return true;
+            }
+            [HarmonyTranspiler]
+            [HarmonyPatch(typeof(ShareableDeck), "DeserializeFromVersion_1")]
+            public static IEnumerable<CodeInstruction> PatchDeserializeFromVersion_1(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+            {
+                if (isDeckShareCodeCheckEnable.Value == false)
+                {
+                    return instructions;
+                }
+                List<CodeInstruction> list = new List<CodeInstruction>(instructions);
+                int num = list.FindIndex((CodeInstruction x) => x.opcode == OpCodes.Ldloc_1);
+                num += 2;
+                list[num++]= new CodeInstruction(OpCodes.Nop);
+                list[num++]= new CodeInstruction(OpCodes.Nop);
+                num = list.FindIndex((CodeInstruction x) => x.opcode == OpCodes.Callvirt && (x.operand as MethodInfo).Name == "IsHeroSkin");
+                if (num > 0)
+                {
+                    num++; // brture.s
+                    list[num++] = new CodeInstruction(OpCodes.Nop);
+                    list[num++] = new CodeInstruction(OpCodes.Nop);
+                }
+                return list;
+            }
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(DeckRuleset), "EntityIgnoresRuleset")]
+            public static bool PatchEntityIgnoresRuleset(ref EntityDef def, ref bool __result)
+            {
+                if (isDeckShareCodeCheckEnable.Value)
+                {
+                    __result = true;
+                    return false;
+                }
+                return true;
+            }
+        }
 
         //好友观战相关
         public class PatchDeathOb
