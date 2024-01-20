@@ -95,9 +95,9 @@ namespace HsMod
                     UnPatch("PatchRealtimeCardNum");
                 }
             };
-            isDeckShareCodeCheckEnable.SettingChanged += delegate
+            isBypassDeckShareCodeCheckEnable.SettingChanged += delegate
             {
-                if (isDeckShareCodeCheckEnable.Value)
+                if (isBypassDeckShareCodeCheckEnable.Value)
                 {
                     LoadPatch(typeof(Patcher.PatchDeckShareCode));
                 }
@@ -205,7 +205,7 @@ namespace HsMod
             {
                 LoadPatch(typeof(Patcher.PatchRealtimeCardNum));
             }
-            if (isDeckShareCodeCheckEnable.Value)
+            if (isBypassDeckShareCodeCheckEnable.Value)
             {
                 LoadPatch(typeof(Patcher.PatchDeckShareCode));
             }
@@ -997,7 +997,7 @@ namespace HsMod
             [HarmonyPatch(typeof(CollectionManagerDisplay), "IsValidHeroClassesForCollectionDeck")]
             public static bool PatchIsValidHeroClassesForCollectionDeck(ref List<TAG_CLASS> heroClasses, ref CollectionDeck deck, ref bool __result)
             {
-                if (isDeckShareCodeCheckEnable.Value)
+                if (isBypassDeckShareCodeCheckEnable.Value)
                 {
                     __result = true;
                     return false;
@@ -1005,11 +1005,11 @@ namespace HsMod
                 return true;
             }
             [HarmonyPrefix]
-            [HarmonyPatch(typeof(CollectionManagerDisplay), "CanPasteShareableDeck", new Type[] { typeof(ShareableDeck) ,typeof(string)}, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Out })]
+            [HarmonyPatch(typeof(CollectionManagerDisplay), "CanPasteShareableDeck", new Type[] { typeof(ShareableDeck), typeof(string) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Out })]
             public static bool PatchCanPasteShareableDeck(ShareableDeck shareableDeck, out string alertMessage, ref bool __result)
             {
                 alertMessage = string.Empty;
-                if (isDeckShareCodeCheckEnable.Value)
+                if (isBypassDeckShareCodeCheckEnable.Value)
                 {
                     __result = true;
                     return false;
@@ -1020,15 +1020,15 @@ namespace HsMod
             [HarmonyPatch(typeof(ShareableDeck), "DeserializeFromVersion_1")]
             public static IEnumerable<CodeInstruction> PatchDeserializeFromVersion_1(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
             {
-                if (isDeckShareCodeCheckEnable.Value == false)
+                if (isBypassDeckShareCodeCheckEnable.Value == false)
                 {
                     return instructions;
                 }
                 List<CodeInstruction> list = new List<CodeInstruction>(instructions);
                 int num = list.FindIndex((CodeInstruction x) => x.opcode == OpCodes.Ldloc_1);
                 num += 2;
-                list[num++]= new CodeInstruction(OpCodes.Nop);
-                list[num++]= new CodeInstruction(OpCodes.Nop);
+                list[num++] = new CodeInstruction(OpCodes.Nop);
+                list[num++] = new CodeInstruction(OpCodes.Nop);
                 num = list.FindIndex((CodeInstruction x) => x.opcode == OpCodes.Callvirt && (x.operand as MethodInfo).Name == "IsHeroSkin");
                 if (num > 0)
                 {
@@ -1042,7 +1042,7 @@ namespace HsMod
             [HarmonyPatch(typeof(DeckRuleset), "EntityIgnoresRuleset")]
             public static bool PatchEntityIgnoresRuleset(ref EntityDef def, ref bool __result)
             {
-                if (isDeckShareCodeCheckEnable.Value)
+                if (isBypassDeckShareCodeCheckEnable.Value)
                 {
                     __result = true;
                     return false;
@@ -1449,7 +1449,7 @@ namespace HsMod
                 return list;
             }
             [HarmonyPrefix, HarmonyPatch(typeof(GameState), "IsUsingFastActorTriggers")]
-            public static bool PatchGameStateIsUsingFastActorTriggers(bool __result)
+            public static bool PatchGameStateIsUsingFastActorTriggers(ref bool __result)
             {
                 if (ConfigValue.Get().IsQuickModeEnableValue)
                 {
@@ -2175,7 +2175,7 @@ namespace HsMod
             {
                 try
                 {
-                    // Todo: 添加更细致化的判断条件。目前，手牌有变色龙时，游戏会轻微卡顿。
+                    // Todo: 添加更细致化的判断条件。
                     if ((__instance?.GetEntity()?.GetZone() == TAG_ZONE.PLAY) || (__instance?.GetEntity()?.GetZone() == TAG_ZONE.HAND))
                     {
                         __instance?.GetActor()?.SetCard(__instance);

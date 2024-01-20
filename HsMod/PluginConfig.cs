@@ -39,7 +39,7 @@ namespace HsMod
         public static ConfigEntry<bool> isShowCollectionCardIdEnable;
         public static ConfigEntry<bool> isShowRetireForever;
         public static ConfigEntry<bool> isIdleKickEnable;
-        public static ConfigEntry<bool> isDeckShareCodeCheckEnable;
+        public static ConfigEntry<bool> isBypassDeckShareCodeCheckEnable;
 
         //public static ConfigEntry<Utils.QuickMode> quickModeState;
         public static ConfigEntry<bool> isQuickModeEnable;
@@ -171,11 +171,12 @@ namespace HsMod
             //isAutoRestart = config.Bind("优化", "退出时重启", false, "（可能无效）遇到错误是否自动重启");
             isShowCardLargeCount = config.Bind("优化", "收藏卡牌数量", false, "是否显示收藏卡牌数量大于等于10时的数量（选中时暂有Bug）");
             isShowCollectionCardIdEnable = config.Bind("优化", "显示卡牌ID", false, "是否在右键选择卡牌（皮肤）时，显示并复制所选内容的CardID");
+            isBypassDeckShareCodeCheckEnable = config.Bind("优化", "卡组分享代码检测", false, "是否移除卡组分享代码检测");
             isShowRetireForever = config.Bind("优化", "显示放弃", false, "允许在0-0时放弃套牌");
             isIdleKickEnable = config.Bind("优化", "允许掉线", true, "（尚未测试）是否允许长时间无操作掉线（启动游戏时无法加载配置）");
-            isDeckShareCodeCheckEnable = config.Bind("优化", "卡组分享代码检测", false, "是否移除卡组分享代码检测");
 
-        isQuickPackOpeningEnable = config.Bind("开包", "开包加速", false, "开包加速，使用空格开包时直接展示结果");
+
+            isQuickPackOpeningEnable = config.Bind("开包", "开包加速", false, "开包加速，使用空格开包时直接展示结果");
             isAutoPackOpeningEnable = config.Bind("开包", "自动开包", false, "（慎用，有BUG！）开完全部卡包，不区分卡包品类（基于开包加速）");
             isAutoRefundCardDisenchantEnable = config.Bind("开包", "自动分解", false, "是否在开包时自动分解全额反尘的卡");
 
@@ -551,10 +552,10 @@ namespace HsMod
         {
             get { return (DateTime.Now.Ticks - PluginConfig.timeKeeper) / 10000000; }    // 返回秒
         }
-        public bool IsDeckShareCodeCheckEnable
+        public bool IsBypassDeckShareCodeCheckEnable
         {
-            get { return PluginConfig.isDeckShareCodeCheckEnable.Value; }
-            set { PluginConfig.isDeckShareCodeCheckEnable.Value = value; }
+            get { return PluginConfig.isBypassDeckShareCodeCheckEnable.Value; }
+            set { PluginConfig.isBypassDeckShareCodeCheckEnable.Value = value; }
         }
         public string HsMatchLogPathValue
         {
