@@ -690,7 +690,7 @@ text-decoration: none;
                 temp += "<th>名称</th>";
                 temp += "</tr>";
 
-                foreach (var record in GameDbf.Coin.GetRecords().OrderBy(x => x.ID).ToList())
+                foreach (var record in GameDbf.CosmeticCoin.GetRecords().OrderBy(x => x.ID).ToList())
                 {
                     if (record != null)
                     {

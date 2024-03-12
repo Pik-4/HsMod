@@ -693,7 +693,7 @@ namespace HsMod
             public static void UpdateCoin()
             {
                 CacheCoin.Clear();
-                foreach (var record in GameDbf.Coin.GetRecords())
+                foreach (var record in GameDbf.CosmeticCoin.GetRecords())
                 {
                     if (record != null)
                     {
@@ -704,7 +704,7 @@ namespace HsMod
             public static void UpdateCoinCard()
             {
                 CacheCoinCard.Clear();
-                foreach (var record in GameDbf.Coin.GetRecords())
+                foreach (var record in GameDbf.CosmeticCoin.GetRecords())
                 {
                     if (record != null)
                     {
@@ -1064,7 +1064,7 @@ namespace HsMod
             {
                 System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到硬币皮肤如下：\n");
                 System.IO.File.AppendAllText(savePath, "[CARD_ID]\t[Name]\n");
-                foreach (var record in GameDbf.Coin.GetRecords())
+                foreach (var record in GameDbf.CosmeticCoin.GetRecords())
                 {
                     string saveString;
                     if (record != null)

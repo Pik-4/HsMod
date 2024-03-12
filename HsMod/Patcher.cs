@@ -2366,30 +2366,30 @@ namespace HsMod
             }
 
             //偏好硬币修改，不需要patch
-            [HarmonyPrefix]
-            [HarmonyPatch(typeof(CoinManager), "GetFavoriteCoinId")]
-            public static bool PatchGetFavoriteCoinId(ref int __result)
-            {
-                if (skinCoin.Value == 0) return true;
-                if (Utils.CheckInfo.IsCoin())
-                {
-                    int res = 0;
-                    foreach (var record in GameDbf.Coin.GetRecords())
-                    {
-                        if (record != null)
-                        {
-                            if (record.CardId == skinCoin.Value)
-                            {
-                                res = record.ID;
-                                break;
-                            }
-                        }
-                    }
-                    __result = res;
-                    return false;
-                }
-                return true;
-            }
+            //[HarmonyPrefix]
+            //[HarmonyPatch(typeof(CosmeticCoinManager), "GetFavoriteCoinId")]
+            //public static bool PatchGetFavoriteCoinId(ref int __result)
+            //{
+            //    if (skinCoin.Value == 0) return true;
+            //    if (Utils.CheckInfo.IsCoin())
+            //    {
+            //        int res = 0;
+            //        foreach (var record in GameDbf.CosmeticCoin.GetRecords())
+            //        {
+            //            if (record != null)
+            //            {
+            //                if (record.CardId == skinCoin.Value)
+            //                {
+            //                    res = record.ID;
+            //                    break;
+            //                }
+            //            }
+            //        }
+            //        __result = res;
+            //        return false;
+            //    }
+            //    return true;
+            //}
             //[HarmonyPrefix]
             //[HarmonyPatch(typeof(CoinManager), "GetFavoriteCoinCardId")]
             //public static bool PatchGetFavoriteCoinCardId(ref string __result)
