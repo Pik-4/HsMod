@@ -62,7 +62,7 @@ namespace HsMod
                             isTimeGearEnable.Value = true;  //enable gear
                             configTemplate.Value = Utils.ConfigTemplate.AwayFromKeyboard;    //Set idle template
                             break;
-                        case 2:    //Anti-hookbutDisableshortcut key
+                        case 2:    //Anti-hook但是Disable快捷键
                             isPluginEnable.Value = true;
                             configTemplate.Value = Utils.ConfigTemplate.AntiAwayFromKeyboard;
                             isShortcutsEnable.Value = false;

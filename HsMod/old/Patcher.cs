@@ -249,7 +249,7 @@ namespace HsMod
         }
     }
 
-    //prefixPatchforharmonypatch，rearPatchforreflection
+    //prefixPatchforharmonypatch，rearPatchfor反射
     public class Patcher
     {
         public class PatchMisc
@@ -385,7 +385,7 @@ namespace HsMod
                 //Vars.Key("Application.SendExceptions")
             }
 
-            //shielderror report
+            //shield错误报告
             [HarmonyPrefix]
             [HarmonyPatch(typeof(Blizzard.BlizzardErrorMobile.ExceptionReporter), "ReportCaughtException", new Type[] { typeof(Exception) })]
             public static bool PatchReportCaughtException(ref Exception exception)
@@ -535,7 +535,7 @@ namespace HsMod
                 }
             }
 
-            //shieldOpen the screen to prevent addictionhint
+            //shield开屏防沉迷hint
             [HarmonyPrefix]
             [HarmonyPatch(typeof(SplashScreen), "GetRatingsScreenRegion")]
             public static bool PatchGetRatingsScreenRegion()
@@ -566,7 +566,7 @@ namespace HsMod
                 else return true;
             }
 
-            //test patch，shieldreward display
+            //test patch，shield奖励显示
             [HarmonyPrefix]
             [HarmonyPatch(typeof(Hearthstone.Progression.RewardPresenter), "ShowNextReward")]
             public static bool PatchRewardPresenterShowNextReward(Hearthstone.Progression.RewardPresenter __instance, ref Action onHiddenCallback)
@@ -592,7 +592,7 @@ namespace HsMod
                 return true;
             }
 
-            //Clear automatic decompositionofHandler
+            //清空自动分解ofHandler
             [HarmonyPrefix]
             [HarmonyPatch(typeof(CollectionManager), "RegisterCollectionNetHandlers")]
             public static void PatchRegisterCollectionNetHandlers()
@@ -1207,7 +1207,7 @@ namespace HsMod
         }
 
 
-        //Expression relatedofPatch
+        //表情相关ofPatch
         public class PatchEmote
         {
             //thinking expression
@@ -1366,7 +1366,7 @@ namespace HsMod
                 return list;
             }
 
-            //Quick fight - Theoretically can be used in all modes Now only applies to Tavern Battle FlagsorMercenary War Chroniclesofai
+            //Quick fight - Theoretically can be used in all modes 现只应用于酒馆战旗or佣兵战纪ofai
             [HarmonyReversePatch]
             [HarmonyPatch(typeof(SpellController), "OnProcessTaskList")]
             [MethodImpl(MethodImplOptions.NoInlining)]
@@ -1496,7 +1496,7 @@ namespace HsMod
                             }
                         }
 
-                        //shieldOpponent special effects
+                        //shield对手特效
                         if (__instance.IsControlledByOpposingSidePlayer() && (!isOpponentGoldenCardShow.Value) && (!GameMgr.Get().IsBattlegrounds()))
                         {
                             __result = TAG_PREMIUM.NORMAL;
@@ -2232,7 +2232,7 @@ namespace HsMod
             }
 
 
-            //bobreplace语音
+            //bob替换语音
             [HarmonyPrefix]
             [HarmonyPatch(typeof(TB_BaconShop), "GetFavoriteBattlegroundsGuideSkinCardId")]
             public static bool PatchGetFavoriteBattlegroundsGuideSkinCardId(ref string __result)
@@ -2289,7 +2289,7 @@ namespace HsMod
                 }
                 else return true;
             }
-            //replaceUnpackcard back
+            //替换Unpack卡背
             private static readonly MethodInfo getValidCardBackID = typeof(CardBackManager).GetMethod("GetValidCardBackID", BindingFlags.Instance | BindingFlags.NonPublic);
             private static readonly MethodInfo loadCardBackPrefabIntoSlot = typeof(CardBackManager).GetMethod("LoadCardBackPrefabIntoSlot", BindingFlags.Instance | BindingFlags.NonPublic);
             [HarmonyPrefix]
@@ -2404,10 +2404,10 @@ namespace HsMod
             //}
         }
 
-        //Remove promotion;Interception weakenedpatchinformation
+        //Remove promotion;拦截削弱patchinformation
         public class PatchIGMMessage
         {
-            //Interception weakenedpatchinformation
+            //拦截削弱patchinformation
             [HarmonyPostfix]
             [HarmonyPatch(typeof(CardListPopup), "Show")]
             public static void PatchCardListPopupShow(ref UIBButton ___m_okayButton)
@@ -2466,7 +2466,7 @@ namespace HsMod
                 return false;
             }
 
-            //shieldborrowdeckTime limit has expired
+            //shield借用deck时限已到期
             [HarmonyPrefix]
             [HarmonyPatch(typeof(LoanerDeckDisplay), "CanShowTimerExpiredState")]
             public static bool PatchCanShowTimerExpiredState(ref bool __result)
@@ -2485,7 +2485,7 @@ namespace HsMod
             }
         }
 
-        //andThe mercenary hang-up plug-in may conflict Therefore write it out separately
+        //and佣兵挂机插件可能会冲突 Therefore write it out separately
         public class PatchMercenariesReward
         {
             // shield+1+5hint
@@ -2547,7 +2547,7 @@ namespace HsMod
                 }
             }
 
-            // shieldMercenary Adventure Unlockedhint
+            // shield佣兵冒险解锁hint
             [HarmonyPrefix]
             [HarmonyPatch(typeof(RewardPopups), "ShowMercenariesZoneUnlockPopup")]
             public static bool PatchShowMercenariesZoneUnlockPopup(ref Action onPopupCompleteCallback, ref bool __result, ref RewardPopups __instance, ref Action ___OnPopupClosed)
@@ -2692,7 +2692,7 @@ namespace HsMod
 
         public class PatchFakePackOpening
         {
-            //activationUnpacksimulation
+            //激活Unpack模拟
             [HarmonyPrefix]
             [HarmonyPatch(typeof(GameUtils), "IsFakePackOpeningEnabled")]
             public static bool PatchIsFakePackOpeningEnabled(ref bool __result)
@@ -2742,7 +2742,7 @@ namespace HsMod
                 return false;
             }
 
-            //simulationUnpack
+            //模拟Unpack
             [HarmonyReversePatch]
             [HarmonyPatch(typeof(MonoBehaviour), "StopCoroutine", new Type[] { typeof(Coroutine) })]
             [MethodImpl(MethodImplOptions.NoInlining)]
@@ -2799,7 +2799,7 @@ namespace HsMod
                 ___m_UnopenedPackScroller.Pause(pause: true);
                 return false;
             }
-            // Unpack结果replace
+            // Unpack结果替换
             private static readonly MethodInfo triggerHooverDeath = typeof(PackOpening).GetMethod("TriggerHooverDeath", BindingFlags.Instance | BindingFlags.NonPublic);
             [HarmonyPrefix]
             [HarmonyPatch(typeof(PackOpening), "OnBoosterOpened")]
@@ -3411,7 +3411,7 @@ namespace HsMod
         }
     }
 
-    //simulationUnpack
+    //模拟Unpack
     public static class PackOpeningPatch
     {
         private static readonly MethodInfo onReloginComplete = typeof(PackOpening).GetMethod("OnReloginComplete", BindingFlags.Instance | BindingFlags.NonPublic);

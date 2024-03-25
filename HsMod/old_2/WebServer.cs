@@ -102,7 +102,7 @@ namespace HsMod
                     }
 
 
-                    if (File.Exists(preUrl))   // for removal/ ，Find local files first
+                    if (File.Exists(preUrl))   // 用于移除/ ，优先查找本地文件
                     {
                         var file = File.ReadAllBytes(preUrl);
                         httpListenerContext.Response.OutputStream.Write(file, 0, file.Length);

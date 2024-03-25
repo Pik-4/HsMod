@@ -21,7 +21,7 @@ namespace HsMod
             OnlyMy,
             [Description("All take effect")]
             All,
-            [Description("Disablespecial effects")]
+            [Description("Disable特效")]
             Disabled
         }
         //public enum QuickMode
@@ -88,7 +88,7 @@ namespace HsMod
             [Description("Karazhan Night")]
             BuyKara
         }
-        public enum CardRarity    // cardrareEvery time
+        public enum CardRarity    // cardrare度
         {
             COMMON = TAG_RARITY.COMMON,
             RARE = TAG_RARITY.RARE,
@@ -151,7 +151,7 @@ namespace HsMod
                         cardCount.gTotal += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 50;
-                        return $"<td>goldusually</td><td>{count}</td>";
+                        return $"<td>金色usually</td><td>{count}</td>";
                     }
                     else
                     {
@@ -167,7 +167,7 @@ namespace HsMod
                         cardCount.gTotal += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 100;
-                        return $"<td>goldrare</td><td>{count}</td>";
+                        return $"<td>金色rare</td><td>{count}</td>";
                     }
                     else
                     {
@@ -499,7 +499,7 @@ namespace HsMod
                     {
                         if (entitydef.GetCardType() != TAG_CARDTYPE.HERO)
                             cardsDbId.Add(dbid);
-                        else if (entitydef.GetCost() != 0)    // neglecthero skin
+                        else if (entitydef.GetCost() != 0)    // 忽略hero skin
                             cardsDbId.Add(dbid);
                     }
                 }
@@ -507,7 +507,7 @@ namespace HsMod
             return cardsDbId;
         }
 
-        //false results，designationrareEvery time
+        //false results，指定rare度
         public static int GetRandomCardID(TAG_RARITY rarity)
         {
             int dbid;
@@ -657,7 +657,7 @@ namespace HsMod
                 if (StoreManager.GetStaticProductItemOwnershipStatus(productType, wingID, out string failReason) == ItemOwnershipStatus.OWNED)
                 {
                     Utils.MyLogger(LogLevel.Warning, $"{adventure}：Adventure already owned！");
-                    UIStatus.Get().AddInfo("selectedAdventure already owned！");
+                    UIStatus.Get().AddInfo("所选Adventure already owned！");
                 }
                 else
                 {
@@ -1027,12 +1027,12 @@ namespace HsMod
             public static void Mercenaries(string savePath = @"BepInEx/HsMercenaries.log")
             {
                 //List<LettuceTeam> teams = CollectionManager.Get().GetTeams();
-                //System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGet您的队伍likeDown：\n");
+                //System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到您的队伍like下：\n");
                 //foreach (LettuceTeam team in teams)
                 //{
                 //    System.IO.File.AppendAllText(savePath, team.Name + "\n");
                 //}
-                System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGet关卡信息likeDown：\n");
+                System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到关卡信息like下：\n");
                 System.IO.File.AppendAllText(savePath, "[ID]\t[Heroic?]\t[Bounty]\t[BossName]\n");
                 foreach (var record in GameDbf.LettuceBounty.GetRecords())     // Generate level name
                 {
@@ -1046,7 +1046,7 @@ namespace HsMod
             }
             public static void MyCards(string savePath = @"BepInEx/HsRefundCards.log")
             {
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGet全额分解cardConditionlikeDown：\n");
+                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到全额分解card情况like下：\n");
                 System.IO.File.AppendAllText(savePath, "[Name]\t[PremiumType]\t[Rarity]\t[CardId]\t[CardDbId]\t[OwnedCount]\n");
                 //Filter<CollectibleCard> filter3 = new Filter<CollectibleCard>((CollectibleCard card) => card.IsRefundable);
                 foreach (var record in CollectionManager.Get().GetOwnedCards())
@@ -1086,7 +1086,7 @@ namespace HsMod
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGet游戏面板信息likeDown：\n");
+                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到游戏面板信息like下：\n");
                 System.IO.File.AppendAllText(savePath, "[ID]\t[NOTE_DESC]\n");
                 foreach (var record in GameDbf.Board.GetRecords())
                 {
@@ -1099,7 +1099,7 @@ namespace HsMod
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGet酒馆战斗面板likeDown：\n");
+                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到酒馆战斗面板like下：\n");
                 System.IO.File.AppendAllText(savePath, "[ID]\t[CollectionShortName]\t[CollectionName]\n");
                 foreach (var record in GameDbf.BattlegroundsBoardSkin.GetRecords())
                 {
@@ -1112,7 +1112,7 @@ namespace HsMod
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGetTavern ending special effectslikeDown：\n");
+                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到Tavern ending special effectslike下：\n");
                 System.IO.File.AppendAllText(savePath, "[ID]\t[CollectionShortName]\t[CollectionName]\n");
                 foreach (var record in GameDbf.BattlegroundsFinisher.GetRecords())
                 {
@@ -1125,7 +1125,7 @@ namespace HsMod
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGet hero skin（including pub）likeDown：\n");
+                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGet hero skin（including pub）like下：\n");
                 System.IO.File.AppendAllText(savePath, "[CARD_ID]\t[Name]\t[HeroType]\n");
                 foreach (var record in GameDbf.CardHero.GetRecords())
                 {

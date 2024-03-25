@@ -21,7 +21,7 @@ namespace HsMod
             {
                 System.Diagnostics.Process CmdProcess = new System.Diagnostics.Process();
                 CmdProcess.StartInfo.FileName = "cmd.exe";
-                CmdProcess.StartInfo.CreateNoWindow = true;         // Don't createnewwindow    
+                CmdProcess.StartInfo.CreateNoWindow = true;         // 不创建new窗口    
                 CmdProcess.StartInfo.UseShellExecute = false;       //Not enabledshellstart process  
                 CmdProcess.StartInfo.RedirectStandardInput = true;  // Redirect input    
                 CmdProcess.StartInfo.RedirectStandardOutput = true; // Redirect standard output    
@@ -33,7 +33,7 @@ namespace HsMod
 
                 stringBuilder.Append(CmdProcess.StandardOutput.ReadToEnd());    //Get return value  There may be problems with Chinese characters Encoding 936 data could not be found.
 
-                CmdProcess.WaitForExit(5000);    //waiting procedureimplementComplete exit process  timeoutforwait待of毫Secondnumber，liketimeoutIf negative, it will wait indefinitely
+                CmdProcess.WaitForExit(5000);    //等待程序implement完退出进程  timeout为等待的毫Second数，liketimeoutIf negative, it will wait indefinitely
 
                 CmdProcess.Close();    //Finish
             }
@@ -48,7 +48,7 @@ namespace HsMod
         public static StringBuilder Template(string title = "", string body = "")
         {
             StringBuilder builder = new StringBuilder();
-            string nav = (System.IO.File.Exists(CommandConfig.hsMatchLogPath) && title != "index") ? "<li class=\"nav_li\"><a href=\"/matchlog\"><button class=\"btn_li\">Hearthstonegame</button></a></li>" : "";
+            string nav = (System.IO.File.Exists(CommandConfig.hsMatchLogPath) && title != "index") ? "<li class=\"nav_li\"><a href=\"/matchlog\"><button class=\"btn_li\">Hearthstone对局</button></a></li>" : "";
             if (title != "index")
             {
                 nav = $@"<center>
@@ -57,8 +57,8 @@ namespace HsMod
 <li class=""nav_li""><a href=""/pack""><button class=""btn_li"">Card pack information</button></a></li>
 <li class=""nav_li""><a href=""/collection""><button class=""btn_li"">card collection</button></a></li>
 <li class=""nav_li""><a href=""/skins""><button class=""btn_li"">Skin information</button></a></li>
-<li class=""nav_li""><a href=""/lettuce""><button class=""btn_li"">mercenarycloseCard</button></a></li>
-<li class=""nav_li""><a href=""/mercenaries""><button class=""btn_li"">mercenarycollect</button></a></li>
+<li class=""nav_li""><a href=""/lettuce""><button class=""btn_li"">mercenaryclose卡</button></a></li>
+<li class=""nav_li""><a href=""/mercenaries""><button class=""btn_li"">mercenary收藏</button></a></li>
 {nav}
 <li class=""nav_li""><a href=""/about""><button class=""btn_li"">close&emsp;&emsp;At</button></a></li>
 </ul></center><br />";
@@ -135,7 +135,7 @@ text-decoration: none;
         public static StringBuilder Template(StringBuilder body, string title = "")
         {
             StringBuilder builder = new StringBuilder();
-            string nav = (System.IO.File.Exists(CommandConfig.hsMatchLogPath) && title != "index") ? "<li class=\"nav_li\"><a href=\"/matchlog\"><button class=\"btn_li\">Hearthstonegame</button></a></li>" : "";
+            string nav = (System.IO.File.Exists(CommandConfig.hsMatchLogPath) && title != "index") ? "<li class=\"nav_li\"><a href=\"/matchlog\"><button class=\"btn_li\">Hearthstone对局</button></a></li>" : "";
             if (title != "index")
             {
                 nav = $@"<center>
@@ -144,8 +144,8 @@ text-decoration: none;
 <li class=""nav_li""><a href=""/pack""><button class=""btn_li"">Card pack information</button></a></li>
 <li class=""nav_li""><a href=""/collection""><button class=""btn_li"">card collection</button></a></li>
 <li class=""nav_li""><a href=""/skins""><button class=""btn_li"">Skin information</button></a></li>
-<li class=""nav_li""><a href=""/lettuce""><button class=""btn_li"">mercenarycloseCard</button></a></li>
-<li class=""nav_li""><a href=""/mercenaries""><button class=""btn_li"">mercenarycollect</button></a></li>
+<li class=""nav_li""><a href=""/lettuce""><button class=""btn_li"">mercenaryclose卡</button></a></li>
+<li class=""nav_li""><a href=""/mercenaries""><button class=""btn_li"">mercenary收藏</button></a></li>
 {nav}
 <li class=""nav_li""><a href=""/about""><button class=""btn_li"">close&emsp;&emsp;At</button></a></li>
 </ul></center><br />";
@@ -225,9 +225,9 @@ text-decoration: none;
             btn += @"<a href=""/pack""><button class=""btn_li"">Card pack information</button><br/></a><br/>";
             btn += @"<a href=""/collection""><button class=""btn_li"">card collection</button><br/></a><br/>";
             btn += @"<a href=""/skins""><button class=""btn_li"">Skin information</button><br/></a><br/>";
-            btn += @"<a href=""/lettuce""><button class=""btn_li"">mercenarycloseCard</button><br/></a><br/>";
-            btn += @"<a href=""/mercenaries""><button class=""btn_li"">mercenarycollect</button><br/></a><br/>";
-            if (System.IO.File.Exists(CommandConfig.hsMatchLogPath)) btn += @"<a href=""/matchlog""><button class=""btn_li"">Hearthstonegame</button><br/></a><br/>";
+            btn += @"<a href=""/lettuce""><button class=""btn_li"">mercenaryclose卡</button><br/></a><br/>";
+            btn += @"<a href=""/mercenaries""><button class=""btn_li"">mercenary收藏</button><br/></a><br/>";
+            if (System.IO.File.Exists(CommandConfig.hsMatchLogPath)) btn += @"<a href=""/matchlog""><button class=""btn_li"">Hearthstone对局</button><br/></a><br/>";
             btn += @"<a href=""/about""><button class=""btn_li"">close&emsp;&emsp;At</button><br/></a><br/>";
             string body = @"<h1 style=""text-align: center; opacity: 0.6;"">HsMod</h1>";
             body += $@"<div style=""text-align: center; width: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);"">{btn}</div>";
@@ -239,9 +239,9 @@ text-decoration: none;
             StringBuilder builder = new StringBuilder();
             builder.AppendLine(@"<h3 style=""text-align: center;"">closeAtHsMod</h3>");
             builder.AppendLine($"<p>Author: <a href='https://github.com/Pik-4'>Pik_4</a><br />Page Last Updated: 2022.12.10<br />HsMod Version:{PluginInfo.PLUGIN_VERSION}</p><br />");
-            builder.Append("<p><strong>H</strong>earth<strong>s</strong>tone <strong>Mod</strong>ify Based on BepInEx baseAtBepInExHearthstone modifications，plug-insource code bitsAt<a href='https://github.com/Pik-4/HsMod'>github.com/Pik-4/HsMod</a>，plug-in不会收集您of任何information；Project follows<code>AGPL-3.0</code>，For study and research only。</p>\r\n");
-            builder.Append("<h3>Implemented features</h3>\r\n<ol start='' >\r\n<li>supportGear speed8timesspeed（Allow expansion to speed and slowness in settings32times）</li>\r\n<li>with permissionVerifyWebCredentialsLog in（Also supports command line startup，No need to start Battle.net）。</li>\r\n<li>Block error reports，when an exception occurs，Error messages will not be reported to Blizzard。</li>\r\n<li>Disable dropped calls，Allow long periods of inactivity</li>\r\n<li>Allow automatic exit on error</li>\r\n<li>Allow window focus to be removed</li>\r\n<li>Remove window size restrictions</li>\r\n<li>Block pop-ups（If it cannot be matched, etc.）hint。</li>\r\n<li>Remove Chinese characteristicshint</li>\r\n<li>supportRemove nerf patchhint，Remove promotional ads，Remove ladder settlementawardWait for the pop-up window</li>\r\n<li>allowshieldgameFinishof升级hint、Settlementhint</li>\r\n<li>Allow blocking of battle orders、Tips for collecting achievements and other rewards</li>\r\n<li>Allows quick opening of packages，Open spaces once5open</li>\r\n<li>allowexistopenBaghour自动分解全额分解ofCard牌</li>\r\n<li>Allow display of game frame rate information</li>\r\n<li>allowRevisegame frame rate</li>\r\n<li>Support in collection、hero、card back、Strike effects、TavernPanel etc.fieldscene，Shown when a card is selected by right-clickingDbid</li>\r\n<li>supportcollectshow9+Actual number of cards</li>\r\n<li>allowexist0-0（No need to form cards）give up duel</li>\r\n<li>Allow automatic claiming of competitionsfield、Duels and other rewards（Click package at the end）</li>\r\n<li>Allow access to Hearthstone developer mode</li>\r\n<li>Automatically rotate cards when friends watch the game、Automatically watch both sides</li>\r\n<li>Support fireside party simulation positioning</li>\r\n<li>Allows automatic blocking of opponent's expressions or setting upper limit of opponent's expressions；Supports blocking thinking emoticons；Supports blocking Bob’s voice；supportBattle跳过herointroduce</li>\r\n<li>supportExpression without cooling（Minimum interval for sending emoticons1.5Second）</li>\r\n<li>supportExpression shortcut keys</li>\r\n<li>Support quick combat（Skip part of animation，Smoother than gears，turn onhourshieldFinal effects，This option canexistTavernandmercenary(PVE)Take effect，The mercenary may have a lag during the final death settlement.，）</li>\r\n<li>Support Hearthstone automatic gold card、Diamond card</li>\r\n<li>Allows individual blocking of opponent card effects</li>\r\n<li>Allow display of opponent's full BattleTag nickname</li>\r\n<li>Allow click on avatar to obtainTavernPlayer nickname</li>\r\n<li>Allow adding opponents to the match</li>\r\n<li>allowexistlegend前显对手示Ladder to Heavengrade</li>\r\n<li>Supports marking opponent’s known cards</li>\r\n<li>with permissionShortcut key to muteHearthstone</li>\r\n<li>Allow automatic reporting of opponents；When auto-report opponents is enabled，can be automatically generatedGame records</li>\r\n<li>Support analog unplugging（Need to enable shortcut keys）</li>\r\n<li>support一键自动分解全额分解ofCard牌（Need to enable shortcut keys）</li>\r\n<li>Support one-click removal<code>new！</code>（Need to enable shortcut keys，May need to re-newGo to favorites，mercenarypossibleRestartexpire after）</li>\r\n<li>supportReviseBattleheroskin、Tavernheroskin、Final effects、Battle panel、Tavernpanel、lucky coinwaitSkin information。（Requires configuration<code>HsSkins.cfg</code>，orexistSetting upRevise，game中Evennewneedexist按Down<code>F4</code>After saving，Simulate unplugging）</li>\r\n<li>supportRevisecard back（game中自动Take effect）</li>\r\n<li>supportmercenaryRandom skin，Mandatory diamond skin etc.</li>\r\n<li>supportshieldmercenarytreasure chest、Ladder to HeavenawardWait for the pop-up window</li>\r\n<li>supportshieldmercenaryBattle interface scaling</li>\r\n<li>support模拟openBag（Support random results，support自定义CardBagtype、quantity、rarity、Quality and other information；Supports simulation of fixed results）</li>\r\n<li>supportDevice simulation（Allowed to collectiOS、Androidwait设备ofCardBagcard back，It may take a battle）</li>\r\n<li>supportgoldBuy Naxxramas、black rock mountain、Society of Explorers and other adventures（alsosupportCard拉赞，But can't write a prologue）</li>\r\n<li>Allows forcible opening of Karazhan（Can't write prologue，Not passedcloseCan't jump beforeclose）</li>\r\n<li>Support information display（showinfo，Need to enableplug-in，defaultHTTP，port58744）；supportshowmercenarydevelopschedule、openBag历史informationwait。</li>\r\n<li>Support receiving Hearthstone startup parameters，Such as specifying the resolution size, etc.。</li>\r\n<li>supportWebshell，The path is/shell。Need to be turned on in settings，Currently Chinese display may existexistGarbled characters。</li>\r\n<li>allowed to passWebRead local file，That is, parsing static pages。This function is not yetexistopen发中，Currently with<code>Hearthstone\\website</code>as root directory。</li>\r\n\r\n</ol>");
-            builder.AppendLine("<h3><strong>Additional information</strong></h3>\r\n<ol start='' >\r\n<li>plug-inCannot be placedexist含有中文ofUnder contents，That is, the Hearthstone installation path cannot contain Chinese characters.。</li>\r\n<li>Bookplug-inpossibleandbaseAt<code>Assembly-CSharp.dll</code>ofReviseconflict，Revise<code>Assembly-CSharp.dll</code>may causeILInstruction positioning exception，thus causing correlationPatchUnableTake effect；It may also be related to otherBepInExplug-in（For examplemercenary、MixMod）conflict，The reason is that the same method mayexisttwoplug-inZhongducunexistPatch，When there are multiplePatchhour，The running results may be abnormal，Bookplug-inThere is no detection of whether the original method isRevise。</li>\r\n<li>The skin's configuration file is in<code>Hearthstone\\BepInEx\\config\\HsSkins.cfg</code>。likenone，is automatically created after running the game。</li>\r\n<li><code>F4</code>for fixed shortcut keys，useAtGet some in-game information（Mutuallycloseinformation storageexist<code>Hearthstone\\BepInEx\\</code>Under contents）、<strong>Update skin configuration</strong>、RestartWebServices etc.。The rest of the shortcut keys can be customized。</li>\r\n<li>Bookplug-inexistdefaultstateDown，Almost all functions need to be turned on manually；plug-inMost functions canexistInstructions found in configuration，A small number of functions are only available inPatchmentioned in（such as minimizing restrictions）。</li>\r\n<li>Bookplug-inWeb Server（Right nowShowinfo）ofdefaultportfor58744，Normally，Listen to all localIP，Use cloud serverhour，Please pay attention to firewall、Security group and other configurations。</li>\r\n<li>used for game statisticslogThe file is<code>BepInEx\\HsMatch.log</code>，Can be modified in settings。（The fields start with<code>,</code>separate）</li>\r\n<li>When a problem occurs, first try to delete the relevant<code>.cfg</code>Configuration file（Generally located<code>BepInEx\\config\\</code>），to reconfigure；If the problem still exists，please bring<code>HsMod.cfg</code>submit<a href='https://github.com/Pik-4/HsMod/issues'>Issues</a>，However, timely answers are not guaranteed。</li>\r\n<li><code>GetHsLib.py</code>useAtEvennewHearthstoneOwn runtime library，<code>install.bat</code>used to compile the<code>HsMod.dll</code>Copy to default Hearthstone directory（The premise isBepInExAlready configured）。also，existpushRevise版Book号后（PluginInfo.csafter changes），will be automatically generated<a href='https://github.com/Pik-4/HsMod/releases'>release</a>。</li>\r\n<li>If skin abnormalities appear，Check, please<code>HsSkins.cfg</code>，and try to delete<code>HsMod.cfg</code>Reconfigure。</li>\r\n<li>ifReviseSettings cannot be saved，Check, pleaseWhether to enable otherHearthstoneplug-in。</li>\r\n\r\n</ol>");
+            builder.Append("<p><strong>H</strong>earth<strong>s</strong>tone <strong>Mod</strong>ify Based on BepInEx 基AtBepInExHearthstone modifications，plug-in源代码位At<a href='https://github.com/Pik-4/HsMod'>github.com/Pik-4/HsMod</a>，plug-in不会收集您的任何信息；Project follows<code>AGPL-3.0</code>，For study and research only。</p>\r\n");
+            builder.Append("<h3>Implemented features</h3>\r\n<ol start='' >\r\n<li>support齿轮快慢8times速（Allow expansion to speed and slowness in settings32times）</li>\r\n<li>with permissionVerifyWebCredentialsLog in（Also supports command line startup，No need to start Battle.net）。</li>\r\n<li>Block error reports，when an exception occurs，Error messages will not be reported to Blizzard。</li>\r\n<li>Disable dropped calls，Allow long periods of inactivity</li>\r\n<li>Allow automatic exit on error</li>\r\n<li>Allow window focus to be removed</li>\r\n<li>Remove window size restrictions</li>\r\n<li>Block pop-ups（If it cannot be matched, etc.）hint。</li>\r\n<li>移除中国特色hint</li>\r\n<li>support移除削弱补丁hint，Remove promotional ads，移除天梯结算award等弹窗</li>\r\n<li>允许屏蔽对局Finish的升级hint、结算hint</li>\r\n<li>Allow blocking of battle orders、Tips for collecting achievements and other rewards</li>\r\n<li>Allows quick opening of packages，Open spaces once5open</li>\r\n<li>允许exist开Baghour自动分解全额分解的卡牌</li>\r\n<li>Allow display of game frame rate information</li>\r\n<li>允许Revise游戏帧率</li>\r\n<li>Support in collection、hero、card back、Strike effects、Tavern面板等field景，Shown when a card is selected by right-clickingDbid</li>\r\n<li>support收藏显示9+Actual number of cards</li>\r\n<li>允许exist0-0（No need to form cards）give up duel</li>\r\n<li>允许自动领取竞技field、Duels and other rewards（Click package at the end）</li>\r\n<li>Allow access to Hearthstone developer mode</li>\r\n<li>Automatically rotate cards when friends watch the game、Automatically watch both sides</li>\r\n<li>Support fireside party simulation positioning</li>\r\n<li>Allows automatic blocking of opponent's expressions or setting upper limit of opponent's expressions；Supports blocking thinking emoticons；Supports blocking Bob’s voice；support对战跳过hero介绍</li>\r\n<li>support表情无冷却（Minimum interval for sending emoticons1.5Second）</li>\r\n<li>support表情快捷键</li>\r\n<li>Support quick combat（Skip part of animation，Smoother than gears，开启hour屏蔽Final effects，该选项可existTavern与mercenary(PVE)Take effect，The mercenary may have a lag during the final death settlement.，）</li>\r\n<li>Support Hearthstone automatic gold card、Diamond card</li>\r\n<li>Allows individual blocking of opponent card effects</li>\r\n<li>Allow display of opponent's full BattleTag nickname</li>\r\n<li>允许点击头像获取Tavern玩家昵称</li>\r\n<li>Allow adding opponents to the match</li>\r\n<li>允许existlegend前显对手示天梯grade</li>\r\n<li>Supports marking opponent’s known cards</li>\r\n<li>with permission快捷键静音Hearthstone</li>\r\n<li>Allow automatic reporting of opponents；When auto-report opponents is enabled，可以自动生成Game records</li>\r\n<li>Support analog unplugging（Need to enable shortcut keys）</li>\r\n<li>support一键自动分解全额分解的卡牌（Need to enable shortcut keys）</li>\r\n<li>Support one-click removal<code>new！</code>（Need to enable shortcut keys，可能需要重new进入收藏，mercenary可能Restart后失效）</li>\r\n<li>supportRevise对战hero皮肤、Tavernhero皮肤、Final effects、Battle panel、Tavern面板、lucky coin等Skin information。（Requires configuration<code>HsSkins.cfg</code>，或exist设置中Revise，对局中更new需要exist按下<code>F4</code>After saving，Simulate unplugging）</li>\r\n<li>supportRevisecard back（对局中自动Take effect）</li>\r\n<li>supportmercenary随机皮肤，Mandatory diamond skin etc.</li>\r\n<li>support屏蔽mercenary宝箱、天梯award等弹窗</li>\r\n<li>support屏蔽mercenary对战界面缩放</li>\r\n<li>support模拟开Bag（Support random results，support自定义卡Bagtype、quantity、rarity、Quality and other information；Supports simulation of fixed results）</li>\r\n<li>support设备模拟（Allowed to collectiOS、Android等设备的卡Bagcard back，It may take a battle）</li>\r\n<li>supportgold购买纳克萨玛斯、black rock mountain、Society of Explorers and other adventures（也support卡拉赞，But can't write a prologue）</li>\r\n<li>Allows forcible opening of Karazhan（Can't write prologue，未通close前不能跳close）</li>\r\n<li>Support information display（showinfo，需要启用plug-in，defaultHTTP，port58744）；support显示mercenary养成schedule、开Bag历史信息等。</li>\r\n<li>Support receiving Hearthstone startup parameters，Such as specifying the resolution size, etc.。</li>\r\n<li>supportWebshell，The path is/shell。Need to be turned on in settings，目前中文显示可能存exist乱码。</li>\r\n<li>allowed to passWebRead local file，That is, parsing static pages。该功能尚exist开发中，Currently with<code>Hearthstone\\website</code>as root directory。</li>\r\n\r\n</ol>");
+            builder.AppendLine("<h3><strong>Additional information</strong></h3>\r\n<ol start='' >\r\n<li>plug-in不可放置exist含有中文的Under contents，That is, the Hearthstone installation path cannot contain Chinese characters.。</li>\r\n<li>本plug-in可能与基At<code>Assembly-CSharp.dll</code>的Reviseconflict，Revise<code>Assembly-CSharp.dll</code>may causeILInstruction positioning exception，thus causing correlationPatch无法Take effect；It may also be related to otherBepInExplug-in（例如mercenary、MixMod）conflict，原因是同一个方法可能exist两个plug-in中都存existPatch，When there are multiplePatchhour，The running results may be abnormal，本plug-in没有检测原方法是否被Revise。</li>\r\n<li>The skin's configuration file is in<code>Hearthstone\\BepInEx\\config\\HsSkins.cfg</code>。like无，is automatically created after running the game。</li>\r\n<li><code>F4</code>for fixed shortcut keys，用At获取游戏内部分信息（相close信息存放exist<code>Hearthstone\\BepInEx\\</code>Under contents）、<strong>Update skin configuration</strong>、RestartWebServices etc.。The rest of the shortcut keys can be customized。</li>\r\n<li>本plug-inexistdefaultstate下，Almost all functions need to be turned on manually；plug-in大部分功能能exist配置中找到说明，A small number of functions are only available inPatchmentioned in（such as minimizing restrictions）。</li>\r\n<li>本plug-inWeb Server（Right nowShowinfo）的defaultport为58744，Normally，Listen to all localIP，使用云服务器hour，Please pay attention to firewall、Security group and other configurations。</li>\r\n<li>used for game statisticslogThe file is<code>BepInEx\\HsMatch.log</code>，Can be modified in settings。（The fields start with<code>,</code>separate）</li>\r\n<li>When a problem occurs, first try to delete the relevant<code>.cfg</code>Configuration file（Generally located<code>BepInEx\\config\\</code>），to reconfigure；If the problem still exists，please bring<code>HsMod.cfg</code>submit<a href='https://github.com/Pik-4/HsMod/issues'>Issues</a>，However, timely answers are not guaranteed。</li>\r\n<li><code>GetHsLib.py</code>用At更newHearthstone自有运行库，<code>install.bat</code>used to compile the<code>HsMod.dll</code>Copy to default Hearthstone directory（The premise isBepInExAlready configured）。also，existpushRevise版本号后（PluginInfo.csafter changes），will be automatically generated<a href='https://github.com/Pik-4/HsMod/releases'>release</a>。</li>\r\n<li>If skin abnormalities appear，Check, please<code>HsSkins.cfg</code>，and try to delete<code>HsMod.cfg</code>Reconfigure。</li>\r\n<li>如果Revise设置无法保存，Check, please是否启用其他Hearthstoneplug-in。</li>\r\n\r\n</ol>");
             return Template(builder, "About");
         }
 
@@ -282,7 +282,7 @@ text-decoration: none;
             }
             catch (Exception ex)
             {
-                builder.Append($@"Basic InformationGetException<br /><p style=""white-space: pre-line;"">{ex}</p><br />");
+                builder.Append($@"Basic Information获取异常<br /><p style=""white-space: pre-line;"">{ex}</p><br />");
             }
             finally
             {
@@ -300,7 +300,7 @@ text-decoration: none;
             }
             catch (Exception ex)
             {
-                builder.Append($@"War order informationGetException<br /><p style=""white-space: pre-line;"">{ex}</p><br />");
+                builder.Append($@"War order information获取异常<br /><p style=""white-space: pre-line;"">{ex}</p><br />");
             }
             finally
             {
@@ -336,7 +336,7 @@ text-decoration: none;
                     string rankName = Utils.RankIdxToString(currentMedal.starLevel);
                     string detail = (rankName == "legend") ? currentMedal.legendIndex.ToString() + " name" : currentMedal.earnedStars.ToString() + " star";
                     builder.Append($@"{rankMode}：{rankName}&emsp;{detail}&emsp;&emsp;");
-                    builder.Append($@"seasonfieldSecond-rate：{currentMedal.seasonWins}win - {currentMedal.seasonGames}field");
+                    builder.Append($@"赛季field次：{currentMedal.seasonWins}win - {currentMedal.seasonGames}field");
                     builder.Append($@"（{string.Format("{0:P1}", (float)currentMedal.seasonWins / (float)currentMedal.seasonGames)}）<br />");
                 }
                 NetCache.NetCacheMercenariesPlayerInfo mercenariesPlayerInfo = NetCache.Get()?.GetNetObject<NetCache.NetCacheMercenariesPlayerInfo>();
@@ -352,7 +352,7 @@ text-decoration: none;
             {
                 builder.Append("<hr />");
             }
-            builder.Append(@"<h3 style=""text-align: center;"">Taskinformation</h3>");
+            builder.Append(@"<h3 style=""text-align: center;"">Task信息</h3>");
             try
             {
                 Hearthstone.DataModels.QuestListDataModel dailyQuestListDataModel = new Hearthstone.DataModels.QuestListDataModel();
@@ -368,7 +368,7 @@ text-decoration: none;
                     }
                     dailyQuestListDataModel.Quests.Add(item);
                 }
-                builder.Append(@"<h4>dailyTask</h4>");
+                builder.Append(@"<h4>日常Task</h4>");
                 foreach (Hearthstone.DataModels.QuestDataModel item in dailyQuestListDataModel.Quests)
                 {
                     if (item != null)
@@ -378,7 +378,7 @@ text-decoration: none;
                             builder.Append("<li>");
                             builder.Append($@"{item?.Status} {item?.Name}：{item?.Description}<br />schedule：{item?.ProgressMessage}<br />");
                             builder.Append($@"experienceaward：{item?.RewardTrackXp}");
-                            builder.Append((item?.RerollCount > 0) ? "（Can be brushednew）" : "");
+                            builder.Append((item?.RerollCount > 0) ? "（可刷new）" : "");
                             builder.Append("</li><br />");
                         }
                         else
@@ -399,7 +399,7 @@ text-decoration: none;
                     }
                     weeklyQuestListDataModel.Quests.Add(item);
                 }
-                builder.Append(@"<h4>weeklyTask</h4>");
+                builder.Append(@"<h4>每周Task</h4>");
                 foreach (Hearthstone.DataModels.QuestDataModel item in weeklyQuestListDataModel.Quests)
                 {
                     if (item != null)
@@ -409,7 +409,7 @@ text-decoration: none;
                             builder.Append("<li>");
                             builder.Append($@"{item?.Status} {item?.Name}：{item?.Description}<br />schedule：{item?.ProgressMessage}<br />");
                             builder.Append($@"experienceaward：{item?.RewardTrackXp}");
-                            builder.Append((item?.RerollCount > 0) ? "（Can be brushednew）" : "");
+                            builder.Append((item?.RerollCount > 0) ? "（可刷new）" : "");
                             builder.Append("</li><br />");
                         }
                         else
@@ -444,7 +444,7 @@ text-decoration: none;
 
                 if (specialQuestListDataModel.Quests.Count >= 1 && specialQuestListDataModel.Quests[0].QuestId > 0)
                 {
-                    builder.Append(@"<h4>ActivityTask</h4>");
+                    builder.Append(@"<h4>活动Task</h4>");
                     foreach (Hearthstone.DataModels.QuestDataModel item in specialQuestListDataModel.Quests.ToList().Where((x, i) => specialQuestListDataModel.Quests.ToList().FindIndex(z => z.QuestId == x.QuestId) == i).ToList())
                     {
                         if (item != null)
@@ -458,7 +458,7 @@ text-decoration: none;
                                 if (item.NextInChain != 0)
                                 {
                                     int nextQuestID = item.NextInChain;
-                                    builder.Append("Taskchain：<br />");
+                                    builder.Append("Task链：<br />");
                                     while (nextQuestID != 0)
                                     {
                                         var nextQuest = GameDbf.Quest.GetRecord(nextQuestID);
@@ -472,7 +472,7 @@ text-decoration: none;
                                 builder.Append($@"There is still time left until the end of the event：" + (!String.IsNullOrEmpty(item.TimeUntilExpiration) ? item.TimeUntilExpiration.ToString() : "unknown"));
                                 builder.Append(" ");
                                 builder.Append(item.Abandonable ? "（Can be abandoned）" : "");
-                                builder.Append((item?.RerollCount > 0) ? "(Can be brushednew）" : "");
+                                builder.Append((item?.RerollCount > 0) ? "(可刷new）" : "");
                                 builder.Append("</li><br />");
                             }
                             else
@@ -491,7 +491,7 @@ text-decoration: none;
                     }
                     battlegroundsQuestListDataModel.Quests.Add(item);
                 }
-                builder.Append(@"<h4>weeklyTavern</h4>");
+                builder.Append(@"<h4>每周Tavern</h4>");
                 foreach (Hearthstone.DataModels.QuestDataModel item in battlegroundsQuestListDataModel.Quests)
                 {
                     if (item != null)
@@ -501,7 +501,7 @@ text-decoration: none;
                             builder.Append("<li>");
                             builder.Append($@"{item?.Status} {item?.Name}：{item?.Description}<br />schedule：{item?.ProgressMessage}<br />");
                             builder.Append($@"experienceaward：{item?.RewardTrackXp}");
-                            builder.Append((item?.RerollCount > 0) ? "（Can be brushednew）" : "");
+                            builder.Append((item?.RerollCount > 0) ? "（可刷new）" : "");
                             builder.Append("</li><br />");
                         }
                         else
@@ -530,7 +530,7 @@ text-decoration: none;
                     builder.Append($"Taskaward：{mercenaryVillageTaskItemDataModel.RewardList.Description}<br />");
                     builder.Append($"task progress：{mercenaryVillageTaskItemDataModel.ProgressMessage}");
                     if (mercenaryVillageTaskItemDataModel.IsTimedEvent)
-                        builder.Append($"<br />Remaininghourbetween：{mercenaryVillageTaskItemDataModel.RemainingEventTime}<br />");
+                        builder.Append($"<br />Remaininghour间：{mercenaryVillageTaskItemDataModel.RemainingEventTime}<br />");
                     builder.Append("</li><br />");
                 }
 
@@ -538,7 +538,7 @@ text-decoration: none;
             }
             catch (Exception ex)
             {
-                builder.Append($@"TaskinformationGetException<br /><p style=""white-space: pre-line;"">{ex}</p><br />");
+                builder.Append($@"Task信息获取异常<br /><p style=""white-space: pre-line;"">{ex}</p><br />");
             }
             finally
             {
@@ -583,18 +583,18 @@ text-decoration: none;
                 }
                 temp += "</table>";
 
-                body += $"<li>Total number of cards：{cards.total}，Among them gold cardquantity：{cards.gTotal}</li>";
-                body += $"<li>usuallyNumber of cards：{cards.common + cards.gCommon}，Among them gold cardquantity：{cards.gCommon}</li>";
-                body += $"<li>rareNumber of cards：{cards.rare + cards.gRare}，Among them gold cardquantity：{cards.gRare}</li>";
-                body += $"<li>Number of epic cards：{cards.epic + cards.gEpic}，Among them gold cardquantity：{cards.gEpic}</li>";
-                body += $"<li>legendNumber of cards：{cards.legendary + cards.gLegendary}，Among them gold cardquantity：{cards.gLegendary}</li>";
+                body += $"<li>Total number of cards：{cards.total}，其中金卡quantity：{cards.gTotal}</li>";
+                body += $"<li>usuallyNumber of cards：{cards.common + cards.gCommon}，其中金卡quantity：{cards.gCommon}</li>";
+                body += $"<li>稀有Number of cards：{cards.rare + cards.gRare}，其中金卡quantity：{cards.gRare}</li>";
+                body += $"<li>Number of epic cards：{cards.epic + cards.gEpic}，其中金卡quantity：{cards.gEpic}</li>";
+                body += $"<li>legendNumber of cards：{cards.legendary + cards.gLegendary}，其中金卡quantity：{cards.gLegendary}</li>";
                 body += $"<li>Disintegrating arcane dust：{cards.totalDust}</li>";
                 body += "<br /><hr />";
                 //body += temp;
             }
             catch (Exception ex)
             {
-                body += $@"Abnormal acquisition of card information，Please repeatnewGo to favorites模式。<br /><p style=""white-space: pre-line;"">{ex}</p><br />";
+                body += $@"Abnormal acquisition of card information，请重new进入收藏模式。<br /><p style=""white-space: pre-line;"">{ex}</p><br />";
             }
             finally
             {
@@ -605,7 +605,7 @@ text-decoration: none;
         public static StringBuilder MercenariesLettucePage()
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append(@"<h3 style=""text-align: center;"">mercenarycloseCard</h3>");
+            builder.Append(@"<h3 style=""text-align: center;"">mercenaryclose卡</h3>");
 
             try
             {
@@ -668,7 +668,7 @@ text-decoration: none;
             }
             catch (Exception ex)
             {
-                builder.Append($@"mercenarycloseAbnormal acquisition of card information<br /><p style=""white-space: pre-line;"">{ex}</p><br />");
+                builder.Append($@"mercenaryclose卡信息获取异常<br /><p style=""white-space: pre-line;"">{ex}</p><br />");
             }
             finally
             {
@@ -706,7 +706,7 @@ text-decoration: none;
             }
             catch (Exception ex)
             {
-                body += $@"lucky coininformationGetException<br /><p style=""white-space: pre-line;"">{ex}</p>";
+                body += $@"lucky coin信息获取异常<br /><p style=""white-space: pre-line;"">{ex}</p>";
             }
             finally
             {
@@ -747,7 +747,7 @@ text-decoration: none;
             builder.Append(body);
 
 
-            body = "<h4>Tavernbattle panel</h4>";
+            body = "<h4>Tavern战斗面板</h4>";
             try
             {
                 string temp = @"<table border=0 style=""text-align: center;""><tr>";
@@ -770,7 +770,7 @@ text-decoration: none;
             }
             catch (Exception ex)
             {
-                body += $@"TavernAbnormal acquisition of battle panel information<br /><p style=""white-space: pre-line;"">{ex}</p>";
+                body += $@"Tavern战斗面板信息获取异常<br /><p style=""white-space: pre-line;"">{ex}</p>";
             }
             finally
             {
@@ -802,7 +802,7 @@ text-decoration: none;
             }
             catch (Exception ex)
             {
-                body += $@"TavernFinal effectsinformationGetException<br /><p style=""white-space: pre-line;"">{ex}</p>";
+                body += $@"TavernFinal effects信息获取异常<br /><p style=""white-space: pre-line;"">{ex}</p>";
             }
             finally
             {
@@ -834,10 +834,10 @@ text-decoration: none;
                                 temp += "<td>Tavernhero</td>";
                                 break;
                             case Assets.CardHero.HeroType.BATTLEGROUNDS_GUIDE:
-                                temp += "<td>Tavernbob</td>";
+                                temp += "<td>Tavern鲍勃</td>";
                                 break;
                             default:
-                                temp += "<td>Battlehero</td>";
+                                temp += "<td>对战hero</td>";
                                 break;
                         }
                         temp += "</tr>";
@@ -848,7 +848,7 @@ text-decoration: none;
             }
             catch (Exception ex)
             {
-                body += $@"heroinformationGetException<br /><p style=""white-space: pre-line;"">{ex}</p>";
+                body += $@"hero信息获取异常<br /><p style=""white-space: pre-line;"">{ex}</p>";
             }
             finally
             {
@@ -863,7 +863,7 @@ text-decoration: none;
         public static StringBuilder MercenariesPage()
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append(@"<h3 style=""text-align: center;"">mercenarycollect</h3>");
+            builder.Append(@"<h3 style=""text-align: center;"">mercenary收藏</h3>");
             try
             {
                 if (CollectionManager.Get() == null)
@@ -932,7 +932,7 @@ text-decoration: none;
                                 temp += $"<td>More coins are needed to reach full range：{coinNeed}</td>";
                             else
                             {
-                                temp += $"<td>Can be upgraded tofull！</td>";
+                                temp += $"<td>可升级至full！</td>";
                             }
                         }
 
@@ -956,7 +956,7 @@ text-decoration: none;
             }
             catch (Exception ex)
             {
-                builder.Append($@"mercenarycollectinformationGetException<br /><p style=""white-space: pre-line;"">{ex}</p>");
+                builder.Append($@"mercenary收藏信息获取异常<br /><p style=""white-space: pre-line;"">{ex}</p>");
             }
             finally
             {
@@ -1013,11 +1013,11 @@ text-decoration: none;
                     }
                 }
                 body += temp;
-                body += $"</table><br /><p>You opened a total of{totalOpened}Bag，There are still{totalRemain}Bag未open。</p>";
+                body += $"</table><br /><p>You opened a total of{totalOpened}Bag，There are still{totalRemain}Bag未开。</p>";
             }
             catch (Exception ex)
             {
-                body += $@"Card pack informationGetException<br /><p style=""white-space: pre-line;"">{ex}</p>";
+                body += $@"Card pack information获取异常<br /><p style=""white-space: pre-line;"">{ex}</p>";
             }
             finally
             {
@@ -1055,7 +1055,7 @@ text-decoration: none;
                         {
                             if (i == 1 && lineSplit[i].Length > 0)
                             {
-                                if (lineSplit[i] == "winprofit") temp += $"<td style=\"color:#01FF70\">winprofit</td>";
+                                if (lineSplit[i] == "win利") temp += $"<td style=\"color:#01FF70\">win利</td>";
                                 else if (lineSplit[i] == "fail") temp += $"<td style=\"color:#FF4136\">fail</td>";
                                 else if (lineSplit[i] == "unknown" || lineSplit[i] == "draw") temp += $"<td>{lineSplit[i]}</td>";
                                 else if (int.Parse(lineSplit[i]) > 0) temp += $"<td style=\"color:#01FF70\">+{int.Parse(lineSplit[i])}</td>";
