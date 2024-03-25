@@ -15,47 +15,47 @@ namespace HsMod
     {
         public enum CardState
         {
-            [Description("default（No modifications）")]
+            [Description("默认（不做修改）")]
             Default,
-            [Description("Only valid for friendly parties")]
+            [Description("仅友方有效")]
             OnlyMy,
-            [Description("All take effect")]
+            [Description("全部生效")]
             All,
-            [Description("Disablespecial effects")]
+            [Description("禁用特效")]
             Disabled
         }
         //public enum QuickMode
         //{
-        //    [Description("default（Disable）")]
+        //    [Description("默认（禁用）")]
         //    Default,
-        //    [Description("Battlegrounds")]
+        //    [Description("酒馆战棋")]
         //    Battlegrounds,
-        //    [Description("Mercenary War Chronicles")]
+        //    [Description("佣兵战纪")]
         //    Mercenaries,
-        //    [Description("All modes")]
+        //    [Description("全部模式")]
         //    AllMode,
-        //    [Description("Disable")]
+        //    [Description("禁用")]
         //    Disabled
         //}
         public enum SkinType
         {
-            [Description("card back")]
+            [Description("卡背")]
             CARDBACK,
-            [Description("card")]
+            [Description("卡牌")]
             CARD,
-            [Description("coin")]
+            [Description("硬币")]
             COIN,
-            [Description("hero skin")]
+            [Description("英雄皮肤")]
             HERO,
-            [Description("Tavern Bob")]
+            [Description("酒馆鲍勃")]
             BOB,
-            [Description("Tavern ending special effects")]
+            [Description("酒馆终结特效")]
             BATTLEGROUNDSFINISHER,
-            [Description("Tavern Battlefield")]
+            [Description("酒馆战场")]
             BATTLEGROUNDSBOARD,
-            [Description("Tavern hero skin")]
+            [Description("酒馆英雄皮肤")]
             BATTLEGROUNDSHERO,
-            [Description("Hero Powers")]
+            [Description("英雄技能")]
             HEROPOWER,
         }
         public enum AlertPopupResponse
@@ -68,27 +68,27 @@ namespace HsMod
         }
         public enum ConfigTemplate
         {
-            [Description("default")]
+            [Description("默认")]
             DoNothing,
-            [Description("Hang up")]
+            [Description("挂机")]
             AwayFromKeyboard,
-            [Description("Anti-hook")]
+            [Description("反挂机")]
             AntiAwayFromKeyboard
         }
         public enum BuyAdventureTemplate
         {
-            [Description("default")]
+            [Description("默认")]
             DoNothing,
-            [Description("Curse of Naxxramas")]
+            [Description("纳克萨玛斯的诅咒")]
             BuyNAX,
-            [Description("Blackrock Mountain's Fire")]
+            [Description("黑石山的火焰")]
             BuyBRM,
-            [Description("Society of Explorers")]
+            [Description("探险者协会")]
             BuyLOE,
-            [Description("Karazhan Night")]
+            [Description("卡拉赞之夜")]
             BuyKara
         }
-        public enum CardRarity    // cardrareEvery time
+        public enum CardRarity    // 卡牌稀有度
         {
             COMMON = TAG_RARITY.COMMON,
             RARE = TAG_RARITY.RARE,
@@ -151,14 +151,14 @@ namespace HsMod
                         cardCount.gTotal += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 50;
-                        return $"<td>goldusually</td><td>{count}</td>";
+                        return $"<td>金色普通</td><td>{count}</td>";
                     }
                     else
                     {
                         cardCount.common += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 5;
-                        return $"<td>usually</td><td>{count}</td>";
+                        return $"<td>普通</td><td>{count}</td>";
                     }
                 case TAG_RARITY.RARE:
                     if (golden)
@@ -167,14 +167,14 @@ namespace HsMod
                         cardCount.gTotal += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 100;
-                        return $"<td>goldrare</td><td>{count}</td>";
+                        return $"<td>金色稀有</td><td>{count}</td>";
                     }
                     else
                     {
                         cardCount.rare += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 20;
-                        return $"<td>rare</td><td>{count}</td>";
+                        return $"<td>稀有</td><td>{count}</td>";
                     }
                 case TAG_RARITY.EPIC:
                     if (golden)
@@ -183,14 +183,14 @@ namespace HsMod
                         cardCount.gTotal += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 400;
-                        return $"<td>golden epic</td><td>{count}</td>";
+                        return $"<td>金色史诗</td><td>{count}</td>";
                     }
                     else
                     {
                         cardCount.epic += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 100;
-                        return $"<td>epic</td><td>{count}</td>";
+                        return $"<td>史诗</td><td>{count}</td>";
                     }
                 case TAG_RARITY.LEGENDARY:
                     if (golden)
@@ -199,17 +199,17 @@ namespace HsMod
                         cardCount.gTotal += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 1600;
-                        return $"<td>golden legend</td><td>{count}</td>";
+                        return $"<td>金色传说</td><td>{count}</td>";
                     }
                     else
                     {
                         cardCount.legendary += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 400;
-                        return $"<td>legend</td><td>{count}</td>";
+                        return $"<td>传说</td><td>{count}</td>";
                     }
                 default:
-                    return "<td>unknown</td>";
+                    return "<td>未知</td>";
             }
         }
 
@@ -219,24 +219,24 @@ namespace HsMod
             switch ((rank - 1) / 10)
             {
                 case 0:
-                    text = "bronze";
+                    text = "青铜";
                     break;
                 case 1:
-                    text = "silver";
+                    text = "白银";
                     break;
                 case 2:
-                    text = "gold";
+                    text = "黄金";
                     break;
                 case 3:
-                    text = "platinum";
+                    text = "铂金";
                     break;
                 case 4:
-                    text = "diamond";
+                    text = "钻石";
                     break;
                 case 5:
-                    return "legend";
+                    return "传说";
                 default:
-                    text = "unknown";
+                    text = "未知";
                     break;
             }
             return text + (11 - (rank - (rank - 1) / 10 * 10)).ToString();
@@ -278,7 +278,7 @@ namespace HsMod
             Blizzard.GameService.SDK.Client.Integration.BattleNet.Get().SubmitReport(Utils.CacheLastOpponentAccountID, Blizzard.GameService.SDK.Client.Integration.ReportType.ComplaintType.CHEATING, subcomplaintTypes);
             subcomplaintTypes.Clear();
 
-            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, Utils.CacheLastOpponentFullName + Utils.CacheLastOpponentAccountID.EntityId.ToString() + "Reported");
+            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, Utils.CacheLastOpponentFullName + Utils.CacheLastOpponentAccountID.EntityId.ToString() + "已举报");
         }
 
         public static void TryRefundCardDisenchantCallback()
@@ -286,17 +286,17 @@ namespace HsMod
             Network.CardSaleResult cardSaleResult = Network.Get().GetCardSaleResult();
             if (cardSaleResult.Action != Network.CardSaleResult.SaleResult.CARD_WAS_SOLD)
             {
-                MyLogger(LogLevel.Warning, $"Decomposition failed：{cardSaleResult.Action}");
-                UIStatus.Get().AddInfo("Decomposition failed");
+                MyLogger(LogLevel.Warning, $"分解失败：{cardSaleResult.Action}");
+                UIStatus.Get().AddInfo("分解失败");
             }
             else
             {
-                MyLogger(LogLevel.Warning, "Decomposed successfully");
+                MyLogger(LogLevel.Warning, "分解成功");
                 CollectionManager.Get().OnCollectionChanged();
             }
         }
 
-        //Destroy it
+        //毁灭吧
         //public static void TryRuinCardDisenchant()
         //{
         //    int totalSell = 0;
@@ -311,8 +311,8 @@ namespace HsMod
         //            totalSell += record.OwnedCount * value;
         //        }
         //    }
-        //    MyLogger(LogLevel.Warning, "Try to break down the dust：" + totalSell);
-        //    UIStatus.Get().AddInfo("Try to break down the dust：" + totalSell);
+        //    MyLogger(LogLevel.Warning, "尝试分解粉尘：" + totalSell);
+        //    UIStatus.Get().AddInfo("尝试分解粉尘：" + totalSell);
         //}
 
         public static void TryReadNewCards()
@@ -327,7 +327,7 @@ namespace HsMod
                     }
                 }
             }
-            if ((SceneMgr.Get()?.GetMode() == SceneMgr.Mode.LETTUCE_COLLECTION) || (SceneMgr.Get().GetMode() == SceneMgr.Mode.LETTUCE_PACK_OPENING)) // after execution，Need to re-enter the mercenary collection
+            if ((SceneMgr.Get()?.GetMode() == SceneMgr.Mode.LETTUCE_COLLECTION) || (SceneMgr.Get().GetMode() == SceneMgr.Mode.LETTUCE_PACK_OPENING)) // 执行后，需要重新进入佣兵收藏
             {
                 List<PegasusLettuce.MercenaryAcknowledgeData> m_mercenaryAcknowledgements = new List<PegasusLettuce.MercenaryAcknowledgeData>();
                 foreach (var merc in CollectionManager.Get().FindMercenaries(null, true, null, null, null).m_mercenaries)
@@ -403,7 +403,7 @@ namespace HsMod
             network.RegisterNetHandler(PegasusUtil.BoughtSoldCard.PacketID.ID, new Network.NetHandler(TryRefundCardDisenchantCallback), null);
             foreach (var record in CollectionManager.Get().GetOwnedCards())
             {
-                if (record != null && record.IsCraftable && record.IsRefundable && (record.OwnedCount > 0))    // Gold cards and regular cards will be triggered once each.，But all at once
+                if (record != null && record.IsCraftable && record.IsRefundable && (record.OwnedCount > 0))    // 金卡和普卡会分别触发一次，但是一次性分完
                 {
                     CraftingManager.Get().TryGetCardSellValue(record.CardId, record.PremiumType, out int value);
                     totalSell += record.OwnedCount * value;
@@ -429,8 +429,8 @@ namespace HsMod
                     m_pendingClientTransaction = null;
                 }
             }
-            MyLogger(LogLevel.Warning, "Try to break down the dust：" + totalSell);
-            UIStatus.Get().AddInfo("Try to break down the dust：" + totalSell);
+            MyLogger(LogLevel.Warning, "尝试分解粉尘：" + totalSell);
+            UIStatus.Get().AddInfo("尝试分解粉尘：" + totalSell);
         }
 
         public static void TryGetSafeImg()
@@ -485,7 +485,7 @@ namespace HsMod
         }
 
 
-        //False packet opening data range
+        //虚假开包数据范围
         public static List<int> GetCardsDbId()
         {
             List<int> cardsDbId = new List<int>();
@@ -499,7 +499,7 @@ namespace HsMod
                     {
                         if (entitydef.GetCardType() != TAG_CARDTYPE.HERO)
                             cardsDbId.Add(dbid);
-                        else if (entitydef.GetCost() != 0)    // neglecthero skin
+                        else if (entitydef.GetCost() != 0)    // 忽略英雄皮肤
                             cardsDbId.Add(dbid);
                     }
                 }
@@ -507,7 +507,7 @@ namespace HsMod
             return cardsDbId;
         }
 
-        //false results，designationrareEvery time
+        //虚假结果，指定稀有度
         public static int GetRandomCardID(TAG_RARITY rarity)
         {
             int dbid;
@@ -549,7 +549,7 @@ namespace HsMod
         }
 
 
-        //false results
+        //虚假结果
         public static void GenerateRandomCard(bool rarityRandom = false, bool premiumRandom = false, TAG_RARITY rarity = TAG_RARITY.LEGENDARY, TAG_PREMIUM premium = TAG_PREMIUM.GOLDEN)
         {
             if (!rarityRandom) rarity = (TAG_RARITY)fakeRandomRarity.Value;
@@ -604,12 +604,12 @@ namespace HsMod
             }
             if (SceneMgr.Get().GetMode() == SceneMgr.Mode.STARTUP || SceneMgr.Get().GetMode() == SceneMgr.Mode.LOGIN)
             {
-                UIStatus.Get().AddInfo("Uninitialized！");
+                UIStatus.Get().AddInfo("未初始化！");
                 return;
             }
             if (SceneMgr.Get().GetMode() == SceneMgr.Mode.GAMEPLAY)
             {
-                UIStatus.Get().AddInfo("Cannot be purchased within the game！");
+                UIStatus.Get().AddInfo("不能在游戏内购买！");
                 return;
             }
             try
@@ -656,14 +656,14 @@ namespace HsMod
 
                 if (StoreManager.GetStaticProductItemOwnershipStatus(productType, wingID, out string failReason) == ItemOwnershipStatus.OWNED)
                 {
-                    Utils.MyLogger(LogLevel.Warning, $"{adventure}：Adventure already owned！");
-                    UIStatus.Get().AddInfo("selectedAdventure already owned！");
+                    Utils.MyLogger(LogLevel.Warning, $"{adventure}：冒险已拥有！");
+                    UIStatus.Get().AddInfo("所选冒险已拥有！");
                 }
                 else
                 {
                     StoreManager.Get().StartAdventureTransaction(productType, wingID, null, null, global::ShopType.ADVENTURE_STORE, 1, false, null, 0);
 
-                    //ProductDataModel productByPmtId = StoreManager.Get().Catalog.GetProductByPmtId(ProductId.CreateFromValidated((long)0));     // Buy Classic Card Packs
+                    //ProductDataModel productByPmtId = StoreManager.Get().Catalog.GetProductByPmtId(ProductId.CreateFromValidated((long)0));     // 购买经典卡包
                     //PriceDataModel priceDataModel = productByPmtId.Prices.FirstOrDefault((PriceDataModel p) => p.Currency == CurrencyType.GOLD);
                     //Shop.Get().AttemptToPurchaseProduct(productByPmtId, priceDataModel, 1);
                 }
@@ -812,7 +812,7 @@ namespace HsMod
         public static void UpdateHeroPowerMapping()
         {
             HeroesPowerMapping.Clear();
-            //HeroesPowerMapping.Add("CS2_083b_H1", "CS2_102_H1"); Solve existing problems，like，Maiev's skills are not listed correctly。
+            //HeroesPowerMapping.Add("CS2_083b_H1", "CS2_102_H1"); 求解存在问题，如，玛维的技能无法正确列出。
             foreach (var hero in HeroesMapping)
             {
                 string rawHeroPower = GameUtils.GetHeroPowerCardIdFromHero(hero.Key);
@@ -1027,14 +1027,14 @@ namespace HsMod
             public static void Mercenaries(string savePath = @"BepInEx/HsMercenaries.log")
             {
                 //List<LettuceTeam> teams = CollectionManager.Get().GetTeams();
-                //System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGet您的队伍likeDown：\n");
+                //System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到您的队伍如下：\n");
                 //foreach (LettuceTeam team in teams)
                 //{
                 //    System.IO.File.AppendAllText(savePath, team.Name + "\n");
                 //}
-                System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGet关卡信息likeDown：\n");
+                System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到关卡信息如下：\n");
                 System.IO.File.AppendAllText(savePath, "[ID]\t[Heroic?]\t[Bounty]\t[BossName]\n");
-                foreach (var record in GameDbf.LettuceBounty.GetRecords())     // Generate level name
+                foreach (var record in GameDbf.LettuceBounty.GetRecords())     // 生成关卡名称
                 {
                     string saveString;
                     if (record != null)
@@ -1046,7 +1046,7 @@ namespace HsMod
             }
             public static void MyCards(string savePath = @"BepInEx/HsRefundCards.log")
             {
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGet全额分解cardConditionlikeDown：\n");
+                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到全额分解卡牌情况如下：\n");
                 System.IO.File.AppendAllText(savePath, "[Name]\t[PremiumType]\t[Rarity]\t[CardId]\t[CardDbId]\t[OwnedCount]\n");
                 //Filter<CollectibleCard> filter3 = new Filter<CollectibleCard>((CollectibleCard card) => card.IsRefundable);
                 foreach (var record in CollectionManager.Get().GetOwnedCards())
@@ -1062,7 +1062,7 @@ namespace HsMod
             }
             public static void Skins(string savePath = "BepInEx/HsSkins.log")
             {
-                System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGet the coin skin as follows：\n");
+                System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到硬币皮肤如下：\n");
                 System.IO.File.AppendAllText(savePath, "[CARD_ID]\t[Name]\n");
                 foreach (var record in GameDbf.CosmeticCoin.GetRecords())
                 {
@@ -1073,7 +1073,7 @@ namespace HsMod
                         System.IO.File.AppendAllText(savePath, saveString + "\n");
                     }
                 }
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tObtain the card back information as follows:：\n");
+                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到卡背信息如下：\n");
                 System.IO.File.AppendAllText(savePath, "[ID]\t[Name]\n");
                 foreach (var record in GameDbf.CardBack.GetRecords())
                 {
@@ -1086,7 +1086,7 @@ namespace HsMod
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGet游戏面板信息likeDown：\n");
+                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到游戏面板信息如下：\n");
                 System.IO.File.AppendAllText(savePath, "[ID]\t[NOTE_DESC]\n");
                 foreach (var record in GameDbf.Board.GetRecords())
                 {
@@ -1099,7 +1099,7 @@ namespace HsMod
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGet酒馆战斗面板likeDown：\n");
+                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到酒馆战斗面板如下：\n");
                 System.IO.File.AppendAllText(savePath, "[ID]\t[CollectionShortName]\t[CollectionName]\n");
                 foreach (var record in GameDbf.BattlegroundsBoardSkin.GetRecords())
                 {
@@ -1112,7 +1112,7 @@ namespace HsMod
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGetTavern ending special effectslikeDown：\n");
+                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到酒馆终结特效如下：\n");
                 System.IO.File.AppendAllText(savePath, "[ID]\t[CollectionShortName]\t[CollectionName]\n");
                 foreach (var record in GameDbf.BattlegroundsFinisher.GetRecords())
                 {
@@ -1125,7 +1125,7 @@ namespace HsMod
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGet hero skin（including pub）likeDown：\n");
+                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到英雄皮肤（包括酒馆）如下：\n");
                 System.IO.File.AppendAllText(savePath, "[CARD_ID]\t[Name]\t[HeroType]\n");
                 foreach (var record in GameDbf.CardHero.GetRecords())
                 {

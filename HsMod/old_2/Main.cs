@@ -12,7 +12,7 @@ namespace HsMod
     {
         private void Awake()
         {
-            // Clear Hearthstone Cache，No clearing judgment conditions are set yet.
+            // 清除炉石缓存，暂不设置清空判断条件
             if (true == true)
             {
                 Utils.DeleteFolder(Hearthstone.Util.PlatformFilePaths.ExternalDataPath + "/Cache");
@@ -20,7 +20,7 @@ namespace HsMod
             }
 
 
-            // Handling command line arguments
+            // 处理命令行参数
             string hsUnitID = "";
             if (UtilsArgu.Instance.Exists("hsunitid"))
                 hsUnitID = UtilsArgu.Instance.Single("hsunitid");
@@ -50,35 +50,35 @@ namespace HsMod
             if (UtilsArgu.Instance.Exists("afk"))
                 if (int.TryParse(UtilsArgu.Instance.Single("afk"), out int afk))
                 {
-                    timeGear.Value = 0;    //gear zero
+                    timeGear.Value = 0;    //齿轮置零
                     switch (afk)
                     {
-                        case 0:    //Disable
+                        case 0:    //禁用
                             isPluginEnable.Value = false;
                             isTimeGearEnable.Value = false;
                             break;
-                        case 1:    //Normal on-hook enabled
-                            isPluginEnable.Value = true;    //Enable plugin
-                            isTimeGearEnable.Value = true;  //enable gear
-                            configTemplate.Value = Utils.ConfigTemplate.AwayFromKeyboard;    //Set idle template
+                        case 1:    //正常挂机启用
+                            isPluginEnable.Value = true;    //启用插件
+                            isTimeGearEnable.Value = true;  //启用齿轮
+                            configTemplate.Value = Utils.ConfigTemplate.AwayFromKeyboard;    //设置挂机模板
                             break;
-                        case 2:    //Anti-hookbutDisableshortcut key
+                        case 2:    //反挂机但是禁用快捷键
                             isPluginEnable.Value = true;
                             configTemplate.Value = Utils.ConfigTemplate.AntiAwayFromKeyboard;
                             isShortcutsEnable.Value = false;
                             break;
-                        case 3:    //Enable but disable gear
+                        case 3:    //启用但是禁止齿轮
                             isPluginEnable.Value = true;
                             isTimeGearEnable.Value = false;
                             break;
-                        case 4:    //Anti-hook
+                        case 4:    //反挂机
                             isPluginEnable.Value = true;
                             configTemplate.Value = Utils.ConfigTemplate.AntiAwayFromKeyboard;
                             break;
                     }
                 }
 
-            // Handle plugin status
+            // 处理插件状态
             //Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
             if (isPluginEnable.Value)
             {
@@ -101,7 +101,7 @@ namespace HsMod
                 OnDestroy();
                 return;
             }
-            //Temporarily unable to moveshowFPSRelated code
+            //暂时无法移动showFPS相关代码
             showFPS = new GameObject("ShowFPSSceneObject", new Type[] { typeof(HSDontDestroyOnLoad) }).AddComponent<ShowFPS>();
             showFPS.enabled = false;
             showFPS.StartFrameCount();
@@ -121,19 +121,19 @@ namespace HsMod
                 graphicsManager?.UpdateTargetFramerate(targetFrameRate.Value, false);
             }
 
-            //Set the resolution of the command line lie inpatchafter，Prevent Hearthstone from automatically modifying
+            //设置命令行的分辨率 位于patch之后，防止炉石自动修改
             if (CommandConfig.width > 0 && CommandConfig.height > 0)
             {
                 Screen.SetResolution(CommandConfig.width, CommandConfig.height, false);
             }
 
-            //Green health
+            //绿色健康
             if (string.IsNullOrEmpty(webPageBackImg.Value) || webPageBackImg.Value.EndsWith("safeimg"))
             {
                 Utils.TryGetSafeImg();
             }
 
-            //start upwebServe
+            //启动web服务
             WebServer.Start();
             //InactivePlayerKicker.Get().SetShouldCheckForInactivity(isIdleKickEnable.Value);
         }
@@ -148,7 +148,7 @@ namespace HsMod
                     allPatchNum += tempatch.GetPatchedMethods().Count();
                 }
                 LoadSkinsConfigFromFile();
-                UIStatus.Get().AddInfo($"[{allPatchNum}]Plugin status：" + (isPluginEnable.Value ? "run" : "stop"));
+                UIStatus.Get().AddInfo($"[{allPatchNum}]插件状态：" + (isPluginEnable.Value ? "运行" : "停止"));
                 InactivePlayerKicker.Get().SetShouldCheckForInactivity(isIdleKickEnable.Value);
                 WebServer.Restart();
             }

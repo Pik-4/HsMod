@@ -12,7 +12,7 @@ namespace HsMod
     {
         private void Awake()
         {
-            // Clear Hearthstone Cache，No clearing judgment conditions are set yet.
+            // Очистить кэш Hearthstone，Условия вынесения окончательного решения пока не установлены.
             if (true == true)
             {
                 Utils.DeleteFolder(Hearthstone.Util.PlatformFilePaths.ExternalDataPath + "/Cache");
@@ -20,7 +20,7 @@ namespace HsMod
             }
 
 
-            // Handling command line arguments
+            // Обработка аргументов командной строки
             string hsUnitID = "";
             if (UtilsArgu.Instance.Exists("hsunitid"))
                 hsUnitID = UtilsArgu.Instance.Single("hsunitid");
@@ -50,35 +50,35 @@ namespace HsMod
             if (UtilsArgu.Instance.Exists("afk"))
                 if (int.TryParse(UtilsArgu.Instance.Single("afk"), out int afk))
                 {
-                    timeGear.Value = 0;    //gear zero
+                    timeGear.Value = 0;    //нулевая передача
                     switch (afk)
                     {
-                        case 0:    //Disable
+                        case 0:    //Запрещать
                             isPluginEnable.Value = false;
                             isTimeGearEnable.Value = false;
                             break;
-                        case 1:    //Normal on-hook enabled
-                            isPluginEnable.Value = true;    //Enable plugin
-                            isTimeGearEnable.Value = true;  //enable gear
-                            configTemplate.Value = Utils.ConfigTemplate.AwayFromKeyboard;    //Set idle template
+                        case 1:    //Обычная положенная трубка включена
+                            isPluginEnable.Value = true;    //Включить плагин
+                            isTimeGearEnable.Value = true;  //включить передачу
+                            configTemplate.Value = Utils.ConfigTemplate.AwayFromKeyboard;    //Установить шаблон простоя
                             break;
-                        case 2:    //Anti-hookbutDisableshortcut key
+                        case 2:    //Анти-крючок但是Запрещать快捷键
                             isPluginEnable.Value = true;
                             configTemplate.Value = Utils.ConfigTemplate.AntiAwayFromKeyboard;
                             isShortcutsEnable.Value = false;
                             break;
-                        case 3:    //Enable but disable gear
+                        case 3:    //Включить, но отключить передачу
                             isPluginEnable.Value = true;
                             isTimeGearEnable.Value = false;
                             break;
-                        case 4:    //Anti-hook
+                        case 4:    //Анти-крючок
                             isPluginEnable.Value = true;
                             configTemplate.Value = Utils.ConfigTemplate.AntiAwayFromKeyboard;
                             break;
                     }
                 }
 
-            // Handle plugin status
+            // 处理Статус плагина
             //Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
             if (isPluginEnable.Value)
             {
@@ -101,7 +101,7 @@ namespace HsMod
                 OnDestroy();
                 return;
             }
-            //Temporarily unable to moveshowFPSRelated code
+            //Временно не могу двигатьсяshowFPSСвязанный код
             showFPS = new GameObject("ShowFPSSceneObject", new Type[] { typeof(HSDontDestroyOnLoad) }).AddComponent<ShowFPS>();
             showFPS.enabled = false;
             showFPS.StartFrameCount();
@@ -121,19 +121,19 @@ namespace HsMod
                 graphicsManager?.UpdateTargetFramerate(targetFrameRate.Value, false);
             }
 
-            //Set the resolution of the command line lie inpatchafter，Prevent Hearthstone from automatically modifying
+            //Установите разрешение командной строки родыpatchпосле，Запретить автоматическое изменение Hearthstone
             if (CommandConfig.width > 0 && CommandConfig.height > 0)
             {
                 Screen.SetResolution(CommandConfig.width, CommandConfig.height, false);
             }
 
-            //Green health
+            //Зеленое здоровье
             if (string.IsNullOrEmpty(webPageBackImg.Value) || webPageBackImg.Value.EndsWith("safeimg"))
             {
                 Utils.TryGetSafeImg();
             }
 
-            //start upwebServe
+            //запускатьwebСлужить
             WebServer.Start();
             //InactivePlayerKicker.Get().SetShouldCheckForInactivity(isIdleKickEnable.Value);
         }
@@ -148,7 +148,7 @@ namespace HsMod
                     allPatchNum += tempatch.GetPatchedMethods().Count();
                 }
                 LoadSkinsConfigFromFile();
-                UIStatus.Get().AddInfo($"[{allPatchNum}]Plugin status：" + (isPluginEnable.Value ? "run" : "stop"));
+                UIStatus.Get().AddInfo($"[{allPatchNum}]Статус плагина：" + (isPluginEnable.Value ? "бегать" : "останавливаться"));
                 InactivePlayerKicker.Get().SetShouldCheckForInactivity(isIdleKickEnable.Value);
                 WebServer.Restart();
             }

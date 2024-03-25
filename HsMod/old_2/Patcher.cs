@@ -23,7 +23,7 @@ namespace HsMod
     //}
     public static class PatchManager
     {
-        public static List<Harmony> AllHarmony = new List<Harmony>();    //Save patch information，Convenient targeted uninstallation。
+        public static List<Harmony> AllHarmony = new List<Harmony>();    //保存补丁信息，方便定向卸载。
         public static List<string> AllHarmonyName = new List<string>();
 
         public static void LoadPatch(Type loadType)
@@ -61,7 +61,7 @@ namespace HsMod
             return false;
         }
 
-        //Delegate binding
+        //委托绑定
         public static void PatchSettingDelegate()
         {
             isPluginEnable.SettingChanged += delegate
@@ -249,12 +249,12 @@ namespace HsMod
         }
     }
 
-    //prefixPatchforharmonypatch，rearPatchforreflection
+    //前置Patch为harmony补丁，后置Patch为反射
     public class Patcher
     {
         public class PatchMisc
         {
-            //Remove resolution limit
+            //移除分辨率限制
             [HarmonyPrefix]
             [HarmonyPatch(typeof(GraphicsResolution), "IsAspectRatioWithinLimit")]
             public static bool PatchAspectRatioWithinLimit(ref bool __result, int width, int height, bool isWindowedMode)
@@ -263,7 +263,7 @@ namespace HsMod
                 return false;
             }
 
-            //Modify resolution from command line，Prevent Hearthstone from modifying itself
+            //命令行修改分辨率，阻止炉石自修改
             [HarmonyPrefix]
             [HarmonyPatch(typeof(Screen), "SetResolution", new Type[] { typeof(int), typeof(int), typeof(bool) })]
             public static bool PatchSetResolution(ref int width, ref int height, ref bool fullscreen)
@@ -282,7 +282,7 @@ namespace HsMod
                 return true;
             }
 
-            // Frame rate modification
+            // 帧率修改
             [HarmonyPrefix, HarmonyPatch(typeof(Options), nameof(Options.GetInt), new Type[] { typeof(Option) })]
             public static bool PatchOptionsGetInt(ref Option option, ref int __result)
             {
@@ -302,7 +302,7 @@ namespace HsMod
             //    }
             //}
 
-            //useWebTokenLog in
+            //使用WebToken登录
             [HarmonyTranspiler]
             [HarmonyPatch(typeof(Hearthstone.Login.DesktopLoginTokenFetcher), "GetTokenFromTokenFetcher")]
             public static IEnumerable<CodeInstruction> PatchGetTokenFromTokenFetcher(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
@@ -375,7 +375,7 @@ namespace HsMod
                 __instance.Set("Aurora.Env", __state.Substring(0, 2).ToLower() + ".actual.battle.net");
             }
 
-            //Disable error reports
+            //禁止发送错误报告
             [HarmonyPrefix]
             [HarmonyPostfix]
             [HarmonyPatch(typeof(Hearthstone.ExceptionReporterControl), "ExceptionReportInitialize")]
@@ -385,7 +385,7 @@ namespace HsMod
                 //Vars.Key("Application.SendExceptions")
             }
 
-            //shielderror report
+            //屏蔽错误报告
             [HarmonyPrefix]
             [HarmonyPatch(typeof(Blizzard.BlizzardErrorMobile.ExceptionReporter), "ReportCaughtException", new Type[] { typeof(Exception) })]
             public static bool PatchReportCaughtException(ref Exception exception)
@@ -415,7 +415,7 @@ namespace HsMod
                 return false;
             }
 
-            //Disable dropped calls
+            //禁用掉线
             [HarmonyPrefix]
             [HarmonyPatch(typeof(InactivePlayerKicker), "SetShouldCheckForInactivity")]
             public static void PatchSetShouldCheckForInactivity(ref bool check)
@@ -435,7 +435,7 @@ namespace HsMod
                 }
             }
 
-            ////Automatic restart no effect
+            ////自动重启 没有效果
             //[HarmonyPrefix]
             //[HarmonyPatch(typeof(Application), "Quit", new Type[] {  })]
             //public static void PatchApplicationQuit()
@@ -445,7 +445,7 @@ namespace HsMod
             //    System.Diagnostics.Process.Start(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             //}
 
-            //Exit with error
+            //报错退出
             [HarmonyPrefix]
             [HarmonyPatch(typeof(DialogManager), "ShowReconnectHelperDialog")]
             [HarmonyPatch(typeof(ReconnectHelperDialog), "Show")]
@@ -460,7 +460,7 @@ namespace HsMod
                 else return true;
             }
 
-            //Whether to block pop-ups
+            //是否拦截弹窗
             [HarmonyPrefix]
             [HarmonyPatch(typeof(AlertPopup), "Show")]
             public static bool PatchAlertPopupShow(ref UIBButton ___m_okayButton, ref UIBButton ___m_confirmButton, ref UIBButton ___m_cancelButton, ref AlertPopup.PopupInfo ___m_popupInfo)
@@ -513,7 +513,7 @@ namespace HsMod
                     return false;
                 }
             }
-            //Handle disconnection and reconnection
+            //处理断线重连
             [HarmonyPostfix]
             [HarmonyPatch(typeof(AlertPopup), "UpdateInfo")]
             public static void PatchAlertPopupUpdateInfo(ref AlertPopup.PopupInfo info, ref UIBButton ___m_okayButton, ref UIBButton ___m_confirmButton, ref UIBButton ___m_cancelButton, ref AlertPopup.PopupInfo ___m_popupInfo)
@@ -535,7 +535,7 @@ namespace HsMod
                 }
             }
 
-            //shieldOpen the screen to prevent addictionhint
+            //屏蔽开屏防沉迷提示
             [HarmonyPrefix]
             [HarmonyPatch(typeof(SplashScreen), "GetRatingsScreenRegion")]
             public static bool PatchGetRatingsScreenRegion()
@@ -543,7 +543,7 @@ namespace HsMod
                 return false;
             }
 
-            //Settlement tasks、Upgrade tips
+            //结算任务、升级提示
             [HarmonyPrefix]
             [HarmonyPatch(typeof(QuestPopups), "ShowNextQuestNotification")]
             [HarmonyPatch(typeof(EndGameScreen), "ShowMercenariesExperienceRewards")]
@@ -552,10 +552,10 @@ namespace HsMod
                 return isRewardToastShow.Value;
             }
 
-            //War order、Tips for collecting achievements and other rewards
+            //战令、成就等奖励领取提示
             [HarmonyPrefix]
             [HarmonyPatch(typeof(Hearthstone.Progression.RewardTrack), "HandleRewardGranted")]
-            public static bool PatchHandleRewardGranted(int rewardTrackId, int level, bool forPaidTrack, List<PegasusUtil.RewardItemOutput> rewardItemOutput)      //Hidden Pass Rewards
+            public static bool PatchHandleRewardGranted(int rewardTrackId, int level, bool forPaidTrack, List<PegasusUtil.RewardItemOutput> rewardItemOutput)      //隐藏通行证奖励
             {
                 if (!isRewardToastShow.Value)
                 {
@@ -566,7 +566,7 @@ namespace HsMod
                 else return true;
             }
 
-            //test patch，shieldreward display
+            //测试补丁，屏蔽奖励显示
             [HarmonyPrefix]
             [HarmonyPatch(typeof(Hearthstone.Progression.RewardPresenter), "ShowNextReward")]
             public static bool PatchRewardPresenterShowNextReward(Hearthstone.Progression.RewardPresenter __instance, ref Action onHiddenCallback)
@@ -592,7 +592,7 @@ namespace HsMod
                 return true;
             }
 
-            //Clear automatic decompositionofHandler
+            //清空自动分解的Handler
             [HarmonyPrefix]
             [HarmonyPatch(typeof(CollectionManager), "RegisterCollectionNetHandlers")]
             public static void PatchRegisterCollectionNetHandlers()
@@ -607,7 +607,7 @@ namespace HsMod
                 }
             }
 
-            //Quickly open package
+            //快速开包
             [HarmonyTranspiler]
             [HarmonyPatch(typeof(PackOpening), "AutomaticallyOpenPack")]
             public static IEnumerable<CodeInstruction> PatchAutomaticallyOpenPack(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
@@ -655,7 +655,7 @@ namespace HsMod
                 }
                 return true;
             }
-            //try to decompose
+            //尝试分解
             [HarmonyPostfix]
             [HarmonyPatch(typeof(PackOpeningDirector), "OnSpellFinished")]
             public static void PatchPackOpeningDirectorOnSpellFinished()
@@ -674,7 +674,7 @@ namespace HsMod
                 PackOpeningDirectorPatch.m_WaitingForCards = true;
             }
 
-            //exhibitFPSinformation
+            //展示FPS信息
             [HarmonyTranspiler]
             [HarmonyPatch(typeof(ShowFPS), "Awake")]
             public static IEnumerable<CodeInstruction> PatchShowFPSAwake(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
@@ -737,7 +737,7 @@ namespace HsMod
                 return false;
             }
 
-            //exhibitCardID
+            //展示CardID
             [HarmonyPrefix]
             [HarmonyPatch(typeof(CollectionCardVisual), "EnterCraftingMode")]
             public static bool PatchEnterCraftingMode(CollectionCardVisual __instance)
@@ -786,7 +786,7 @@ namespace HsMod
                 }
             }
 
-            //Allowed to give up
+            //允许放弃
             [HarmonyPrefix]
             [HarmonyPatch(typeof(AdventureDungeonCrawlDisplay), "Update")]
             public static void PatchAdventureDungeonCrawlDisplayUpdate(ref GameObject ___m_retireButton)
@@ -805,7 +805,7 @@ namespace HsMod
                 return isOnApplicationFocus.Value;
             }
 
-            //gear need to be carried outdelegateentrust
+            //齿轮 需要进行delegate委托
             [HarmonyPrefix]
             [HarmonyPatch(typeof(TimeScaleMgr), "Update")]
             public static bool PatchTimeScaleMgr(ref float ___m_timeScaleMultiplier, ref float ___m_gameTimeScale)
@@ -823,7 +823,7 @@ namespace HsMod
                 else return true;
             }
 
-            //toastVariable speed modification
+            //toast变速修改
             [HarmonyTranspiler]
             [HarmonyPatch(typeof(SocialToastMgr), "AddToast", new Type[]
             {
@@ -853,7 +853,7 @@ namespace HsMod
 
         public class PatchBoxesReward
         {
-            //Automatically click on packages
+            //自动点击包裹
             [HarmonyPostfix]
             [HarmonyPatch(typeof(RewardBoxesDisplay), "RewardPackageOnComplete")]
             public static void PatchRewardPackageOnComplete(RewardBoxesDisplay.RewardBoxData boxData)
@@ -865,7 +865,7 @@ namespace HsMod
                 }
             }
 
-            //Automatic click complete
+            //自动点击完成
             [HarmonyPostfix]
             [HarmonyPatch(typeof(RewardBoxesDisplay), "OnDoneButtonShown")]
             public static void PatchOnDoneButtonShown(Spell spell, object userData)
@@ -877,7 +877,7 @@ namespace HsMod
                 }
             }
 
-            //Additional rewards
+            //额外奖励
             [HarmonyPostfix]
             [HarmonyPatch(typeof(RewardBoxesDisplay), "OnBonusLootButtonShown")]
             public static void PatchOnBonusLootButtonShown(Spell spell, object userData)
@@ -892,7 +892,7 @@ namespace HsMod
 
         public class PatchDevOptioins
         {
-            //Enter internal mode（Hearthstone Developer Mode）
+            //进入内部模式（炉石开发者模式）
             [HarmonyTranspiler]
             [HarmonyPatch(typeof(Hearthstone.HearthstoneApplication), "GetMode")]
             public static IEnumerable<CodeInstruction> PatchHearthstoneApplicationGetMode(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
@@ -964,7 +964,7 @@ namespace HsMod
 
         public class PatchRealtimeCardNum
         {
-            //Show number of cards or||There is a temporary problem with the control，need to be carried outdelegateentrust
+            //显示卡牌数量 或||控制暂时有问题，需要进行delegate委托
             [HarmonyTranspiler]
             [HarmonyPatch(typeof(CollectionCardCount), "UpdateVisibility")]
             public static IEnumerable<CodeInstruction> PatchCollectionCardCountUpdateVisibility(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
@@ -992,7 +992,7 @@ namespace HsMod
 
         public class PatchDeckShareCode
         {
-            //Remove deck code detection
+            //移除卡组代码检测
             [HarmonyPrefix]
             [HarmonyPatch(typeof(CollectionManagerDisplay), "IsValidHeroClassesForCollectionDeck")]
             public static bool PatchIsValidHeroClassesForCollectionDeck(ref List<TAG_CLASS> heroClasses, ref CollectionDeck deck, ref bool __result)
@@ -1051,7 +1051,7 @@ namespace HsMod
             }
         }
 
-        //Related to friends watching the game
+        //好友观战相关
         public class PatchDeathOb
         {
             private static readonly MethodInfo registerCreateGameListenerInfo = typeof(GameState).GetMethod("RegisterCreateGameListener", BindingFlags.Instance | BindingFlags.Public, null, new Type[2]
@@ -1207,10 +1207,10 @@ namespace HsMod
         }
 
 
-        //Expression relatedofPatch
+        //表情相关的Patch
         public class PatchEmote
         {
-            //thinking expression
+            //思考表情
             [HarmonyTranspiler]
             [HarmonyPatch(typeof(MatchingQueueTab), "Update")]
             [HarmonyPatch(typeof(ThinkEmoteManager), "Update")]
@@ -1227,7 +1227,7 @@ namespace HsMod
                 return list;
             }
 
-            //thinking expression
+            //思考表情
             [HarmonyPrefix]
             [HarmonyPatch(typeof(ThinkEmoteManager), "Update")]
             public static bool PatchThinkEmoteManagerUpdate()
@@ -1235,7 +1235,7 @@ namespace HsMod
                 return isThinkEmotesEnable.Value;
             }
 
-            //facial expression cooling
+            //表情冷却
             [HarmonyPrefix]
             [HarmonyPatch(typeof(EmoteHandler), "EmoteSpamBlocked")]
             public static bool PatchUpdateAllMutes(ref float ___m_timeSinceLastEmote, ref bool __result)
@@ -1254,7 +1254,7 @@ namespace HsMod
                 return true;
             }
 
-            //Emoticons are automatically banned at the start of the game
+            //开局自动禁止表情
             [HarmonyPrefix]
             [HarmonyPatch(typeof(EnemyEmoteHandler), "IsSquelched")]
             public static bool PatchIsSquelched(ref int playerId, ref bool __result)
@@ -1268,7 +1268,7 @@ namespace HsMod
             }
 
 
-            //Expression management，There is a small error in the quantity limit
+            //表情管理，数量限制存在小误差
             [HarmonyPrefix]
             [HarmonyPatch(typeof(RemoteActionHandler), "CanReceiveEnemyEmote")]
             public static bool PatchPreCanReceiveEnemyEmote(ref EmoteType emoteType, ref int playerId, ref bool __result)
@@ -1318,7 +1318,7 @@ namespace HsMod
         }
         public class PatchBattlegrounds
         {
-            //closed,bob!
+            //闭了,鲍勃!
             [HarmonyTranspiler]
             [HarmonyPatch(typeof(TB_BaconShop), "PlayBobLineWithoutText", MethodType.Enumerator)]
             public static IEnumerable<CodeInstruction> PatchPlayBobLineWithoutText(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
@@ -1366,7 +1366,7 @@ namespace HsMod
                 return list;
             }
 
-            //Quick fight - Theoretically can be used in all modes Now only applies to Tavern Battle FlagsorMercenary War Chroniclesofai
+            //快速战斗 - 理论上可以用于所有模式 现只应用于酒馆战旗或佣兵战纪的ai
             [HarmonyReversePatch]
             [HarmonyPatch(typeof(SpellController), "OnProcessTaskList")]
             [MethodImpl(MethodImplOptions.NoInlining)]
@@ -1464,7 +1464,7 @@ namespace HsMod
 
         public class PatchHearthstone
         {
-            //Gold Card Diamond Card Patch
+            //金卡钻石卡补丁
             [HarmonyPrefix]
             [HarmonyPatch(typeof(Entity), "GetPremiumType")]
             public static bool PatchGetPremiumType(Entity __instance, ref TAG_PREMIUM __result)
@@ -1473,7 +1473,7 @@ namespace HsMod
                 {
                     if (GameMgr.Get() != null && GameState.Get() != null && GameState.Get().IsGameCreatedOrCreating())
                     {
-                        //Skip tavern follower
+                        //跳过酒馆随从
                         if (GameMgr.Get().IsBattlegrounds())
                         {
                             if (!isBgsGoldenEnable.Value || __instance.IsMinion() || __instance.IsQuest())
@@ -1483,7 +1483,7 @@ namespace HsMod
                         Utils.CardState mGolden = goldenCardState.Value;
                         Utils.CardState mMaxState = maxCardState.Value;
 
-                        //Mercenary Gilded
+                        //佣兵镀金
                         int dbid = GameUtils.TranslateCardIdToDbId(__instance.GetCardId());
                         bool mercDiamond = false;
                         bool isMerc = false;
@@ -1496,7 +1496,7 @@ namespace HsMod
                             }
                         }
 
-                        //shieldOpponent special effects
+                        //屏蔽对手特效
                         if (__instance.IsControlledByOpposingSidePlayer() && (!isOpponentGoldenCardShow.Value) && (!GameMgr.Get().IsBattlegrounds()))
                         {
                             __result = TAG_PREMIUM.NORMAL;
@@ -1509,7 +1509,7 @@ namespace HsMod
                         }
 
 
-                        //Other qualities
+                        //其他品质
                         if (__instance.HasTag(GAME_TAG.HAS_DIAMOND_QUALITY) || __instance.HasTag(GAME_TAG.HAS_SIGNATURE_QUALITY) || mercDiamond)
                         {
                             if (__instance.HasTag(GAME_TAG.HAS_DIAMOND_QUALITY) || mercDiamond)
@@ -1547,14 +1547,14 @@ namespace HsMod
                                 return false;
                             }
                         }
-                        //gold card special effects
+                        //金卡特效
                         if (mGolden == Utils.CardState.All || (mGolden == Utils.CardState.OnlyMy && __instance.IsControlledByFriendlySidePlayer()))
                         {
                             __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.GOLDEN);
                             __result = TAG_PREMIUM.GOLDEN;
                             return false;
                         }
-                        //Disable special effects
+                        //禁用特效
                         if (mGolden == Utils.CardState.Disabled)
                         {
                             __result = TAG_PREMIUM.NORMAL;
@@ -1576,7 +1576,7 @@ namespace HsMod
             }
 
 
-            //Set up next opponent、Used to get Battle.net tags
+            //设置下个对手、用于获取战网标签
             [HarmonyTranspiler]
             [HarmonyPatch(typeof(PlayerLeaderboardManager), "SetNextOpponent")]
             public static IEnumerable<CodeInstruction> PatchSetNextOpponent(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
@@ -1593,7 +1593,7 @@ namespace HsMod
                 return list;
             }
 
-            //Set current opponent、Used to get Battle.net tags
+            //设置当前对手、用于获取战网标签
             [HarmonyPostfix]
             [HarmonyPatch(typeof(PlayerLeaderboardManager), "SetCurrentOpponent")]
             public static void PatchSetCurrentOpponent(ref int opponentPlayerId)
@@ -1605,7 +1605,7 @@ namespace HsMod
             }
 
 
-            //Show full Battle.netID
+            //显示完整战网ID
             [HarmonyPrefix]
             [HarmonyPatch(typeof(BnetPlayer), "GetBestName")]
             public static bool PatchBnetPlayerGetBestName(BnetPlayer __instance, ref BnetAccount ___m_account, ref Map<BnetGameAccountId, BnetGameAccount> ___m_gameAccounts, ref BnetGameAccount ___m_hsGameAccount, ref string __result)
@@ -1643,7 +1643,7 @@ namespace HsMod
                 return false;
             }
 
-            //Allow adding opponents
+            //允许添加对手
             [HarmonyPrefix]
             [HarmonyPatch(typeof(BnetRecentPlayerMgr), "IsCurrentOpponent")]
             public static bool PatchIsCurrentOpponent(BnetPlayer player, ref bool __result)
@@ -1669,7 +1669,7 @@ namespace HsMod
             }
 
 
-            //Show ladder level
+            //显示天梯等级
             [HarmonyTranspiler]
             [HarmonyPatch(typeof(NameBanner), "UpdateMedalWhenReady", MethodType.Enumerator)]
             public static IEnumerable<CodeInstruction> PatchUpdateMedalWhenReady(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
@@ -1708,7 +1708,7 @@ namespace HsMod
                 return list;
             }
 
-            //Skip hero introduction
+            //跳过英雄介绍
             [HarmonyTranspiler]
             [HarmonyPatch(typeof(MulliganManager), "HandleGameStart")]
             public static IEnumerable<CodeInstruction> PatchHandleGameStart(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
@@ -1726,7 +1726,7 @@ namespace HsMod
                 return list;
             }
 
-            //Set mute
+            //设置静音
             [HarmonyPrefix]
             [HarmonyPatch(typeof(SoundManager), "UpdateAllMutes")]
             public static bool PatchUpdateAllMutes(ref bool ___m_mute)
@@ -1739,32 +1739,32 @@ namespace HsMod
             [HarmonyPatch(typeof(GameEntity), "ShowEndGameScreen")]
             public static void PatchEndGameScreenShow(ref TAG_PLAYSTATE playState, ref Spell enemyBlowUpSpell, ref Spell friendlyBlowUpSpell)
             {
-                // Automatic reporting + Game records
+                // 自动举报 + 对局记录
                 try
                 {
                     if (!GameMgr.Get().IsSpectator() && (Utils.CacheLastOpponentAccountID != null) && (!String.IsNullOrEmpty(Utils.CacheLastOpponentFullName)))
                     {
-                        LoadSkinsConfigFromFile(); // Update skin mapping
+                        LoadSkinsConfigFromFile(); // 更新皮肤映射
                         Utils.CacheRawHeroCardId = null;
 
                         if (isAutoReportEnable.Value)
                         {
                             Utils.TryReportOpponent();
 
-                            string finalResult = "unknown";
+                            string finalResult = "未知";
                             switch (playState)
                             {
                                 case TAG_PLAYSTATE.WINNING:
                                 case TAG_PLAYSTATE.WON:
-                                    finalResult = "victory";
+                                    finalResult = "胜利";
                                     break;
                                 case TAG_PLAYSTATE.CONCEDED:
                                 case TAG_PLAYSTATE.LOST:
                                 case TAG_PLAYSTATE.LOSING:
-                                    finalResult = "fail";
+                                    finalResult = "失败";
                                     break;
                                 case TAG_PLAYSTATE.TIED:
-                                    finalResult = "draw";
+                                    finalResult = "平局";
                                     break;
                                 default:
                                     break;
@@ -1776,10 +1776,10 @@ namespace HsMod
                             //{
                             //    var currentMedal = RankMgr.Get().GetLocalPlayerMedalInfo().GetCurrentMedalForCurrentFormatType();
                             //    gameRank = Utils.RankIdxToString(currentMedal.starLevel);
-                            //    gameRank = (gameRank == "legend") ? "legend" + currentMedal.legendIndex.ToString() : gameRank + "-" + currentMedal.earnedStars.ToString();
+                            //    gameRank = (gameRank == "传说") ? "传说" + currentMedal.legendIndex.ToString() : gameRank + "-" + currentMedal.earnedStars.ToString();
                             //}
                             finalResult = $"{String.Join("<br />", DateTime.Now.ToString().Split(' '))},{finalResult},{gameRank},{gameType},{Utils.CacheLastOpponentFullName},";
-                            finalResult += $"High:{Utils.CacheLastOpponentAccountID.High}+Low:{Utils.CacheLastOpponentAccountID.Low} => Reported";
+                            finalResult += $"High:{Utils.CacheLastOpponentAccountID.High}+Low:{Utils.CacheLastOpponentAccountID.Low} => 已举报";
                             System.IO.File.AppendAllText(CommandConfig.hsMatchLogPath, finalResult + "\n");
                             Utils.CacheLastOpponentAccountID = null;
                         }
@@ -1791,15 +1791,15 @@ namespace HsMod
                     Utils.CacheLastOpponentAccountID = null;
                 }
 
-                // Automatic withdrawal
+                // 自动退出
                 if (autoQuitTimer.Value > 0 && ConfigValue.Get().RunningTime >= autoQuitTimer.Value)
                 {
-                    Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "Scheduled restart！About to exit the game...");
+                    Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "定时重启！即将退出游戏...");
                     Application.Quit();
                 }
             }
 
-            // Hand tracking
+            // 手牌追踪
             [HarmonyPrefix]
             [HarmonyPatch(typeof(Player), "IsRevealed")]
             public static bool PatchPlayerIsRevealed(ref bool __result)
@@ -1811,7 +1811,7 @@ namespace HsMod
                 }
                 return true;
             }
-            // Select recognition（Opponent choice tips）
+            // 选择识别（对手抉择提示）
             [HarmonyPrefix]
             [HarmonyPatch(typeof(GameState), "OnPowerHistory")]
             public static void PatchDebugPrintPower(GameState __instance, ref List<Network.PowerHistory> powerList)
@@ -1841,7 +1841,7 @@ namespace HsMod
                                         if (hintText != null)
                                         {
                                             hintText = hintText + "\n" + entityDef.GetCardTextInHand();
-                                            UIStatus.Get().AddInfo($"Notice: {hintText}", 15f);
+                                            UIStatus.Get().AddInfo($"注意: {hintText}", 15f);
                                         }
                                     }
                                 }
@@ -1864,7 +1864,7 @@ namespace HsMod
                         string hintText2 = string.Join(" ", hintList);
                         if (hintText2 != "")
                         {
-                            UIStatus.Get().AddInfo($"Notice: {hintText2}", 15f);
+                            UIStatus.Get().AddInfo($"注意: {hintText2}", 15f);
                         }
                     }
                 }
@@ -1874,7 +1874,7 @@ namespace HsMod
                 }
             }
 
-            // Drag Master Identification，40card recognition
+            // 变装大师识别，40牌识别
             [HarmonyPrefix]
             [HarmonyPatch(typeof(MulliganManager), "SetMulliganBannerText", new Type[] { typeof(string), typeof(string) })]
             public static void PatchSetMulliganBannerText(MulliganManager __instance, ref string title, ref string subtitle, ref bool ___friendlyPlayerGoesFirst)
@@ -1908,10 +1908,10 @@ namespace HsMod
 
                     string heroClass = isRogue ? GameStrings.GetClassName(TAG_CLASS.ROGUE)
                                                : GameStrings.GetClassName(GameState.Get().GetOpposingPlayer().GetHero().GetClass());
-                    title = $"The opponent’s profession is{heroClass}，deck{oppoCardCount}open";
+                    title = $"对手职业是{heroClass}，套牌{oppoCardCount}张";
                 }
             }
-            //// generatePower.log
+            //// 生成Power.log
             //[HarmonyPrefix]
             //[HarmonyPatch(typeof(Log), "get_ConfigPath")]
             //public static void PatchConfigPath()
@@ -1946,8 +1946,8 @@ namespace HsMod
 
         }
 
-        // Get log file path LogArchive.Get().LogPath
-        // meaninglessPatch，tryinternalandgetterofpatch
+        // 日志文件路径获取 LogArchive.Get().LogPath
+        // 无意义Patch，尝试internal与getter的patch
         public class PatchLogArchive
         {
             [HarmonyTargetMethod]
@@ -1966,7 +1966,7 @@ namespace HsMod
 
         public class PatchFavorite
         {
-            //Load processing
+            //加载处理
             [HarmonyPrefix]
             [HarmonyPatch(typeof(Entity), "LoadCard")]
             public static void PatchLoadCard(Entity __instance, ref string cardId, ref Entity.LoadCardData data)
@@ -2168,14 +2168,14 @@ namespace HsMod
                 //return;
             }
 
-            //Refresh card screen，solve evolution、Degenerative anomalies
+            //刷新卡牌画面，解决进化、退化异常
             [HarmonyPrefix]
             [HarmonyPatch(typeof(Card), "RefreshActor")]
             public static void RefreshActor(Card __instance)
             {
                 try
                 {
-                    // Todo: Add more detailed judgment conditions。
+                    // Todo: 添加更细致化的判断条件。
                     if ((__instance?.GetEntity()?.GetZone() == TAG_ZONE.PLAY) || (__instance?.GetEntity()?.GetZone() == TAG_ZONE.HAND))
                     {
                         __instance?.GetActor()?.SetCard(__instance);
@@ -2191,7 +2191,7 @@ namespace HsMod
             }
 
 
-            //Determine whether there is a strange painting，Alleviate the problem of strange paintings Signature frame for RLK_Prologue_RLK_653 not found.
+            //判断存在异画是否存在，缓解异画问题 Signature frame for RLK_Prologue_RLK_653 not found.
             //private static readonly MethodInfo getSignatureActor = typeof(ActorNames).GetMethod("GetSignatureActor", BindingFlags.Instance | BindingFlags.NonPublic);
             [HarmonyPostfix]
             [HarmonyPatch(typeof(ActorNames), "GetNameWithPremiumType")]
@@ -2232,7 +2232,7 @@ namespace HsMod
             }
 
 
-            //bobreplace语音
+            //鲍勃替换语音
             [HarmonyPrefix]
             [HarmonyPatch(typeof(TB_BaconShop), "GetFavoriteBattlegroundsGuideSkinCardId")]
             public static bool PatchGetFavoriteBattlegroundsGuideSkinCardId(ref string __result)
@@ -2251,7 +2251,7 @@ namespace HsMod
             }
 
 
-            //game panel replacement
+            //游戏面板替换
             [HarmonyPrefix]
             [HarmonyPatch(typeof(GameMgr), "ChangeBoardIfNecessary")]
             public static bool PatchChangeBoardIfNecessary(ref Network.GameSetup ___m_gameSetup)
@@ -2264,7 +2264,7 @@ namespace HsMod
                 return true;
             }
 
-            //Card back replacement
+            //卡背替换
             [HarmonyPrefix]
             [HarmonyPatch(typeof(Gameplay), "InitCardBacks")]
             public static bool PatchGameplayInitCardBacks()
@@ -2279,7 +2279,7 @@ namespace HsMod
                     if (opposingSidePlayer != null)
                         opponentCardBackID = opposingSidePlayer.GetCardBackId();
                     int friendlyCardBackID = skinCardBack.Value;
-                    if (GameMgr.Get().IsBattlegrounds())   // FIXME: In tavern battles, the opponent's card back may not be displayed properly.
+                    if (GameMgr.Get().IsBattlegrounds())   // FIXME: 酒馆对战中可能无法正常显示对手卡背
                     {
                         opponentCardBackID = friendlyCardBackID;
                     }
@@ -2289,7 +2289,7 @@ namespace HsMod
                 }
                 else return true;
             }
-            //replaceUnpackcard back
+            //替换开包卡背
             private static readonly MethodInfo getValidCardBackID = typeof(CardBackManager).GetMethod("GetValidCardBackID", BindingFlags.Instance | BindingFlags.NonPublic);
             private static readonly MethodInfo loadCardBackPrefabIntoSlot = typeof(CardBackManager).GetMethod("LoadCardBackPrefabIntoSlot", BindingFlags.Instance | BindingFlags.NonPublic);
             [HarmonyPrefix]
@@ -2313,7 +2313,7 @@ namespace HsMod
                 else return true;
             }
 
-            //Tavern battle panel
+            //酒馆对战面板
             [HarmonyPrefix]
             [HarmonyPatch(typeof(BaconBoard), "OnBoardSkinChosen")]
             [HarmonyPatch(typeof(BaconBoard), "LoadInitialTavernBoard")]
@@ -2365,7 +2365,7 @@ namespace HsMod
                 return false;
             }
 
-            //Preference coin modification，unnecessarypatch
+            //偏好硬币修改，不需要patch
             //[HarmonyPrefix]
             //[HarmonyPatch(typeof(CosmeticCoinManager), "GetFavoriteCoinId")]
             //public static bool PatchGetFavoriteCoinId(ref int __result)
@@ -2404,10 +2404,10 @@ namespace HsMod
             //}
         }
 
-        //Remove promotion;Interception weakenedpatchinformation
+        //移除推销;拦截削弱补丁信息
         public class PatchIGMMessage
         {
-            //Interception weakenedpatchinformation
+            //拦截削弱补丁信息
             [HarmonyPostfix]
             [HarmonyPatch(typeof(CardListPopup), "Show")]
             public static void PatchCardListPopupShow(ref UIBButton ___m_okayButton)
@@ -2456,7 +2456,7 @@ namespace HsMod
                 Traverse.Create(__instance).Method("OnMessageClosed").GetValue();
             }
 
-            //Ladder settlement rewards
+            //天梯结算奖励
             [HarmonyPrefix]
             [HarmonyPatch(typeof(SeasonEndDialog), "ShowWhenReady")]
             public static bool PatchSeasonEndDialog(SeasonEndDialog __instance)
@@ -2466,7 +2466,7 @@ namespace HsMod
                 return false;
             }
 
-            //shieldborrowdeckTime limit has expired
+            //屏蔽借用套牌时限已到期
             [HarmonyPrefix]
             [HarmonyPatch(typeof(LoanerDeckDisplay), "CanShowTimerExpiredState")]
             public static bool PatchCanShowTimerExpiredState(ref bool __result)
@@ -2485,10 +2485,10 @@ namespace HsMod
             }
         }
 
-        //andThe mercenary hang-up plug-in may conflict Therefore write it out separately
+        //与佣兵挂机插件可能会冲突 故单独写出
         public class PatchMercenariesReward
         {
-            // shield+1+5hint
+            // 屏蔽+1+5提示
             [HarmonyPrefix]
             [HarmonyPatch(typeof(RewardPopups), "ShowMercenariesFullyUpgraded")]
             public static bool PatchShowMercenariesFullyUpgraded(ref Action doneCallback, ref bool __result, ref RewardPopups __instance, ref Action ___OnPopupClosed)
@@ -2547,7 +2547,7 @@ namespace HsMod
                 }
             }
 
-            // shieldMercenary Adventure Unlockedhint
+            // 屏蔽佣兵冒险解锁提示
             [HarmonyPrefix]
             [HarmonyPatch(typeof(RewardPopups), "ShowMercenariesZoneUnlockPopup")]
             public static bool PatchShowMercenariesZoneUnlockPopup(ref Action onPopupCompleteCallback, ref bool __result, ref RewardPopups __instance, ref Action ___OnPopupClosed)
@@ -2606,7 +2606,7 @@ namespace HsMod
                 }
             }
 
-            //Ladder rewards
+            //天梯奖励
             [HarmonyPrefix]
             [HarmonyPatch(typeof(MercenariesSeasonRewardsDialog), "Show")]
             [HarmonyPatch(typeof(MercenariesSeasonRewardsDialog), "ShowWhenReady")]
@@ -2620,7 +2620,7 @@ namespace HsMod
                 else return true;
             }
 
-            //Ladder rewards
+            //天梯奖励
             [HarmonyPrefix]
             [HarmonyPatch(typeof(DialogManager), "ProcessMercenariesSeasonRewardsDialog")]
             public static bool PatchProcessMercenariesSeasonRewardsDialog(ref DialogManager.DialogRequest request,
@@ -2635,7 +2635,7 @@ namespace HsMod
                 else return true;
             }
 
-            //Mercenary chest rewards are not displayed
+            //不显示佣兵宝箱奖励
             [HarmonyPrefix]
             [HarmonyPatch(typeof(RewardPopups), "ShowMercenariesRewards")]
             public static bool PatchShowMercenariesRewards(ref bool autoOpenChest,
@@ -2670,7 +2670,7 @@ namespace HsMod
         {
             public static readonly float m_FieldOfViewDefault = BoardCameras.Get().m_FieldOfViewDefault;
             public static readonly float m_FieldOfViewZoomed = BoardCameras.Get().m_FieldOfViewZoomed;
-            //Disable combat scaling
+            //禁止战斗缩放
             [HarmonyPrefix]
             [HarmonyPatch(typeof(LettuceMissionEntity), "SetFullScreenFXForCombat")]
             public static bool PatchSetFullScreenFXForCombat()
@@ -2692,7 +2692,7 @@ namespace HsMod
 
         public class PatchFakePackOpening
         {
-            //activationUnpacksimulation
+            //激活开包模拟
             [HarmonyPrefix]
             [HarmonyPatch(typeof(GameUtils), "IsFakePackOpeningEnabled")]
             public static bool PatchIsFakePackOpeningEnabled(ref bool __result)
@@ -2704,7 +2704,7 @@ namespace HsMod
                 __result = true;
                 return false;
             }
-            //Set the number of simulation card packs
+            //设置模拟卡包数量
             [HarmonyPrefix]
             [HarmonyPatch(typeof(GameUtils), "GetFakePackCount")]
             public static bool PatchGetFakePackCount(ref int __result)
@@ -2716,7 +2716,7 @@ namespace HsMod
                 __result = fakePackCount.Value >= 0 ? fakePackCount.Value : 0;
                 return false;
             }
-            //Set the simulation card package type
+            //设置模拟卡包类型
             [HarmonyPrefix]
             [HarmonyPatch(typeof(NetCache), "GetTestData")]
             public static bool PatchGetTestData(ref Type type, ref object __result)
@@ -2742,7 +2742,7 @@ namespace HsMod
                 return false;
             }
 
-            //simulationUnpack
+            //模拟开包
             [HarmonyReversePatch]
             [HarmonyPatch(typeof(MonoBehaviour), "StopCoroutine", new Type[] { typeof(Coroutine) })]
             [MethodImpl(MethodImplOptions.NoInlining)]
@@ -2799,7 +2799,7 @@ namespace HsMod
                 ___m_UnopenedPackScroller.Pause(pause: true);
                 return false;
             }
-            // Unpack结果replace
+            // 开包结果替换
             private static readonly MethodInfo triggerHooverDeath = typeof(PackOpening).GetMethod("TriggerHooverDeath", BindingFlags.Instance | BindingFlags.NonPublic);
             [HarmonyPrefix]
             [HarmonyPatch(typeof(PackOpening), "OnBoosterOpened")]
@@ -2995,7 +2995,7 @@ namespace HsMod
 
         public class PatchKarazhan
         {
-            // Try to repair gold coins to buy Karazhanbug
+            // 尝试修复金币购买卡拉赞bug
             [HarmonyTranspiler]
             [HarmonyPatch(typeof(AdventureWing), "Initialize")]
             public static IEnumerable<CodeInstruction> PatchAdventureWingInitialize(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
@@ -3004,7 +3004,7 @@ namespace HsMod
                 list.RemoveRange(201, 9);
                 return list;
             }
-            // Keep only numbers8
+            // 只保留数字8
             [HarmonyTranspiler]
             [HarmonyPatch(typeof(AdventureWing), "Update")]
             public static IEnumerable PatchAdventureWingUpdate(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
@@ -3022,7 +3022,7 @@ namespace HsMod
             }
         }
 
-        ////test patch
+        ////测试补丁
         //[HarmonyPrefix]
         //[HarmonyPatch(typeof(UIStatus), "AddInfo", new Type[] { typeof(string) })]
         //public static bool PatchAddInfo(ref string message)
@@ -3033,7 +3033,7 @@ namespace HsMod
         //}
     }
 
-    //In-game time speed update
+    //游戏内时间速度更新
     public static class TimeScaleMgrPatch
     {
         private static readonly MethodInfo updateInfo = typeof(TimeScaleMgr).GetMethod("Update", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -3044,7 +3044,7 @@ namespace HsMod
         }
     }
 
-    //Collection updates，The test is currently invalid
+    //收藏更新，目前测试无效
     public static class CollectionManagerPatch
     {
         private static readonly MethodInfo onCollectionChanged = typeof(CollectionManager).GetMethod("OnCollectionChanged", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -3054,7 +3054,7 @@ namespace HsMod
         }
     }
 
-    //Silent management
+    //静音管理
     public static class SoundManagerPatch
     {
         public static bool MuteKeyPressed = false;
@@ -3072,7 +3072,7 @@ namespace HsMod
         }
     }
 
-    //Get player information
+    //获取玩家信息
     public static class SharedPlayerInfoPatch
     {
         private static readonly FieldInfo m_gameAccountIdInfo = typeof(SharedPlayerInfo).GetField("m_gameAccountId", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -3083,7 +3083,7 @@ namespace HsMod
         }
     }
 
-    //Click to get tags
+    //点击获取标签
     public static class PlayerLeaderboardManagerPatch
     {
         private static readonly FieldInfo m_currentlyMousedOverTileInfo = typeof(PlayerLeaderboardManager).GetField("m_currentlyMousedOverTile", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -3130,7 +3130,7 @@ namespace HsMod
         }
     }
 
-    //Send emoticons
+    //表情发送
     public static class EmoteHandlerPatch
     {
         private static readonly FieldInfo m_totalEmotesInfo = typeof(EmoteHandler).GetField("m_totalEmotes", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -3328,7 +3328,7 @@ namespace HsMod
         }
     }
 
-    //Silent expression
+    //表情静默
     public static class EnemyEmoteHandlerPatch
     {
         private static readonly MethodInfo doSquelchClickInfo = typeof(EnemyEmoteHandler).GetMethod("DoSquelchClick", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -3349,7 +3349,7 @@ namespace HsMod
         }
     }
 
-    //Unpack
+    //开包
     public static class PackOpeningDirectorPatch
     {
         public static bool m_WaitingForCards;
@@ -3411,7 +3411,7 @@ namespace HsMod
         }
     }
 
-    //simulationUnpack
+    //模拟开包
     public static class PackOpeningPatch
     {
         private static readonly MethodInfo onReloginComplete = typeof(PackOpening).GetMethod("OnReloginComplete", BindingFlags.Instance | BindingFlags.NonPublic);
