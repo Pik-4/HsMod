@@ -1,6 +1,6 @@
 # HsMod
 
-**Hearth**stone **Modify Based on BepInEx Based on BepInEx's Hearthstone modification, the plugin source code is located at [github.com/Pik-4/HsMod](https://github.com/Pik-4/HsMod), the plugin does not collect your any information; the project follows `AGPL-3.0` and is used for learning and research only.
+**Hearthstone Modify** Based on BepInEx Based on BepInEx's Hearthstone modification, the plugin source code is located at [github.com/Pik-4/HsMod](https://github.com/Pik-4/HsMod), the plugin does not collect your any information; the project follows `AGPL-3.0` and is used for learning and research only.
 
 ### Functions realized
 
