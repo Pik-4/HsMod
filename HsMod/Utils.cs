@@ -414,6 +414,7 @@ namespace HsMod
                     int numNormalCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.NORMAL);
                     int numGoldenCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.GOLDEN);
                     int numSignatureCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.SIGNATURE);
+                    int numDiamondCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.DIAMOND);
 
                     CraftingPendingTransaction m_pendingClientTransaction = new CraftingPendingTransaction
                     {
@@ -421,11 +422,12 @@ namespace HsMod
                         Premium = record.PremiumType,
                         NormalDisenchantCount = numNormalCopiesInCollection,
                         GoldenDisenchantCount = numGoldenCopiesInCollection,
-                        SignatureDisenchantCount = numSignatureCopiesInCollection
+                        SignatureDisenchantCount = numSignatureCopiesInCollection,
+                        DiamondDisenchantCount = numSignatureCopiesInCollection
                     };
 
                     value = -(normalValue * numNormalCopiesInCollection + goldenValue * numGoldenCopiesInCollection);
-                    network.CraftingTransaction(m_pendingClientTransaction, value, numNormalCopiesInCollection, numGoldenCopiesInCollection, numSignatureCopiesInCollection);
+                    network.CraftingTransaction(m_pendingClientTransaction, value, numNormalCopiesInCollection, numGoldenCopiesInCollection, numSignatureCopiesInCollection, numDiamondCopiesInCollection);
                     m_pendingClientTransaction = null;
                 }
             }
