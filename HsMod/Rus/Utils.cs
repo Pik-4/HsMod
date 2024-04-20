@@ -15,47 +15,47 @@ namespace HsMod
     {
         public enum CardState
         {
-            [Description("default（No modifications）")]
+            [Description("Default（Никаких модификаций）")]
             Default,
-            [Description("Only valid for friendly parties")]
+            [Description("Действует только для дружеских вечеринок")]
             OnlyMy,
-            [Description("All take effect")]
+            [Description("Все вступает в силу")]
             All,
-            [Description("Disablespecial effects")]
+            [Description("Запрещать特效")]
             Disabled
         }
         //public enum QuickMode
         //{
-        //    [Description("default（Disable）")]
+        //    [Description("Default（Запрещать）")]
         //    Default,
-        //    [Description("Battlegrounds")]
+        //    [Description("Поля боя")]
         //    Battlegrounds,
-        //    [Description("Mercenary War Chronicles")]
+        //    [Description("Mercenary record")]
         //    Mercenaries,
-        //    [Description("All modes")]
+        //    [Description("Все режимы")]
         //    AllMode,
-        //    [Description("Disable")]
+        //    [Description("Запрещать")]
         //    Disabled
         //}
         public enum SkinType
         {
-            [Description("card back")]
+            [Description("рубашка назад")]
             CARDBACK,
-            [Description("card")]
+            [Description("Cards")]
             CARD,
-            [Description("coin")]
+            [Description("монета")]
             COIN,
-            [Description("hero skin")]
+            [Description("скин героя")]
             HERO,
-            [Description("Tavern Bob")]
+            [Description("Таверна Боб")]
             BOB,
-            [Description("Tavern ending special effects")]
+            [Description("Спецэффекты концовки таверны")]
             BATTLEGROUNDSFINISHER,
-            [Description("Tavern Battlefield")]
+            [Description("Таверна Поле битвы")]
             BATTLEGROUNDSBOARD,
-            [Description("Tavern hero skin")]
+            [Description("酒馆скин героя")]
             BATTLEGROUNDSHERO,
-            [Description("Hero Powers")]
+            [Description("Силы героя")]
             HEROPOWER,
         }
         public enum AlertPopupResponse
@@ -68,27 +68,27 @@ namespace HsMod
         }
         public enum ConfigTemplate
         {
-            [Description("default")]
+            [Description("Default")]
             DoNothing,
-            [Description("Hang up")]
+            [Description("Вешать трубку")]
             AwayFromKeyboard,
-            [Description("Anti-hook")]
+            [Description("Анти-крючок")]
             AntiAwayFromKeyboard
         }
         public enum BuyAdventureTemplate
         {
-            [Description("default")]
+            [Description("Default")]
             DoNothing,
-            [Description("Curse of Naxxramas")]
+            [Description("Проклятие Наксрамаса")]
             BuyNAX,
-            [Description("Blackrock Mountain's Fire")]
+            [Description("Огонь Черной горы")]
             BuyBRM,
-            [Description("Society of Explorers")]
+            [Description("Общество исследователей")]
             BuyLOE,
-            [Description("Karazhan Night")]
+            [Description("Каражан Ночь")]
             BuyKara
         }
-        public enum CardRarity    // cardrareEvery time
+        public enum CardRarity    // CardsRare度
         {
             COMMON = TAG_RARITY.COMMON,
             RARE = TAG_RARITY.RARE,
@@ -151,14 +151,14 @@ namespace HsMod
                         cardCount.gTotal += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 50;
-                        return $"<td>goldusually</td><td>{count}</td>";
+                        return $"<td>золотой ординарный</td><td>{count}</td>";
                     }
                     else
                     {
                         cardCount.common += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 5;
-                        return $"<td>usually</td><td>{count}</td>";
+                        return $"<td>обычно</td><td>{count}</td>";
                     }
                 case TAG_RARITY.RARE:
                     if (golden)
@@ -167,14 +167,14 @@ namespace HsMod
                         cardCount.gTotal += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 100;
-                        return $"<td>goldrare</td><td>{count}</td>";
+                        return $"<td>золотой редкий</td><td>{count}</td>";
                     }
                     else
                     {
                         cardCount.rare += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 20;
-                        return $"<td>rare</td><td>{count}</td>";
+                        return $"<td>Rare</td><td>{count}</td>";
                     }
                 case TAG_RARITY.EPIC:
                     if (golden)
@@ -183,14 +183,14 @@ namespace HsMod
                         cardCount.gTotal += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 400;
-                        return $"<td>golden epic</td><td>{count}</td>";
+                        return $"<td>золотая эпопея</td><td>{count}</td>";
                     }
                     else
                     {
                         cardCount.epic += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 100;
-                        return $"<td>epic</td><td>{count}</td>";
+                        return $"<td>Epic</td><td>{count}</td>";
                     }
                 case TAG_RARITY.LEGENDARY:
                     if (golden)
@@ -199,17 +199,17 @@ namespace HsMod
                         cardCount.gTotal += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 1600;
-                        return $"<td>golden legend</td><td>{count}</td>";
+                        return $"<td>金色легенда</td><td>{count}</td>";
                     }
                     else
                     {
                         cardCount.legendary += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 400;
-                        return $"<td>legend</td><td>{count}</td>";
+                        return $"<td>легенда</td><td>{count}</td>";
                     }
                 default:
-                    return "<td>unknown</td>";
+                    return "<td>неизвестный</td>";
             }
         }
 
@@ -219,24 +219,24 @@ namespace HsMod
             switch ((rank - 1) / 10)
             {
                 case 0:
-                    text = "bronze";
+                    text = "бронза";
                     break;
                 case 1:
-                    text = "silver";
+                    text = "серебро";
                     break;
                 case 2:
-                    text = "gold";
+                    text = "золото";
                     break;
                 case 3:
-                    text = "platinum";
+                    text = "платина";
                     break;
                 case 4:
-                    text = "diamond";
+                    text = "алмаз";
                     break;
                 case 5:
-                    return "legend";
+                    return "легенда";
                 default:
-                    text = "unknown";
+                    text = "неизвестный";
                     break;
             }
             return text + (11 - (rank - (rank - 1) / 10 * 10)).ToString();
@@ -278,7 +278,7 @@ namespace HsMod
             Blizzard.GameService.SDK.Client.Integration.BattleNet.Get().SubmitReport(Utils.CacheLastOpponentAccountID, Blizzard.GameService.SDK.Client.Integration.ReportType.ComplaintType.CHEATING, subcomplaintTypes);
             subcomplaintTypes.Clear();
 
-            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, Utils.CacheLastOpponentFullName + Utils.CacheLastOpponentAccountID.EntityId.ToString() + "Reported");
+            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, Utils.CacheLastOpponentFullName + Utils.CacheLastOpponentAccountID.EntityId.ToString() + "Сообщено");
         }
 
         public static void TryRefundCardDisenchantCallback()
@@ -286,17 +286,17 @@ namespace HsMod
             Network.CardSaleResult cardSaleResult = Network.Get().GetCardSaleResult();
             if (cardSaleResult.Action != Network.CardSaleResult.SaleResult.CARD_WAS_SOLD)
             {
-                MyLogger(LogLevel.Warning, $"Decomposition failed：{cardSaleResult.Action}");
-                UIStatus.Get().AddInfo("Decomposition failed");
+                MyLogger(LogLevel.Warning, $"Разложение не удалось：{cardSaleResult.Action}");
+                UIStatus.Get().AddInfo("Разложение не удалось");
             }
             else
             {
-                MyLogger(LogLevel.Warning, "Decomposed successfully");
+                MyLogger(LogLevel.Warning, "Разложение успешно");
                 CollectionManager.Get().OnCollectionChanged();
             }
         }
 
-        //Destroy it
+        //Уничтожьте это
         //public static void TryRuinCardDisenchant()
         //{
         //    int totalSell = 0;
@@ -311,8 +311,8 @@ namespace HsMod
         //            totalSell += record.OwnedCount * value;
         //        }
         //    }
-        //    MyLogger(LogLevel.Warning, "Try to break down the dust：" + totalSell);
-        //    UIStatus.Get().AddInfo("Try to break down the dust：" + totalSell);
+        //    MyLogger(LogLevel.Warning, "Попробуй разбить пыль：" + totalSell);
+        //    UIStatus.Get().AddInfo("Попробуй разбить пыль：" + totalSell);
         //}
 
         public static void TryReadNewCards()
@@ -327,7 +327,7 @@ namespace HsMod
                     }
                 }
             }
-            if ((SceneMgr.Get()?.GetMode() == SceneMgr.Mode.LETTUCE_COLLECTION) || (SceneMgr.Get().GetMode() == SceneMgr.Mode.LETTUCE_PACK_OPENING)) // after execution，Need to re-enter the mercenary collection
+            if ((SceneMgr.Get()?.GetMode() == SceneMgr.Mode.LETTUCE_COLLECTION) || (SceneMgr.Get().GetMode() == SceneMgr.Mode.LETTUCE_PACK_OPENING)) // после исполнения，Нужно заново войти в коллекцию наемников
             {
                 List<PegasusLettuce.MercenaryAcknowledgeData> m_mercenaryAcknowledgements = new List<PegasusLettuce.MercenaryAcknowledgeData>();
                 foreach (var merc in CollectionManager.Get().FindMercenaries(null, true, null, null, null).m_mercenaries)
@@ -403,7 +403,7 @@ namespace HsMod
             network.RegisterNetHandler(PegasusUtil.BoughtSoldCard.PacketID.ID, new Network.NetHandler(TryRefundCardDisenchantCallback), null);
             foreach (var record in CollectionManager.Get().GetOwnedCards())
             {
-                if (record != null && record.IsCraftable && record.IsRefundable && (record.OwnedCount > 0))    // Gold cards and regular cards will be triggered once each.，But all at once
+                if (record != null && record.IsCraftable && record.IsRefundable && (record.OwnedCount > 0))    // Золотые карты и обычные карты будут активироваться по одному разу.，Но все сразу
                 {
                     CraftingManager.Get().TryGetCardSellValue(record.CardId, record.PremiumType, out int value);
                     totalSell += record.OwnedCount * value;
@@ -414,7 +414,6 @@ namespace HsMod
                     int numNormalCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.NORMAL);
                     int numGoldenCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.GOLDEN);
                     int numSignatureCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.SIGNATURE);
-                    int numDiamondCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.DIAMOND);
 
                     CraftingPendingTransaction m_pendingClientTransaction = new CraftingPendingTransaction
                     {
@@ -422,17 +421,16 @@ namespace HsMod
                         Premium = record.PremiumType,
                         NormalDisenchantCount = numNormalCopiesInCollection,
                         GoldenDisenchantCount = numGoldenCopiesInCollection,
-                        SignatureDisenchantCount = numSignatureCopiesInCollection,
-                        DiamondDisenchantCount = numSignatureCopiesInCollection
+                        SignatureDisenchantCount = numSignatureCopiesInCollection
                     };
 
                     value = -(normalValue * numNormalCopiesInCollection + goldenValue * numGoldenCopiesInCollection);
-                    network.CraftingTransaction(m_pendingClientTransaction, value, numNormalCopiesInCollection, numGoldenCopiesInCollection, numSignatureCopiesInCollection, numDiamondCopiesInCollection);
+                    network.CraftingTransaction(m_pendingClientTransaction, value, numNormalCopiesInCollection, numGoldenCopiesInCollection, numSignatureCopiesInCollection);
                     m_pendingClientTransaction = null;
                 }
             }
-            MyLogger(LogLevel.Warning, "Try to break down the dust：" + totalSell);
-            UIStatus.Get().AddInfo("Try to break down the dust：" + totalSell);
+            MyLogger(LogLevel.Warning, "Попробуй разбить пыль：" + totalSell);
+            UIStatus.Get().AddInfo("Попробуй разбить пыль：" + totalSell);
         }
 
         public static void TryGetSafeImg()
@@ -487,7 +485,7 @@ namespace HsMod
         }
 
 
-        //False packet opening data range
+        //Диапазон данных ложного открытия пакета
         public static List<int> GetCardsDbId()
         {
             List<int> cardsDbId = new List<int>();
@@ -501,7 +499,7 @@ namespace HsMod
                     {
                         if (entitydef.GetCardType() != TAG_CARDTYPE.HERO)
                             cardsDbId.Add(dbid);
-                        else if (entitydef.GetCost() != 0)    // neglecthero skin
+                        else if (entitydef.GetCost() != 0)    // Игнорировать скины героев
                             cardsDbId.Add(dbid);
                     }
                 }
@@ -509,7 +507,7 @@ namespace HsMod
             return cardsDbId;
         }
 
-        //false results，designationrareEvery time
+        //ложные результаты，指定Rare度
         public static int GetRandomCardID(TAG_RARITY rarity)
         {
             int dbid;
@@ -551,7 +549,7 @@ namespace HsMod
         }
 
 
-        //false results
+        //ложные результаты
         public static void GenerateRandomCard(bool rarityRandom = false, bool premiumRandom = false, TAG_RARITY rarity = TAG_RARITY.LEGENDARY, TAG_PREMIUM premium = TAG_PREMIUM.GOLDEN)
         {
             if (!rarityRandom) rarity = (TAG_RARITY)fakeRandomRarity.Value;
@@ -606,12 +604,12 @@ namespace HsMod
             }
             if (SceneMgr.Get().GetMode() == SceneMgr.Mode.STARTUP || SceneMgr.Get().GetMode() == SceneMgr.Mode.LOGIN)
             {
-                UIStatus.Get().AddInfo("Uninitialized！");
+                UIStatus.Get().AddInfo("Неинициализированный！");
                 return;
             }
             if (SceneMgr.Get().GetMode() == SceneMgr.Mode.GAMEPLAY)
             {
-                UIStatus.Get().AddInfo("Cannot be purchased within the game！");
+                UIStatus.Get().AddInfo("Невозможно приобрести в игре.！");
                 return;
             }
             try
@@ -658,14 +656,14 @@ namespace HsMod
 
                 if (StoreManager.GetStaticProductItemOwnershipStatus(productType, wingID, out string failReason) == ItemOwnershipStatus.OWNED)
                 {
-                    Utils.MyLogger(LogLevel.Warning, $"{adventure}：Adventure already owned！");
-                    UIStatus.Get().AddInfo("selectedAdventure already owned！");
+                    Utils.MyLogger(LogLevel.Warning, $"{adventure}：Приключение уже принадлежит！");
+                    UIStatus.Get().AddInfo("Выбранное приключение уже принадлежит！");
                 }
                 else
                 {
                     StoreManager.Get().StartAdventureTransaction(productType, wingID, null, null, global::ShopType.ADVENTURE_STORE, 1, false, null, 0);
 
-                    //ProductDataModel productByPmtId = StoreManager.Get().Catalog.GetProductByPmtId(ProductId.CreateFromValidated((long)0));     // Buy Classic Card Packs
+                    //ProductDataModel productByPmtId = StoreManager.Get().Catalog.GetProductByPmtId(ProductId.CreateFromValidated((long)0));     // Купить классические наборы карт
                     //PriceDataModel priceDataModel = productByPmtId.Prices.FirstOrDefault((PriceDataModel p) => p.Currency == CurrencyType.GOLD);
                     //Shop.Get().AttemptToPurchaseProduct(productByPmtId, priceDataModel, 1);
                 }
@@ -814,7 +812,7 @@ namespace HsMod
         public static void UpdateHeroPowerMapping()
         {
             HeroesPowerMapping.Clear();
-            //HeroesPowerMapping.Add("CS2_083b_H1", "CS2_102_H1"); Solve existing problems，like，Maiev's skills are not listed correctly。
+            //HeroesPowerMapping.Add("CS2_083b_H1", "CS2_102_H1"); Решить существующие проблемы，нравиться，Навыки Майев указаны неправильно.。
             foreach (var hero in HeroesMapping)
             {
                 string rawHeroPower = GameUtils.GetHeroPowerCardIdFromHero(hero.Key);
@@ -1029,14 +1027,14 @@ namespace HsMod
             public static void Mercenaries(string savePath = @"BepInEx/HsMercenaries.log")
             {
                 //List<LettuceTeam> teams = CollectionManager.Get().GetTeams();
-                //System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGet您的队伍likeDown：\n");
+                //System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tСоберите свою команду следующим образом：\n");
                 //foreach (LettuceTeam team in teams)
                 //{
                 //    System.IO.File.AppendAllText(savePath, team.Name + "\n");
                 //}
-                System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGet关卡信息likeDown：\n");
+                System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到关卡信息нравиться下：\n");
                 System.IO.File.AppendAllText(savePath, "[ID]\t[Heroic?]\t[Bounty]\t[BossName]\n");
-                foreach (var record in GameDbf.LettuceBounty.GetRecords())     // Generate level name
+                foreach (var record in GameDbf.LettuceBounty.GetRecords())     // Создать название уровня
                 {
                     string saveString;
                     if (record != null)
@@ -1048,7 +1046,7 @@ namespace HsMod
             }
             public static void MyCards(string savePath = @"BepInEx/HsRefundCards.log")
             {
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGet全额分解cardConditionlikeDown：\n");
+                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tСитуация с получением полностью разложенных карт следующая:：\n");
                 System.IO.File.AppendAllText(savePath, "[Name]\t[PremiumType]\t[Rarity]\t[CardId]\t[CardDbId]\t[OwnedCount]\n");
                 //Filter<CollectibleCard> filter3 = new Filter<CollectibleCard>((CollectibleCard card) => card.IsRefundable);
                 foreach (var record in CollectionManager.Get().GetOwnedCards())
@@ -1064,7 +1062,7 @@ namespace HsMod
             }
             public static void Skins(string savePath = "BepInEx/HsSkins.log")
             {
-                System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGet the coin skin as follows：\n");
+                System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到монета皮肤нравиться下：\n");
                 System.IO.File.AppendAllText(savePath, "[CARD_ID]\t[Name]\n");
                 foreach (var record in GameDbf.CosmeticCoin.GetRecords())
                 {
@@ -1075,7 +1073,7 @@ namespace HsMod
                         System.IO.File.AppendAllText(savePath, saveString + "\n");
                     }
                 }
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tObtain the card back information as follows:：\n");
+                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到рубашка назад信息нравиться下：\n");
                 System.IO.File.AppendAllText(savePath, "[ID]\t[Name]\n");
                 foreach (var record in GameDbf.CardBack.GetRecords())
                 {
@@ -1088,7 +1086,7 @@ namespace HsMod
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGet游戏面板信息likeDown：\n");
+                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tИнформация об игровой панели получается следующим образом:：\n");
                 System.IO.File.AppendAllText(savePath, "[ID]\t[NOTE_DESC]\n");
                 foreach (var record in GameDbf.Board.GetRecords())
                 {
@@ -1101,7 +1099,7 @@ namespace HsMod
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGet酒馆战斗面板likeDown：\n");
+                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到酒馆战斗面板нравиться下：\n");
                 System.IO.File.AppendAllText(savePath, "[ID]\t[CollectionShortName]\t[CollectionName]\n");
                 foreach (var record in GameDbf.BattlegroundsBoardSkin.GetRecords())
                 {
@@ -1114,7 +1112,7 @@ namespace HsMod
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGetTavern ending special effectslikeDown：\n");
+                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tПолучите специальные эффекты концовки таверны следующим образом:：\n");
                 System.IO.File.AppendAllText(savePath, "[ID]\t[CollectionShortName]\t[CollectionName]\n");
                 foreach (var record in GameDbf.BattlegroundsFinisher.GetRecords())
                 {
@@ -1127,7 +1125,7 @@ namespace HsMod
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\tGet hero skin（including pub）likeDown：\n");
+                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到скин героя（включая паб）нравиться下：\n");
                 System.IO.File.AppendAllText(savePath, "[CARD_ID]\t[Name]\t[HeroType]\n");
                 foreach (var record in GameDbf.CardHero.GetRecords())
                 {

@@ -21,21 +21,21 @@ namespace HsMod
             {
                 System.Diagnostics.Process CmdProcess = new System.Diagnostics.Process();
                 CmdProcess.StartInfo.FileName = "cmd.exe";
-                CmdProcess.StartInfo.CreateNoWindow = true;         // Don't createnewwindow    
-                CmdProcess.StartInfo.UseShellExecute = false;       //Not enabledshellstart process  
-                CmdProcess.StartInfo.RedirectStandardInput = true;  // Redirect input    
-                CmdProcess.StartInfo.RedirectStandardOutput = true; // Redirect standard output    
-                CmdProcess.StartInfo.RedirectStandardError = true;  // Redirect error output
-                CmdProcess.StartInfo.StandardOutputEncoding = Encoding.Default;    //Specify the encoding used for asynchronous output
-                CmdProcess.StartInfo.StandardErrorEncoding = Encoding.Default;    //Specifies the encoding used for asynchronous errors
-                CmdProcess.StartInfo.Arguments = "/c " + WebServer.shellCommand;    //“/C”Indicates that you will exit immediately after executing the command.  
-                CmdProcess.Start();    //implement  
+                CmdProcess.StartInfo.CreateNoWindow = true;         // Не создавать новое окно    
+                CmdProcess.StartInfo.UseShellExecute = false;       //Не включеноshellначать процесс  
+                CmdProcess.StartInfo.RedirectStandardInput = true;  // Перенаправление ввода    
+                CmdProcess.StartInfo.RedirectStandardOutput = true; // 重定向стандартный输出    
+                CmdProcess.StartInfo.RedirectStandardError = true;  // Перенаправление вывода ошибки
+                CmdProcess.StartInfo.StandardOutputEncoding = Encoding.Default;    //Укажите кодировку, используемую для асинхронного вывода.
+                CmdProcess.StartInfo.StandardErrorEncoding = Encoding.Default;    //Указывает кодировку, используемую для асинхронных ошибок.
+                CmdProcess.StartInfo.Arguments = "/c " + WebServer.shellCommand;    //“/C”表示осуществлять完命令后马上退出  
+                CmdProcess.Start();    //осуществлять  
 
-                stringBuilder.Append(CmdProcess.StandardOutput.ReadToEnd());    //Get return value  There may be problems with Chinese characters Encoding 936 data could not be found.
+                stringBuilder.Append(CmdProcess.StandardOutput.ReadToEnd());    //Получить возвращаемое значение  Могут быть проблемы с китайскими иероглифами. Encoding 936 data could not be found.
 
-                CmdProcess.WaitForExit(5000);    //waiting procedureimplementComplete exit process  timeoutforwait待of毫Secondnumber，liketimeoutIf negative, it will wait indefinitely
+                CmdProcess.WaitForExit(5000);    //等待程序осуществлять完退出进程  timeoutКоличество миллисекунд ожидания，нравитьсяtimeoutЕсли отрицательный, он будет ждать неопределенное время.
 
-                CmdProcess.Close();    //Finish
+                CmdProcess.Close();    //Заканчивать
             }
             catch (Exception ex)
             {
@@ -48,19 +48,19 @@ namespace HsMod
         public static StringBuilder Template(string title = "", string body = "")
         {
             StringBuilder builder = new StringBuilder();
-            string nav = (System.IO.File.Exists(CommandConfig.hsMatchLogPath) && title != "index") ? "<li class=\"nav_li\"><a href=\"/matchlog\"><button class=\"btn_li\">Hearthstonegame</button></a></li>" : "";
+            string nav = (System.IO.File.Exists(CommandConfig.hsMatchLogPath) && title != "index") ? "<li class=\"nav_li\"><a href=\"/matchlog\"><button class=\"btn_li\">Хартстоун игра</button></a></li>" : "";
             if (title != "index")
             {
                 nav = $@"<center>
 <ul class=""nav_ui"">
-<li class=""nav_li""><a href=""/info""><button class=""btn_li"">main information</button></a></li>
-<li class=""nav_li""><a href=""/pack""><button class=""btn_li"">Card pack information</button></a></li>
-<li class=""nav_li""><a href=""/collection""><button class=""btn_li"">card collection</button></a></li>
-<li class=""nav_li""><a href=""/skins""><button class=""btn_li"">Skin information</button></a></li>
-<li class=""nav_li""><a href=""/lettuce""><button class=""btn_li"">mercenarycloseCard</button></a></li>
-<li class=""nav_li""><a href=""/mercenaries""><button class=""btn_li"">mercenarycollect</button></a></li>
+<li class=""nav_li""><a href=""/info""><button class=""btn_li"">основная информация</button></a></li>
+<li class=""nav_li""><a href=""/pack""><button class=""btn_li"">卡Сумка信息</button></a></li>
+<li class=""nav_li""><a href=""/collection""><button class=""btn_li"">коллекция карт</button></a></li>
+<li class=""nav_li""><a href=""/skins""><button class=""btn_li"">Информация о скине</button></a></li>
+<li class=""nav_li""><a href=""/lettuce""><button class=""btn_li"">наемникзакрывать卡</button></a></li>
+<li class=""nav_li""><a href=""/mercenaries""><button class=""btn_li"">Коллекция наемников</button></a></li>
 {nav}
-<li class=""nav_li""><a href=""/about""><button class=""btn_li"">close&emsp;&emsp;At</button></a></li>
+<li class=""nav_li""><a href=""/about""><button class=""btn_li"">закрывать&emsp;&emsp;В</button></a></li>
 </ul></center><br />";
             }
             builder.Append($@"
@@ -135,19 +135,19 @@ text-decoration: none;
         public static StringBuilder Template(StringBuilder body, string title = "")
         {
             StringBuilder builder = new StringBuilder();
-            string nav = (System.IO.File.Exists(CommandConfig.hsMatchLogPath) && title != "index") ? "<li class=\"nav_li\"><a href=\"/matchlog\"><button class=\"btn_li\">Hearthstonegame</button></a></li>" : "";
+            string nav = (System.IO.File.Exists(CommandConfig.hsMatchLogPath) && title != "index") ? "<li class=\"nav_li\"><a href=\"/matchlog\"><button class=\"btn_li\">Хартстоун игра</button></a></li>" : "";
             if (title != "index")
             {
                 nav = $@"<center>
 <ul class=""nav_ui"">
-<li class=""nav_li""><a href=""/info""><button class=""btn_li"">main information</button></a></li>
-<li class=""nav_li""><a href=""/pack""><button class=""btn_li"">Card pack information</button></a></li>
-<li class=""nav_li""><a href=""/collection""><button class=""btn_li"">card collection</button></a></li>
-<li class=""nav_li""><a href=""/skins""><button class=""btn_li"">Skin information</button></a></li>
-<li class=""nav_li""><a href=""/lettuce""><button class=""btn_li"">mercenarycloseCard</button></a></li>
-<li class=""nav_li""><a href=""/mercenaries""><button class=""btn_li"">mercenarycollect</button></a></li>
+<li class=""nav_li""><a href=""/info""><button class=""btn_li"">основная информация</button></a></li>
+<li class=""nav_li""><a href=""/pack""><button class=""btn_li"">卡Сумка信息</button></a></li>
+<li class=""nav_li""><a href=""/collection""><button class=""btn_li"">коллекция карт</button></a></li>
+<li class=""nav_li""><a href=""/skins""><button class=""btn_li"">Информация о скине</button></a></li>
+<li class=""nav_li""><a href=""/lettuce""><button class=""btn_li"">наемникзакрывать卡</button></a></li>
+<li class=""nav_li""><a href=""/mercenaries""><button class=""btn_li"">Коллекция наемников</button></a></li>
 {nav}
-<li class=""nav_li""><a href=""/about""><button class=""btn_li"">close&emsp;&emsp;At</button></a></li>
+<li class=""nav_li""><a href=""/about""><button class=""btn_li"">закрывать&emsp;&emsp;В</button></a></li>
 </ul></center><br />";
             }
             builder.Append($@"
@@ -221,14 +221,14 @@ text-decoration: none;
 
         public static StringBuilder HomePage()
         {
-            string btn = @" <a href=""/info""><button class=""btn_li"">main information</button><br/></a><br/>";
-            btn += @"<a href=""/pack""><button class=""btn_li"">Card pack information</button><br/></a><br/>";
-            btn += @"<a href=""/collection""><button class=""btn_li"">card collection</button><br/></a><br/>";
-            btn += @"<a href=""/skins""><button class=""btn_li"">Skin information</button><br/></a><br/>";
-            btn += @"<a href=""/lettuce""><button class=""btn_li"">mercenarycloseCard</button><br/></a><br/>";
-            btn += @"<a href=""/mercenaries""><button class=""btn_li"">mercenarycollect</button><br/></a><br/>";
-            if (System.IO.File.Exists(CommandConfig.hsMatchLogPath)) btn += @"<a href=""/matchlog""><button class=""btn_li"">Hearthstonegame</button><br/></a><br/>";
-            btn += @"<a href=""/about""><button class=""btn_li"">close&emsp;&emsp;At</button><br/></a><br/>";
+            string btn = @" <a href=""/info""><button class=""btn_li"">основная информация</button><br/></a><br/>";
+            btn += @"<a href=""/pack""><button class=""btn_li"">卡Сумка信息</button><br/></a><br/>";
+            btn += @"<a href=""/collection""><button class=""btn_li"">коллекция карт</button><br/></a><br/>";
+            btn += @"<a href=""/skins""><button class=""btn_li"">Информация о скине</button><br/></a><br/>";
+            btn += @"<a href=""/lettuce""><button class=""btn_li"">наемникзакрывать卡</button><br/></a><br/>";
+            btn += @"<a href=""/mercenaries""><button class=""btn_li"">Коллекция наемников</button><br/></a><br/>";
+            if (System.IO.File.Exists(CommandConfig.hsMatchLogPath)) btn += @"<a href=""/matchlog""><button class=""btn_li"">Хартстоун игра</button><br/></a><br/>";
+            btn += @"<a href=""/about""><button class=""btn_li"">закрывать&emsp;&emsp;В</button><br/></a><br/>";
             string body = @"<h1 style=""text-align: center; opacity: 0.6;"">HsMod</h1>";
             body += $@"<div style=""text-align: center; width: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);"">{btn}</div>";
             return Template("index", body);
@@ -237,11 +237,11 @@ text-decoration: none;
         public static StringBuilder AboutPage()
         {
             StringBuilder builder = new StringBuilder();
-            builder.AppendLine(@"<h3 style=""text-align: center;"">closeAtHsMod</h3>");
+            builder.AppendLine(@"<h3 style=""text-align: center;"">закрыватьВHsMod</h3>");
             builder.AppendLine($"<p>Author: <a href='https://github.com/Pik-4'>Pik_4</a><br />Page Last Updated: 2022.12.10<br />HsMod Version:{PluginInfo.PLUGIN_VERSION}</p><br />");
-            builder.Append("<p><strong>H</strong>earth<strong>s</strong>tone <strong>Mod</strong>ify Based on BepInEx baseAtBepInExHearthstone modifications，plug-insource code bitsAt<a href='https://github.com/Pik-4/HsMod'>github.com/Pik-4/HsMod</a>，plug-in不会收集您of任何information；Project follows<code>AGPL-3.0</code>，For study and research only。</p>\r\n");
-            builder.Append("<h3>Implemented features</h3>\r\n<ol start='' >\r\n<li>supportGear speed8timesspeed（Allow expansion to speed and slowness in settings32times）</li>\r\n<li>with permissionVerifyWebCredentialsLog in（Also supports command line startup，No need to start Battle.net）。</li>\r\n<li>Block error reports，when an exception occurs，Error messages will not be reported to Blizzard。</li>\r\n<li>Disable dropped calls，Allow long periods of inactivity</li>\r\n<li>Allow automatic exit on error</li>\r\n<li>Allow window focus to be removed</li>\r\n<li>Remove window size restrictions</li>\r\n<li>Block pop-ups（If it cannot be matched, etc.）hint。</li>\r\n<li>Remove Chinese characteristicshint</li>\r\n<li>supportRemove nerf patchhint，Remove promotional ads，Remove ladder settlementawardWait for the pop-up window</li>\r\n<li>allowshieldgameFinishof升级hint、Settlementhint</li>\r\n<li>Allow blocking of battle orders、Tips for collecting achievements and other rewards</li>\r\n<li>Allows quick opening of packages，Open spaces once5open</li>\r\n<li>allowexistopenBaghour自动分解全额分解ofCard牌</li>\r\n<li>Allow display of game frame rate information</li>\r\n<li>allowRevisegame frame rate</li>\r\n<li>Support in collection、hero、card back、Strike effects、TavernPanel etc.fieldscene，Shown when a card is selected by right-clickingDbid</li>\r\n<li>supportcollectshow9+Actual number of cards</li>\r\n<li>allowexist0-0（No need to form cards）give up duel</li>\r\n<li>Allow automatic claiming of competitionsfield、Duels and other rewards（Click package at the end）</li>\r\n<li>Allow access to Hearthstone developer mode</li>\r\n<li>Automatically rotate cards when friends watch the game、Automatically watch both sides</li>\r\n<li>Support fireside party simulation positioning</li>\r\n<li>Allows automatic blocking of opponent's expressions or setting upper limit of opponent's expressions；Supports blocking thinking emoticons；Supports blocking Bob’s voice；supportBattle跳过herointroduce</li>\r\n<li>supportExpression without cooling（Minimum interval for sending emoticons1.5Second）</li>\r\n<li>supportExpression shortcut keys</li>\r\n<li>Support quick combat（Skip part of animation，Smoother than gears，turn onhourshieldFinal effects，This option canexistTavernandmercenary(PVE)Take effect，The mercenary may have a lag during the final death settlement.，）</li>\r\n<li>Support Hearthstone automatic gold card、Diamond card</li>\r\n<li>Allows individual blocking of opponent card effects</li>\r\n<li>Allow display of opponent's full BattleTag nickname</li>\r\n<li>Allow click on avatar to obtainTavernPlayer nickname</li>\r\n<li>Allow adding opponents to the match</li>\r\n<li>allowexistlegend前显对手示Ladder to Heavengrade</li>\r\n<li>Supports marking opponent’s known cards</li>\r\n<li>with permissionShortcut key to muteHearthstone</li>\r\n<li>Allow automatic reporting of opponents；When auto-report opponents is enabled，can be automatically generatedGame records</li>\r\n<li>Support analog unplugging（Need to enable shortcut keys）</li>\r\n<li>support一键自动分解全额分解ofCard牌（Need to enable shortcut keys）</li>\r\n<li>Support one-click removal<code>new！</code>（Need to enable shortcut keys，May need to re-newGo to favorites，mercenarypossibleRestartexpire after）</li>\r\n<li>supportReviseBattleheroskin、Tavernheroskin、Final effects、Battle panel、Tavernpanel、lucky coinwaitSkin information。（Requires configuration<code>HsSkins.cfg</code>，orexistSetting upRevise，game中Evennewneedexist按Down<code>F4</code>After saving，Simulate unplugging）</li>\r\n<li>supportRevisecard back（game中自动Take effect）</li>\r\n<li>supportmercenaryRandom skin，Mandatory diamond skin etc.</li>\r\n<li>supportshieldmercenarytreasure chest、Ladder to HeavenawardWait for the pop-up window</li>\r\n<li>supportshieldmercenaryBattle interface scaling</li>\r\n<li>support模拟openBag（Support random results，support自定义CardBagtype、quantity、rarity、Quality and other information；Supports simulation of fixed results）</li>\r\n<li>supportDevice simulation（Allowed to collectiOS、Androidwait设备ofCardBagcard back，It may take a battle）</li>\r\n<li>supportgoldBuy Naxxramas、black rock mountain、Society of Explorers and other adventures（alsosupportCard拉赞，But can't write a prologue）</li>\r\n<li>Allows forcible opening of Karazhan（Can't write prologue，Not passedcloseCan't jump beforeclose）</li>\r\n<li>Support information display（showinfo，Need to enableplug-in，defaultHTTP，port58744）；supportshowmercenarydevelopschedule、openBag历史informationwait。</li>\r\n<li>Support receiving Hearthstone startup parameters，Such as specifying the resolution size, etc.。</li>\r\n<li>supportWebshell，The path is/shell。Need to be turned on in settings，Currently Chinese display may existexistGarbled characters。</li>\r\n<li>allowed to passWebRead local file，That is, parsing static pages。This function is not yetexistopen发中，Currently with<code>Hearthstone\\website</code>as root directory。</li>\r\n\r\n</ol>");
-            builder.AppendLine("<h3><strong>Additional information</strong></h3>\r\n<ol start='' >\r\n<li>plug-inCannot be placedexist含有中文ofUnder contents，That is, the Hearthstone installation path cannot contain Chinese characters.。</li>\r\n<li>Bookplug-inpossibleandbaseAt<code>Assembly-CSharp.dll</code>ofReviseconflict，Revise<code>Assembly-CSharp.dll</code>may causeILInstruction positioning exception，thus causing correlationPatchUnableTake effect；It may also be related to otherBepInExplug-in（For examplemercenary、MixMod）conflict，The reason is that the same method mayexisttwoplug-inZhongducunexistPatch，When there are multiplePatchhour，The running results may be abnormal，Bookplug-inThere is no detection of whether the original method isRevise。</li>\r\n<li>The skin's configuration file is in<code>Hearthstone\\BepInEx\\config\\HsSkins.cfg</code>。likenone，is automatically created after running the game。</li>\r\n<li><code>F4</code>for fixed shortcut keys，useAtGet some in-game information（Mutuallycloseinformation storageexist<code>Hearthstone\\BepInEx\\</code>Under contents）、<strong>Update skin configuration</strong>、RestartWebServices etc.。The rest of the shortcut keys can be customized。</li>\r\n<li>Bookplug-inexistdefaultstateDown，Almost all functions need to be turned on manually；plug-inMost functions canexistInstructions found in configuration，A small number of functions are only available inPatchmentioned in（such as minimizing restrictions）。</li>\r\n<li>Bookplug-inWeb Server（Right nowShowinfo）ofdefaultportfor58744，Normally，Listen to all localIP，Use cloud serverhour，Please pay attention to firewall、Security group and other configurations。</li>\r\n<li>used for game statisticslogThe file is<code>BepInEx\\HsMatch.log</code>，Can be modified in settings。（The fields start with<code>,</code>separate）</li>\r\n<li>When a problem occurs, first try to delete the relevant<code>.cfg</code>Configuration file（Generally located<code>BepInEx\\config\\</code>），to reconfigure；If the problem still exists，please bring<code>HsMod.cfg</code>submit<a href='https://github.com/Pik-4/HsMod/issues'>Issues</a>，However, timely answers are not guaranteed。</li>\r\n<li><code>GetHsLib.py</code>useAtEvennewHearthstoneOwn runtime library，<code>install.bat</code>used to compile the<code>HsMod.dll</code>Copy to default Hearthstone directory（The premise isBepInExAlready configured）。also，existpushRevise版Book号后（PluginInfo.csafter changes），will be automatically generated<a href='https://github.com/Pik-4/HsMod/releases'>release</a>。</li>\r\n<li>If skin abnormalities appear，Check, please<code>HsSkins.cfg</code>，and try to delete<code>HsMod.cfg</code>Reconfigure。</li>\r\n<li>ifReviseSettings cannot be saved，Check, pleaseWhether to enable otherHearthstoneplug-in。</li>\r\n\r\n</ol>");
+            builder.Append("<p><strong>H</strong>earth<strong>s</strong>tone <strong>Mod</strong>ify Based on BepInEx 基ВBepInEx的домашний очагИсправлять，плагин源代码位В<a href='https://github.com/Pik-4/HsMod'>github.com/Pik-4/HsMod</a>，плагин不会收集您的任何信息；Проект следует<code>AGPL-3.0</code>，Только для учебы и исследований。</p>\r\n");
+            builder.Append("<h3>Реализованные функции</h3>\r\n<ol start='' >\r\n<li>поддерживать齿轮快慢8двойная скорость（Разрешить расширение скорости и замедления в настройках.32раз）</li>\r\n<li>с разрешенияVerifyWebCredentialsАвторизоваться（亦поддерживать命令行启动，Нет необходимости запускать Battle.net）。</li>\r\n<li>Блокировать отчеты об ошибках，когда возникает исключение，Сообщения об ошибках не будут передаваться в Blizzard.。</li>\r\n<li>Отключить сбрасываемые вызовы，允许长час间无操作</li>\r\n<li>Разрешить автоматический выход при ошибке</li>\r\n<li>Разрешить снятие фокуса окна</li>\r\n<li>Удалить ограничения размера окна</li>\r\n<li>Блокировать всплывающие окна（Если оно не может быть сопоставлено и т. д.）намекать。</li>\r\n<li>移除中国特色намекать</li>\r\n<li>Поддержка удаления подсказок об ослаблении патчей.，Удалить рекламную рекламу，Удалите всплывающие окна, такие как награды за поселение в лестнице.</li>\r\n<li>Позволяет блокировать запросы на обновление в конце игры.、Советы по урегулированию</li>\r\n<li>Разрешить блокировку боевых приказов、成就等награда领取намекать</li>\r\n<li>Позволяет быстро открывать упаковки.，Открытые пространства однажды5открыть</li>\r\n<li>Позволяет полностью разбирать карты и автоматически разбирать их при открытии колоды.</li>\r\n<li>Разрешить отображение информации о частоте кадров в игре</li>\r\n<li>允许Исправлять游戏帧率</li>\r\n<li>поддерживатьсуществовать收藏、герой、рубашка назад、Эффекты удара、панель таверны等поле景，Отображается, когда карта выбрана щелчком правой кнопки мыши.Dbid</li>\r\n<li>поддерживать收藏显示9+卡牌实际количество</li>\r\n<li>允许существовать0-0（Нет необходимости формировать карты）отказаться от дуэли</li>\r\n<li>允许自动领取竞技поле、对决等награда（Заканчиватьчас点Сумка裹）</li>\r\n<li>Разрешить доступ к режиму разработчика Hearthstone</li>\r\n<li>Автоматически чередовать карты, когда друзья смотрят игру、Автоматически наблюдать за обеими сторонами</li>\r\n<li>поддерживать炉边聚会模拟定位</li>\r\n<li>Позволяет автоматически блокировать выражения оппонента или устанавливать верхний предел выражения оппонента.；поддерживать屏蔽思考表情；поддерживать屏蔽鲍勃语音；Поддерживает пропуск представления героя в бою.</li>\r\n<li>поддерживать表情无冷却（Минимальный интервал отправки смайлов1.5Второй）</li>\r\n<li>поддерживать表情快捷键</li>\r\n<li>поддерживать快速战斗（Пропустить часть анимации，Мягче, чем шестерни，开启час屏蔽Окончательные эффекты，该选项可существоватьТаверна与наемник(PVE)Take effect，наемник可能существовать最终死亡结算有卡顿，）</li>\r\n<li>поддерживатьдомашний очаг自动金卡、Бриллиантовая карта</li>\r\n<li>Позволяет индивидуально блокировать эффекты карт противника.</li>\r\n<li>Разрешить отображение полного ника BattleTag противника.</li>\r\n<li>Разрешить нажатие на аватарку для получения ника тавернного игрока</li>\r\n<li>Разрешить добавление противников в матч</li>\r\n<li>允许существоватьлегенда前显对手示天梯оценка</li>\r\n<li>поддерживать标记对手已知卡牌</li>\r\n<li>Разрешить отключение звука в Hearthstone с помощью горячих клавиш</li>\r\n<li>Разрешить автоматическое сообщение об оппонентах；Когда включен автоматический отчет об оппонентах，Может автоматически генерировать игровые записи</li>\r\n<li>поддерживатьИмитировать отключение（Необходимо включить сочетания клавиш）</li>\r\n<li>поддерживать一键自动分解全额分解的卡牌（Необходимо включить сочетания клавиш）</li>\r\n<li>поддерживать一键移除<code>New！</code>（Необходимо включить сочетания клавиш，Возможно, вам придется повторно ввести коллекцию.，наемник可能Перезапуск后失效）</li>\r\n<li>поддерживатьИсправлятьГерои битвы皮肤、Тавернагерой皮肤、Окончательные эффекты、Панель боя、панель таверны、счастливая монета等Информация о скине。（Требуется настройка<code>HsSkins.cfg</code>，Или измените это в настройках，对局中更New需要существовать按下<code>F4</code>После сохранения，Имитировать отключение）</li>\r\n<li>поддерживатьИсправлятьрубашка назад（Автоматически вступает в силу во время матча.）</li>\r\n<li>поддерживатьнаемник随机皮肤，Обязательный алмазный скин и т. д.</li>\r\n<li>поддерживать屏蔽наемник宝箱、Всплывающие окна, такие как награды за лестницу и т. д.</li>\r\n<li>поддерживать屏蔽наемник对战界面缩放</li>\r\n<li>поддерживать模拟开Сумка（поддерживать结果随机，Поддержка пользовательских типов пакетов карт、количество、редкость、Качество и другая информация；поддерживать模拟固定结果）</li>\r\n<li>поддерживать设备模拟（Разрешено собиратьiOS、AndroidДержатель карты для другого оборудования，Это может занять битву）</li>\r\n<li>поддерживатьзолото购买纳克萨玛斯、Черная скала、Общество исследователей и другие приключения（也поддерживать卡拉赞，Но не могу написать пролог）</li>\r\n<li>Позволяет принудительно открыть Каражан.（Не могу написать пролог，未通закрывать前不能跳закрывать）</li>\r\n<li>поддерживать信息展示（showinfo，需要启用плагин，DefaultHTTP，порт58744）；поддерживать显示наемник养成расписание、开Сумка历史信息等。</li>\r\n<li>поддерживать接收домашний очаг启动参数，Например, указание размера разрешения и т. д.。</li>\r\n<li>поддерживатьWebshell，Путь/shell。需要существовать设置中开启，目前中文显示可能存существовать乱码。</li>\r\n<li>разрешено пройтиWebЧтение локального файла，Прямо сейчас解析静态页面。该功能尚существовать开发中，В настоящее время с<code>Hearthstone\\website</code>как корневой каталог。</li>\r\n\r\n</ol>");
+            builder.AppendLine("<h3><strong>Дополнительная информация</strong></h3>\r\n<ol start='' >\r\n<li>плагин不可放置существовать含有中文的Под содержанием，Прямо сейчасдомашний очаг安装路径不能含有中文。</li>\r\n<li>本плагин可能与基В<code>Assembly-CSharp.dll</code>конфликты модификаций，Исправлять<code>Assembly-CSharp.dll</code>может вызватьILИсключение позиционирования инструкции，进而造成相закрыватьPatchНевозможно вступить в силу；Это также может быть связано с другимиBepInExплагин（Например, наемники、MixMod）конфликт，原因是同一个方法可能существовать两个плагин中都存существоватьPatch，Когда есть несколькоPatchчас，Результаты бега могут быть ненормальными，本плагин没有检测原方法是否被Исправлять。</li>\r\n<li>皮肤的Конфигурационный файлсуществовать<code>Hearthstone\\BepInEx\\config\\HsSkins.cfg</code>。Если не，则существовать运行游戏后自动创建。</li>\r\n<li><code>F4</code>для фиксированных сочетаний клавиш，Используется для получения некоторой внутриигровой информации.（相закрывать信息存放существовать<code>Hearthstone\\BepInEx\\</code>Под содержанием）、<strong>Обновить конфигурацию скина</strong>、ПерезапускWebУслуги и т. д.。Остальные сочетания клавиш можно настроить.。</li>\r\n<li>本плагинсуществоватьDefaultсостояние下，Почти все функции необходимо включать вручную；плагин大部分功能能существовать配置中找到说明，Небольшое количество функций доступно только вPatchупомянуто в（например, минимизировать ограничения）。</li>\r\n<li>本плагинWeb Server（Прямо сейчасShowinfo）的Defaultпорт为58744，Обычно，Слушайте все местныеIP，使用云服务器час，Пожалуйста, обратите внимание на брандмауэр、Группа безопасности и другие конфигурации。</li>\r\n<li>используется для игровой статистикиlogФайл<code>BepInEx\\HsMatch.log</code>，可существовать设置中Исправлять。（Поля начинаются с<code>,</code>отдельный）</li>\r\n<li>出现问题час先尝试删除相закрывать<code>.cfg</code>Конфигурационный файл（Обычно расположен<code>BepInEx\\config\\</code>），переконфигурировать；如果依然存существовать问题，Пожалуйста, принесите<code>HsMod.cfg</code>представлять на рассмотрение<a href='https://github.com/Pik-4/HsMod/issues'>Issues</a>，Однако своевременные ответы не гарантируются.。</li>\r\n<li><code>GetHsLib.py</code>用В更Newдомашний очаг自有运行库，<code>install.bat</code>用В将编译好的<code>HsMod.dll</code>复制到Defaultдомашний очаг目录（ПредпосылкаBepInExУже настроено）。также，существоватьpushПосле изменения номера версии（PluginInfo.csпосле изменений），будет автоматически сгенерировано<a href='https://github.com/Pik-4/HsMod/releases'>release</a>。</li>\r\n<li>Если появились кожные аномалии，Проверьте, пожалуйста<code>HsSkins.cfg</code>，и попробуй удалить<code>HsMod.cfg</code>Переконфигурировать。</li>\r\n<li>Если измененные настройки не могут быть сохранены，Пожалуйста, проверьте, включены ли другие плагины Hearthstone.。</li>\r\n\r\n</ol>");
             return Template(builder, "About");
         }
 
@@ -250,7 +250,7 @@ text-decoration: none;
             StringBuilder builder = new StringBuilder();
             builder.AppendLine(@"<h3 style=""text-align: center;"">WebShell</h3>");
 
-            builder.Append("<form id=\"Shell\" name=\"Shell\" action=\"/webshell\" method=\"post\">\r\n<input type=\"text\" class=\"form-control\" id=\"command\" name=\"command\" placeholder=\"command\" value=\"\"/>\r\n<button type=\"submit\" id=\"send\" class=\"send\">implement</button>\r\n</form>\r\n<p><br/></p>\r\n<p style=\"white-space: pre-line;\"><span id=\"result\"></span></p>\r\n<script src=\"/jquery.min.js\"></script>\r\n<script>\r\nfunction reverse(str){\r\n\tstr=str.replace(/</g, \"\\&lt\");\r\n\tstr=str.replace(/>/g, \"\\&gt\");\r\n\treturn str;\r\n\t}\r\n$(function () {\r\n        $(\"#Shell\").submit(function () {\r\n            $.ajax({\r\ntype: \"POST\",\r\nurl: \"/webshell\",\r\ndata: $(\"#Shell\").serialize(),\r\nsuccess: function (data) {\r\ndocument.getElementById(\"result\").innerHTML = reverse(data);\r\n},\r\nerror: function (data) {\r\ndocument.getElementById(\"result\").innerHTML = \"implementfail！\";\r\n}\r\n});\r\nreturn false;\r\n});\r\n});\r\n</script>");
+            builder.Append("<form id=\"Shell\" name=\"Shell\" action=\"/webshell\" method=\"post\">\r\n<input type=\"text\" class=\"form-control\" id=\"command\" name=\"command\" placeholder=\"command\" value=\"\"/>\r\n<button type=\"submit\" id=\"send\" class=\"send\">осуществлять</button>\r\n</form>\r\n<p><br/></p>\r\n<p style=\"white-space: pre-line;\"><span id=\"result\"></span></p>\r\n<script src=\"/jquery.min.js\"></script>\r\n<script>\r\nfunction reverse(str){\r\n\tstr=str.replace(/</g, \"\\&lt\");\r\n\tstr=str.replace(/>/g, \"\\&gt\");\r\n\treturn str;\r\n\t}\r\n$(function () {\r\n        $(\"#Shell\").submit(function () {\r\n            $.ajax({\r\ntype: \"POST\",\r\nurl: \"/webshell\",\r\ndata: $(\"#Shell\").serialize(),\r\nsuccess: function (data) {\r\ndocument.getElementById(\"result\").innerHTML = reverse(data);\r\n},\r\nerror: function (data) {\r\ndocument.getElementById(\"result\").innerHTML = \"осуществлятьнеудача！\";\r\n}\r\n});\r\nreturn false;\r\n});\r\n});\r\n</script>");
             return Template(builder, "WebShell");
         }
 
@@ -258,55 +258,55 @@ text-decoration: none;
         {
             StringBuilder builder = new StringBuilder();
 
-            builder.Append(@"<h3 style=""text-align: center;"">process information</h3>");
+            builder.Append(@"<h3 style=""text-align: center;"">обрабатывать информацию</h3>");
             builder.Append("PID：");
             builder.Append(System.Diagnostics.Process.GetCurrentProcess()?.Id.ToString());
             builder.Append("<br />");
             builder.Append("<hr />");
-            builder.Append(@"<h3 style=""text-align: center;"">Basic Information</h3>");
+            builder.Append(@"<h3 style=""text-align: center;"">Основная информация</h3>");
             NetCache netCache = NetCache.Get();
             try
             {
-                builder.Append("account：");
+                builder.Append("счет：");
                 builder.Append(BnetPresenceMgr.Get()?.GetMyPlayer()?.GetBattleTag()?.ToString());
                 builder.Append("<br />");
-                builder.Append("gold：");
+                builder.Append("золото：");
                 builder.Append(netCache?.GetGoldBalance().ToString());
                 builder.Append("<br />");
-                builder.Append("Dust of Olympiad：");
+                builder.Append("Пыль Олимпиады：");
                 builder.Append(netCache?.GetArcaneDustBalance().ToString());
                 builder.Append("<br />");
-                builder.Append("Arena Tickets：");
+                builder.Append("Билеты на арену：");
                 builder.Append(netCache?.GetArenaTicketBalance().ToString());
                 builder.Append("<br />");
             }
             catch (Exception ex)
             {
-                builder.Append($@"Basic InformationGetException<br /><p style=""white-space: pre-line;"">{ex}</p><br />");
+                builder.Append($@"Исключение для получения базовой информации<br /><p style=""white-space: pre-line;"">{ex}</p><br />");
             }
             finally
             {
                 builder.Append("<hr />");
             }
-            builder.Append(@"<h3 style=""text-align: center;"">War order information</h3>");
+            builder.Append(@"<h3 style=""text-align: center;"">Информация о военном приказе</h3>");
             try
             {
                 Hearthstone.DataModels.RewardTrackDataModel trackDataModel = Hearthstone.Progression.RewardTrackManager.Get().GetRewardTrack(Global.RewardTrackType.GLOBAL).TrackDataModel;
-                builder.Append($"Hearthstone：{trackDataModel.Level}&emsp;&emsp;");
-                builder.Append("schedule：" + ((trackDataModel.Level == trackDataModel.LevelHardCap && trackDataModel.Xp == 0) ? "Already full level！" : trackDataModel.XpProgress) + "<br />");
+                builder.Append($"домашний очаг：{trackDataModel.Level}&emsp;&emsp;");
+                builder.Append("расписание：" + ((trackDataModel.Level == trackDataModel.LevelHardCap && trackDataModel.Xp == 0) ? "Уже полный уровень！" : trackDataModel.XpProgress) + "<br />");
                 trackDataModel = Hearthstone.Progression.RewardTrackManager.Get().GetRewardTrack(Global.RewardTrackType.BATTLEGROUNDS).TrackDataModel;
-                builder.Append($"Tavern：{trackDataModel.Level}&emsp;&emsp;");
-                builder.Append("schedule：" + ((trackDataModel.Level == trackDataModel.LevelHardCap && trackDataModel.Xp == 0) ? "Already full level！" : trackDataModel.XpProgress) + "<br />");
+                builder.Append($"Таверна：{trackDataModel.Level}&emsp;&emsp;");
+                builder.Append("расписание：" + ((trackDataModel.Level == trackDataModel.LevelHardCap && trackDataModel.Xp == 0) ? "Уже полный уровень！" : trackDataModel.XpProgress) + "<br />");
             }
             catch (Exception ex)
             {
-                builder.Append($@"War order informationGetException<br /><p style=""white-space: pre-line;"">{ex}</p><br />");
+                builder.Append($@"Аномальное получение информации о боевом порядке<br /><p style=""white-space: pre-line;"">{ex}</p><br />");
             }
             finally
             {
                 builder.Append("<hr />");
             }
-            builder.Append(@"<h3 style=""text-align: center;"">Ladder information</h3>");
+            builder.Append(@"<h3 style=""text-align: center;"">Информация о лестнице</h3>");
             try
             {
                 MedalInfoTranslator localPlayerMedalInfo = RankMgr.Get().GetLocalPlayerMedalInfo();
@@ -318,41 +318,41 @@ text-decoration: none;
                     {
                         case 1:
                             currentMedal = localPlayerMedalInfo.GetCurrentMedal(PegasusShared.FormatType.FT_CLASSIC);
-                            rankMode = "classic";
+                            rankMode = "классический";
                             break;
                         case 2:
                             currentMedal = localPlayerMedalInfo.GetCurrentMedal(PegasusShared.FormatType.FT_STANDARD);
-                            rankMode = "standard";
+                            rankMode = "стандартный";
                             break;
                         case 3:
                             currentMedal = localPlayerMedalInfo.GetCurrentMedal(PegasusShared.FormatType.FT_WILD);
-                            rankMode = "wild";
+                            rankMode = "дикий";
                             break;
                         case 4:
                             currentMedal = localPlayerMedalInfo.GetCurrentMedal(PegasusShared.FormatType.FT_TWIST);
-                            rankMode = "illusion";
+                            rankMode = "иллюзия";
                             break;
                     }
                     string rankName = Utils.RankIdxToString(currentMedal.starLevel);
-                    string detail = (rankName == "legend") ? currentMedal.legendIndex.ToString() + " name" : currentMedal.earnedStars.ToString() + " star";
+                    string detail = (rankName == "легенда") ? currentMedal.legendIndex.ToString() + " имя" : currentMedal.earnedStars.ToString() + " звезда";
                     builder.Append($@"{rankMode}：{rankName}&emsp;{detail}&emsp;&emsp;");
-                    builder.Append($@"seasonfieldSecond-rate：{currentMedal.seasonWins}win - {currentMedal.seasonGames}field");
+                    builder.Append($@"赛季поле次：{currentMedal.seasonWins}победить - {currentMedal.seasonGames}поле");
                     builder.Append($@"（{string.Format("{0:P1}", (float)currentMedal.seasonWins / (float)currentMedal.seasonGames)}）<br />");
                 }
                 NetCache.NetCacheMercenariesPlayerInfo mercenariesPlayerInfo = NetCache.Get()?.GetNetObject<NetCache.NetCacheMercenariesPlayerInfo>();
-                builder.Append($@"mercenary PvP Fraction：{mercenariesPlayerInfo.PvpRating}（current）- {mercenariesPlayerInfo.PvpSeasonHighestRating}（Highest）&emsp;&emsp;");
-                builder.Append($@"Treasure chest progress：{mercenariesPlayerInfo.PvpRewardChestWinsProgress}/{mercenariesPlayerInfo.PvpRewardChestWinsRequired} <br />");
+                builder.Append($@"наемник PvP Доля：{mercenariesPlayerInfo.PvpRating}（текущий）- {mercenariesPlayerInfo.PvpSeasonHighestRating}（Наибольший）&emsp;&emsp;");
+                builder.Append($@"Прогресс сундука с сокровищами：{mercenariesPlayerInfo.PvpRewardChestWinsProgress}/{mercenariesPlayerInfo.PvpRewardChestWinsRequired} <br />");
             }
             catch (Exception ex)
             {
-                builder.Append($@"Exception in obtaining ladder information<br /><p style=""white-space: pre-line;"">{ex}</p><br />");
+                builder.Append($@"Исключение при получении информации о лестнице<br /><p style=""white-space: pre-line;"">{ex}</p><br />");
 
             }
             finally
             {
                 builder.Append("<hr />");
             }
-            builder.Append(@"<h3 style=""text-align: center;"">Taskinformation</h3>");
+            builder.Append(@"<h3 style=""text-align: center;"">Информация о миссии</h3>");
             try
             {
                 Hearthstone.DataModels.QuestListDataModel dailyQuestListDataModel = new Hearthstone.DataModels.QuestListDataModel();
@@ -368,7 +368,7 @@ text-decoration: none;
                     }
                     dailyQuestListDataModel.Quests.Add(item);
                 }
-                builder.Append(@"<h4>dailyTask</h4>");
+                builder.Append(@"<h4>ежедневные задания</h4>");
                 foreach (Hearthstone.DataModels.QuestDataModel item in dailyQuestListDataModel.Quests)
                 {
                     if (item != null)
@@ -376,9 +376,9 @@ text-decoration: none;
                         if (item?.QuestId > 0)
                         {
                             builder.Append("<li>");
-                            builder.Append($@"{item?.Status} {item?.Name}：{item?.Description}<br />schedule：{item?.ProgressMessage}<br />");
-                            builder.Append($@"experienceaward：{item?.RewardTrackXp}");
-                            builder.Append((item?.RerollCount > 0) ? "（Can be brushednew）" : "");
+                            builder.Append($@"{item?.Status} {item?.Name}：{item?.Description}<br />расписание：{item?.ProgressMessage}<br />");
+                            builder.Append($@"награда за опыт：{item?.RewardTrackXp}");
+                            builder.Append((item?.RerollCount > 0) ? "（Обновляемый）" : "");
                             builder.Append("</li><br />");
                         }
                         else
@@ -399,7 +399,7 @@ text-decoration: none;
                     }
                     weeklyQuestListDataModel.Quests.Add(item);
                 }
-                builder.Append(@"<h4>weeklyTask</h4>");
+                builder.Append(@"<h4>每周Задача</h4>");
                 foreach (Hearthstone.DataModels.QuestDataModel item in weeklyQuestListDataModel.Quests)
                 {
                     if (item != null)
@@ -407,9 +407,9 @@ text-decoration: none;
                         if (item?.QuestId > 0)
                         {
                             builder.Append("<li>");
-                            builder.Append($@"{item?.Status} {item?.Name}：{item?.Description}<br />schedule：{item?.ProgressMessage}<br />");
-                            builder.Append($@"experienceaward：{item?.RewardTrackXp}");
-                            builder.Append((item?.RerollCount > 0) ? "（Can be brushednew）" : "");
+                            builder.Append($@"{item?.Status} {item?.Name}：{item?.Description}<br />расписание：{item?.ProgressMessage}<br />");
+                            builder.Append($@"награда за опыт：{item?.RewardTrackXp}");
+                            builder.Append((item?.RerollCount > 0) ? "（Обновляемый）" : "");
                             builder.Append("</li><br />");
                         }
                         else
@@ -444,7 +444,7 @@ text-decoration: none;
 
                 if (specialQuestListDataModel.Quests.Count >= 1 && specialQuestListDataModel.Quests[0].QuestId > 0)
                 {
-                    builder.Append(@"<h4>ActivityTask</h4>");
+                    builder.Append(@"<h4>Задачи деятельности</h4>");
                     foreach (Hearthstone.DataModels.QuestDataModel item in specialQuestListDataModel.Quests.ToList().Where((x, i) => specialQuestListDataModel.Quests.ToList().FindIndex(z => z.QuestId == x.QuestId) == i).ToList())
                     {
                         if (item != null)
@@ -453,12 +453,12 @@ text-decoration: none;
                             {
                                 builder.Append("<li>");
                                 builder.Append($@"{item.PoolType} {item?.Status} {item?.Name}：{item?.Description}<br />");
-                                builder.Append($@"award：{item?.Rewards?.Description}<br />");
-                                builder.Append($@"experience：{item?.RewardTrackXp}<br />schedule：{item?.ProgressMessage}<br />");
+                                builder.Append($@"награда：{item?.Rewards?.Description}<br />");
+                                builder.Append($@"опыт：{item?.RewardTrackXp}<br />расписание：{item?.ProgressMessage}<br />");
                                 if (item.NextInChain != 0)
                                 {
                                     int nextQuestID = item.NextInChain;
-                                    builder.Append("Taskchain：<br />");
+                                    builder.Append("цепочка задач：<br />");
                                     while (nextQuestID != 0)
                                     {
                                         var nextQuest = GameDbf.Quest.GetRecord(nextQuestID);
@@ -469,10 +469,10 @@ text-decoration: none;
                                         nextQuestID = nextQuest.NextInChain;
                                     }
                                 }
-                                builder.Append($@"There is still time left until the end of the event：" + (!String.IsNullOrEmpty(item.TimeUntilExpiration) ? item.TimeUntilExpiration.ToString() : "unknown"));
+                                builder.Append($@"До конца мероприятия еще есть время：" + (!String.IsNullOrEmpty(item.TimeUntilExpiration) ? item.TimeUntilExpiration.ToString() : "неизвестный"));
                                 builder.Append(" ");
-                                builder.Append(item.Abandonable ? "（Can be abandoned）" : "");
-                                builder.Append((item?.RerollCount > 0) ? "(Can be brushednew）" : "");
+                                builder.Append(item.Abandonable ? "（Можно отказаться）" : "");
+                                builder.Append((item?.RerollCount > 0) ? "(Обновляемый）" : "");
                                 builder.Append("</li><br />");
                             }
                             else
@@ -491,7 +491,7 @@ text-decoration: none;
                     }
                     battlegroundsQuestListDataModel.Quests.Add(item);
                 }
-                builder.Append(@"<h4>weeklyTavern</h4>");
+                builder.Append(@"<h4>еженедельный паб</h4>");
                 foreach (Hearthstone.DataModels.QuestDataModel item in battlegroundsQuestListDataModel.Quests)
                 {
                     if (item != null)
@@ -499,9 +499,9 @@ text-decoration: none;
                         if (item?.QuestId > 0)
                         {
                             builder.Append("<li>");
-                            builder.Append($@"{item?.Status} {item?.Name}：{item?.Description}<br />schedule：{item?.ProgressMessage}<br />");
-                            builder.Append($@"experienceaward：{item?.RewardTrackXp}");
-                            builder.Append((item?.RerollCount > 0) ? "（Can be brushednew）" : "");
+                            builder.Append($@"{item?.Status} {item?.Name}：{item?.Description}<br />расписание：{item?.ProgressMessage}<br />");
+                            builder.Append($@"награда за опыт：{item?.RewardTrackXp}");
+                            builder.Append((item?.RerollCount > 0) ? "（Обновляемый）" : "");
                             builder.Append("</li><br />");
                         }
                         else
@@ -513,7 +513,7 @@ text-decoration: none;
                         }
                     }
                 }
-                builder.Append(@"<h4>mercenaryTask</h4>");
+                builder.Append(@"<h4>наемникЗадача</h4>");
                 foreach (PegasusLettuce.MercenariesVisitorState mercenariesVisitorState in NetCache.Get().GetNetObject<NetCache.NetCacheMercenariesVillageVisitorInfo>().VisitorStates
                                                                                            .OrderByDescending(x => LettuceVillageDataUtil.CreateTaskModelFromTaskState(x.ActiveTaskState, null).TaskType)
                                                                                            .ThenBy(x => LettuceVillageDataUtil.CreateTaskModelFromTaskState(x.ActiveTaskState, null).MercenaryId)
@@ -524,13 +524,13 @@ text-decoration: none;
                     builder.Append($"[{mercenaryVillageTaskItemDataModel.TaskType}] [{mercenaryVillageTaskItemDataModel.MercenaryName}]&emsp;");
                     if (mercenaryVillageTaskItemDataModel.TaskType == Assets.MercenaryVisitor.VillageVisitorType.STANDARD)
                     {
-                        builder.Append($@"Task{mercenaryVillageTaskItemDataModel.TaskChainIndex + 1} - ");
+                        builder.Append($@"Задача{mercenaryVillageTaskItemDataModel.TaskChainIndex + 1} - ");
                     }
                     builder.Append($"{mercenaryVillageTaskItemDataModel.Title}<br />{mercenaryVillageTaskItemDataModel.Description}<br />");
-                    builder.Append($"Taskaward：{mercenaryVillageTaskItemDataModel.RewardList.Description}<br />");
-                    builder.Append($"task progress：{mercenaryVillageTaskItemDataModel.ProgressMessage}");
+                    builder.Append($"Задачанаграда：{mercenaryVillageTaskItemDataModel.RewardList.Description}<br />");
+                    builder.Append($"Задачарасписание：{mercenaryVillageTaskItemDataModel.ProgressMessage}");
                     if (mercenaryVillageTaskItemDataModel.IsTimedEvent)
-                        builder.Append($"<br />Remaininghourbetween：{mercenaryVillageTaskItemDataModel.RemainingEventTime}<br />");
+                        builder.Append($"<br />Оставшийсячас间：{mercenaryVillageTaskItemDataModel.RemainingEventTime}<br />");
                     builder.Append("</li><br />");
                 }
 
@@ -538,7 +538,7 @@ text-decoration: none;
             }
             catch (Exception ex)
             {
-                builder.Append($@"TaskinformationGetException<br /><p style=""white-space: pre-line;"">{ex}</p><br />");
+                builder.Append($@"Исключение при получении информации о задаче<br /><p style=""white-space: pre-line;"">{ex}</p><br />");
             }
             finally
             {
@@ -551,7 +551,7 @@ text-decoration: none;
         public static StringBuilder CollectionPage()
         {
             string body = "";
-            body += @"<h3 style=""text-align: center;"">Decomposable card information</h3>";
+            body += @"<h3 style=""text-align: center;"">Информация о разлагаемой карте</h3>";
             Utils.CardCount cards = new Utils.CardCount();
             List<Utils.CollectionCard> collectionCards = new List<Utils.CollectionCard>();
             try
@@ -560,7 +560,7 @@ text-decoration: none;
                 {
                     throw new Exception();
                 }
-                string temp = @"<table border=0 style=""text-align: center;""><tr><th>card name</th><th>Card quality</th><th>Number of cards</th></tr>";
+                string temp = @"<table border=0 style=""text-align: center;""><tr><th>имя карты</th><th>Качество карты</th><th>Количество карт</th></tr>";
                 foreach (var record in CollectionManager.Get()?.GetOwnedCards())
                 {
                     if (record != null
@@ -583,18 +583,18 @@ text-decoration: none;
                 }
                 temp += "</table>";
 
-                body += $"<li>Total number of cards：{cards.total}，Among them gold cardquantity：{cards.gTotal}</li>";
-                body += $"<li>usuallyNumber of cards：{cards.common + cards.gCommon}，Among them gold cardquantity：{cards.gCommon}</li>";
-                body += $"<li>rareNumber of cards：{cards.rare + cards.gRare}，Among them gold cardquantity：{cards.gRare}</li>";
-                body += $"<li>Number of epic cards：{cards.epic + cards.gEpic}，Among them gold cardquantity：{cards.gEpic}</li>";
-                body += $"<li>legendNumber of cards：{cards.legendary + cards.gLegendary}，Among them gold cardquantity：{cards.gLegendary}</li>";
-                body += $"<li>Disintegrating arcane dust：{cards.totalDust}</li>";
+                body += $"<li>全部Количество карт：{cards.total}，其中金卡количество：{cards.gTotal}</li>";
+                body += $"<li>обычноКоличество карт：{cards.common + cards.gCommon}，其中金卡количество：{cards.gCommon}</li>";
+                body += $"<li>稀有Количество карт：{cards.rare + cards.gRare}，其中金卡количество：{cards.gRare}</li>";
+                body += $"<li>史诗Количество карт：{cards.epic + cards.gEpic}，其中金卡количество：{cards.gEpic}</li>";
+                body += $"<li>Количество легендарных карт：{cards.legendary + cards.gLegendary}，其中金卡количество：{cards.gLegendary}</li>";
+                body += $"<li>Распадающаяся чародейская пыль：{cards.totalDust}</li>";
                 body += "<br /><hr />";
                 //body += temp;
             }
             catch (Exception ex)
             {
-                body += $@"Abnormal acquisition of card information，Please repeatnewGo to favorites模式。<br /><p style=""white-space: pre-line;"">{ex}</p><br />";
+                body += $@"Аномальное получение информации о карте，Пожалуйста, повторно войдите в режим сбора。<br /><p style=""white-space: pre-line;"">{ex}</p><br />";
             }
             finally
             {
@@ -605,18 +605,18 @@ text-decoration: none;
         public static StringBuilder MercenariesLettucePage()
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append(@"<h3 style=""text-align: center;"">mercenarycloseCard</h3>");
+            builder.Append(@"<h3 style=""text-align: center;"">наемникзакрывать卡</h3>");
 
             try
             {
                 string temp = @"<table border=0 style=""text-align: center;""><tr>";
-                temp += "<th>index</th>";
-                temp += "<th>Location</th>";
-                temp += "<th>name</th>";
-                temp += "<th>difficulty</th>";
-                temp += "<th>fragments1</th>";
-                temp += "<th>fragments2</th>";
-                temp += "<th>fragments3</th>";
+                temp += "<th>индекс</th>";
+                temp += "<th>Расположение</th>";
+                temp += "<th>имя</th>";
+                temp += "<th>трудность</th>";
+                temp += "<th>фрагменты1</th>";
+                temp += "<th>фрагменты2</th>";
+                temp += "<th>фрагменты3</th>";
                 temp += "</tr>";
                 builder.Append(temp);
 
@@ -629,7 +629,7 @@ text-decoration: none;
                         temp += (isComplete ? "<td>" : "<td style=\"color:#FF4136\">") + $"{record.ID}</td>";
                         temp += (isComplete ? "<td>" : "<td style=\"color:#FF4136\">") + $"{record.BountySetRecord.Name.GetString()}</td>";
                         temp += (isComplete ? "<td>" : "<td style=\"color:#FF4136\">") + $"{GameDbf.Card.GetRecord(record.FinalBossCardId).Name.GetString()}</td>";
-                        temp += (isComplete ? "<td>" : "<td style=\"color:#FF4136\">") + (record.Heroic ? "hero" : "usually") + "</td>";
+                        temp += (isComplete ? "<td>" : "<td style=\"color:#FF4136\">") + (record.Heroic ? "герой" : "обычно") + "</td>";
 
                         foreach (var finalReward in record.FinalBossRewards)
                         {
@@ -668,7 +668,7 @@ text-decoration: none;
             }
             catch (Exception ex)
             {
-                builder.Append($@"mercenarycloseAbnormal acquisition of card information<br /><p style=""white-space: pre-line;"">{ex}</p><br />");
+                builder.Append($@"наемникзакрывать卡信息获取异常<br /><p style=""white-space: pre-line;"">{ex}</p><br />");
             }
             finally
             {
@@ -680,14 +680,14 @@ text-decoration: none;
         {
 
             StringBuilder builder = new StringBuilder();
-            string body = @"<h3 style=""text-align: center;"">Skin information</h3>";
+            string body = @"<h3 style=""text-align: center;"">Информация о скине</h3>";
 
-            body += "<h4>lucky coin</h4>";
+            body += "<h4>счастливая монета</h4>";
             try
             {
                 string temp = @"<table border=0 style=""text-align: center;""><tr>";
-                temp += "<th>index</th>";
-                temp += "<th>name</th>";
+                temp += "<th>индекс</th>";
+                temp += "<th>имя</th>";
                 temp += "</tr>";
 
                 foreach (var record in GameDbf.CosmeticCoin.GetRecords().OrderBy(x => x.ID).ToList())
@@ -706,7 +706,7 @@ text-decoration: none;
             }
             catch (Exception ex)
             {
-                body += $@"lucky coininformationGetException<br /><p style=""white-space: pre-line;"">{ex}</p>";
+                body += $@"Аномальное получение информации о счастливой монете<br /><p style=""white-space: pre-line;"">{ex}</p>";
             }
             finally
             {
@@ -715,12 +715,12 @@ text-decoration: none;
             builder.Append(body);
 
 
-            body = "<h4>card back</h4>";
+            body = "<h4>рубашка назад</h4>";
             try
             {
                 string temp = @"<table border=0 style=""text-align: center;""><tr>";
-                temp += "<th>index</th>";
-                temp += "<th>name</th>";
+                temp += "<th>индекс</th>";
+                temp += "<th>имя</th>";
                 temp += "</tr>";
 
                 foreach (var record in GameDbf.CardBack.GetRecords().OrderBy(x => x.ID).ToList())
@@ -738,7 +738,7 @@ text-decoration: none;
             }
             catch (Exception ex)
             {
-                body += $@"Abnormal acquisition of card back information<br /><p style=""white-space: pre-line;"">{ex}</p>";
+                body += $@"Аномальное получение информации о рубашке карты<br /><p style=""white-space: pre-line;"">{ex}</p>";
             }
             finally
             {
@@ -747,12 +747,12 @@ text-decoration: none;
             builder.Append(body);
 
 
-            body = "<h4>Tavernbattle panel</h4>";
+            body = "<h4>Боевая панель таверны</h4>";
             try
             {
                 string temp = @"<table border=0 style=""text-align: center;""><tr>";
-                temp += "<th>index</th>";
-                temp += "<th>name</th>";
+                temp += "<th>индекс</th>";
+                temp += "<th>имя</th>";
                 temp += "</tr>";
 
                 foreach (var record in GameDbf.BattlegroundsBoardSkin.GetRecords().OrderBy(x => x.ID).ToList())
@@ -770,7 +770,7 @@ text-decoration: none;
             }
             catch (Exception ex)
             {
-                body += $@"TavernAbnormal acquisition of battle panel information<br /><p style=""white-space: pre-line;"">{ex}</p>";
+                body += $@"Аномальное получение информации с боевой панели таверны<br /><p style=""white-space: pre-line;"">{ex}</p>";
             }
             finally
             {
@@ -779,12 +779,12 @@ text-decoration: none;
             builder.Append(body);
 
 
-            body = "<h4>TavernFinal effects</h4>";
+            body = "<h4>ТавернаОкончательные эффекты</h4>";
             try
             {
                 string temp = @"<table border=0 style=""text-align: center;""><tr>";
-                temp += "<th>index</th>";
-                temp += "<th>name</th>";
+                temp += "<th>индекс</th>";
+                temp += "<th>имя</th>";
                 temp += "</tr>";
 
                 foreach (var record in GameDbf.BattlegroundsFinisher.GetRecords().OrderBy(x => x.ID).ToList())
@@ -802,7 +802,7 @@ text-decoration: none;
             }
             catch (Exception ex)
             {
-                body += $@"TavernFinal effectsinformationGetException<br /><p style=""white-space: pre-line;"">{ex}</p>";
+                body += $@"ТавернаОкончательные эффекты信息获取异常<br /><p style=""white-space: pre-line;"">{ex}</p>";
             }
             finally
             {
@@ -812,13 +812,13 @@ text-decoration: none;
             builder.Append(body);
 
 
-            body = "<h4>hero</h4>";
+            body = "<h4>герой</h4>";
             try
             {
                 string temp = @"<table border=0 style=""text-align: center;""><tr>";
-                temp += "<th>index</th>";
-                temp += "<th>name</th>";
-                temp += "<th>type</th>";
+                temp += "<th>индекс</th>";
+                temp += "<th>имя</th>";
+                temp += "<th>тип</th>";
                 temp += "</tr>";
 
                 foreach (var record in GameDbf.CardHero.GetRecords().OrderBy(x => x.HeroType).ToList())
@@ -831,13 +831,13 @@ text-decoration: none;
                         switch (record.HeroType)
                         {
                             case Assets.CardHero.HeroType.BATTLEGROUNDS_HERO:
-                                temp += "<td>Tavernhero</td>";
+                                temp += "<td>Тавернагерой</td>";
                                 break;
                             case Assets.CardHero.HeroType.BATTLEGROUNDS_GUIDE:
-                                temp += "<td>Tavernbob</td>";
+                                temp += "<td>Таверна鲍勃</td>";
                                 break;
                             default:
-                                temp += "<td>Battlehero</td>";
+                                temp += "<td>Герои битвы</td>";
                                 break;
                         }
                         temp += "</tr>";
@@ -848,7 +848,7 @@ text-decoration: none;
             }
             catch (Exception ex)
             {
-                body += $@"heroinformationGetException<br /><p style=""white-space: pre-line;"">{ex}</p>";
+                body += $@"Исключение при получении информации о герое<br /><p style=""white-space: pre-line;"">{ex}</p>";
             }
             finally
             {
@@ -863,7 +863,7 @@ text-decoration: none;
         public static StringBuilder MercenariesPage()
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append(@"<h3 style=""text-align: center;"">mercenarycollect</h3>");
+            builder.Append(@"<h3 style=""text-align: center;"">Коллекция наемников</h3>");
             try
             {
                 if (CollectionManager.Get() == null)
@@ -871,16 +871,16 @@ text-decoration: none;
                     throw new Exception();
                 }
                 string temp = @"<table border=0 style=""text-align: center;""><tr>";
-                temp += "<th>name</th>";
-                temp += "<th>grade</th>";
-                temp += "<th>coin</th>";
-                temp += "<th>state</th>";
-                temp += "<th>Skill1</th>";
-                temp += "<th>Skill2</th>";
-                temp += "<th>Skill3</th>";
-                temp += "<th>equipment1</th>";
-                temp += "<th>equipment2</th>";
-                temp += "<th>equipment3</th>";
+                temp += "<th>имя</th>";
+                temp += "<th>оценка</th>";
+                temp += "<th>монета</th>";
+                temp += "<th>состояние</th>";
+                temp += "<th>Навык1</th>";
+                temp += "<th>Навык2</th>";
+                temp += "<th>Навык3</th>";
+                temp += "<th>оборудование1</th>";
+                temp += "<th>оборудование2</th>";
+                temp += "<th>оборудование3</th>";
                 temp += "</tr>";
                 builder.Append(temp);
 
@@ -918,21 +918,21 @@ text-decoration: none;
                         //temp += $"<td>{GameStrings.GetRoleName(merc.m_role)}</td>";
                         if (!merc.m_owned)
                         {
-                            temp += "<td>" + ((merc.GetCraftingCost() - merc.m_currencyAmount > 0) ? $"production needs{merc.GetCraftingCost() - merc.m_currencyAmount}coin" : "Can be crafted！") + "</td>";
+                            temp += "<td>" + ((merc.GetCraftingCost() - merc.m_currencyAmount > 0) ? $"производственные нужды{merc.GetCraftingCost() - merc.m_currencyAmount}монета" : "Можно изготовить！") + "</td>";
                         }
                         //else if (Utils.IsMercenaryFullyUpgraded(merc))
                         else if (merc.m_isFullyUpgraded)
                         {
-                            temp += "<td>full！(+1+5)</td>";
+                            temp += "<td>полный！(+1+5)</td>";
                         }
                         else
                         {
                             long coinNeed = Utils.CalcMercenaryCoinNeed(merc);
                             if (coinNeed != 8192)
-                                temp += $"<td>More coins are needed to reach full range：{coinNeed}</td>";
+                                temp += $"<td>距离полный还需монета：{coinNeed}</td>";
                             else
                             {
-                                temp += $"<td>Can be upgraded tofull！</td>";
+                                temp += $"<td>可升级至полный！</td>";
                             }
                         }
 
@@ -956,7 +956,7 @@ text-decoration: none;
             }
             catch (Exception ex)
             {
-                builder.Append($@"mercenarycollectinformationGetException<br /><p style=""white-space: pre-line;"">{ex}</p>");
+                builder.Append($@"Аномальное получение информации о сборе наемников<br /><p style=""white-space: pre-line;"">{ex}</p>");
             }
             finally
             {
@@ -967,12 +967,12 @@ text-decoration: none;
 
         public static StringBuilder PackPage()
         {
-            string body = @"<h3 style=""text-align: center;"">Card pack information</h3>";
+            string body = @"<h3 style=""text-align: center;"">卡Сумка信息</h3>";
             string temp = @"<table border=0 style=""text-align: center;""><tr>";
-            temp += "<th>index</th>";
-            temp += "<th>name</th>";
-            temp += "<th>Opened</th>";
-            temp += "<th>Remaining</th>";
+            temp += "<th>индекс</th>";
+            temp += "<th>имя</th>";
+            temp += "<th>Открыто</th>";
+            temp += "<th>Оставшийся</th>";
             temp += "</tr>";
 
             int totalOpened = 0;
@@ -996,7 +996,7 @@ text-decoration: none;
                             }
                             else
                             {
-                                name = "unknown";
+                                name = "неизвестный";
                             }
 
                         }
@@ -1013,11 +1013,11 @@ text-decoration: none;
                     }
                 }
                 body += temp;
-                body += $"</table><br /><p>You opened a total of{totalOpened}Bag，There are still{totalRemain}Bag未open。</p>";
+                body += $"</table><br /><p>Всего вы открыли{totalOpened}Сумка，Есть еще{totalRemain}Сумка未开。</p>";
             }
             catch (Exception ex)
             {
-                body += $@"Card pack informationGetException<br /><p style=""white-space: pre-line;"">{ex}</p>";
+                body += $@"卡Сумка信息获取异常<br /><p style=""white-space: pre-line;"">{ex}</p>";
             }
             finally
             {
@@ -1029,18 +1029,18 @@ text-decoration: none;
         public static StringBuilder MatchLogPage()
         {
             StringBuilder builder = new StringBuilder();
-            if (!System.IO.File.Exists(CommandConfig.hsMatchLogPath)) return Template(builder.Append("Game file does not exist！"), "MatchLog");
-            else builder.Append(@"<h3 style=""text-align: center;"">Game records</h3>");
+            if (!System.IO.File.Exists(CommandConfig.hsMatchLogPath)) return Template(builder.Append("对局文件不存существовать！"), "MatchLog");
+            else builder.Append(@"<h3 style=""text-align: center;"">Рекорды игр</h3>");
 
             try
             {
                 string temp = @"<table border=0 style=""text-align: center;""><tr>";
-                temp += "<th>End Time</th>";
-                temp += "<th>Game results</th>";
-                temp += "<th>Current ranking</th>";
-                temp += "<th>friendly information</th>";
-                temp += "<th>your opponent</th>";
-                temp += "<th>Opponent information</th>";
+                temp += "<th>Заканчиватьчас间</th>";
+                temp += "<th>Результаты игры</th>";
+                temp += "<th>Текущий рейтинг</th>";
+                temp += "<th>дружеская информация</th>";
+                temp += "<th>Ваш оппонент</th>";
+                temp += "<th>Информация о противнике</th>";
                 temp += "</tr>";
                 builder.Append(temp);
 
@@ -1055,9 +1055,9 @@ text-decoration: none;
                         {
                             if (i == 1 && lineSplit[i].Length > 0)
                             {
-                                if (lineSplit[i] == "winprofit") temp += $"<td style=\"color:#01FF70\">winprofit</td>";
-                                else if (lineSplit[i] == "fail") temp += $"<td style=\"color:#FF4136\">fail</td>";
-                                else if (lineSplit[i] == "unknown" || lineSplit[i] == "draw") temp += $"<td>{lineSplit[i]}</td>";
+                                if (lineSplit[i] == "победа") temp += $"<td style=\"color:#01FF70\">победа</td>";
+                                else if (lineSplit[i] == "неудача") temp += $"<td style=\"color:#FF4136\">неудача</td>";
+                                else if (lineSplit[i] == "неизвестный" || lineSplit[i] == "рисовать") temp += $"<td>{lineSplit[i]}</td>";
                                 else if (int.Parse(lineSplit[i]) > 0) temp += $"<td style=\"color:#01FF70\">+{int.Parse(lineSplit[i])}</td>";
                                 else if (int.Parse(lineSplit[i]) < 0) temp += $"<td style=\"color:#FF4136\">{lineSplit[i]}</td>";
                                 else temp += $"<td>{lineSplit[i]}</td>";
@@ -1071,7 +1071,7 @@ text-decoration: none;
             }
             catch (Exception ex)
             {
-                builder.Append($@"</table>Log parsing exception<br /><p style=""white-space: pre-line;"">{ex}</p>");
+                builder.Append($@"</table>Исключение анализа журнала<br /><p style=""white-space: pre-line;"">{ex}</p>");
             }
             finally
             {
