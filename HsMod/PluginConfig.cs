@@ -347,7 +347,7 @@ namespace HsMod
                     receiveEnemyEmoteLimit.Value = 0;
                     isOpponentGoldenCardShow.Value = false;
                     skinCoin.Value = 1746;   // 初始幸运币
-                    isSkinDefalutHeroEnable.Value = true;
+                    //isSkinDefalutHeroEnable.Value = true;
                     mercenaryDiamondCardState.Value = Utils.CardState.Disabled;
                     randomMercenarySkinEnable.Value = Utils.CardState.Disabled;
                     goldenCardState.Value = Utils.CardState.Disabled;
