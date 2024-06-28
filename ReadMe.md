@@ -72,6 +72,8 @@
 
    2.3. 修改`Hearthstone\doorstop_config.ini`，将`dllSearchPathOverride=` 替换成`dllSearchPathOverride=BepInEx\unstripped_corlib`
 
+   注：[BepInEx 5.4.23.2](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.2)中， 修改`Hearthstone\doorstop_config.ini`，将`dll_search_path_override = ` 替换成`dll_search_path_override = BepInEx\unstripped_corlib`
+
 3. 将`HsMod.dll`存放在`Hearthstone\BepInEx\plugins`。
 
 4. 安装BepInEx配置管理[BepInExConfigManager.Mono](https://github.com/sinai-dev/BepInExConfigManager/releases)，解压到`Hearthstone\BepInEx\`即可；进入游戏后`F5`进行相关控制。
