@@ -375,6 +375,15 @@ namespace HsMod
                 __instance.Set("Aurora.Env", __state.Substring(0, 2).ToLower() + ".actual.battle.net");
             }
 
+            //禁用反作弊
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "OnLoginComplete")]
+            public static bool PatchAntiCheatManagerOnLoginComplete()
+            {
+                Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat feature is disabled.");
+                return false;
+            }
+
             //禁止发送错误报告
             [HarmonyPrefix]
             [HarmonyPostfix]
@@ -411,7 +420,7 @@ namespace HsMod
             [HarmonyPatch(typeof(Blizzard.BlizzardErrorMobile.ExceptionReporter), "get_SubmitURL")]
             public static bool PatchExceptionReporterSubmitURLGetter(ref string __result)
             {
-                __result = "";
+                __result = "http://127.0.0.1/submit";
                 return false;
             }
 
