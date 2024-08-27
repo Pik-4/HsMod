@@ -68,19 +68,30 @@
 
    2.1. Download [BepInEx_x86](https://github.com/BepInEx/BepInEx/releases) and extract it to the Hearthstone root directory `Hearthstone\`.
 
+
    2.2. create a directory `Hearthstone\BepInEx\unstripped_corlib\`; ~~ download [Mono](https://unity.bepinex.dev/corlibs/2021.3.25.zip) and [Unity](https:// unity.bepinex.dev/libraries/2021.3.25.zip) and unzip them in that directory ~~; copy all the dlls under the project directory HsMod/LibUnityMono to the unstripped_corlib directory.
+
 
    2.3 Modify `Hearthstone\doorstop_config.ini` by replacing `dllSearchPathOverride=` with `dllSearchPathOverride=BepInEx\unstripped_corlib`.
 
+
 3. Store `HsMod.dll` in `Hearthstone\BepInEx\plugins`.
 
+   注：[BepInEx 5.4.23.2](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.2)中， 修改`Hearthstone\doorstop_config.ini`，将`dll_search_path_override = ` 替换成`dll_search_path_override = BepInEx\unstripped_corlib`
+
 4. Install BepInEx ConfigManager [BepInExConfigManager.Mono](https://github.com/sinai-dev/BepInExConfigManager/releases), unzip it to `Hearthstone\BepInEx\`. ; Enter the game and `F5` for related controls.
+
+注：Windows的unity和mono，从[unity editor](https://unity.com/ja/releases/editor/whats-new/2021.3.40)中提取，unity位于`.\Unity 2021.3.40f1\Editor\Data\PlaybackEngines\windowsstandalonesupport\Variations\win32_player_development_mono\Data\Managed`，mono位于`.\Unity 2021.3.40f1\Editor\Data\MonoBleedingEdge\lib\mono\unityjit-win32`，部分文件位于`unityjit-win32\Facades`）
 
 #### Mac
 
 1. Download the latest version of [BepInEx_unix](https://github.com/BepInEx/BepInEx/releases) and extract it to `Hearthstone/'
 
+
 2. ~~Download original [Mono](https://unity.bepinex.dev/corlibs/2021.3.25.zip) and [Unity](https://unity.bepinex.dev/libraries/2021.3. 25.zip) libraries and unpack to Hearthstone/BepInEx/unstripped_corlib~~. 25.zip) libraries and unpack to Hearthstone/BepInEx/unstripped_corlib~~. Copy all `dll` which under the project folder `HsMod/LibUnityMonoUnix` (`cp HsMod/LibUnityMonoUnix/* Hearthstone/BepInEx/unstripped_corlib/ ` ) . ( PS. Mono and Unity version must be same as Hearthstone ).
+
+2. ~~Download original [Mono](https://unity.bepinex.dev/corlibs/2021.3.40.zip) and [Unity](https://unity.bepinex.dev/libraries/2021.3.40.zip) libraries and unpack to Hearthstone/BepInEx/unstripped_corlib~~. Copy all `dll` which under the project folder `HsMod/LibUnityMonoUnix` (`cp HsMod/LibUnityMonoUnix/*  Hearthstone/BepInEx/unstripped_corlib/   ` ). ( PS. Mono and Unity version must same as Hearthstone ).
+
 
 3. Edit the `run_bepinex.sh` file replacing the line `export DOORSTOP_CORLIB_OVERRIDE_PATH=""`with `DOORSTOP_CORLIB_OVERRIDE_PATH="$BASEDIR/ BepInEx/unstripped_corlib"`
 
