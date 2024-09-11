@@ -417,10 +417,10 @@ namespace HsMod
                 return false;
             }
             [HarmonyPrefix]
-            [HarmonyPatch(typeof(Blizzard.BlizzardErrorMobile.ExceptionReporter), "get_SubmitURL")]
-            public static bool PatchExceptionReporterSubmitURLGetter(ref string __result)
+            [HarmonyPatch(typeof(Blizzard.BlizzardErrorMobile.ExceptionReporter), "get_ExceptionSubmitURL")]
+            public static bool PatchExceptionReporterSubmitURLGetter(ref System.Uri __result)
             {
-                __result = "http://127.0.0.1/submit";
+                __result = new Uri(string.Format("http://127.0.0.1/submit/{0}", Blizzard.BlizzardErrorMobile.ReportBuilder.Settings.m_projectID));
                 return false;
             }
 
