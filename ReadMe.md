@@ -230,7 +230,7 @@ Version = 3
 VerifyWebCredentials = "VerifyWebCredentials"
 ClientCheck = 0
 Env.Override = 1
-Env = cn.actual.battle.net
+Env = us.actual.battle.net
 ```
 
 一些token获取链接
@@ -244,6 +244,8 @@ https://eu.battle.net/login/en/?app=wtcg
 ```
 
 在启用插件后，支持`./Hearthstone.exe VerifyWebCredentials` 命令启动炉石（~~但需要有client.config文件~~，现在不需要了！）。
+
+注意：中国的`Env`参数为`cn.actual.battlenet.com.cn`。
 
 ### TODO
 

@@ -373,8 +373,8 @@ namespace HsMod
 
                 __instance.Set("Aurora.VerifyWebCredentials", __state);
                 if (__state.Substring(0, 2).ToLower() == "cn")
-					__instance.Set("Aurora.Env", "cn.actual.battlenet.com.cn");
-				else
+                    __instance.Set("Aurora.Env", "cn.actual.battlenet.com.cn");
+                else
                     __instance.Set("Aurora.Env", __state.Substring(0, 2).ToLower() + ".actual.battle.net");
             }
 
