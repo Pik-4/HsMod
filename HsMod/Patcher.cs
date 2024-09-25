@@ -356,7 +356,7 @@ namespace HsMod
                         configPath = "./";
                     }
                     path = configPath + "HsClient.config";
-                    System.IO.File.WriteAllText(path, "[Config]\r\nVersion = 3\r\n[Aurora]\r\nVerifyWebCredentials = \"token\"\r\nClientCheck = 0\r\nEnv.Override = 1\r\nEnv = cn.actual.battle.net\r\n");
+                    System.IO.File.WriteAllText(path, "[Config]\r\nVersion = 3\r\n[Aurora]\r\nVerifyWebCredentials = \"token\"\r\nClientCheck = 0\r\nEnv.Override = 1\r\nEnv = cn.actual.battlenet.com.cn\r\n");
 
                 }
             }
@@ -372,7 +372,10 @@ namespace HsMod
                 }
 
                 __instance.Set("Aurora.VerifyWebCredentials", __state);
-                __instance.Set("Aurora.Env", __state.Substring(0, 2).ToLower() + ".actual.battle.net");
+                if (__state.Substring(0, 2).ToLower() == "cn")
+					__instance.Set("Aurora.Env", "cn.actual.battlenet.com.cn");
+				else
+                    __instance.Set("Aurora.Env", __state.Substring(0, 2).ToLower() + ".actual.battle.net");
             }
 
             //禁用反作弊
