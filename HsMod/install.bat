@@ -5,3 +5,4 @@ if exist "%PROGRAMFILES(x86)%\Hearthstone\BepInEx\core\BepInEx.dll" (
 ) else (
     echo BepInEx is not exist!
 )
+pause
