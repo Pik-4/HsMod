@@ -42,6 +42,9 @@ namespace HsMod
             catch (Exception ex)
             {
                 Utils.MyLogger(BepInEx.Logging.LogLevel.Error, $"{loadType.Name} => {ex.Message} \n{ex.InnerException}");
+                UIStatus.Get()?.AddInfo("HsMod patch failed!", 11.4514f);
+                //System.Threading.Thread.Sleep(11451);
+                //System.Environment.Exit(114514);
             }
         }
 
@@ -1758,11 +1761,17 @@ namespace HsMod
                     {
                         LoadSkinsConfigFromFile(); // 更新皮肤映射
                         Utils.CacheRawHeroCardId = null;
-
-                        if (isAutoReportEnable.Value)
+                        if (!System.IO.File.Exists(CommandConfig.hsMatchLogPath))
                         {
-                            Utils.TryReportOpponent();
-
+                            var f=System.IO.File.Create(CommandConfig.hsMatchLogPath);
+                            f?.Close();
+                        }
+                        if (System.IO.File.Exists(CommandConfig.hsMatchLogPath))
+                        {
+                            if (isAutoReportEnable.Value)
+                            {
+                                Utils.TryReportOpponent();
+                            }
                             string finalResult = "未知";
                             switch (playState)
                             {
@@ -1783,15 +1792,23 @@ namespace HsMod
                             }
 
                             string gameType = (GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_RANKED) ? GameMgr.Get().GetFormatType().ToString() : GameMgr.Get().GetGameType().ToString();
+                          
                             string gameRank = "-";
-                            //if (GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_RANKED && GameMgr.Get().GetFormatType() != PegasusShared.FormatType.FT_UNKNOWN)
-                            //{
-                            //    var currentMedal = RankMgr.Get().GetLocalPlayerMedalInfo().GetCurrentMedalForCurrentFormatType();
-                            //    gameRank = Utils.RankIdxToString(currentMedal.starLevel);
-                            //    gameRank = (gameRank == "传说") ? "传说" + currentMedal.legendIndex.ToString() : gameRank + "-" + currentMedal.earnedStars.ToString();
-                            //}
+                            if ((GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_RANKED) && (GameMgr.Get().GetFormatType() != PegasusShared.FormatType.FT_UNKNOWN))
+                            {
+                                var currentMedal = RankMgr.Get()?.GetLocalPlayerMedalInfo()?.GetCurrentMedal(GameMgr.Get().GetFormatType());
+                                if (currentMedal != null)
+                                {
+                                    gameRank = Utils.RankIdxToString(currentMedal.starLevel);
+                                    gameRank = (gameRank == "传说") ? "传说" + currentMedal.legendIndex.ToString() : (currentMedal.earnedStars > 0 ? gameRank + "-" + currentMedal.earnedStars.ToString() : "-");
+                                }
+                            }
                             finalResult = $"{String.Join("<br />", DateTime.Now.ToString().Split(' '))},{finalResult},{gameRank},{gameType},{Utils.CacheLastOpponentFullName},";
-                            finalResult += $"High:{Utils.CacheLastOpponentAccountID.High}+Low:{Utils.CacheLastOpponentAccountID.Low} => 已举报";
+                            finalResult += $"High:{Utils.CacheLastOpponentAccountID.High}+Low:{Utils.CacheLastOpponentAccountID.Low}";
+                            if (isAutoReportEnable.Value)
+                            {
+                                finalResult += " => 已举报";
+                            }
                             System.IO.File.AppendAllText(CommandConfig.hsMatchLogPath, finalResult + "\n");
                             Utils.CacheLastOpponentAccountID = null;
                         }
@@ -2419,6 +2436,25 @@ namespace HsMod
         //移除推销;拦截削弱补丁信息
         public class PatchIGMMessage
         {
+            //排队人数
+            [HarmonyPostfix]
+            [HarmonyPatch(typeof(SplashScreen), "UpdateQueueInfo")]
+            public static void PatchSplashScreenUpdateQueueInfo(ref Network.QueueInfo queueInfo)
+            {
+                if (isIGMMessageShow.Value)
+                {
+                    UIStatus.Get()?.AddInfo(string.Concat(new string[] {
+                                "当前排队人数：",
+                                queueInfo.position.ToString(),
+                                ", 还剩",
+                                (queueInfo.secondsTilEnd / 60L).ToString(),
+                                "分钟"
+                    }), ((float)(queueInfo.secondsTilEnd)) + 3f);
+                    Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, $"当前排队人数：{queueInfo.position}，还剩{queueInfo.secondsTilEnd / 60L}分钟（{queueInfo.secondsTilEnd}秒）。");
+                }
+            }
+
+
             //拦截削弱补丁信息
             [HarmonyPostfix]
             [HarmonyPatch(typeof(CardListPopup), "Show")]
