@@ -962,7 +962,7 @@ text-decoration: none;
             {
                 builder.Append("<br />");
             }
-            return Template(builder, "Mercenaries").Remove(108, 126);
+            return Template(builder, "Mercenaries").Remove(108, 127);
         }
 
         public static StringBuilder PackPage()
@@ -1038,7 +1038,7 @@ text-decoration: none;
                 temp += "<th>结束时间</th>";
                 temp += "<th>对局结果</th>";
                 temp += "<th>当前排名</th>";
-                temp += "<th>友方信息</th>";
+                temp += "<th>游戏模式</th>";
                 temp += "<th>你的对手</th>";
                 temp += "<th>对手信息</th>";
                 temp += "</tr>";
@@ -1077,7 +1077,7 @@ text-decoration: none;
             {
                 builder.Append("</table>");
             }
-            return Template(builder, "MatchLog").Remove(108, 126);
+            return Template(builder, "MatchLog").Remove(108, 127);
         }
 
         public static StringBuilder AlivePage()
