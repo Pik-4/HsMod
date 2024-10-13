@@ -236,7 +236,7 @@ Env = us.actual.battle.net
 一些token获取链接
 
 ```url
-https://www.battlenet.com.cn/login/zh-cn/?app=wtcg
+https://account.battlenet.com.cn/login/zh-cn/?app=wtcg
 https://tw.battle.net/login/zh/?app=wtcg
 https://kr.battle.net/login/zh/?app=wtcg
 https://us.battle.net/login/en/?app=wtcg
