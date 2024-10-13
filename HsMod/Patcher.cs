@@ -42,9 +42,9 @@ namespace HsMod
             catch (Exception ex)
             {
                 Utils.MyLogger(BepInEx.Logging.LogLevel.Error, $"{loadType.Name} => {ex.Message} \n{ex.InnerException}");
-                UIStatus.Get()?.AddInfo("HsMod patch failed!", 11.4514f);
-                //System.Threading.Thread.Sleep(11451);
-                //System.Environment.Exit(114514);
+                Utils.MyLogger(BepInEx.Logging.LogLevel.Error, "HsMod patch failed!");
+                System.Threading.Thread.Sleep(11451);
+                Application.Quit(114514);
             }
         }
 
@@ -385,6 +385,14 @@ namespace HsMod
             [HarmonyPrefix]
             [HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "OnLoginComplete")]
             public static bool PatchAntiCheatManagerOnLoginComplete()
+            {
+                Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat feature is disabled.");
+                return false;
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "Shutdown")]
+            public static bool PatchAntiCheatManagerShutdown()
             {
                 Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat feature is disabled.");
                 return false;
@@ -2184,6 +2192,31 @@ namespace HsMod
                 try
                 {
                     __instance?.SetCardId(cardId);
+
+                    //EntityDef entityDef = DefLoader.Get().GetEntityDef(cardId);
+                    //if (entityDef.GetTag(GAME_TAG.EMOTECHARACTER) > 0)
+                    //{
+                    //    GameState gameState = GameState.Get();
+                    //    if (gameState == null)
+                    //    {
+                    //        return;
+                    //    }
+                    //    int entityId = gameState.GetPlayerBySide(Player.Side.FRIENDLY).GetEntityId();
+                    //    int tag = gameState.GetEntity(entityId).GetTag(GAME_TAG.HERO_ENTITY);
+                    //    gameState.GetEntity(tag).SetTag(GAME_TAG.EMOTECHARACTER, entityDef.GetTag(GAME_TAG.EMOTECHARACTER));
+                    //}
+                    //if (entityDef.GetTag(GAME_TAG.CORNER_REPLACEMENT_TYPE) > 0)
+                    //{
+                    //    GameState gameState2 = GameState.Get();
+                    //    if (gameState2 == null)
+                    //    {
+                    //        return;
+                    //    }
+                    //    int entityId2 = gameState2.GetPlayerBySide(Player.Side.FRIENDLY).GetEntityId();
+                    //    gameState2.GetEntity(entityId2).SetTag(GAME_TAG.CORNER_REPLACEMENT_TYPE, entityDef.GetTag(GAME_TAG.CORNER_REPLACEMENT_TYPE));
+                    //    new CornerSpellReplacementManager(false).UpdateCornerReplacements(CornerReplacementSpellType.NONE, CornerReplacementSpellType.NONE);
+                    //}
+
                     __instance?.SetRealTimePremium(__instance.GetPremiumType());
                 }
                 catch (Exception ex)
