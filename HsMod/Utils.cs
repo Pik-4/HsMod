@@ -954,6 +954,11 @@ namespace HsMod
                     heroType = CacheHeroes[DbID];
                     return true;
                 }
+                if (DefLoader.Get()?.GetEntityDef(DbID)?.GetCardType() == TAG_CARDTYPE.HERO)
+                {
+                    heroType = Assets.CardHero.HeroType.UNKNOWN;
+                    return true;
+                }
                 else
                 {
                     heroType = Assets.CardHero.HeroType.UNKNOWN;
