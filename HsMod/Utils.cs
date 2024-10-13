@@ -948,10 +948,15 @@ namespace HsMod
             }
             public static bool IsHero(int DbID, out Assets.CardHero.HeroType heroType)
             {
+                string heroCardID = GameUtils.TranslateDbIdToCardId(DbID);
                 if (CacheHeroes.Count == 0) CacheInfo.UpdateHeroes();
                 if (CacheHeroes.ContainsKey(DbID))
                 {
                     heroType = CacheHeroes[DbID];
+                    return true;
+                }
+                else if (DefLoader.Get().GetEntityDef(heroCardID).GetCardType() == TAG_CARDTYPE.HERO){
+                    heroType = Assets.CardHero.HeroType.UNKNOWN;
                     return true;
                 }
                 else
