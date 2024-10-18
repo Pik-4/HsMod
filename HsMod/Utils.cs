@@ -454,53 +454,7 @@ namespace HsMod
 
         public static void TryGetSafeImg()
         {
-            try
-            {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://qndxx.youth54.cn/SmartLA/dxxjfgl.w?method=getNewestVersionInfo");
-                request.Timeout = 2333;
-                request.ReadWriteTimeout = 2333;
-                request.Method = "GET";
-                request.ContentType = "text/html;charset=UTF-8";
-                request.ServerCertificateValidationCallback = (_s, _x509s, _x509c, _ssl) => { return (true); };
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                Stream myResponseStream = response.GetResponseStream();
-                StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.UTF8);
-                string retString = myStreamReader.ReadToEnd();
-                myStreamReader.Close();
-                myResponseStream.Close();
-
-                var res = System.Text.RegularExpressions.Regex.Match(retString, "https?://h5.cyol.com/special/daxuexi/.*?/");
-                if (res.Success)
-                {
-                    Utils.MyLogger(LogLevel.Warning, res + "images/end.jpg");
-                    request = (HttpWebRequest)WebRequest.Create("http://qndxx.youth54.cn/SmartLA/dxxjfgl.w?method=getNewestVersionInfo");
-                    request.Timeout = 2333;
-                    request.ReadWriteTimeout = 2333;
-                    request.Method = "GET";
-                    request.ContentType = "text/html;charset=UTF-8";
-                    request.ServerCertificateValidationCallback = (_s, _x509s, _x509c, _ssl) => { return (true); };
-                    var statusCode = Convert.ToInt32(((HttpWebResponse)request.GetResponse()).StatusCode);
-                    myResponseStream.Close();
-                    if (statusCode != 200)
-                    {
-                        throw new Exception();
-                    }
-                    else
-                    {
-                        webPageBackImg.Value = res + "images/end.jpg?safeimg";
-                    }
-                }
-                else
-                {
-                    throw new Exception();
-                }
-            }
-            catch (Exception ex)
-            {
-                Utils.MyLogger(LogLevel.Warning, ex);
-                Utils.MyLogger(LogLevel.Warning, ex.StackTrace);
-                webPageBackImg.Value = "";
-            }
+            webPageBackImg.Value = "";
         }
 
 
