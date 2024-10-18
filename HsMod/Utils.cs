@@ -398,6 +398,7 @@ namespace HsMod
 
         public static void TryRefundCardDisenchant()    //TellServerAboutWhatUserDid
         {
+            return;
             int totalSell = 0;
             Network network = Network.Get();
             network.RegisterNetHandler(PegasusUtil.BoughtSoldCard.PacketID.ID, new Network.NetHandler(TryRefundCardDisenchantCallback), null);
