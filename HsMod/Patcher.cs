@@ -13,6 +13,7 @@ using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
 using static HsMod.PluginConfig;
+using static UnityEngine.UI.CanvasScaler;
 
 namespace HsMod
 {
@@ -41,6 +42,14 @@ namespace HsMod
             }
             catch (Exception ex)
             {
+                if (loadType == typeof(Patcher.PatchDeathOb))
+                {
+                    if ((Environment.OSVersion.Platform == PlatformID.MacOSX) || (Environment.OSVersion.Platform == PlatformID.Unix))
+                    {
+                        Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "Skip Mac.");
+                        return;
+                    }
+                }
                 Utils.MyLogger(BepInEx.Logging.LogLevel.Error, $"{loadType.Name} => {ex.Message} \n{ex.InnerException}");
                 Utils.MyLogger(BepInEx.Logging.LogLevel.Error, "HsMod patch failed!");
                 System.Threading.Thread.Sleep(11451);
@@ -194,6 +203,7 @@ namespace HsMod
         public static void PatchAll()
         {
             LoadPatch(typeof(Patcher));
+            LoadPatch(typeof(Patcher.PatchAntiCheat));
             LoadPatch(typeof(Patcher.PatchMisc));
             LoadPatch(typeof(Patcher.PatchEmote));
             LoadPatch(typeof(Patcher.PatchIGMMessage));
@@ -255,6 +265,27 @@ namespace HsMod
     //前置Patch为harmony补丁，后置Patch为反射
     public class Patcher
     {
+
+        public class PatchAntiCheat
+        {
+            //禁用反作弊
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "OnLoginComplete")]
+            public static bool PatchAntiCheatManagerOnLoginComplete()
+            {
+                Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat feature is disabled.");
+                return false;
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "Shutdown")]
+            public static bool PatchAntiCheatManagerShutdown()
+            {
+                Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat feature is disabled.");
+                return false;
+            }
+        }
+
         public class PatchMisc
         {
             //移除分辨率限制
@@ -379,23 +410,6 @@ namespace HsMod
                     __instance.Set("Aurora.Env", "cn.actual.battlenet.com.cn");
                 else
                     __instance.Set("Aurora.Env", __state.Substring(0, 2).ToLower() + ".actual.battle.net");
-            }
-
-            //禁用反作弊
-            [HarmonyPrefix]
-            [HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "OnLoginComplete")]
-            public static bool PatchAntiCheatManagerOnLoginComplete()
-            {
-                Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat feature is disabled.");
-                return false;
-            }
-
-            [HarmonyPrefix]
-            [HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "Shutdown")]
-            public static bool PatchAntiCheatManagerShutdown()
-            {
-                Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat feature is disabled.");
-                return false;
             }
 
             //禁止发送错误报告

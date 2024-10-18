@@ -441,8 +441,7 @@ namespace HsMod
 
                         totalSell += record.OwnedCount * sellValue;
                         sellValue = -(normalSellValue * numNormalCopiesInCollection + goldenSellValue * numGoldenCopiesInCollection);
-                        //network.CraftingTransaction(m_pendingClientTransaction, sellValue, numNormalCopiesInCollection, numGoldenCopiesInCollection, numSignatureCopiesInCollection, numDiamondCopiesInCollection);
-                        network.CraftingTransaction(m_pendingClientTransaction, sellValue, numNormalCopiesInCollection, numGoldenCopiesInCollection, 0, 0);
+                        network.CraftingTransaction(m_pendingClientTransaction, sellValue, numNormalCopiesInCollection, numGoldenCopiesInCollection, numSignatureCopiesInCollection, numDiamondCopiesInCollection);
                         m_pendingClientTransaction = null;
                         MyLogger(LogLevel.Warning, $"尝试分解卡牌：{record.CardId}({record.Name.ToString()})，普通{numNormalCopiesInCollection}，金卡{numGoldenCopiesInCollection}。");
                     }
