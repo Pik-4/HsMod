@@ -178,7 +178,7 @@ namespace HsMod
 
             isQuickPackOpeningEnable = config.Bind("开包", "开包加速", false, "开包加速，使用空格开包时直接展示结果");
             isAutoPackOpeningEnable = config.Bind("开包", "自动开包", false, "（慎用，有BUG！）开完全部卡包，不区分卡包品类（基于开包加速）");
-            isAutoRefundCardDisenchantEnable = config.Bind("开包", "自动分解", false, "是否在开包时自动分解全额反尘的卡");
+            isAutoRefundCardDisenchantEnable = config.Bind("开包", "自动分解", false, "是否在开包时自动分解全额反尘的卡（该选项会在启动时自动禁用，必须手动开启）");
 
             isAutoReportEnable = config.Bind("好友", "自动举报", false, "对局结束后自动举报对手昵称违规、作弊和脚本、恶意投降");
             // isAutoReportEnable = config.Bind("好友", "自动举报", true, new ConfigDescription("对局结束后自动举报对手昵称违规、作弊和脚本、恶意投降", null, new object[] { "Advanced" }));
@@ -229,7 +229,7 @@ namespace HsMod
             keySquelch = config.Bind("快捷键", "沉默对手", new KeyboardShortcut(KeyCode.Q, KeyCode.LeftControl), "屏蔽你对手的表情，默认左Ctrl+Q");
             keySoundMute = config.Bind("快捷键", "静音/恢复音量", new KeyboardShortcut(KeyCode.S, KeyCode.LeftControl), "静音/恢复音量，默认左Ctrl+S");
             keyShutUpBob = config.Bind("快捷键", "闭了，鲍勃", new KeyboardShortcut(KeyCode.B, KeyCode.LeftControl), "禁用/恢复鲍勃语音，默认左Ctrl+B");
-            keyRefund = config.Bind("快捷键", "一键全额分解", new KeyboardShortcut(KeyCode.Z, KeyCode.LeftControl), "一键分解全额分解的卡牌（仅在开包界面与收藏界面有效），默认左Ctrl+Z");
+            keyRefund = config.Bind("快捷键", "一键全额分解", new KeyboardShortcut(KeyCode.Z, KeyCode.LeftControl), "一键分解全额分解的卡牌（仅在开包界面与收藏界面有效，且必须开启自动分解。），默认左Ctrl+Z");
             //keyRuin = config.Bind("快捷键", "毁灭吧，赶紧的", new KeyboardShortcut(KeyCode.R, KeyCode.LeftControl), "一键退坑，默认左Ctrl+R");
             keyReadNewCards = config.Bind("快捷键", "朕，已阅！", new KeyboardShortcut(KeyCode.R, KeyCode.LeftControl), "消除所有新！标记（仅在开包界面与收藏界面有效；佣兵模式（有bug，重启后失效）下，执行后可能需要重新进入收藏），默认左Ctrl+R");
             keyShowFPS = config.Bind("快捷键", "显示/隐藏帧率", new KeyboardShortcut(KeyCode.P, KeyCode.LeftControl), "展示或隐藏游戏帧率信息，默认左Ctrl+P");
@@ -288,6 +288,8 @@ namespace HsMod
             if (CommandConfig.hsMatchLogPath == string.Empty) CommandConfig.hsMatchLogPath = hsMatchLogPath.Value;
             if (CommandConfig.webServerPort == -1) CommandConfig.webServerPort = webServerPort.Value;
 
+            isAutoRefundCardDisenchantEnable.Value = false;  // 自动禁用自动分解，使用时，必须手动开启
+
         }
 
         public static void ConfigValueDelegate()
@@ -339,7 +341,7 @@ namespace HsMod
                     isAutoExit.Value = true;
                     isIdleKickEnable.Value = true;
                     isQuickPackOpeningEnable.Value = true;
-                    isAutoRefundCardDisenchantEnable.Value = true;
+                    //isAutoRefundCardDisenchantEnable.Value = true;
                     isAutoRecvMercenaryRewardEnable.Value = true;
                     isMercenaryBattleZoom.Value = false;
                     isSkipHeroIntro.Value = true;
@@ -365,7 +367,7 @@ namespace HsMod
                     isAutoExit.Value = false;
                     isIdleKickEnable.Value = false;
                     isQuickPackOpeningEnable.Value = true;
-                    isAutoRefundCardDisenchantEnable.Value = false;
+                    //isAutoRefundCardDisenchantEnable.Value = false;
                     isAutoRecvMercenaryRewardEnable.Value = true;
                     isMercenaryBattleZoom.Value = false;
                     isSkipHeroIntro.Value = true;

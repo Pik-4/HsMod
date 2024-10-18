@@ -284,7 +284,11 @@ namespace HsMod
         public static void TryRefundCardDisenchantCallback()
         {
             Network.CardSaleResult cardSaleResult = Network.Get().GetCardSaleResult();
-            if (cardSaleResult.Action != Network.CardSaleResult.SaleResult.CARD_WAS_SOLD)
+            if (cardSaleResult.Action == Network.CardSaleResult.SaleResult.CARD_WAS_BOUGHT)
+            {
+                ;
+            }
+            else if (cardSaleResult.Action != Network.CardSaleResult.SaleResult.CARD_WAS_SOLD)
             {
                 MyLogger(LogLevel.Warning, $"分解失败：{cardSaleResult.Action}");
                 UIStatus.Get().AddInfo("分解失败");
@@ -398,7 +402,10 @@ namespace HsMod
 
         public static void TryRefundCardDisenchant()    //TellServerAboutWhatUserDid
         {
-            return;
+            if (!isAutoRefundCardDisenchantEnable.Value)
+            {
+                return;
+            }
             int totalSell = 0;
             Network network = Network.Get();
             network.RegisterNetHandler(PegasusUtil.BoughtSoldCard.PacketID.ID, new Network.NetHandler(TryRefundCardDisenchantCallback), null);
@@ -406,30 +413,39 @@ namespace HsMod
             {
                 if (record != null && record.IsCraftable && record.IsRefundable && (record.OwnedCount > 0))    // 金卡和普卡会分别触发一次，但是一次性分完
                 {
-                    CraftingManager.Get().TryGetCardSellValue(record.CardId, record.PremiumType, out int value);
-                    totalSell += record.OwnedCount * value;
+                    CraftingManager.Get().TryGetCardSellValue(record.CardId, record.PremiumType, out int sellValue);
+                    CraftingManager.Get().TryGetCardSellValue(record.CardId, TAG_PREMIUM.NORMAL, out int normalSellValue);
+                    CraftingManager.Get().TryGetCardSellValue(record.CardId, TAG_PREMIUM.GOLDEN, out int goldenSellValue);
 
-                    CraftingManager.Get().TryGetCardSellValue(record.CardId, TAG_PREMIUM.NORMAL, out int normalValue);
-                    CraftingManager.Get().TryGetCardSellValue(record.CardId, TAG_PREMIUM.GOLDEN, out int goldenValue);
+                    CraftingManager.Get().TryGetCardBuyValue(record.CardId, record.PremiumType, out int buyValue);
+                    CraftingManager.Get().TryGetCardBuyValue(record.CardId, TAG_PREMIUM.NORMAL, out int normalBuyValue);
+                    CraftingManager.Get().TryGetCardBuyValue(record.CardId, TAG_PREMIUM.GOLDEN, out int goldenBuyValue);
+
 
                     int numNormalCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.NORMAL);
                     int numGoldenCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.GOLDEN);
                     int numSignatureCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.SIGNATURE);
                     int numDiamondCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.DIAMOND);
 
-                    CraftingPendingTransaction m_pendingClientTransaction = new CraftingPendingTransaction
+                    if ((sellValue == buyValue) && (normalBuyValue == normalSellValue) && (goldenBuyValue == goldenSellValue))
                     {
-                        CardID = record.CardId,
-                        Premium = record.PremiumType,
-                        NormalDisenchantCount = numNormalCopiesInCollection,
-                        GoldenDisenchantCount = numGoldenCopiesInCollection,
-                        SignatureDisenchantCount = numSignatureCopiesInCollection,
-                        DiamondDisenchantCount = numSignatureCopiesInCollection
-                    };
+                        CraftingPendingTransaction m_pendingClientTransaction = new CraftingPendingTransaction
+                        {
+                            CardID = record.CardId,
+                            Premium = record.PremiumType,
+                            NormalDisenchantCount = numNormalCopiesInCollection,
+                            GoldenDisenchantCount = numGoldenCopiesInCollection,
+                            SignatureDisenchantCount = 0,
+                            DiamondDisenchantCount = 0
+                        };
 
-                    value = -(normalValue * numNormalCopiesInCollection + goldenValue * numGoldenCopiesInCollection);
-                    network.CraftingTransaction(m_pendingClientTransaction, value, numNormalCopiesInCollection, numGoldenCopiesInCollection, numSignatureCopiesInCollection, numDiamondCopiesInCollection);
-                    m_pendingClientTransaction = null;
+                        totalSell += record.OwnedCount * sellValue;
+                        sellValue = -(normalSellValue * numNormalCopiesInCollection + goldenSellValue * numGoldenCopiesInCollection);
+                        //network.CraftingTransaction(m_pendingClientTransaction, sellValue, numNormalCopiesInCollection, numGoldenCopiesInCollection, numSignatureCopiesInCollection, numDiamondCopiesInCollection);
+                        network.CraftingTransaction(m_pendingClientTransaction, sellValue, numNormalCopiesInCollection, numGoldenCopiesInCollection, 0, 0);
+                        m_pendingClientTransaction = null;
+                        MyLogger(LogLevel.Warning, $"尝试分解卡牌：{record.CardId}({record.Name.ToString()})，普通{numNormalCopiesInCollection}，金卡{numGoldenCopiesInCollection}。");
+                    }
                 }
             }
             MyLogger(LogLevel.Warning, "尝试分解粉尘：" + totalSell);
