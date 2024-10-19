@@ -42,7 +42,7 @@ namespace HsMod
             }
             catch (Exception ex)
             {
-                if (loadType == typeof(Patcher.PatchDeathOb))
+                if (loadType == typeof(Patcher.PatchAntiCheat))
                 {
                     if ((Environment.OSVersion.Platform == PlatformID.MacOSX) || (Environment.OSVersion.Platform == PlatformID.Unix))
                     {
