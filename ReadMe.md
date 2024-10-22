@@ -4,7 +4,7 @@
 
 **Warning: The Hearthstone client in mainland China starts the anti-cheat SDK by default, and the plugin will try to block the relevant anti-cheat functions, but it cannot guarantee the safety of your account.**
 
-The readme was translated by DeepL, please forgive any grammatical errors.
+The readme was translated by DeepL, please forgive any grammatical errors. **Currently the mod only supports Simplified Chinese**
 
 ### Realized Functions 
 
