@@ -243,7 +243,7 @@ https://us.battle.net/login/en/?app=wtcg
 https://eu.battle.net/login/en/?app=wtcg
 ```
 
-With the plugin enabled, the support `.` `/Hearthstone.exe VerifyWebCredentials` command to launch Hearthstone ( ~~but required a client.config file~~, which is now not needed!) .
+With the plugin enabled, the support `./Hearthstone.exe VerifyWebCredentials` command to launch Hearthstone ( ~~but required a client.config file~~, which is now not needed!) .
 
 Note: The `Env` parameter for China is `cn.actual.battlenet.com.cn`.
 
