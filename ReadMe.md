@@ -1,6 +1,6 @@
 # HsMod
 
- **Hearthstone** **Modification** Based on BepInEx Hearthstone modification based on BepInEx, the plugin source code is located at [github](https://github.com/Pik-4/HsMod)[.](https://github.com/Pik-4/HsMod)[com](https://github.com/Pik-4/HsMod)[/](https://github.com/Pik-4/HsMod)[Pik](https://github.com/Pik-4/HsMod)[-](https://github.com/Pik-4/HsMod)[4](https://github.com/Pik-4/HsMod)[/](https://github.com/Pik-4/HsMod)[HsMod](https://github.com/Pik-4/HsMod), the plugin will not collect any information about you; the project follows `AGPL-3.0`, and is used for learning and research only.
+ **Hearthstone** **Mod**ification Based on BepInEx Hearthstone modification based on BepInEx, the plugin source code is located at [github](https://github.com/Pik-4/HsMod)[.](https://github.com/Pik-4/HsMod)[com](https://github.com/Pik-4/HsMod)[/](https://github.com/Pik-4/HsMod)[Pik](https://github.com/Pik-4/HsMod)[-](https://github.com/Pik-4/HsMod)[4](https://github.com/Pik-4/HsMod)[/](https://github.com/Pik-4/HsMod)[HsMod](https://github.com/Pik-4/HsMod), the plugin will not collect any information about you; the project follows `AGPL-3.0`, and is used for learning and research only.
 
 **Warning: The Hearthstone client in mainland China starts the anti-cheat SDK by default, and the plugin will try to block the relevant anti-cheat functions, but it cannot guarantee the safety of your account.**
 
@@ -46,7 +46,7 @@ The readme was translated by DeepL, please forgive any grammatical errors.
 36. Allow auto-reporting of opponents; when auto-reporting of opponents is enabled, game logs can be generated automatically
 37. Support analog unplugging (requires shortcut keys to be enabled)
 38. Supports one-click autodecomposition of fully decomposed decks (requires shortcut key enabled).
-39. Support removing `new`` ``cards` with one click `!` (need to turn on the shortcut key, may need to re-enter the collection, mercenaries may not work after restarting)
+39. Support removing `new!` with one click (need to turn on the shortcut key, may need to re-enter the collection, mercenaries may not work after restarting)
 40. Support modifying the skin information of Matchmaking Hero Skin, Tavern Hero Skin, Finale Effect, Matchmaking Panel, Tavern Panel, Lucky Coin and so on. (Need to configure `HsSkins.cfg`, or modify it in settings, update in the matchup needs to simulate unplugging after pressing `F4` to save)
 41. Support modifying card backs (automatically take effect in the game)
 42. Support mercenary random skins, forced diamond skins, etc.
@@ -70,19 +70,19 @@ The readme was translated by DeepL, please forgive any grammatical errors.
 1. Compile `HsMod` or download `HsMod.dll` from `Releases`.
 2. Configure `BepInEx`.
 3. 2.1. Download [BepInEx_x86](https://github.com/BepInEx/BepInEx/releases) and extract it to the Hearthstone root directory `Hearthstone\`.
-4. 2.2. create a directory `Hearthstone\BepInEx\unstripped_corlib\`; ~~download~~[~~Mono~~](https://unity.bepinex.dev/corlibs/2021.3.40.zip)~~and~~[~~Unity~~](https://unity.bepinex.dev/libraries/2021.3.40.zip)~~and~~ ~~~~extract~~ ~~~~them~~ ~~~~in~~ ~~~~that~~ ~~~~directory~~;. Copy all dlls under the project directory HsMod/LibUnityMono to the unstripped_corlib directory. 
+4. 2.2. create a directory `Hearthstone\BepInEx\unstripped_corlib\`; Copy all dlls under the project directory HsMod/LibUnityMono to the unstripped_corlib directory. 
 5. 2.3. Modify `Hearthstone\doorstop_config.ini` by replacing `dllSearchPathOverride=` with `dllSearchPathOverride=BepInEx\unstripped_corlib`
 6. Note: In [BepInEx 5.4.23.2](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.2), modify `Hearthstone\doorstop_config.ini` to replace `dll_search_path_override =` with `dll_search_path_override = BepInEx\unstripped_corlib` `corlib`
 7. Store `HsMod.dll` in `Hearthstone\BepInEx\plugins`.
 8. Install BepInEx [ConfigManager BepInExConfigManager.Mono](https://github.com/sinai-dev/BepInExConfigManager/releases), unzip it to `Hearthstone\BepInEx\` and you're done; enter the game and `F5` for related control.
 
-Note: unity and mono for Windows, extracted from [unity editor](https://unity.com/ja/releases/editor/whats-new/2021.3.40), unity is located at `.\Unity 2021.3.40f1\Editor\Data\PlaybackEngines\windowsstandalonesupport\Variations\win32_player_development_mono\Data\Managed`, mono Located in `.` `\Unity 2021.3.40f1\Editor\Data\MonoBleedingEdge\lib\mono\unityjit-win32`, some of the files are located in `unityjit-win32\Facades` )
+Note: unity and mono for Windows, extracted from [unity editor](https://unity.com/ja/releases/editor/whats-new/2021.3.40), unity is located at `.\Unity 2021.3.40f1\Editor\Data\PlaybackEngines\windowsstandalonesupport\Variations\win32_player_development_mono\Data\Managed`, mono Located in `.\Unity 2021.3.40f1\Editor\Data\MonoBleedingEdge\lib\mono\unityjit-win32`, some of the files are located in `unityjit-win32\Facades` )
 
 #### Mac
 
 1. Download the latest version of [BepInEx_unix](https://github.com/BepInEx/BepInEx/releases) and extract it to `Hearthstone/`
 
-2. ~~Download original [Mono](https://unity.bepinex.dev/corlibs/2021.3.40.zip) and [Unity](https://unity.bepinex.dev/libraries/2021.3.40.zip) libraries and unpack to Hearthstone/BepInEx/unstripped_corlib~~. Copy all `dll` which under the project folder `HsMod/LibUnityMonoUnix` (`cp HsMod/LibUnityMonoUnix/*  Hearthstone/BepInEx/unstripped_corlib/   ` ). ( PS. Mono and Unity version must same as Hearthstone ).
+2. ~~Download original [Mono](https://unity.bepinex.dev/corlibs/2021.3.40.zip) and [Unity](https://unity.bepinex.dev/libraries/2021.3.40.zip) libraries and unpack to Hearthstone/BepInEx/unstripped_corlib~~. Copy all `dll` which under the project folder `HsMod/LibUnityMonoUnix` (`cp HsMod/LibUnityMonoUnix/*  Hearthstone/BepInEx/unstripped_corlib/` ). ( PS. Mono and Unity version must same as Hearthstone ).
 
 3. Edit the `run_bepinex.sh` file replacing the line `export DOORSTOP_CORLIB_OVERRIDE_PATH=""`with `DOORSTOP_CORLIB_OVERRIDE_PATH="$BASEDIR/BepInEx/unstripped_corlib"`
 
@@ -260,7 +260,7 @@ Note: The `Env` parameter for China is `cn.actual.battlenet.com.cn`.
 1. [MixMod_4pda](https://4pda.to/forum/index.php?showtopic=870696&st=4780#entry114865283)
 2. [MixMod_github](https://github.com/DeNcHiK3713/MixMod)
 3. [Hearthstone Advanced Mod](https://hearthmod.com/)
-4. [从0开始教你使用BepInEx为unity游戏制作插件Mod](https://mod.3dmgame.com/read/3)
+4. [Teach you how to use BepInEx to make plugin mods for unity games from scratch](https://mod.3dmgame.com/read/3)
 5. [BepInEx Docs](https://docs.bepinex.dev/)
 6. [Harmony](https://harmony.pardeike.net/articles/intro.html)
 7. [List of CIL instructions](https://en.wikipedia.org/wiki/List_of_CIL_instructions)
