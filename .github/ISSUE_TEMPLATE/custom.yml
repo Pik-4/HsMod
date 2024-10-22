@@ -1,0 +1,11 @@
+name: Custom issue template/自定义问题模板
+description: WARNING! If you are reporting a bug but use this template, the issue will be closed directly./警告！如果您报告错误但使用此模板，问题将直接关闭。
+title: '[Custom]'
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: "Describe your problem./描述你的问题。"
+    validations:
+      required: true
+
