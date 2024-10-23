@@ -155,9 +155,6 @@
     <Reference Include="HarmonyXInterop">
       <HintPath>BepInExCore\HarmonyXInterop.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>LibHearthstone\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
     <Reference Include="Mono.Cecil">
       <HintPath>BepInExCore\Mono.Cecil.dll</HintPath>
     </Reference>
@@ -225,9 +222,6 @@
     </Reference>
     <Reference Include="System.IO.Compression">
       <HintPath>LibHearthstone\System.IO.Compression.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Memory">
-      <HintPath>LibHearthstone\System.Memory.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http">
       <HintPath>LibUnityMono\System.Net.Http.dll</HintPath>

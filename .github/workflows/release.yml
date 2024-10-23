@@ -1,0 +1,45 @@
+name: Auto Release
+
+on:
+  push:
+    branches: [ "bepinex5" ]
+    paths:
+      - '**PluginInfo.cs'
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.x
+    - name: Restore dependencies
+      run: dotnet restore --locked-mode
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal 
+    - name: Generate release tag
+      id: tag
+      run: |
+        Get-Content ./HsMod/PluginInfo.cs | Select-String -Pattern 'public const string PLUGIN_VERSION = "(.*?)"' | ForEach-Object { ($_ -match '"(.*?)"') | Out-Null }
+        $version = $matches[1];
+        echo "PLUGIN_VERSION=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+    - name: Create Release
+      id: create_release
+      uses: softprops/action-gh-release@v2
+      env:
+        CURRENT_TAG: ${{ steps.tag.outputs.PLUGIN_VERSION }}
+      with:
+        tag_name: ${{ steps.tag.outputs.PLUGIN_VERSION }}
+        files: ./HsMod/Release/HsMod.dll
+        prerelease: false
+        make_latest: true
+        generate_release_notes: true
+      

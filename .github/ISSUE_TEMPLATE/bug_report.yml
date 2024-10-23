@@ -1,0 +1,72 @@
+name: Bug report/问题报告
+description: Create a report to help us improve HsMod/创建报告以帮助我们改进HsMod
+labels: [Bug]
+
+body:
+  - type: checkboxes
+    attributes:
+       label: Please check before submitting an issue/提交问题前请检查
+       options:
+          - label: I have searched the issues and haven't found anything relevant/我搜索了这些问题，没有找到任何相关信息
+            required: true
+            
+          - label: I will upload LogOutput.log, HsMod.cfg, HsSkins.cfg /我将上传LogOutput.log, HsMod.cfg, HsSkins.cfg
+            required: true
+            
+          - label: I know how to reproduce the issue which may not be specific to my device/ 我知道如何重现该问题，但该问题可能并非特定于我的设备
+            required: false
+
+
+  - type: textarea
+    attributes:
+        label: Describe the bug/描述你的问题。
+        description: A clear and concise description of what the bug is/对问题有一个清晰而简洁的描述
+    validations:
+        required: true
+      
+
+  - type: textarea
+    attributes:
+        label: To Reproduce/如何复现
+        description: Steps to reproduce the behaviour/重现此问题的步骤
+        placeholder: |
+          - 1. Go to '...'
+          - 2. Click on '....'
+          - 3. Scroll down to '....'
+          - 4. See error
+          
+
+  - type: textarea
+    attributes:
+        label: Expected behavior/期望结果
+        description: A clear and concise description of what you expected to happen./对您期望发生的情况的清晰而简洁的描述。
+    
+    
+  - type: textarea
+    attributes:
+        label: Screenshots/截图
+        description: If applicable, add screenshots to help explain your problem./如果适用，请添加屏幕截图来帮助解释您的问题。
+        
+        
+  - type: textarea
+    attributes:
+        label: Logs/日志
+        description: If applicable, add crash or any other logs to help us figure out the problem./如果适用，请添加崩溃或任何其他日志以帮助我们找出问题。
+        
+        
+  - type: textarea
+    attributes:
+        label: Environment info/环境信息
+        value: |
+          - OS Platform/操作系统:
+          - HsMod Version/HsMod版本:
+          - BepInEx Version/BepInEx版本:
+          - Hearthstone Version/炉石版本:
+    validations:
+        required: true
+
+
+  - type: textarea
+    attributes:
+        label: Additional context/其他信息
+        description: Add any other context about the problem here./在此处添加有关该问题的任何其他信息。
