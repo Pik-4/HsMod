@@ -26,6 +26,7 @@ jobs:
       run: dotnet test --no-build --verbosity normal 
     - name: Generate release tag
       id: tag
+      shell: cmd
       run: |
         for /f tokens^=2^,3^ delims^=^" %a in ('findstr PLUGIN_VERSION .\\HsMod\\PluginInfo.cs') do @echo %a
     - name: Create Release
