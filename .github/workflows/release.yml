@@ -1,11 +1,5 @@
 name: .NET
 
-on:
-  push:
-    branches: [ "bepinex5" ]
-    paths:
-      - '**PluginInfo.cs'
-
 jobs:
   build:
 
@@ -26,6 +20,8 @@ jobs:
     - name: Create Release
       id: create_release
       uses: softprops/action-gh-release@v2
+      env:
+        CURRENT_TAG: ${{ steps.version_tag.outputs.VERSION }}
       with:
         name: ${{ github.run_number }}
         release_name: ${{ github.event.head_commit.message }}
