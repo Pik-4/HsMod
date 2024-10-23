@@ -13,7 +13,6 @@ using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
 using static HsMod.PluginConfig;
-using static UnityEngine.UI.CanvasScaler;
 
 namespace HsMod
 {
@@ -445,7 +444,7 @@ namespace HsMod
                 return false;
             }
             [HarmonyPrefix]
-            [HarmonyPatch(typeof(Blizzard.BlizzardErrorMobile.ExceptionReporter), "get_ExceptionSubmitURL")]
+            [HarmonyPatch(typeof(Blizzard.BlizzardErrorMobile.ExceptionReporter), "ExceptionSubmitURL", MethodType.Getter)]
             public static bool PatchExceptionReporterSubmitURLGetter(ref System.Uri __result)
             {
                 __result = new Uri(string.Format("http://127.0.0.1/submit/{0}", Blizzard.BlizzardErrorMobile.ReportBuilder.Settings.m_projectID));
@@ -1785,7 +1784,7 @@ namespace HsMod
                         Utils.CacheRawHeroCardId = null;
                         if (!System.IO.File.Exists(CommandConfig.hsMatchLogPath))
                         {
-                            var f=System.IO.File.Create(CommandConfig.hsMatchLogPath);
+                            var f = System.IO.File.Create(CommandConfig.hsMatchLogPath);
                             f?.Close();
                         }
                         if (System.IO.File.Exists(CommandConfig.hsMatchLogPath))
@@ -1814,7 +1813,7 @@ namespace HsMod
                             }
 
                             string gameType = (GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_RANKED) ? GameMgr.Get().GetFormatType().ToString() : GameMgr.Get().GetGameType().ToString();
-                          
+
                             string gameRank = "-";
                             if ((GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_RANKED) && (GameMgr.Get().GetFormatType() != PegasusShared.FormatType.FT_UNKNOWN))
                             {

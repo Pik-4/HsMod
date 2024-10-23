@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
 using static HsMod.PluginConfig;
 
 namespace HsMod
@@ -347,7 +345,8 @@ namespace HsMod
                                 Acknowledged = true,
                                 MercenaryId = merc.ID
                             };
-                            m_mercenaryAcknowledgements.Append(mercenaryAcknowledgeData);
+                            //m_mercenaryAcknowledgements.Add(mercenaryAcknowledgeData);
+                            //m_mercenaryAcknowledgements.Append(mercenaryAcknowledgeData);
                             CollectionManager.Get().MarkMercenaryAsAcknowledgedinCollection(mercenaryAcknowledgeData);
                         }
                     }
@@ -362,7 +361,7 @@ namespace HsMod
                                 Acknowledged = true,
                                 MercenaryId = merc.ID
                             };
-                            m_mercenaryAcknowledgements.Append(mercenaryAcknowledgeData);
+                            //m_mercenaryAcknowledgements.Add(mercenaryAcknowledgeData);
                             CollectionManager.Get().MarkMercenaryAsAcknowledgedinCollection(mercenaryAcknowledgeData);
                         }
                     }
@@ -378,7 +377,7 @@ namespace HsMod
                                 Acknowledged = true,
                                 MercenaryId = merc.ID
                             };
-                            m_mercenaryAcknowledgements.Append(mercenaryAcknowledgeData);
+                            //m_mercenaryAcknowledgements.Add(mercenaryAcknowledgeData);
                             CollectionManager.Get().MarkMercenaryAsAcknowledgedinCollection(mercenaryAcknowledgeData);
                         }
                     }
