@@ -1,4 +1,4 @@
-name: .NET
+name: Auto Release
 
 on:
   push:
@@ -8,10 +8,12 @@ on:
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -22,13 +24,18 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal 
+    - name: Generate release tag
+      id: tag
+      run: |
+        cat ./HsMod/PluginInfo.cs | grep PLUGIN_VERSION | awk -F '"' '{print $2}'
     - name: Create Release
       id: create_release
       uses: softprops/action-gh-release@v2
       env:
         CURRENT_TAG: ${{ steps.version_tag.outputs.VERSION }}
       with:
-        name: ${{ github.run_number }}
+        name: ${{ steps.tag.outputs.release_tag }}
+        tag_name: ${{ steps.tag.outputs.release_tag }}
         release_name: ${{ github.event.head_commit.message }}
         files: ./HsMod/Release/HsMod.dll
         prerelease: false
