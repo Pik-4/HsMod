@@ -27,6 +27,9 @@ jobs:
       id: create_release
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: ${{ github.run_number }}
+        name: ${{ github.run_number }}
+        release_name: ${{ github.event.head_commit.message }}
         files: ./HsMod/Release/HsMod.dll
+        prerelease: false
+        make_latest: true
       
