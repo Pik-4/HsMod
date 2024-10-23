@@ -28,9 +28,13 @@ jobs:
       id: tag
       shell: cmd
       run: |
+<<<<<<< HEAD
         @echo off
         set pre=%::set-output name=release_tag::%
         for /f tokens^=2^,3^ delims^=^" %%a in ('findstr PLUGIN_VERSION .\\HsMod\\PluginInfo.cs') do @echo %pre%%%a
+=======
+        for /f tokens^=2^,3^ delims^=^" %a in ('findstr PLUGIN_VERSION .\\HsMod\\PluginInfo.cs') do @echo ::set-output name=release_tag::%a
+>>>>>>> c8b988db553041a8d88a63c97c3757b2060e15a5
     - name: Create Release
       id: create_release
       uses: softprops/action-gh-release@v2
