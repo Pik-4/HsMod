@@ -1,10 +1,10 @@
 # HsMod
 
- **Hearthstone** **Mod**ification Based on BepInEx Hearthstone modification based on BepInEx, the plugin source code is located at [github](https://github.com/Pik-4/HsMod)[.](https://github.com/Pik-4/HsMod)[com](https://github.com/Pik-4/HsMod)[/](https://github.com/Pik-4/HsMod)[Pik](https://github.com/Pik-4/HsMod)[-](https://github.com/Pik-4/HsMod)[4](https://github.com/Pik-4/HsMod)[/](https://github.com/Pik-4/HsMod)[HsMod](https://github.com/Pik-4/HsMod), the plugin will not collect any information about you; the project follows `AGPL-3.0`, and is used for learning and research only.
+ **H**earth**s**tone **Mod**ification Based on BepInEx Hearthstone modification based on BepInEx, the plugin source code is located at [github](https://github.com/Pik-4/HsMod)[.](https://github.com/Pik-4/HsMod)[com](https://github.com/Pik-4/HsMod)[/](https://github.com/Pik-4/HsMod)[Pik](https://github.com/Pik-4/HsMod)[-](https://github.com/Pik-4/HsMod)[4](https://github.com/Pik-4/HsMod)[/](https://github.com/Pik-4/HsMod)[HsMod](https://github.com/Pik-4/HsMod), the plugin will not collect any information about you; the project follows `AGPL-3.0`, and is used for learning and research only.
 
 **Warning: The Hearthstone client in mainland China starts the anti-cheat SDK by default, and the plugin will try to block the relevant anti-cheat functions, but it cannot guarantee the safety of your account.**
 
-The readme was translated by DeepL, please forgive any grammatical errors. **Currently the mod only supports Simplified Chinese**
+The readme was translated by DeepL, please forgive any grammatical errors. **Currently the mod only supports [Simplified Chinese](https://github.com/Pik-4/HsMod/blob/bepinex5/[CHS]ReadMe.md)**
 
 ### Realized Functions 
 
