@@ -8,9 +8,10 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
+    - name: Clone repository
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
@@ -27,7 +28,7 @@ jobs:
     - name: Generate release tag
       id: tag
       run: |
-        cat ./HsMod/PluginInfo.cs | grep PLUGIN_VERSION | awk -F '"' '{print $2}'
+        for /f tokens^=2^,3^ delims^=^" %a in ('findstr PLUGIN_VERSION .\\HsMod\\PluginInfo.cs') do @echo %a
     - name: Create Release
       id: create_release
       uses: softprops/action-gh-release@v2
