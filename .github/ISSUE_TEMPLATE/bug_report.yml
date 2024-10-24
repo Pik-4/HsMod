@@ -62,6 +62,7 @@ body:
           - HsMod Version/HsMod版本:
           - BepInEx Version/BepInEx版本:
           - Hearthstone Version/炉石版本:
+          - Unity(unstripped_corlib) Version/Unity(unstripped_corlib)版本:
     validations:
         required: true
 

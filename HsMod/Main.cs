@@ -12,6 +12,16 @@ namespace HsMod
     {
         private void Awake()
         {
+            // enable logging bepinex and unity to disk without append
+            try
+            {
+                Utils.EnableBepInExLogs();
+            }
+            catch (Exception ex)
+            {
+                Utils.MyLogger(BepInEx.Logging.LogLevel.Error, $"{ex.Message} \n{ex.InnerException}");
+            }
+
             // 清除炉石缓存，暂不设置清空判断条件
             if (true == true)
             {
@@ -27,7 +37,7 @@ namespace HsMod
             if (hsUnitID.Length <= 0)
                 ConfigBind(base.Config);
             else
-                ConfigBind(new BepInEx.Configuration.ConfigFile(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BepInEx/config", hsUnitID, PluginInfo.PLUGIN_GUID + ".cfg"), false,
+                ConfigBind(new BepInEx.Configuration.ConfigFile(System.IO.Path.Combine(Paths.ConfigPath, hsUnitID, PluginInfo.PLUGIN_GUID + ".cfg"), false,
                     new BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)));
 
             if (UtilsArgu.Instance.Exists("port"))

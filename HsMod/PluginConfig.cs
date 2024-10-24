@@ -428,8 +428,9 @@ namespace HsMod
             }
         }
 
-        public static void LoadSkinsConfigFromFile(string file = "BepInEx/config/HsSkins.cfg")
+        public static void LoadSkinsConfigFromFile()
         {
+            string file = Path.Combine(BepInEx.Paths.ConfigPath, "HsSkins.cfg");
             HeroesMapping.Clear();
             if (File.Exists(file))
             {

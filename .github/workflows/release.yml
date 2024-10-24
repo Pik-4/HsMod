@@ -21,10 +21,8 @@ jobs:
         dotnet-version: 8.x
     - name: Restore dependencies
       run: dotnet restore --locked-mode
-    - name: Build
+    - name: Build HsMod
       run: dotnet build --configuration Release --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal 
     - name: Generate release tag
       id: tag
       run: |

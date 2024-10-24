@@ -7,11 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HsMod", "HsMod\HsMod.csproj
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4353F22A-2F95-49D7-A5E7-3E829BD8BF4B}.Debug|Any CPU.ActiveCfg = Release|Any CPU
 		{4353F22A-2F95-49D7-A5E7-3E829BD8BF4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4353F22A-2F95-49D7-A5E7-3E829BD8BF4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

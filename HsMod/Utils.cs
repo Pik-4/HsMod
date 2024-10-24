@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using static HsMod.PluginConfig;
 
 namespace HsMod
@@ -982,6 +983,70 @@ namespace HsMod
 
         }
 
+        public static void EnableBepInExLogs()
+        {
+            var coreConfigProp = typeof(BepInEx.Configuration.ConfigFile).GetProperty("CoreConfig", BindingFlags.Static | BindingFlags.NonPublic);
+            if (coreConfigProp == null) throw new ArgumentNullException(nameof(coreConfigProp));
+            var coreConfig = (BepInEx.Configuration.ConfigFile)coreConfigProp.GetValue(null, null);
+
+            //var bepinMeta = new BepInEx.BepInPlugin("BepInEx", "BepInEx", typeof(BepInEx.Bootstrap.Chainloader).Assembly.GetName().Version.ToString());
+            //var bepinexConfig = new BepInEx.Configuration.ConfigFile(Path.Combine(BepInEx.Paths.ConfigPath, "BepInEx.cfg"), true, bepinMeta);
+            BepInEx.Configuration.ConfigEntry<bool> configUnityLogListening;
+            BepInEx.Configuration.ConfigEntry<bool> configWriteUnityLog;
+            BepInEx.Configuration.ConfigEntry<bool> configAppendLog;
+            BepInEx.Configuration.ConfigEntry<bool> configEnabled;
+            BepInEx.Configuration.ConfigEntry<LogLevel> configLogLevels;
+            BepInEx.Configuration.ConfigEntry<LogLevel> configUnityLogLevels;
+            if (coreConfig.TryGetEntry("Logging", "UnityLogListening", out configUnityLogListening))
+            {
+                configUnityLogListening.Value = true;
+            }
+            else
+            {
+                MyLogger(LogLevel.Error, Path.Combine(BepInEx.Paths.ConfigPath, "BepInEx.cfg"));
+                MyLogger(LogLevel.Error, "Logging.UnityLogListening not found");
+            }
+            if (coreConfig.TryGetEntry("Logging.Disk", "WriteUnityLog", out configWriteUnityLog))
+            {
+                configWriteUnityLog.Value = true;
+            }
+            else
+            {
+                MyLogger(LogLevel.Error, "Logging.Disk.WriteUnityLog not found");
+            }
+            if (coreConfig.TryGetEntry("Logging.Disk", "AppendLog", out configAppendLog))
+            {
+                configAppendLog.Value = false;
+            }
+            else
+            {
+                MyLogger(LogLevel.Error, "Logging.Disk.AppendLog not found");
+            }
+            if (coreConfig.TryGetEntry("Logging.Disk", "Enabled", out configEnabled))
+            {
+                configEnabled.Value = true;
+            }
+            else
+            {
+                MyLogger(LogLevel.Error, "Logging.DiskEnabled  not found");
+            }
+            if (coreConfig.TryGetEntry("Logging.Disk", "LogLevels", out configLogLevels))
+            {
+                configLogLevels.Value = LogLevel.All;
+            }
+            else
+            {
+                MyLogger(LogLevel.Warning, "Logging.Disk.LogLevels not found");
+            }
+            if (coreConfig.TryGetEntry("Logging.Unity", "LogLevels", out configUnityLogLevels))
+            {
+                configUnityLogLevels.Value = LogLevel.All;
+            }
+            else
+            {
+                MyLogger(LogLevel.Warning, "Logging.Unity.LogLevels not found");
+            }
+        }
 
         public static void DeleteFolder(string dir)
         {
