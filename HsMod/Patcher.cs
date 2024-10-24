@@ -372,26 +372,26 @@ namespace HsMod
                     }
 
                     string configPath = "";
-                    if (System.IO.Directory.Exists(Hearthstone.Util.PlatformFilePaths.ExternalDataPath + "/Cache/"))
+                    if (System.IO.Directory.Exists(Hearthstone.Util.PlatformFilePaths.CachePath))
                     {
-                        configPath = Hearthstone.Util.PlatformFilePaths.ExternalDataPath + "/Cache/";
+                        configPath = Hearthstone.Util.PlatformFilePaths.CachePath;
                     }
-                    else if (System.IO.Directory.Exists(Hearthstone.Util.PlatformFilePaths.PersistentDataPath + "/Cache/"))
+                    //else if (System.IO.Directory.Exists(Hearthstone.Util.PlatformFilePaths.PersistentDataPath + "/Cache/"))
+                    //{
+                    //    configPath = Hearthstone.Util.PlatformFilePaths.PersistentDataPath + "/Cache/";
+                    //}
+                    else if (System.IO.Directory.Exists(BepInEx.Paths.ConfigPath))
                     {
-                        configPath = Hearthstone.Util.PlatformFilePaths.PersistentDataPath + "/Cache/";
-                    }
-                    else if (System.IO.Directory.Exists("./BepInEx/config/"))
-                    {
-                        configPath = "./BepInEx/config/";
+                        configPath = BepInEx.Paths.ConfigPath;
                     }
                     else
                     {
                         configPath = "./";
                     }
-                    path = configPath + "HsClient.config";
+                    path = System.IO.Path.Combine(configPath, "HsClient.config");
                     System.IO.File.WriteAllText(path, "[Config]\r\nVersion = 3\r\n[Aurora]\r\nVerifyWebCredentials = \"token\"\r\nClientCheck = 0\r\nEnv.Override = 1\r\nEnv = cn.actual.battlenet.com.cn\r\n");
-
                 }
+                Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, $"client.config => {path}");
             }
             [HarmonyPostfix, HarmonyPatch(typeof(Blizzard.T5.Configuration.ConfigFile), "Load", new Type[] { typeof(string), typeof(bool) })]
             public static void PatchPostConfigFileLoad(ref string path,

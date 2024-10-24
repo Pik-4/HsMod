@@ -37,7 +37,7 @@ namespace HsMod
             if (hsUnitID.Length <= 0)
                 ConfigBind(base.Config);
             else
-                ConfigBind(new BepInEx.Configuration.ConfigFile(System.IO.Path.Combine(Paths.ConfigPath, hsUnitID, PluginInfo.PLUGIN_GUID + ".cfg"), false,
+                ConfigBind(new BepInEx.Configuration.ConfigFile(System.IO.Path.Combine(BepInEx.Paths.ConfigPath, hsUnitID, PluginInfo.PLUGIN_GUID + ".cfg"), false,
                     new BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)));
 
             if (UtilsArgu.Instance.Exists("port"))

@@ -111,8 +111,8 @@ namespace HsMod
                     }
                     else if (rawUrLower == "/safeimg")
                     {
-                        var safeimg = Convert.FromBase64String(WebPage.SafeImg);
-                        httpListenerContext.Response.OutputStream.Write(safeimg, 0, safeimg.Length);
+                        //var safeimg = Convert.FromBase64String(WebPage.SafeImg);
+                        //httpListenerContext.Response.OutputStream.Write(safeimg, 0, safeimg.Length);
                         httpListenerContext.Response.OutputStream.Close();
                     }
                     else
