@@ -369,7 +369,7 @@ namespace HsMod
                     receiveEnemyEmoteLimit.Value = 0;
                     isOpponentGoldenCardShow.Value = false;
                     skinCoin.Value = 1746;   // 初始幸运币
-                    isSkinDefalutHeroEnable.Value = true;// my 默认英雄皮肤
+                    isSkinDefalutHeroEnable.Value = false;// my 默认英雄皮肤 会影响策略
                     isQuickModeEnable.Value = true;// my 快速模式
                     mercenaryDiamondCardState.Value = Utils.CardState.Disabled;
                     randomMercenarySkinEnable.Value = Utils.CardState.Disabled;
