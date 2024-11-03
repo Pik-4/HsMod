@@ -430,7 +430,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>$(ProjectDir)\install.bat</PostBuildEvent>
+    <PostBuildEvent>$(ProjectDir)\HsMod\install.bat</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
