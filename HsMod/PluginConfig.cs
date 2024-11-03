@@ -377,6 +377,7 @@ namespace HsMod
                     maxCardState.Value = Utils.CardState.Disabled;
                     configTemplate.Value = Utils.ConfigTemplate.DoNothing;
                     return;
+
                 case Utils.ConfigTemplate.AntiAwayFromKeyboard:
                     isShortcutsEnable.Value = true;
                     isIGMMessageShow.Value = true;
