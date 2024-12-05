@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="theme-color" content="#66CCFF">
+    {useViewport}
+    <style>
+        body {
+            background: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url('{webPageBackImg}') no-repeat 0% 25% / cover;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            opacity: 1.0;
+            align-items: center;
+            justify-content: center;
+            font-family: "Lucida Console", sans-serif;
+        }
+
+        a {
+            color: #66CCFF;
+            text-decoration: none;
+        }
+
+            a:hover {
+                text-decoration: underline
+            }
+
+        hr {
+            width: auto;
+            margin: 0 auto;
+            border: 0;
+            height: 0;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn_li {
+            z-index: 9;
+            width: 100%;
+        }
+
+        .btn_li {
+            -webkit-transition-duration: 0.4s; /* Safari */
+            transition-duration: 0.4s;
+            border: 1px solid #66CCFF;
+            opacity: 0.4;
+        }
+
+            .btn_li:hover {
+                background-color: #66CCFF;
+                color: white;
+                opacity: 0.6;
+            }
+
+        ul {
+            list-style-type: none;
+            margin: 0 auto;
+            overflow: hidden;
+            display: table;
+        }
+
+        .nav_li {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            margin: 0 auto;
+            text-decoration: none;
+        }
+    </style>
+    <title>{PluginInfo.PLUGIN_GUID} - {title}</title>
+</head>
+<body>
+    {nav}
+    {body}
+</body>
+</html>

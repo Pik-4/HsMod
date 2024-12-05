@@ -20,7 +20,7 @@ namespace HsMod
             //}
             //else { res = localName.ToString(); }
 
-            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"HsMod Languages: {res}");
+            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"CurrentCulture: {res}, Hearthstone {Localization.GetLocale()}, HsMod {pluginInitLanague.Value}.");
             return res;
         }
 
@@ -69,10 +69,49 @@ namespace HsMod
                     return res;
                 }
                 Utils.MyLogger(BepInEx.Logging.LogLevel.Error, $"Languages key '{lang_key}' not found.");
-                return "KEY_NOT_FOUND";
+                return "VALUE_NOT_FOUND";
             }
         }
 
+        public static string GetLangKey(string lang_value)
+        {
+            if (String.IsNullOrEmpty(CacheCurrentLangJson))
+            {
+                CacheCurrentLangJson = GetLangFileContext(pluginInitLanague.Value);
+                CacheCurrentLangJsonObj = JsonConvert.DeserializeObject<Dictionary<string, string>>(CacheCurrentLangJson);
+            }
+
+            foreach (var key in CacheCurrentLangJsonObj)
+            {
+                if (key.Value == lang_value)
+                {
+                    if (key.Key.EndsWith(".name"))
+                    {
+                        return key.Key;
+                    }
+                }
+            }
+            if (String.IsNullOrEmpty(CacheEnUSLangJson))
+            {
+                CacheEnUSLangJson = GetLangFileContext("enUS");
+                CacheEnUSLangJsonObj = JsonConvert.DeserializeObject<Dictionary<string, string>>(CacheEnUSLangJson);
+            }
+
+            foreach (var key in CacheEnUSLangJsonObj)
+            {
+                if (key.Value == lang_value)
+                {
+                    if (key.Key.EndsWith("name"))
+                    {
+                        return key.Key;
+                    }
+                }
+            }
+
+            Utils.MyLogger(BepInEx.Logging.LogLevel.Error, $"Languages value '{lang_value}' not found.");
+            return "KEY_NOT_FOUND";
+
+        }
 
         public static Locale StrToLocale(string lang)
         {

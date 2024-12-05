@@ -17,11 +17,6 @@ namespace HsMod
 				{
 					GUILayout.Width(200f)
 				});
-			if (isTimeGearEnable.Value == true)
-				GUILayout.Label(new GUIContent($"Gear:{timeGear.Value}X"), new GUILayoutOption[]
-				{
-					GUILayout.Width(200f)
-				});
 		}
         private void Awake()
         {
@@ -32,16 +27,22 @@ namespace HsMod
             }
             catch (Exception ex)
             {
-                Utils.MyLogger(BepInEx.Logging.LogLevel.Error, $"{ex.Message} \n{ex.InnerException}");
+                Utils.MyLogger(BepInEx.Logging.LogLevel.Error, $"EnableBepInExLogs: {ex.Message} \n{ex.InnerException} \n{ex.StackTrace}");
             }
 
             // 清除炉石缓存，暂不设置清空判断条件
             if (true == true)
             {
-                Utils.DeleteFolder(Hearthstone.Util.PlatformFilePaths.ExternalDataPath + "/Cache");
-                Utils.DeleteFolder(Hearthstone.Util.PlatformFilePaths.PersistentDataPath + "/Cache");
+                try
+                {
+                    Utils.DeleteFolder(Hearthstone.Util.PlatformFilePaths.ExternalDataPath + "/Cache");
+                    Utils.DeleteFolder(Hearthstone.Util.PlatformFilePaths.PersistentDataPath + "/Cache");
+                }
+                catch (Exception ex)
+                {
+                    Utils.MyLogger(BepInEx.Logging.LogLevel.Error, $"DeleteFolder: {ex.Message} \n{ex.InnerException} \n{ex.StackTrace}");
+                }
             }
-
 
             // 处理命令行参数
             string hsUnitID = "";
@@ -120,12 +121,14 @@ namespace HsMod
         private void Start()
         {
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is started!");
+
             if (!isPluginEnable.Value)
             {
                 OnDestroy();
                 return;
             }
-            //暂时无法移动showFPS相关代码
+
+            //Show FPS info
             showFPS = new GameObject("ShowFPSSceneObject", new Type[] { typeof(HSDontDestroyOnLoad) }).AddComponent<ShowFPS>();
             showFPS.enabled = false;
             showFPS.StartFrameCount();
@@ -159,7 +162,7 @@ namespace HsMod
 
             //启动web服务
             WebServer.Start();
-            //InactivePlayerKicker.Get().SetShouldCheckForInactivity(isIdleKickEnable.Value);
+
         }
 
         private void Update()
@@ -172,9 +175,9 @@ namespace HsMod
                     allPatchNum += tempatch.GetPatchedMethods().Count();
                 }
                 LoadSkinsConfigFromFile();
-                UIStatus.Get().AddInfo($"[{allPatchNum}]插件状态：" + (isPluginEnable.Value ? "运行" : "停止"));
+                UIStatus.Get().AddInfo($"[{allPatchNum}]" + (isPluginEnable.Value ? LocalizationManager.GetLangValue("PluginEnable") : LocalizationManager.GetLangValue("PluginDisable")));
                 LocalizationManager.GetCurrentLang();
-                InactivePlayerKicker.Get().SetShouldCheckForInactivity(isIdleKickEnable.Value);
+                InactivePlayerKicker.Get()?.SetShouldCheckForInactivity(isIdleKickEnable.Value);
                 WebServer.Restart();
             }
 
@@ -208,7 +211,8 @@ namespace HsMod
                 }
                 else if (keySimulateDisconnect.Value.IsDown())
                 {
-                    Network.Get().SimulateUncleanDisconnectFromGameServer();
+                    Network.Get()?.QueueDispatcher.SetDebugGameConnectionState(false, System.Net.Sockets.SocketError.ConnectionReset);
+                    //Network.Get()?.SimulateUncleanDisconnectFromGameServer();
                     return;
                 }
                 else if (keyShowFPS.Value.IsDown())
@@ -260,13 +264,13 @@ namespace HsMod
                             }
                             if (GameState.Get().IsMulliganManagerActive() && MulliganManager.Get().GetMulliganButton() != null && keyContinueMulligan.Value.IsDown())
                             {
-                                MulliganManager.Get().AutomaticContinueMulligan();
+                                MulliganManager.Get()?.AutomaticContinueMulligan();
                                 return;
                             }
                         }
                         if (GameMgr.Get().IsBattlegrounds() && keyCopySelectBattleTag.Value.IsDown() && PlayerLeaderboardManager.Get() != null && PlayerLeaderboardManager.Get().IsMousedOver())
                         {
-                            BnetPlayer selectedOpponent = PlayerLeaderboardManager.Get().GetSelectedOpponent();
+                            BnetPlayer selectedOpponent = PlayerLeaderboardManager.Get()?.GetSelectedOpponent();
                             if (selectedOpponent != null)
                             {
                                 BnetBattleTag battleTag = selectedOpponent.GetBattleTag();
@@ -274,7 +278,7 @@ namespace HsMod
                                 {
                                     string @battleTagString = battleTag.GetString();
                                     ClipboardUtils.CopyToClipboard(@battleTagString);
-                                    UIStatus.Get().AddInfo(@battleTagString);
+                                    UIStatus.Get()?.AddInfo(@battleTagString);
                                     return;
                                 }
                             }
@@ -299,7 +303,7 @@ namespace HsMod
                                 if (bnetTag != null)
                                 {
                                     ClipboardUtils.CopyToClipboard(bnetTag.GetString());
-                                    UIStatus.Get().AddInfo(bnetTag.GetString());
+                                    UIStatus.Get()?.AddInfo(bnetTag.GetString());
                                 }
                                 else if (!GameMgr.Get().IsBattlegrounds())
                                 {
@@ -311,7 +315,7 @@ namespace HsMod
                                     }
                                     else tempFullName = Utils.CacheLastOpponentFullName;
                                     ClipboardUtils.CopyToClipboard(@tempFullName);
-                                    UIStatus.Get().AddInfo(@tempFullName);
+                                    UIStatus.Get()?.AddInfo(@tempFullName);
                                 }
                                 return;
                             }

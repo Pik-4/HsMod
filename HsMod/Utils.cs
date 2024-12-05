@@ -6,21 +6,22 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using static HsMod.PluginConfig;
 
 namespace HsMod
 {
-    public class Utils
+    public partial class Utils
     {
         public enum CardState
         {
-            [Description("默认（不做修改）")]
+            //[Description("默认（不做修改）")]
             Default,
-            [Description("仅友方有效")]
+            //[Description("仅友方有效")]
             OnlyMy,
-            [Description("全部生效")]
+            //[Description("全部生效")]
             All,
-            [Description("禁用特效")]
+            //[Description("禁用特效")]
             Disabled
         }
         //public enum QuickMode
@@ -402,10 +403,6 @@ namespace HsMod
 
         public static void TryRefundCardDisenchant()    //TellServerAboutWhatUserDid
         {
-            if (!isAutoRefundCardDisenchantEnable.Value)
-            {
-                return;
-            }
             int totalSell = 0;
             Network network = Network.Get();
             network.RegisterNetHandler(PegasusUtil.BoughtSoldCard.PacketID.ID, new Network.NetHandler(TryRefundCardDisenchantCallback), null);
@@ -658,6 +655,7 @@ namespace HsMod
         public static string CacheRawHeroCardId;
         public static Blizzard.GameService.SDK.Client.Integration.BnetAccountId CacheLastOpponentAccountID;
         public static List<MercenarySkin> CacheMercenarySkin = new List<MercenarySkin>();
+        public static bool CacheLoginStatus = false;
 
         public static class CacheInfo
         {
@@ -889,103 +887,9 @@ namespace HsMod
             return (coinNeed > 0) ? coinNeed : 8192;
         }
 
-        public static class CheckInfo
-        {
-            public static bool IsCoin()
-            {
-                if (CacheCoin.Count == 0) CacheInfo.UpdateCoin();
-                if (CacheCoin.Contains(skinCoin.Value)) return true;
-                else return false;
-            }
-            public static bool IsCoin(string cardId)
-            {
-                int dbId = GameUtils.TranslateCardIdToDbId(cardId);
-                if (CacheCoinCard.Count == 0) CacheInfo.UpdateCoinCard();
-                if (CacheCoinCard.Contains(dbId)) return true;
-                else return false;
-            }
-            public static bool IsBoard()
-            {
-                if (CacheGameBoard.Count == 0) CacheInfo.UpdateGameBoard();
-                if (CacheGameBoard.Contains(skinBoard.Value)) return true;
-                else return false;
-            }
-            public static bool IsBgsBoard()
-            {
-                if (CacheBgsBoard.Count == 0) CacheInfo.UpdateBgsBoard();
-                if (CacheBgsBoard.Contains(skinBgsBoard.Value)) return true;
-                else return false;
-            }
-            public static bool IsHero(int DbID, out Assets.CardHero.HeroType heroType)
-            {
-                if (CacheHeroes.Count == 0) CacheInfo.UpdateHeroes();
-                if (CacheHeroes.ContainsKey(DbID))
-                {
-                    heroType = CacheHeroes[DbID];
-                    return true;
-                }
-                if (DefLoader.Get()?.GetEntityDef(DbID)?.GetCardType() == TAG_CARDTYPE.HERO)
-                {
-                    heroType = Assets.CardHero.HeroType.UNKNOWN;
-                    return true;
-                }
-                else
-                {
-                    heroType = Assets.CardHero.HeroType.UNKNOWN;
-                    return false;
-                }
-            }
-            public static bool IsCardBack()
-            {
-                if (CacheCardBack.Count == 0) CacheInfo.UpdateCardBack();
-                if (CacheCardBack.Contains(skinCardBack.Value)) return true;
-                else return false;
-            }
-            public static bool IsBgsFinisher()
-            {
-                if (CacheBgsFinisher.Count == 0) CacheInfo.UpdateBgsFinisher();
-                if (CacheBgsFinisher.Contains(skinBgsFinisher.Value)) return true;
-                else return false;
-            }
-
-            public static bool IsHero(string cardID, out Assets.CardHero.HeroType heroType)
-            {
-                if (CacheHeroes.Count == 0) CacheInfo.UpdateHeroes();
-                int dbid = GameUtils.TranslateCardIdToDbId(cardID);
-                if (CacheHeroes.ContainsKey(dbid))
-                {
-                    heroType = CacheHeroes[dbid];
-                    return true;
-                }
-                else
-                {
-                    heroType = Assets.CardHero.HeroType.UNKNOWN;
-                    return false;
-                }
-            }
-
-            public static bool IsMercenarySkin(string cardID, out MercenarySkin skin)
-            {
-                if (CacheMercenarySkin.Count == 0) CacheInfo.UpdateMercenarySkin();
-                int dbid = GameUtils.TranslateCardIdToDbId(cardID);
-
-                foreach (var mercSkin in CacheMercenarySkin)
-                {
-                    if (mercSkin.Id.Contains(dbid))
-                    {
-                        skin = mercSkin;
-                        return true;
-                    }
-                }
-                skin = new MercenarySkin();
-                return false;
-            }
-
-        }
-
         public static void EnableBepInExLogs()
         {
-            var coreConfigProp = typeof(BepInEx.Configuration.ConfigFile).GetProperty("CoreConfig", BindingFlags.Static | BindingFlags.NonPublic);
+            var coreConfigProp = typeof(BepInEx.Configuration.ConfigFile).GetProperty("CoreConfig", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
             if (coreConfigProp == null) throw new ArgumentNullException(nameof(coreConfigProp));
             var coreConfig = (BepInEx.Configuration.ConfigFile)coreConfigProp.GetValue(null, null);
 
@@ -1003,7 +907,6 @@ namespace HsMod
             }
             else
             {
-                MyLogger(LogLevel.Error, Path.Combine(BepInEx.Paths.ConfigPath, "BepInEx.cfg"));
                 MyLogger(LogLevel.Error, "Logging.UnityLogListening not found");
             }
             if (coreConfig.TryGetEntry("Logging.Disk", "WriteUnityLog", out configWriteUnityLog))
@@ -1036,7 +939,7 @@ namespace HsMod
             }
             else
             {
-                MyLogger(LogLevel.Warning, "Logging.Disk.LogLevels not found");
+                MyLogger(LogLevel.Error, "Logging.Disk.LogLevels not found");
             }
             if (coreConfig.TryGetEntry("Logging.Unity", "LogLevels", out configUnityLogLevels))
             {
@@ -1044,7 +947,42 @@ namespace HsMod
             }
             else
             {
-                MyLogger(LogLevel.Warning, "Logging.Unity.LogLevels not found");
+                MyLogger(LogLevel.Warning, $"{BepInEx.Paths.BepInExConfigPath}: Logging.Unity.LogLevels not found.");
+            }
+        }
+
+
+        public static string ReadLastLine(string path, int lines, Encoding encoding = null)
+        {
+            if (encoding == null)
+            {
+                encoding = Encoding.UTF8;
+            }
+
+            try
+            {
+                var lastLines = new LinkedList<string>();
+
+                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var reader = new StreamReader(stream, encoding))
+                {
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        lastLines.AddLast(line);
+                        if (lastLines.Count >= lines)
+                        {
+                            lastLines.RemoveFirst();
+                        }
+                    }
+                }
+
+                return string.Join(Environment.NewLine, lastLines);
+            }
+            catch (Exception ex)
+            {
+
+                return ex.Message; // 出现异常时返回空字符串
             }
         }
 
@@ -1063,18 +1001,59 @@ namespace HsMod
             }
         }
 
+        public static void ShowEula()
+        {
+            if (!isEulaRead.Value)
+            {
+                UIStatus.Get()?.AddInfo(LocalizationManager.GetLangValue("hsmod.declaration"), 23.333f);
+                AlertPopup.PopupInfo popupInfo = new AlertPopup.PopupInfo();
+                popupInfo.m_headerText = "HsMod End-User License Agreement";
+                popupInfo.m_text = LocalizationManager.GetLangValue("hsmod.declaration");
+                popupInfo.m_showAlertIcon = false;
+                popupInfo.m_responseDisplay = AlertPopup.ResponseDisplay.OK;
+                popupInfo.m_attentionCategory = UserAttentionBlocker.NONE;
+                DialogManager.Get()?.ShowPopup(popupInfo);
+                isEulaRead.Value = true;
+            }
+            else
+            {
+                UIStatus.Get()?.AddInfo(LocalizationManager.GetLangValue("hsmod.declaration"), 6.666f);
+            }
+        }
+
+        public static void OnHsLoginCompleted()
+        {
+            Utils.CacheLoginStatus = true;
+            try
+            {
+                ShowEula();
+                if (!isIdleKickEnable.Value)
+                {
+                    InactivePlayerKicker.Get()?.SetShouldCheckForInactivity(isIdleKickEnable.Value);
+                }
+                LeakInfo.Mercenaries();
+                LeakInfo.Skins();
+            }
+            catch (Exception ex)
+            {
+                MyLogger(LogLevel.Error, ex.Message);
+                MyLogger(LogLevel.Error, ex.StackTrace);
+            }
+        }
+
         public static class LeakInfo
         {
-            public static void Mercenaries(string savePath = @"BepInEx/HsMercenaries.log")
+            public static void Mercenaries()
             {
+                string savePath = Path.Combine(BepInEx.Paths.BepInExRootPath, "HsMod", "mercenaries.log");
                 //List<LettuceTeam> teams = CollectionManager.Get().GetTeams();
                 //System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到您的队伍如下：\n");
                 //foreach (LettuceTeam team in teams)
                 //{
                 //    System.IO.File.AppendAllText(savePath, team.Name + "\n");
                 //}
-                System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到关卡信息如下：\n");
-                System.IO.File.AppendAllText(savePath, "[ID]\t[Heroic?]\t[Bounty]\t[BossName]\n");
+                System.IO.File.WriteAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到关卡信息如下：\n");
+                System.IO.File.AppendAllText(savePath, "# [ID]\t[Heroic?]\t[Bounty]\t[BossName]\n");
                 foreach (var record in GameDbf.LettuceBounty.GetRecords())     // 生成关卡名称
                 {
                     string saveString;
@@ -1085,10 +1064,11 @@ namespace HsMod
                     }
                 }
             }
-            public static void MyCards(string savePath = @"BepInEx/HsRefundCards.log")
+            public static void MyCards()
             {
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到全额分解卡牌情况如下：\n");
-                System.IO.File.AppendAllText(savePath, "[Name]\t[PremiumType]\t[Rarity]\t[CardId]\t[CardDbId]\t[OwnedCount]\n");
+                string savePath = Path.Combine(BepInEx.Paths.BepInExRootPath, "HsMod", "refundcards.log");
+                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到全额分解卡牌情况如下：\n");
+                System.IO.File.AppendAllText(savePath, "# [Name]\t[PremiumType]\t[Rarity]\t[CardId]\t[CardDbId]\t[OwnedCount]\n");
                 //Filter<CollectibleCard> filter3 = new Filter<CollectibleCard>((CollectibleCard card) => card.IsRefundable);
                 foreach (var record in CollectionManager.Get().GetOwnedCards())
                 {
@@ -1101,10 +1081,11 @@ namespace HsMod
                     }
                 }
             }
-            public static void Skins(string savePath = "BepInEx/HsSkins.log")
+            public static void Skins()
             {
-                System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到硬币皮肤如下：\n");
-                System.IO.File.AppendAllText(savePath, "[CARD_ID]\t[Name]\n");
+                string savePath = Path.Combine(BepInEx.Paths.BepInExRootPath, "HsMod", "skins.log");
+                System.IO.File.WriteAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到硬币皮肤如下：\n");
+                System.IO.File.AppendAllText(savePath, "# [CARD_ID]\t[Name]\n");
                 foreach (var record in GameDbf.CosmeticCoin.GetRecords())
                 {
                     string saveString;
@@ -1114,8 +1095,8 @@ namespace HsMod
                         System.IO.File.AppendAllText(savePath, saveString + "\n");
                     }
                 }
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到卡背信息如下：\n");
-                System.IO.File.AppendAllText(savePath, "[ID]\t[Name]\n");
+                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到卡背信息如下：\n");
+                System.IO.File.AppendAllText(savePath, "# [ID]\t[Name]\n");
                 foreach (var record in GameDbf.CardBack.GetRecords())
                 {
                     string saveString;
@@ -1127,21 +1108,21 @@ namespace HsMod
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到游戏面板信息如下：\n");
-                System.IO.File.AppendAllText(savePath, "[ID]\t[NOTE_DESC]\n");
+                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到游戏面板信息如下：\n");
+                System.IO.File.AppendAllText(savePath, "# [ID]\t[NOTE_DESC]\n");
                 foreach (var record in GameDbf.Board.GetRecords())
                 {
                     string saveString;
                     if (record != null)
                     {
                         // GameUtils.TranslateDbIdToCardId(record.CardId, false);
-                        saveString = $"{record.ID}\t{record.GetVar("NOTE_DESC")}";
+                        saveString = $"{record.ID}\t{record.NoteDesc.ToString()}";
                         System.IO.File.AppendAllText(savePath, saveString + "\n");
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到酒馆战斗面板如下：\n");
-                System.IO.File.AppendAllText(savePath, "[ID]\t[CollectionShortName]\t[CollectionName]\n");
+                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到酒馆战斗面板如下：\n");
+                System.IO.File.AppendAllText(savePath, "# [ID]\t[CollectionShortName]\t[CollectionName]\n");
                 foreach (var record in GameDbf.BattlegroundsBoardSkin.GetRecords())
                 {
                     string saveString;
@@ -1153,8 +1134,8 @@ namespace HsMod
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到酒馆终结特效如下：\n");
-                System.IO.File.AppendAllText(savePath, "[ID]\t[CollectionShortName]\t[CollectionName]\n");
+                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到酒馆终结特效如下：\n");
+                System.IO.File.AppendAllText(savePath, "# [ID]\t[CollectionShortName]\t[CollectionName]\n");
                 foreach (var record in GameDbf.BattlegroundsFinisher.GetRecords())
                 {
                     string saveString;
@@ -1166,8 +1147,8 @@ namespace HsMod
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到英雄皮肤（包括酒馆）如下：\n");
-                System.IO.File.AppendAllText(savePath, "[CARD_ID]\t[Name]\t[HeroType]\n");
+                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到英雄皮肤（包括酒馆）如下：\n");
+                System.IO.File.AppendAllText(savePath, "# [CARD_ID]\t[Name]\t[HeroType]\n");
                 foreach (var record in GameDbf.CardHero.GetRecords())
                 {
                     string saveString;

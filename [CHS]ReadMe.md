@@ -2,6 +2,8 @@
 
 **H**earth**s**tone **Mod**ification Based on BepInEx 基于BepInEx的炉石修改，插件源代码位于[github.com/Pik-4/HsMod](https://github.com/Pik-4/HsMod)，插件不会收集您的任何信息；项目遵循`AGPL-3.0`，仅用作学习研究。
 
+HsMod计划开发基于Web的配置管理，如果你感兴趣，可以查看[#122](https://github.com/Pik-4/HsMod/discussions/122)
+
 **警告：中国大陆地区的炉石客户端默认启动了反作弊SDK，插件会尝试屏蔽相关反作弊功能，但无法保证您的账号安全。**
 
 ### 已实现的功能
@@ -57,11 +59,22 @@
 49. 支持信息展示（showinfo，需要启用插件，默认HTTP，端口58744）；支持显示佣兵养成进度、开包历史信息等。
 50. 支持接收炉石启动参数，如指定分辨率大小等。
 51. 支持Webshell，路径为/shell。需要在设置中开启，目前中文显示可能存在乱码。
-52. 允许通过Web读取本地文件，即解析静态页面。该功能尚在开发中，目前以`Hearthstone\website`作为根目录。
+52. 允许通过Web读取本地文件，即解析静态页面。该功能尚在开发中，目前以`Hearthstone\BepInEx\HsMod`作为根目录。
 53. ~~允许解除套牌识别限制，以开启万宁炉石。~~已被暴雪修复。
 54. 尝试禁用反作弊。
 
 ### 安装说明
+
+#### 编译
+
+```
+# .NET SDK: 8.x
+# Release ./HsMod/Release/HsMod.dll
+git clone --depth 1 --branch bepinex5 https://github.com/Pik-4/HsMod
+cd HsMod
+# dotnet restore --locked-mode
+dotnet build --configuration Release --no-restore
+```
 
 #### Windows
 
@@ -89,21 +102,21 @@ UniTask源自OpenMod.UniTask.2021.2.4.1的net48
 
 #### Mac
 
-1. Download the latest version of [BepInEx_unix](https://github.com/BepInEx/BepInEx/releases) and extract it to `Hearthstone/`
+1. Download the latest version of [BepInEx_macos_x64](https://github.com/BepInEx/BepInEx/releases) (BepInEx 5)and extract it to `Hearthstone/`
 
-2. ~~Download original [Mono](https://unity.bepinex.dev/corlibs/2021.3.40.zip) and [Unity](https://unity.bepinex.dev/libraries/2021.3.40.zip) libraries and unpack to Hearthstone/BepInEx/unstripped_corlib~~. Copy all `dll` which under the project folder `HsMod/UnstrippedCorlibUnix` (`cp HsMod/UnstrippedCorlibUnix/*  Hearthstone/BepInEx/unstripped_corlib/   ` ). ( PS. Mono and Unity version must same as Hearthstone ).
+2. ~~Download original [Mono](https://unity.bepinex.dev/corlibs/2021.3.40.zip) and [Unity](https://unity.bepinex.dev/libraries/2021.3.40.zip) libraries and unpack to Hearthstone/BepInEx/unstripped_corlib~~. Copy all `dll` which under the project folder `HsMod/UnstrippedCorlibUnix` (`cp HsMod/UnstrippedCorlibUnix/* /ApplicationsHearthstone/BepInEx/unstripped_corlib/   ` ). ( PS. Mono and Unity version must same as Hearthstone ).
 
-3. Edit the `run_bepinex.sh` file replacing the line `export DOORSTOP_CORLIB_OVERRIDE_PATH=""`with `DOORSTOP_CORLIB_OVERRIDE_PATH="$BASEDIR/BepInEx/unstripped_corlib"`
+3. Edit the `run_bepinex.sh` file replacing the line `export dll_search_path_override=""`with `dll_search_path_override="BepInEx/unstripped_corlib"`
 
 4. Edit the file `run_bepinex.sh` replacing the line `executable_name=""` with `executable_name="Hearthstone.app"`
 
 5. Run command in console `chmod u+x run_bepinex.sh`
 
-6. Get the [token](https://www.battlenet.com.cn/login/zh-cn/?app=wtcg) here and copy after `http://localhost:0/?ST=` and before `&accountId=`
+6. Get the [TOKEN](https://www.battlenet.com.cn/login/zh-cn/?app=wtcg) here and copy after `http://localhost:0/?ST=` and before `&accountId=`
 
    ```
    # Some verify url
-   https://www.battlenet.com.cn/login/zh-cn/?app=wtcg
+   https://account.battlenet.com.cn/login/zh-cn/?app=wtcg
    https://us.battle.net/login/en/?app=wtcg
    https://tw.battle.net/login/zh/?app=wtcg
    https://kr.battle.net/login/zh/?app=wtcg
@@ -111,25 +124,23 @@ UniTask源自OpenMod.UniTask.2021.2.4.1的net48
    ...
    ```
 
-7. Create a `client.config` file with the following content, instead of `token` - insert the token obtained in the previous step. Env value `xx.actual.battle.net`(cn is `cn.actual.battlenet.com.cn`); `xx` same as the token first two characters. E.g
+7. (Not Necessary)Create a `client.config` file with the following content, instead of `TOKEN` - insert the token obtained in the previous step. Env value `xx.actual.battle.net`(cn is `cn.actual.battlenet.com.cn`); `xx` same as the token first two characters. E.g
 
    ```
    [Config]
    Version = 3
    [Aurora]
-   VerifyWebCredentials = "token"
+   VerifyWebCredentials = "TOKEN"
    ClientCheck = 0
    Env.Override = 1
    Env = us.actual.battle.net
    ```
 
+   If the token becomes obsolete and the game stops opening, then you just need to update it in the `client.config`.
+
 8. Download the HsMod [Releases](https://github.com/Pik-4/HsMod/releases) and unzip to `Hearthstone/BepInEx/plugins`
 
-Now the game needs to be launched only through `./run_bepinex.sh`
-
-If the token becomes obsolete and the game stops opening, then you just need to update it in the `client.config`.
-
-Mac上首次运行可能会提示战网登录错误，请找到HsMod.cfg，修改激活插件即可，详细可参考 [#8](https://github.com/Pik-4/HsMod/issues/8#issuecomment-1344470389)。
+Now the game needs to be launched only through `./run_bepinex.sh TOKEN`  or  `./run_bepinex.sh` (When the command line does not contain a TOKEN, `client.config` is necessary).
 
 #### Linux
 

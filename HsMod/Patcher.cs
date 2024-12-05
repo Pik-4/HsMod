@@ -1,8 +1,7 @@
-using Blizzard.GameService.SDK.Client.Integration;
+﻿using Blizzard.GameService.SDK.Client.Integration;
 using Blizzard.T5.Core;
 using Blizzard.T5.Core.Time;
 using HarmonyLib;
-using PegasusShared;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,7 +12,6 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
-using static HsMod.Patcher;
 using static HsMod.PluginConfig;
 
 namespace HsMod
@@ -30,7 +28,7 @@ namespace HsMod
 
         public static void LoadPatch(Type loadType)
         {
-			try
+            try
             {
                 Harmony harmony;
                 int harmonyCount;
@@ -40,7 +38,7 @@ namespace HsMod
                 Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"{loadType.Name} => Patched {harmonyCount} methods");
                 AllHarmony.Add(harmony);
                 AllHarmonyName.Add(loadType.Name);
-			}
+            }
             catch (Exception ex)
             {
                 if (loadType == typeof(Patcher.PatchAntiCheat))
@@ -204,7 +202,7 @@ namespace HsMod
         public static void PatchAll()
         {
             LoadPatch(typeof(Patcher));
-			LoadPatch(typeof(Patcher.PatchAntiCheat));
+            LoadPatch(typeof(Patcher.PatchAntiCheat));
             LoadPatch(typeof(Patcher.PatchMisc));
             LoadPatch(typeof(Patcher.PatchEmote));
             LoadPatch(typeof(Patcher.PatchIGMMessage));
@@ -266,42 +264,43 @@ namespace HsMod
     //前置Patch为harmony补丁，后置Patch为反射
     public class Patcher
     {
-		public class PatchAntiCheat
+
+        public class PatchAntiCheat
         {
-			//禁用反作弊
-			[HarmonyPrefix]
-			[HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "OnLoginComplete")]
-			public static bool PatchAntiCheatManagerOnLoginComplete()
-			{
-				Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat OnLoginComplete feature is disabled.");
-				return false;
-			}
+            //禁用反作弊
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "OnLoginComplete")]
+            public static bool PatchAntiCheatManagerOnLoginComplete()
+            {
+                Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat OnLoginComplete feature is disabled.");
+                return false;
+            }
 
-			[HarmonyPrefix]
-			[HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "Shutdown")]
-			public static bool PatchAntiCheatManagerShutdown()
-			{
-				Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat Shutdown feature is disabled.");
-				return false;
-			}
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "Shutdown")]
+            public static bool PatchAntiCheatManagerShutdown()
+            {
+                Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat Shutdown feature is disabled.");
+                return false;
+            }
 
-			[HarmonyPrefix]
-			[HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "TryCallSDK")]
-			[HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "CallInterfaceCallSDK")]
-			public static bool PatchAntiCheatManagerTryCallSDK(ref string scriptId)
-			{
-				Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat TryCallSDK feature is disabled.");
-				return false;
-			}
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "TryCallSDK")]
+            [HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "CallInterfaceCallSDK")]
+            public static bool PatchAntiCheatManagerTryCallSDK(ref string scriptId)
+            {
+                Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat TryCallSDK feature is disabled.");
+                return false;
+            }
 
-			[HarmonyPrefix]
-			[HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "InnerSDKMethodCall")]
-			public static bool PatchAntiCheatManagerInnerSDKMethodCall(ref Action<string> handler, ref string args)
-			{
-				Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat InnerSDKMethodCall feature is disabled.");
-				return false;
-			}
-		}
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "InnerSDKMethodCall")]
+            public static bool PatchAntiCheatManagerInnerSDKMethodCall(ref Action<string> handler, ref string args)
+            {
+                Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat InnerSDKMethodCall feature is disabled.");
+                return false;
+            }
+        }
 
         public class PatchMisc
         {
@@ -469,6 +468,16 @@ namespace HsMod
                 return false;
             }
 
+            // login success 
+            [HarmonyPostfix]
+            [HarmonyPatch(typeof(LoginManager), "OnLoginComplete")]
+            public static void PatchOnLoginComplete()
+            {
+                Utils.OnHsLoginCompleted();
+                //Vars.Key("Application.SendExceptions")
+            }
+
+
             //禁用掉线
             [HarmonyPrefix]
             [HarmonyPatch(typeof(InactivePlayerKicker), "SetShouldCheckForInactivity")]
@@ -606,27 +615,27 @@ namespace HsMod
                 return isRewardToastShow.Value;
             }
 
-			//战令、成就等奖励领取提示
-			[HarmonyPrefix]
-			[HarmonyPatch(typeof(Hearthstone.Progression.RewardTrack), "HandleRewardGranted")]
-			public static bool PatchHandleRewardGranted(int rewardTrackId, int level, PegasusShared.RewardTrackPaidType paidType, List<PegasusUtil.RewardItemOutput> rewardItemOutput)      //隐藏通行证奖励
-			{
-				if (!isRewardToastShow.Value)
-				{
-					RewardTrackDbfRecord record = GameDbf.RewardTrack.GetRecord(rewardTrackId);
-					if (record == null)
-					{
-						return false;
-					}
+            //战令、成就等奖励领取提示
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(Hearthstone.Progression.RewardTrack), "HandleRewardGranted")]
+            public static bool PatchHandleRewardGranted(int rewardTrackId, int level, PegasusShared.RewardTrackPaidType paidType, List<PegasusUtil.RewardItemOutput> rewardItemOutput)      //隐藏通行证奖励
+            {
+                if (!isRewardToastShow.Value)
+                {
+                    RewardTrackDbfRecord record = GameDbf.RewardTrack.GetRecord(rewardTrackId);
+                    if (record == null)
+                    {
+                        return false;
+                    }
 
-					Hearthstone.Progression.RewardTrackManager.Get()?.GetRewardTrack(record.RewardTrackType)?.AckReward(rewardTrackId, level, paidType);
-					return false;
-				}
-				else return true;
-			}
+                    Hearthstone.Progression.RewardTrackManager.Get()?.GetRewardTrack(record.RewardTrackType)?.AckReward(rewardTrackId, level, paidType);
+                    return false;
+                }
+                else return true;
+            }
 
-			//测试补丁，屏蔽奖励显示
-			[HarmonyPrefix]
+            //测试补丁，屏蔽奖励显示
+            [HarmonyPrefix]
             [HarmonyPatch(typeof(Hearthstone.Progression.RewardPresenter), "ShowNextReward")]
             public static bool PatchRewardPresenterShowNextReward(Hearthstone.Progression.RewardPresenter __instance, ref Action onHiddenCallback)
             {
@@ -907,14 +916,6 @@ namespace HsMod
                 return list;
             }
 
-			//排队日志记录
-			[HarmonyPrefix]
-			[HarmonyPatch(typeof(SplashScreen), "UpdateQueueInfo")]
-			public static bool PatchUpdateQueueInfo(Network.QueueInfo queueInfo)
-			{
-                Debug.Log($"排队中，预计{queueInfo.secondsTilEnd}秒");
-				return true;
-			}
 
         }
 
@@ -1531,117 +1532,29 @@ namespace HsMod
 
         public class PatchHearthstone
         {
+            // fix #131
+            [HarmonyPostfix]
+            [HarmonyPatch(typeof(TagMap), "GetMap")]
+            public static void PatchTagMapGetMap(ref Dictionary<int, int> __result)
+            {
+                // todo: check call from;
+                // return a copy to prevent modification in foreach
+                __result = __result.ToList().ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            }
+
             //金卡钻石卡补丁
             [HarmonyPrefix]
             [HarmonyPatch(typeof(Entity), "GetPremiumType")]
             public static bool PatchGetPremiumType(Entity __instance, ref TAG_PREMIUM __result)
             {
-                try
-                {
-                    if (GameMgr.Get() != null && GameState.Get() != null && GameState.Get().IsGameCreatedOrCreating())
-                    {
-                        //跳过酒馆随从
-                        if (GameMgr.Get().IsBattlegrounds())
-                        {
-                            if (!isBgsGoldenEnable.Value || __instance.IsMinion() || __instance.IsQuest())
-                                return true;
-                        }
-
-                        Utils.CardState mGolden = goldenCardState.Value;
-                        Utils.CardState mMaxState = maxCardState.Value;
-
-                        //佣兵镀金
-                        int dbid = GameUtils.TranslateCardIdToDbId(__instance.GetCardId());
-                        bool mercDiamond = false;
-                        bool isMerc = false;
-                        if (Utils.CheckInfo.IsMercenarySkin(__instance.GetCardId(), out Utils.MercenarySkin skin))
-                        {
-                            isMerc = true;
-                            if (dbid == skin.Diamond)
-                            {
-                                mercDiamond = true;
-                            }
-                        }
-
-                        //屏蔽对手特效
-                        if (__instance.IsControlledByOpposingSidePlayer() && (!isOpponentGoldenCardShow.Value) && (!GameMgr.Get().IsBattlegrounds()))
-                        {
-                            __result = TAG_PREMIUM.NORMAL;
-                            if (isMerc)
-                            {
-                                __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.NORMAL);
-                                __instance.SetTag(GAME_TAG.HAS_DIAMOND_QUALITY, false);
-                            }
-                            return false;
-                        }
-
-
-                        //其他品质
-                        if (__instance.HasTag(GAME_TAG.HAS_DIAMOND_QUALITY) || __instance.HasTag(GAME_TAG.HAS_SIGNATURE_QUALITY) || mercDiamond)
-                        {
-                            if (__instance.HasTag(GAME_TAG.HAS_DIAMOND_QUALITY) || mercDiamond)
-                            {
-                                if (mMaxState == Utils.CardState.All || (mMaxState == Utils.CardState.OnlyMy && __instance.IsControlledByFriendlySidePlayer()))
-                                {
-                                    if (mercDiamond)
-                                    {
-                                        __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.DIAMOND);
-                                        __instance.SetTag(GAME_TAG.HAS_DIAMOND_QUALITY, true);
-                                    }
-                                    __result = TAG_PREMIUM.DIAMOND;
-                                    return false;
-                                }
-                            }
-
-                            if (__instance.HasTag(GAME_TAG.HAS_SIGNATURE_QUALITY) && isSignatureCardStateEnable.Value)
-                            {
-                                if (mMaxState == Utils.CardState.All || (mMaxState == Utils.CardState.OnlyMy && __instance.IsControlledByFriendlySidePlayer()))
-                                {
-                                    __result = TAG_PREMIUM.SIGNATURE;
-                                    __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.SIGNATURE);
-                                    return false;
-                                }
-                            }
-
-                            if ((mMaxState == Utils.CardState.Disabled) && (mGolden == Utils.CardState.Disabled))
-                            {
-                                __result = TAG_PREMIUM.NORMAL;
-                                if (isMerc)
-                                {
-                                    __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.NORMAL);
-                                    __instance.SetTag(GAME_TAG.HAS_DIAMOND_QUALITY, false);
-                                }
-                                return false;
-                            }
-                        }
-                        //金卡特效
-                        if (mGolden == Utils.CardState.All || (mGolden == Utils.CardState.OnlyMy && __instance.IsControlledByFriendlySidePlayer()))
-                        {
-                            __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.GOLDEN);
-                            __result = TAG_PREMIUM.GOLDEN;
-                            return false;
-                        }
-                        //禁用特效
-                        if (mGolden == Utils.CardState.Disabled)
-                        {
-                            __result = TAG_PREMIUM.NORMAL;
-                            if (isMerc)
-                            {
-                                __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.NORMAL);
-                                __instance.SetTag(GAME_TAG.HAS_DIAMOND_QUALITY, false);
-                            }
-                            return false;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex);
-                    Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex.StackTrace);
-                }
-                return true;
+                return Utils.GetPremiumType(ref __instance, ref __result);
             }
-
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(Actor), nameof(Actor.GetPremium))]
+            public static bool PatchActorGetPremiumType(ref TAG_PREMIUM __result, ref Entity ___m_entity, ref Actor __instance)
+            {
+                return Utils.GetPremiumType(ref ___m_entity, ref __result);
+            }
 
             //设置下个对手、用于获取战网标签
             [HarmonyTranspiler]
@@ -1825,11 +1738,30 @@ namespace HsMod
                                 Utils.TryReportOpponent();
                             }
                             string finalResult = "未知";
-							if (GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_BATTLEGROUNDS)
+							if (GameMgr.Get().GetGameType() != PegasusShared.GameType.GT_BATTLEGROUNDS)
+							{
+                            switch (playState)
+                            {
+                                case TAG_PLAYSTATE.WINNING:
+                                case TAG_PLAYSTATE.WON:
+                                    finalResult = "胜利";
+                                    break;
+                                case TAG_PLAYSTATE.CONCEDED:
+                                case TAG_PLAYSTATE.LOST:
+                                case TAG_PLAYSTATE.LOSING:
+                                    finalResult = "失败";
+                                    break;
+                                case TAG_PLAYSTATE.TIED:
+                                    finalResult = "平局";
+                                    break;
+                                default:
+                                    break;
+                            }
+							}
+							else
 							{
 								switch (GameState.Get().GetFriendlySidePlayer().GetHero().GetRealTimePlayerLeaderboardPlace())
 								{
-
 									case 1: finalResult = "第一名"; break;
 									case 2: finalResult = "第二名"; break;
 									case 3: finalResult = "第三名"; break;
@@ -1841,28 +1773,8 @@ namespace HsMod
 									default: break;
 								}
 							}
-							else
-							{
-								switch (playState)
-								{
-									case TAG_PLAYSTATE.WINNING:
-									case TAG_PLAYSTATE.WON:
-										finalResult = "胜利";
-										break;
-									case TAG_PLAYSTATE.CONCEDED:
-									case TAG_PLAYSTATE.LOST:
-									case TAG_PLAYSTATE.LOSING:
-										finalResult = "失败";
-										break;
-									case TAG_PLAYSTATE.TIED:
-										finalResult = "平局";
-										break;
-									default:
-										break;
-								}
-							}
 
-							string gameType = (GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_RANKED) ? GameMgr.Get().GetFormatType().ToString() : GameMgr.Get().GetGameType().ToString();
+                            string gameType = (GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_RANKED) ? GameMgr.Get().GetFormatType().ToString() : GameMgr.Get().GetGameType().ToString();
 
                             string gameRank = "-";
                             if ((GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_RANKED) && (GameMgr.Get().GetFormatType() != PegasusShared.FormatType.FT_UNKNOWN))
@@ -1880,26 +1792,8 @@ namespace HsMod
                             {
                                 finalResult += " => 已举报";
                             }
-							string directoryPath = System.IO.Path.Combine("BepinEx/Log", CommandConfig.GlobalHSUnitID);
-							string filePath = System.IO.Path.Combine(directoryPath, hsMatchLogPath.Value + "@" + DateTime.Today.ToString("yyyy-MM-dd") + ".log");
-
-							// 检查目录是否存在，如果不存在则创建
-							if (!System.IO.Directory.Exists(directoryPath))
-							{
-								System.IO.Directory.CreateDirectory(directoryPath);
-							}
-
-							if (!System.IO.File.Exists(filePath))
-							{
-								// 如果文件不存在，创建并写入初始内容
-								System.IO.File.WriteAllText(filePath, finalResult + "\n");
-							}
-							else
-							{
-								// 如果文件已存在，追加内容
-								System.IO.File.AppendAllText(filePath, finalResult + "\n");
-							}
-							Utils.CacheLastOpponentAccountID = null;
+                            System.IO.File.AppendAllText(CommandConfig.hsMatchLogPath, finalResult + "\n");
+                            Utils.CacheLastOpponentAccountID = null;
                         }
                     }
                 }
@@ -2087,7 +1981,7 @@ namespace HsMod
             //加载处理
             [HarmonyPrefix]
             [HarmonyPatch(typeof(Entity), "LoadCard")]
-            public static void PatchLoadCard(Entity __instance, ref string cardId, ref Entity.LoadCardData data)
+            public static void PatchLoadCard(Entity __instance, ref string cardId)
             {
                 string rawCardID = cardId;
                 if (cardId != null
@@ -2272,41 +2166,19 @@ namespace HsMod
             LoadCardEnd:    // todo: check Signature
                 try
                 {
+                    if (__instance.GetCard()?.GetControllerSide() == Player.Side.FRIENDLY)
+                        Utils.UpdateHeroTag(cardId);
                     __instance?.SetCardId(cardId);
-
-                    //EntityDef entityDef = DefLoader.Get().GetEntityDef(cardId);
-                    //if (entityDef.GetTag(GAME_TAG.EMOTECHARACTER) > 0)
-                    //{
-                    //    GameState gameState = GameState.Get();
-                    //    if (gameState == null)
-                    //    {
-                    //        return;
-                    //    }
-                    //    int entityId = gameState.GetPlayerBySide(Player.Side.FRIENDLY).GetEntityId();
-                    //    int tag = gameState.GetEntity(entityId).GetTag(GAME_TAG.HERO_ENTITY);
-                    //    gameState.GetEntity(tag).SetTag(GAME_TAG.EMOTECHARACTER, entityDef.GetTag(GAME_TAG.EMOTECHARACTER));
-                    //}
-                    //if (entityDef.GetTag(GAME_TAG.CORNER_REPLACEMENT_TYPE) > 0)
-                    //{
-                    //    GameState gameState2 = GameState.Get();
-                    //    if (gameState2 == null)
-                    //    {
-                    //        return;
-                    //    }
-                    //    int entityId2 = gameState2.GetPlayerBySide(Player.Side.FRIENDLY).GetEntityId();
-                    //    gameState2.GetEntity(entityId2).SetTag(GAME_TAG.CORNER_REPLACEMENT_TYPE, entityDef.GetTag(GAME_TAG.CORNER_REPLACEMENT_TYPE));
-                    //    new CornerSpellReplacementManager(false).UpdateCornerReplacements(CornerReplacementSpellType.NONE, CornerReplacementSpellType.NONE);
-                    //}
-
-                    __instance?.SetRealTimePremium(__instance.GetPremiumType());
                 }
                 catch (Exception ex)
                 {
                     Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex);
                     cardId = rawCardID;
                     __instance?.SetCardId(rawCardID);
+                }
+                finally
+                {
                     __instance?.SetRealTimePremium(__instance.GetPremiumType());
-
                 }
                 //return;
             }
@@ -2326,6 +2198,26 @@ namespace HsMod
                         __instance?.GetActor()?.SetEntity(__instance.GetEntity());
                         __instance?.GetActor()?.UpdateAllComponents();
                     }
+                    //if (__instance?.GetEntity()?.GetCard()?.GetControllerSide() == Player.Side.FRIENDLY)
+                    //{
+                    //    string cardId = __instance?.GetEntity()?.GetCardId();
+                    //    var cardType = __instance?.GetEntity()?.GetCardType();
+                    //    var cardPremium = __instance.GetEntity().GetPremiumType();
+                    //    if (cardType == TAG_CARDTYPE.HERO || cardType == TAG_CARDTYPE.HERO_POWER)
+                    //    {
+                    //        DefLoader.DisposableCardDef cardDef = DefLoader.Get().GetCardDef(cardId, cardPremium);
+
+                    //        if (!DefLoader.Get().HasLoadedEntityDefs())
+                    //        {
+                    //            DefLoader.Get().LoadAllEntityDefs();
+                    //        }
+                    //        __instance?.GetActor()?.SetCard(__instance);
+                    //        __instance?.GetActor()?.SetCardDef(cardDef);
+                    //        __instance?.GetActor()?.SetEntity(__instance.GetEntity());
+                    //        __instance?.GetActor()?.SetPremium(cardPremium);
+                    //        __instance?.GetActor()?.UpdateAllComponents();
+                    //    }
+                    //}
                 }
                 catch (Exception ex)
                 {
@@ -2392,7 +2284,6 @@ namespace HsMod
                     else return true;
                 }
             }
-
 
             //游戏面板替换
             [HarmonyPrefix]
@@ -2550,6 +2441,15 @@ namespace HsMod
         //移除推销;拦截削弱补丁信息
         public class PatchIGMMessage
         {
+            //排队人数
+            [HarmonyPostfix]
+            [HarmonyPatch(typeof(SplashScreen), "UpdateQueueInfo")]
+            public static void PatchSplashScreenUpdateQueueInfo(ref Network.QueueInfo queueInfo)
+            {
+                Debug.Log($"排队中，预计{queueInfo.secondsTilEnd}秒");
+            }
+
+
             //拦截削弱补丁信息
             [HarmonyPostfix]
             [HarmonyPatch(typeof(CardListPopup), "Show")]
@@ -2578,6 +2478,24 @@ namespace HsMod
                 if (isIGMMessageShow.Value) return true;
                 __result = 0;
                 return false;
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(InnKeepersSpecial), "ShowAdAndIncrementViewCountWhenReady")]
+            public static bool PatchInnKeepersSpecial()
+            {
+                if (isIGMMessageShow.Value) return true;
+                return false;
+            }
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(InnKeepersSpecial), "UpdateAdJson")]
+            public static bool PatchUpdateAdJson(ref string jsonResponse, ref object param)
+            {
+                if (!isIGMMessageShow.Value)
+                {
+                    jsonResponse = "";
+                }
+                return true;
             }
 
             [HarmonyPrefix]

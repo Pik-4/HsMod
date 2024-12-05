@@ -10,6 +10,12 @@ body:
           - label: I have searched the issues and haven't found anything relevant/我搜索了这些问题，没有找到任何相关信息
             required: true
             
+          - label: I have read the README and haven't found anything relevant/我认真阅读了README，没有找到任何相关信息
+            required: true
+            
+          - label: I have tried repairing Hearthstone and reinstalling HsMod according to the ReadMe, but the problem persists/我尝试过修复炉石，并按照ReadMe重新安装HsMod，但是问题依然存在。
+            required: true
+            
           - label: I will upload LogOutput.log, HsMod.cfg, HsSkins.cfg /我将上传LogOutput.log, HsMod.cfg, HsSkins.cfg
             required: true
             
@@ -53,19 +59,6 @@ body:
         label: Logs/日志
         description: If applicable, add crash or any other logs to help us figure out the problem./如果适用，请添加崩溃或任何其他日志以帮助我们找出问题。
         
-        
-  - type: textarea
-    attributes:
-        label: Environment info/环境信息
-        value: |
-          - OS Platform/操作系统:
-          - HsMod Version/HsMod版本:
-          - BepInEx Version/BepInEx版本:
-          - Hearthstone Version/炉石版本:
-          - Unity(unstripped_corlib) Version/Unity(unstripped_corlib)版本:
-    validations:
-        required: true
-
 
   - type: textarea
     attributes:

@@ -1,4 +1,5 @@
 ﻿{
+	"hsmod.declaration": "[开源软件] HsMod仅在GitHub进行分发，谨防被骗。\nhttps://github.com/Pik-4/HsMod",
 	"isPluginEnable.name": "HsMod状态",
 	"isPluginEnable.label": "全局",
 	"isPluginEnable.description": "是否启用插件（修改该选项后建议重启炉石）",
@@ -157,7 +158,7 @@
 	"isSkinDefalutHeroEnable.description": "如果可以，将对战英雄皮肤都替换为默认皮肤",
 	"skinHero.name": "英雄",
 	"skinHero.label": "皮肤",
-	"skinHero.description": "（慎用，非挂机不建议使用，优先级低于默认英雄。一般情况下建议从文件加载英雄皮肤，修改完后F4更新；如果再对局中，则还需要模拟拔线）英雄的偏好ID，-1表示不做修改",
+	"skinHero.description": "（慎用，非挂机不建议使用，优先级低于默认英雄。一般情况下建议从HsSkins.cfg加载英雄皮肤，修改完后F4更新；如果再对局中，则还需要模拟拔线）英雄的偏好ID，-1表示不做修改",
 	"skinOpposingHero.name": "对手英雄",
 	"skinOpposingHero.label": "皮肤",
 	"skinOpposingHero.description": "（慎用，非挂机不建议使用，优先级低于默认英雄）对手英雄的偏好ID，-1表示不做修改",
@@ -293,9 +294,9 @@
 	"fakeRandomPremium.name": "品质类型",
 	"fakeRandomPremium.label": "模拟",
 	"fakeRandomPremium.description": "指定品质（基于随机品质）",
-	"fakeCatchupCount.name": "追赶包卡牌数量，小于5时，数量随机",
+	"fakeCatchupCount.name": "Catchup card num",
 	"fakeCatchupCount.label": "模拟",
-	"fakeCatchupCount.description": "Catchup card num",
+	"fakeCatchupCount.description": "追赶包卡牌数量，小于5时，数量随机",
 	"fakeCardID1.name": "卡牌1",
 	"fakeCardID1.label": "模拟",
 	"fakeCardID1.description": "Card 1 DbID.",
@@ -325,5 +326,12 @@
 	"fakeCardID5.description": "Card 5 DbID.",
 	"fakeCardPremium5.name": "卡牌5品质",
 	"fakeCardPremium5.label": "模拟",
-	"fakeCardPremium5.description": "Card 5 Premium."
+	"fakeCardPremium5.description": "Card 5 Premium.",
+	"PluginEnable": "插件状态：运行",
+	"PluginDisable": "插件状态：停止",
+	"HsSkins.cfg": "# 皮肤映射表\n# 说明：主要用作英雄（酒馆、对战）类皮肤替换；按下F4会在BepInEx目录下生成当前全部皮肤信息；\n# 格式：原始皮肤:替换皮肤（:为半角字符）；下一行是一个样例(玛法里奥·怒风替换成大导师玛法里奥)，可以删除\n#      亦支持a:b,c,d这种多值映射，实现随机皮肤。\n274:57761\n\n",
+	"CardState.Default": "默认（不做修改）",
+	"CardState.OnlyMy": "仅友方有效",
+	"CardState.All": "全部生效",
+	"CardState.Disabled": "禁用特效"
 }

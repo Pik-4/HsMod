@@ -1,0 +1,277 @@
+﻿<h1 id='hsmod'>HsMod</h1>
+<p><strong>H</strong>earth<strong>s</strong>tone <strong>Mod</strong>ification Based on BepInEx 基于BepInEx的炉石修改，插件源代码位于<a href='https://github.com/Pik-4/HsMod'>github.com/Pik-4/HsMod</a>，插件不会收集您的任何信息；项目遵循<code>AGPL-3.0</code>，仅用作学习研究。</p>
+<p>HsMod计划开发基于Web的配置管理，如果你感兴趣，可以查看<a href='https://github.com/Pik-4/HsMod/discussions/122'>#122</a></p>
+<p><strong>警告：中国大陆地区的炉石客户端默认启动了反作弊SDK，插件会尝试屏蔽相关反作弊功能，但无法保证您的账号安全。</strong></p>
+<h3 id='已实现的功能'>已实现的功能</h3>
+<ol start=''>
+    <li>支持齿轮快慢8倍速（设置中允许扩展到快慢32倍）</li>
+    <li>允许使用VerifyWebCredentials登录（亦支持命令行启动，不需要启动战网）。</li>
+    <li>屏蔽错误报告，当发生异常时，不会向暴雪报告错误信息。</li>
+    <li>禁用掉线，允许长时间无操作</li>
+    <li>允许报错自动退出</li>
+    <li>允许移除窗口焦点</li>
+    <li>解除窗口大小化限制</li>
+    <li>拦截弹窗（如无法匹配等）提示。</li>
+    <li>移除中国特色提示</li>
+    <li>支持移除削弱补丁提示，移除广告推销，移除天梯结算奖励等弹窗</li>
+    <li>允许屏蔽对局结束的升级提示、结算提示</li>
+    <li>允许屏蔽战令、成就等奖励领取提示</li>
+    <li>允许快速开包，空格一次开5张</li>
+    <li>允许在开包时自动分解全额分解的卡牌</li>
+    <li>允许显示游戏帧率信息</li>
+    <li>允许修改游戏帧率</li>
+    <li>支持在收藏、英雄、卡背、打击特效、酒馆面板等场景，右键选中卡牌时显示Dbid</li>
+    <li>支持收藏显示9+卡牌实际数量</li>
+    <li>允许在0-0（可以不组卡牌）时放弃对决</li>
+    <li>允许自动领取竞技场、对决等奖励（结束时点包裹）</li>
+    <li>允许进入炉石开发者模式</li>
+    <li>好友观战自动旋转卡牌、自动观战双方</li>
+    <li>支持炉边聚会模拟定位</li>
+    <li>允许自动屏蔽对手表情或设置对方表情上限；支持屏蔽思考表情；支持屏蔽鲍勃语音；支持对战跳过英雄介绍</li>
+    <li>支持表情无冷却（表情发送最小间隔1.5秒）</li>
+    <li>支持表情快捷键</li>
+    <li>支持快速战斗（跳过部分动画，比齿轮更丝滑，开启时屏蔽终结特效，该选项可在酒馆与佣兵(PVE)生效，佣兵可能在最终死亡结算有卡顿，）</li>
+    <li>支持炉石自动金卡、钻石卡</li>
+    <li>允许单独屏蔽对手卡牌特效</li>
+    <li>允许显示对手完整战网昵称</li>
+    <li>允许点击头像获取酒馆玩家昵称</li>
+    <li>允许对战中添加对手</li>
+    <li>允许在传说前显对手示天梯等级</li>
+    <li>支持标记对手已知卡牌</li>
+    <li>允许使用快捷键静音炉石</li>
+    <li>允许自动举报对手；当自动举报对手启用时，可以自动生成对局记录</li>
+    <li>支持模拟拔线（需要开启快捷键）</li>
+    <li>支持一键自动分解全额分解的卡牌（需要开启快捷键）</li>
+    <li>支持一键移除<code>新！</code>（需要开启快捷键，可能需要重新进入收藏，佣兵可能重启后失效）</li>
+    <li>支持修改对战英雄皮肤、酒馆英雄皮肤、终结特效、对战面板、酒馆面板、幸运币等皮肤信息。（需要配置<code>HsSkins.cfg</code>，或在设置中修改，对局中更新需要在按下<code>F4</code>保存后，模拟拔线）</li>
+    <li>支持修改卡背（对局中自动生效）</li>
+    <li>支持佣兵随机皮肤，强制钻石皮肤等</li>
+    <li>支持屏蔽佣兵宝箱、天梯奖励等弹窗</li>
+    <li>支持屏蔽佣兵对战界面缩放</li>
+    <li>支持模拟开包（支持结果随机，支持自定义卡包类型、数量、稀有度、品质等信息；支持模拟固定结果）</li>
+    <li>支持设备模拟（允许领取iOS、Android等设备的卡包卡背，可能需要一局对战）</li>
+    <li>支持金币购买纳克萨玛斯、黑石山、探险者协会等冒险（也支持卡拉赞，但无法打序章）</li>
+    <li>允许强开卡拉赞（不能打序章，未通关前不能跳关）</li>
+    <li>支持信息展示（showinfo，需要启用插件，默认HTTP，端口58744）；支持显示佣兵养成进度、开包历史信息等。</li>
+    <li>支持接收炉石启动参数，如指定分辨率大小等。</li>
+    <li>支持Webshell，路径为/shell。需要在设置中开启，目前中文显示可能存在乱码。</li>
+    <li>允许通过Web读取本地文件，即解析静态页面。该功能尚在开发中，目前以<code>Hearthstone\BepInEx\HsMod</code>作为根目录。</li>
+    <li><del>允许解除套牌识别限制，以开启万宁炉石。</del>已被暴雪修复。</li>
+    <li>尝试禁用反作弊。</li>
+
+</ol>
+<h3 id='安装说明'>安装说明</h3>
+<h4 id='编译'>编译</h4>
+<pre><code># .NET SDK: 8.x
+# Release ./HsMod/Release/HsMod.dll
+git clone --depth 1 --branch bepinex5 https://github.com/Pik-4/HsMod
+cd HsMod
+# dotnet restore --locked-mode
+dotnet build --configuration Release --no-restore
+</code></pre>
+<h4 id='windows'>Windows</h4>
+<ol start=''>
+    <li>
+        <p>编译<code>HsMod</code>或从<code>Releases</code>下载<code>HsMod.dll</code>。</p>
+    </li>
+    <li>
+        <p>配置<code>BepInEx</code>。</p>
+        <p>2.1. 下载<a href='https://github.com/BepInEx/BepInEx/releases'>BepInEx_x86</a>，并将其解压到炉石根目录<code>Hearthstone\</code>下。</p>
+        <p>2.2. 创建一个目录<code>Hearthstone\BepInEx\unstripped_corlib\</code>；<del>下载<a href='https://unity.bepinex.dev/corlibs/2021.3.40.zip'>Mono</a>和<a href='https://unity.bepinex.dev/libraries/2021.3.40.zip'>Unity</a>，并将其解压在该目录</del>；。将项目目录HsMod/UnstrippedCorlib下所有dll复制到unstripped_corlib目录下。 </p>
+        <p>2.3. 修改<code>Hearthstone\doorstop_config.ini</code>，将<code>dllSearchPathOverride=</code> 替换成<code>dllSearchPathOverride=BepInEx\unstripped_corlib</code></p>
+        <p>注：<a href='https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.2'>BepInEx 5.4.23.2</a>中， 修改<code>Hearthstone\doorstop_config.ini</code>，将<code>dll_search_path_override =</code> 替换成<code>dll_search_path_override = BepInEx\unstripped_corlib</code></p>
+    </li>
+    <li>
+        <p>将<code>HsMod.dll</code>存放在<code>Hearthstone\BepInEx\plugins</code>。</p>
+    </li>
+
+</ol>
+<p>注：Windows的unity和mono，从<a href='https://unity.com/ja/releases/editor/whats-new/2021.3.40'>unity editor</a>中提取：</p>
+<p>unity位于<code>.\Unity 2021.3.40f1\Editor\Data\PlaybackEngines\windowsstandalonesupport\Variations\win32_player_development_mono\Data\Managed</code></p>
+<p>mono位于<code>.\Unity 2021.3.40f1\Editor\Data\MonoBleedingEdge\lib\mono\unityjit-win32</code>，部分文件位于<code>unityjit-win32\Facades</code>）</p>
+<p>UniTask源自OpenMod.UniTask.2021.2.4.1的net48</p>
+<h4 id='mac'>Mac</h4>
+<ol start=''>
+    <li>
+        <p>Download the latest version of <a href='https://github.com/BepInEx/BepInEx/releases'>BepInEx_unix</a> and extract it to <code>Hearthstone/</code></p>
+    </li>
+    <li>
+        <p><del>Download original <a href='https://unity.bepinex.dev/corlibs/2021.3.40.zip'>Mono</a> and <a href='https://unity.bepinex.dev/libraries/2021.3.40.zip'>Unity</a> libraries and unpack to Hearthstone/BepInEx/unstripped_corlib</del>. Copy all <code>dll</code> which under the project folder <code>HsMod/UnstrippedCorlibUnix</code> (<code>cp HsMod/UnstrippedCorlibUnix/*  Hearthstone/BepInEx/unstripped_corlib/</code> ). ( PS. Mono and Unity version must same as Hearthstone ).</p>
+    </li>
+    <li>
+        <p>Edit the <code>run_bepinex.sh</code> file replacing the line <code>export DOORSTOP_CORLIB_OVERRIDE_PATH=&quot;&quot;</code>with <code>DOORSTOP_CORLIB_OVERRIDE_PATH=&quot;$BASEDIR/BepInEx/unstripped_corlib&quot;</code></p>
+    </li>
+    <li>
+        <p>Edit the file <code>run_bepinex.sh</code> replacing the line <code>executable_name=&quot;&quot;</code> with <code>executable_name=&quot;Hearthstone.app&quot;</code></p>
+    </li>
+    <li>
+        <p>Run command in console <code>chmod u+x run_bepinex.sh</code></p>
+    </li>
+    <li>
+        <p>Get the <a href='https://www.battlenet.com.cn/login/zh-cn/?app=wtcg'>token</a> here and copy after <code>http://localhost:0/?ST=</code> and before <code>&amp;accountId=</code></p>
+<pre><code># Some verify url
+https://account.battlenet.com.cn/login/zh-cn/?app=wtcg
+https://us.battle.net/login/en/?app=wtcg
+https://tw.battle.net/login/zh/?app=wtcg
+https://kr.battle.net/login/zh/?app=wtcg
+https://eu.battle.net/login/zh/?app=wtcg
+...
+</code></pre>
+    </li>
+    <li>
+        <p>Create a <code>client.config</code> file with the following content, instead of <code>token</code> - insert the token obtained in the previous step. Env value <code>xx.actual.battle.net</code>(cn is <code>cn.actual.battlenet.com.cn</code>); <code>xx</code> same as the token first two characters. E.g</p>
+<pre><code>[Config]
+Version = 3
+[Aurora]
+VerifyWebCredentials = &quot;token&quot;
+ClientCheck = 0
+Env.Override = 1
+Env = us.actual.battle.net
+</code></pre>
+    </li>
+    <li>
+        <p>Download the HsMod <a href='https://github.com/Pik-4/HsMod/releases'>Releases</a> and unzip to <code>Hearthstone/BepInEx/plugins</code></p>
+    </li>
+
+</ol>
+<p>Now the game needs to be launched only through <code>./run_bepinex.sh</code></p>
+<p>If the token becomes obsolete and the game stops opening, then you just need to update it in the <code>client.config</code>.</p>
+<p>Mac上首次运行可能会提示战网登录错误，请找到HsMod.cfg，修改激活插件即可，详细可参考 <a href='https://github.com/Pik-4/HsMod/issues/8#issuecomment-1344470389'>#8</a>。</p>
+<h4 id='linux'>Linux</h4>
+<ol start=''>
+    <li>
+        <p>编译<code>HsMod</code>或从<code>Releases</code>下载<code>HsMod.dll</code>。</p>
+    </li>
+    <li>
+        <p>参考<a href='https://github.com/0xf4b1/hearthstone-linux'>0xf4b1/hearthstone-linux</a>安装Linux版Hearthstone。（理论上此时会配置好client.config）</p>
+    </li>
+    <li>
+        <p>下载 <a href='https://github.com/BepInEx/BepInEx/releases'>BepInEx_unix</a>（注：目前采用BepInEx5）并将其解压到炉石根目录<code>hearthstone/</code>下。</p>
+    </li>
+    <li>
+        <p>创建一个目录<code>hearthstone/BepInEx/unstripped_corlib/</code>；</p>
+        <ol start=''>
+            <li>
+                <p><del>下载<a href='https://unity.bepinex.dev/corlibs/2021.3.40.zip'>Mono</a>和<a href='https://unity.bepinex.dev/libraries/2021.3.40.zip'>Unity</a>，解压提取dll，将所有dll复制到该目录下目录下。</del></p>
+            </li>
+            <li>
+                <p>将项目目录<code>HsMod/UnstrippedCorlibUnix</code>下所有的.dll复制到该目录下</p>
+<pre><code class='language-shell' lang='shell'>cp HsMod/UnstrippedCorlibUnix/UniTask* hearthstone/BepInEx/unstripped_corlib/
+</code></pre>
+            </li>
+
+        </ol>
+        <p>注：也可直接将项目目录<code>HsMod/UnstrippedCorlibUnix</code>下所有<code>.dll</code>复制到该目录下；UniTask源自OpenMod.UniTask.2021.2.4.1的net48；</p>
+    </li>
+    <li>
+        <p>修改<code>unix_bepinex.sh</code></p>
+        <ol start=''>
+            <li>替换 <code>export DOORSTOP_CORLIB_OVERRIDE_PATH=&quot;&quot;</code>为 <code>DOORSTOP_CORLIB_OVERRIDE_PATH=&quot;$BASEDIR/BepInEx/unstripped_corlib&quot;</code></li>
+            <li>替换<code>executable_name=&quot;&quot;</code> 为 <code>executable_name=&quot;Bin/Hearthstone.x86_64&quot;</code></li>
+            <li>替换完成后，执行<code>sed -i &quot;s/\r/ /g&quot; ./run_bepinex.sh</code>修改文件结尾换行符，以匹配Linux文件系统。</li>
+
+        </ol>
+    </li>
+    <li>
+        <p>如果配置正确，此时目录结构应该如下。</p>
+<pre><code>hsmod@hsmod:~/hearthstone-linux/hearthstone$ ls -alh
+drwxrwxr-x 9 a a 4.0K Jan 12 12:07 .
+drwxrwxr-x 9 a a 4.0K Jan 12 09:27 ..
+drwxrwxr-x 4 a a 4.0K Jan 12 11:52 BepInEx
+drwxrwxr-x 3 a a 4.0K Jan 12 12:07 Bin
+-rw-rw-r-- 1 a a 1.4K Aug 30 02:53 changelog.txt
+-rw-rw-r-- 1 a a  103 Jan 12 11:16 client.config
+drwxrwxr-x 3 a a 4.0K Jan 12 10:46 Data
+drwxrwxr-x 2 a a 4.0K Jan 12 11:46 doorstop_libs
+-rw-rw-r-- 1 a a    5 Jan 12 09:27 .locale
+-rwxrwxr-x 1 a a 295K Jan 12 11:16 login
+drwxrwxr-x 7 a a 4.0K Jan 12 12:07 Logs
+drwxrwxr-x 5 a a 4.0K Jan 12 09:27 .ngdp
+-rw-rw-r-- 1 a a    3 Jan 12 09:27 .region
+-rwxrwxr-x 1 a a 4.8K Jan 12 12:07 run_bepinex.sh
+drwxrwxr-x 3 a a 4.0K Jan 12 10:47 Strings
+-rw-rw-r-- 1 a a   48 Jan 12 11:23 token
+-rw-rw-r-- 1 a a   12 Jan 12 11:16 .unity
+-rw-rw-r-- 1 a a   21 Jan 12 10:47 .version
+</code></pre>
+    </li>
+    <li>
+        <p>如果未配置<code>client.config</code>，参考MacOS安装说明中6-7步，配置client.config</p>
+    </li>
+    <li>
+        <p>将<code>HsMod.dll</code>存放在<code>hearthstone/BepInEx/plugins</code>目录下（如果plugins目录不存在，需要手动创建）。</p>
+    </li>
+    <li>
+        <p>为<code>run_bepinex.sh</code>赋予执行权限</p>
+<pre><code class='language-shell' lang='shell'>chmod u+x run_bepinex.sh
+</code></pre>
+    </li>
+    <li>
+        <p>执行<code>./run_bepinex.sh</code>，享受炉石吧。</p>
+    </li>
+
+</ol>
+<h3 id='版本说明'>版本说明</h3>
+<p>如HsMod版本<code>3.0.0.0</code>：</p>
+<p>第一位 3 =&gt; 炉石大版本。例如： 3 =&gt; 26</p>
+<p>第二位 0 =&gt; 炉石在该版本更新次数，不与炉石小版本对应；此外，当炉石发生更新，但<code>Assembly-CSharp.dll</code>等文件没有变化时，该数字不会更新。例如：0 =&gt; 26.x.y.z</p>
+<p>第三位 0 =&gt; 当HsMod在该炉石版本有新功能时，此数字+1；当第二位发生变化时，此数字置零。</p>
+<p>第四位 0 =&gt; 编译版本。主要记录修复bug次数，与第三位对应。</p>
+<p>炉石版本更新不一定会导致HsMod失效，如果HsMod插件功能正常，可以不随Release更新。HsMod更新特性可参考commit记录。</p>
+<h3 id='补充说明'><strong>补充说明</strong></h3>
+<ol start=''>
+    <li>插件不可放置在含有中文的目录下，即炉石安装路径不能含有中文。</li>
+    <li>本插件可能与基于<code>Assembly-CSharp.dll</code>的修改冲突，修改<code>Assembly-CSharp.dll</code>可能导致IL指令定位异常，进而造成相关Patch无法生效；还可能与其他BepInEx插件（例如佣兵、MixMod）冲突，原因是同一个方法可能在两个插件中都存在Patch，当有多个Patch时，运行结果可能会异常，本插件没有检测原方法是否被修改。</li>
+    <li>皮肤的配置文件在<code>Hearthstone\BepInEx\config\HsSkins.cfg</code>。若无，则在运行游戏后自动创建。</li>
+    <li><code>F4</code>为固定快捷键，用于获取游戏内部分信息（相关信息存放在<code>Hearthstone\BepInEx\</code>目录下）、<strong>更新皮肤配置</strong>、重启Web服务等。其余快捷键均可自定义配置。</li>
+    <li>本插件在默认状态下，几乎全部的功能均需要手动开启；插件大部分功能能在配置中找到说明，少部分功能只在Patch中提及（如最小化限制）。</li>
+    <li>本插件Web Server（即Showinfo）的默认端口为58744，一般情况下，监听本地所有IP，使用云服务器时，请注意防火墙、安全组等配置。</li>
+    <li>对局统计所使用的log文件是<code>BepInEx\HsMatch.log</code>，可在设置中修改。（字段以<code>,</code>分隔）</li>
+    <li>出现问题时先尝试删除相关<code>.cfg</code>配置文件（一般位于<code>BepInEx\config\</code>），进行重新配置；如果依然存在问题，请带上<code>HsMod.cfg</code>提交<a href='https://github.com/Pik-4/HsMod/issues'>Issues</a>，但不保证及时解答。</li>
+    <li><code>GetHsLib.py</code>用于更新炉石自有运行库，<code>install.bat</code>用于将编译好的<code>HsMod.dll</code>复制到默认炉石目录（前提是BepInEx已经配置好）。此外，在push修改版本号后（PluginInfo.cs发生变化后），会自动生成<a href='https://github.com/Pik-4/HsMod/releases'>release</a>。</li>
+    <li>如果出现皮肤显示异常，请检查<code>HsSkins.cfg</code>，并尝试删除<code>HsMod.cfg</code>重新进行配置。</li>
+    <li>如果修改设置无法保存，请检查是否启用其他炉石插件。</li>
+    <li>BepInEx请选择<strong>BepInEx 5</strong>，由于BepInEx 6目前还在pre-release，暂时不做适配。</li>
+
+</ol>
+<h3 id='clientconfig'>client.config</h3>
+<p><code>client.config</code>用于绕过战网启动炉石，该文件位于Hearthstone.exe所在文件夹，内容如下</p>
+<pre><code class='language-config' lang='config'>[Config]
+Version = 3
+[Aurora]
+VerifyWebCredentials = &quot;VerifyWebCredentials&quot;
+ClientCheck = 0
+Env.Override = 1
+Env = us.actual.battle.net
+</code></pre>
+<p>一些token获取链接</p>
+<pre><code class='language-url' lang='url'>https://account.battlenet.com.cn/login/zh-cn/?app=wtcg
+https://tw.battle.net/login/zh/?app=wtcg
+https://kr.battle.net/login/zh/?app=wtcg
+https://us.battle.net/login/en/?app=wtcg
+https://eu.battle.net/login/en/?app=wtcg
+</code></pre>
+<p>在启用插件后，支持<code>./Hearthstone.exe VerifyWebCredentials</code> 命令启动炉石（<del>但需要有client.config文件</del>，现在不需要了！）。</p>
+<p>注意：中国的<code>Env</code>参数为<code>cn.actual.battlenet.com.cn</code>。</p>
+<h3 id='todo'>TODO</h3>
+<ol start=''>
+    <li>整理ReadMe，更新Wiki等；整理配置与Patch之间关系；多语言支持</li>
+    <li>游戏内一键更换英雄皮肤，目前只能通过模拟掉线更新</li>
+    <li>重构Showinfo相关Web页面。</li>
+    <li>适配Mac</li>
+    <li>修复佣兵相关功能</li>
+
+</ol>
+<h3 id='参考'>参考</h3>
+<ol start=''>
+    <li><a href='https://4pda.to/forum/index.php?showtopic=870696&amp;st=4780#entry114865283'>MixMod_4pda</a></li>
+    <li><a href='https://github.com/DeNcHiK3713/MixMod'>MixMod_github</a></li>
+    <li><a href='https://hearthmod.com/'>Hearthstone Advanced Mod</a></li>
+    <li><a href='https://mod.3dmgame.com/read/3'>从0开始教你使用BepInEx为unity游戏制作插件Mod</a></li>
+    <li><a href='https://docs.bepinex.dev/'>BepInEx Docs</a></li>
+    <li><a href='https://harmony.pardeike.net/articles/intro.html'>Harmony</a></li>
+    <li><a href='https://en.wikipedia.org/wiki/List_of_CIL_instructions'>List of CIL instructions</a></li>
+    <li><a href='https://github.com/0xf4b1/hearthstone-linux'>hearthstone-linux</a></li>
+
+</ol>
+<p>&nbsp;</p>

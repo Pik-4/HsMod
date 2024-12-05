@@ -1,4 +1,5 @@
 ﻿{
+  "hsmod.declaration": "[Free Software] Distributed only on GitHub.\nhttps://github.com/Pik-4/HsMod",
   "isPluginEnable.name": "HsMod Status",
   "isPluginEnable.label": "Global",
   "isPluginEnable.description": "Enable or disable the plugin (suggested to restart Hearthstone after changing this setting)",
@@ -157,7 +158,7 @@
   "isSkinDefalutHeroEnable.description": "Replace opponent hero skin with default skin if possible",
   "skinHero.name": "Hero",
   "skinHero.label": "Skin",
-  "skinHero.description": "(Use with caution; not recommended for non-AFK. Lower priority than default hero. Typically, load hero skins from files, then press F4 to update. If in-game, also requires in-game disconnect simulation) Preferred hero ID, -1 means no modification",
+  "skinHero.description": "(Use with caution; not recommended for non-AFK. Lower priority than default hero. Typically, load hero skins from HsSkins.cfg, then press F4 to update. If in-game, also requires in-game disconnect simulation) Preferred hero ID, -1 means no modification",
   "skinOpposingHero.name": "Opponent Hero",
   "skinOpposingHero.label": "Skin",
   "skinOpposingHero.description": "(Use with caution; not recommended for non-AFK. Lower priority than default hero) Preferred opponent hero ID, -1 means no modification",
@@ -293,9 +294,9 @@
   "fakeRandomPremium.name": "Quality Type",
   "fakeRandomPremium.label": "Simulation",
   "fakeRandomPremium.description": "Specify quality (based on random quality)",
-  "fakeCatchupCount.name": "Catchup Card Count, random if less than 5",
+  "fakeCatchupCount.name": "Catchup card num",
   "fakeCatchupCount.label": "Simulation",
-  "fakeCatchupCount.description": "Catchup card num",
+  "fakeCatchupCount.description": "Catchup Card Count, random if less than 5",
   "fakeCardID1.name": "Card 1",
   "fakeCardID1.label": "Simulation",
   "fakeCardID1.description": "Card 1 DbID",
@@ -325,5 +326,12 @@
   "fakeCardID5.description": "Card 5 DbID",
   "fakeCardPremium5.name": "Card 5 Quality",
   "fakeCardPremium5.label": "Simulation",
-  "fakeCardPremium5.description": "Card 5 Premium"
+  "fakeCardPremium5.description": "Card 5 Premium",
+  "PluginEnable": "Plugin status: Running",
+  "PluginDisable": "Plugin status: Stopped",
+  "HsSkins.cfg": "# Skin mapping table\n# Description: Mainly used for hero (tavern, battle) skin replacement; Press F4 to generate all current skin information in the BepInEx directory;\n# Format: original skin: replacement skin (: is a half-width character); the next line is an example (Malfurion Stormrage is replaced by Grandmaster Malfurion), which can be deleted\n#     It also supports multi-value mapping such as a:b,c,d to achieve random skin.\n274:57761\n\n",
+  "CardState.Default": "Default (no modification)",
+  "CardState.OnlyMy": "Only available to friendly players",
+  "CardState.All": "All available",
+  "CardState.Disabled": "Disable special effects"
 }

@@ -1,6 +1,7 @@
-using Assets;
+﻿using Assets;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using static HsMod.PluginConfig;
@@ -9,236 +10,92 @@ namespace HsMod
 {
     public class WebPage
     {
-        public static StringBuilder Webshell()
+        public const string Viewport = "<meta name=\"viewport\" content=\"width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0\">";
+        private static string GenerateBtn()
         {
-            if (string.IsNullOrEmpty(WebServer.shellCommand))
-                return new StringBuilder();
-            StringBuilder stringBuilder = new StringBuilder();
-            try
-            {
-                System.Diagnostics.Process CmdProcess = new System.Diagnostics.Process();
-                CmdProcess.StartInfo.FileName = "cmd.exe";
-                CmdProcess.StartInfo.CreateNoWindow = true;         // 不创建新窗口    
-                CmdProcess.StartInfo.UseShellExecute = false;       //不启用shell启动进程  
-                CmdProcess.StartInfo.RedirectStandardInput = true;  // 重定向输入    
-                CmdProcess.StartInfo.RedirectStandardOutput = true; // 重定向标准输出    
-                CmdProcess.StartInfo.RedirectStandardError = true;  // 重定向错误输出
-                CmdProcess.StartInfo.StandardOutputEncoding = Encoding.Default;    //指定异步输出使用的编码方式
-                CmdProcess.StartInfo.StandardErrorEncoding = Encoding.Default;    //指定异步错误使用的编码方式
-                CmdProcess.StartInfo.Arguments = "/c " + WebServer.shellCommand;    //“/C”表示执行完命令后马上退出  
-                CmdProcess.Start();    //执行  
-
-                stringBuilder.Append(CmdProcess.StandardOutput.ReadToEnd());    //获取返回值  中文字符可能有问题 Encoding 936 data could not be found.
-
-                CmdProcess.WaitForExit(5000);    //等待程序执行完退出进程  timeout为等待的毫秒数，若timeout为负则会无限期等待
-
-                CmdProcess.Close();    //结束
-            }
-            catch (Exception ex)
-            {
-                Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex);
-            }
-            WebServer.shellCommand = "";
-            return stringBuilder;
+            string btn = @" <a href=""/info""><button class=""btn_li"">主要信息</button><br/></a><br />";
+            btn += @"<a href=""/pack""><button class=""btn_li"">卡包信息</button><br/></a><br />";
+            btn += @"<a href=""/collection""><button class=""btn_li"">卡牌收藏</button><br/></a><br />";
+            btn += @"<a href=""/skins""><button class=""btn_li"">皮肤信息</button><br/></a><br />";
+            btn += @"<a href=""/lettuce""><button class=""btn_li"">佣兵关卡</button><br/></a><br />";
+            btn += @"<a href=""/mercenaries""><button class=""btn_li"">佣兵收藏</button><br/></a><br />";
+            if (System.IO.File.Exists(CommandConfig.hsMatchLogPath)) btn += @"<a href=""/matchlog""><button class=""btn_li"">炉石对局</button><br/></a><br />";
+            btn += @"<a href=""/config/index.html""><button class=""btn_li"">配置修改</button><br/></a><br />";
+            btn += @"<a href=""/about""><button class=""btn_li"">关&emsp;&emsp;于</button><br/></a><br />";
+            return btn;
         }
 
-        public static StringBuilder Template(string title = "", string body = "")
+        private static string GenerateNav(string title)
         {
-            StringBuilder builder = new StringBuilder();
-            string nav = (title != "index") ? "<li class=\"nav_li\"><a href=\"/matchlog\"><button class=\"btn_li\">炉石对局</button></a></li>" : "";
+            string nav = string.Empty;
             if (title != "index")
             {
-                nav = $@"<center>
-<ul class=""nav_ui"">
-<li class=""nav_li""><a href=""/info""><button class=""btn_li"">主要信息</button></a></li>
-<li class=""nav_li""><a href=""/pack""><button class=""btn_li"">卡包信息</button></a></li>
-<li class=""nav_li""><a href=""/collection""><button class=""btn_li"">卡牌收藏</button></a></li>
-<li class=""nav_li""><a href=""/skins""><button class=""btn_li"">皮肤信息</button></a></li>
-<li class=""nav_li""><a href=""/lettuce""><button class=""btn_li"">佣兵关卡</button></a></li>
-<li class=""nav_li""><a href=""/mercenaries""><button class=""btn_li"">佣兵收藏</button></a></li>
-{nav}
-<li class=""nav_li""><a href=""/about""><button class=""btn_li"">关&emsp;&emsp;于</button></a></li>
-</ul></center><br />";
+                nav = "<center><ul class=\"nav_ui\">";
+                var btns = GenerateBtn().Replace("<br/>", "").Split("<br />");
+                foreach (string btn in btns)
+                {
+                    nav += $@"<li class=""nav_li"">{btn}</li>";
+                }
+                nav += "</ul></center><br />";
             }
-            builder.Append($@"
-<!DOCTYPE html>
-<html lang=""zh"">
-<head>
-<meta charset=""UTF-8"">
-<meta name=""theme-color"" content=""#66CCFF""> 
-<meta name=""viewport"" content=""width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"">
-<style>
-body{{
-background: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url('{webPageBackImg.Value}') no-repeat 0% 25% / cover;
-background-size: cover;
-background-repeat:no-repeat;
-background-position:center;
-background-attachment:fixed;
-opacity:1.0;
-align-items: center;
-justify-content: center;
-font-family: ""Lucida Console"", sans-serif;
-}}
-a{{color:#66CCFF;text-decoration: none;}}
-a:hover{{text-decoration:underline}}
-hr{{
-width: auto;
-margin: 0 auto;
-border: 0;
-height: 0;
-border-top: 1px solid rgba(0, 0, 0, 0.1);
-border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-}}
-.btn_li {{
-z-index: 9;
-width: 100%;
-}}
-.btn_li {{
--webkit-transition-duration: 0.4s; /* Safari */
-transition-duration: 0.4s;
-border: 1px solid #66CCFF;
-opacity: 0.4;
-}}
-.btn_li:hover {{
-background-color: #66CCFF; 
-color: white;
-opacity: 0.6;
-}}
-ul{{
-list-style-type: none;
-margin: 0 auto;
-overflow: hidden;
-display: table;
-}}
-.nav_li {{
-float: left;
-display: block;
-color: white;
-text-align: center;
-margin:0 auto;
-text-decoration: none;
-}}
-</style>
-<title>{PluginInfo.PLUGIN_GUID} - {title}</title>
-</head>
-<body>
-{nav}").Append(body).Append(@"
-</body>
-</html>
-");
+
+            return nav;
+        }
+
+        public static StringBuilder Template(string title = "", string body = "", bool useViewport = true)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            string templateContent = FileManager.ReadEmbeddedFile("./WebResources/HsMod.template.html");
+            string nav = GenerateNav(title);
+
+            templateContent = templateContent
+                .Replace("{PluginInfo.PLUGIN_GUID}", PluginInfo.PLUGIN_GUID)
+                .Replace("{useViewport}", useViewport ? Viewport : "")
+                .Replace("{title}", title)
+                .Replace("{nav}", nav)
+                .Replace("{body}", body)
+                .Replace("{webPageBackImg}", webPageBackImg.Value);
+            builder.Append(templateContent);
+
             return builder;
         }
 
-        public static StringBuilder Template(StringBuilder body, string title = "")
+        public static StringBuilder Template(StringBuilder body, string title = "", bool useViewport = true)
         {
             StringBuilder builder = new StringBuilder();
-            string nav = title != "index" ? "<li class=\"nav_li\"><a href=\"/matchlog\"><button class=\"btn_li\">炉石对局</button></a></li>" : "";
-            if (title != "index")
-            {
-                nav = $@"<center>
-<ul class=""nav_ui"">
-<li class=""nav_li""><a href=""/info""><button class=""btn_li"">主要信息</button></a></li>
-<li class=""nav_li""><a href=""/pack""><button class=""btn_li"">卡包信息</button></a></li>
-<li class=""nav_li""><a href=""/collection""><button class=""btn_li"">卡牌收藏</button></a></li>
-<li class=""nav_li""><a href=""/skins""><button class=""btn_li"">皮肤信息</button></a></li>
-<li class=""nav_li""><a href=""/lettuce""><button class=""btn_li"">佣兵关卡</button></a></li>
-<li class=""nav_li""><a href=""/mercenaries""><button class=""btn_li"">佣兵收藏</button></a></li>
-{nav}
-<li class=""nav_li""><a href=""/about""><button class=""btn_li"">关&emsp;&emsp;于</button></a></li>
-</ul></center><br />";
-            }
-            builder.Append($@"
-<!DOCTYPE html>
-<html lang=""zh"">
-<head>
-<meta charset=""UTF-8"">
-<meta name=""theme-color"" content=""#66CCFF""> 
-<meta name=""viewport"" content=""width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"">
-<style>
-body{{
-background: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url('{webPageBackImg.Value}') no-repeat 0% 25% / cover;
-background-size: cover;
-background-repeat:no-repeat;
-background-position:center;
-background-attachment:fixed;
-opacity:1.0;
-align-items: center;
-justify-content: center;
-font-family: ""Lucida Console"", sans-serif;
-}}
-a{{color:#66CCFF;text-decoration: none;}}
-a:hover{{text-decoration:underline}}
-hr{{
-width: auto;
-margin: 0 auto;
-border: 0;
-height: 0;
-border-top: 1px solid rgba(0, 0, 0, 0.1);
-border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-}}
-.btn_li {{
-z-index: 9;
-width: 100%;
-}}
-.btn_li {{
--webkit-transition-duration: 0.4s; /* Safari */
-transition-duration: 0.4s;
-border: 1px solid #66CCFF;
-opacity: 0.4;
-}}
-.btn_li:hover {{
-background-color: #66CCFF; 
-color: white;
-opacity: 0.6;
-}}
-ul{{
-list-style-type: none;
-margin: 0 auto;
-overflow: hidden;
-display: table;
-}}
-.nav_li {{
-float: left;
-display: block;
-color: white;
-text-align: center;
-margin:0 auto;
-text-decoration: none;
-}}
-</style>
-<title>{PluginInfo.PLUGIN_GUID} - {title}</title>
-</head>
-<body>
-{nav}").Append(body).Append(@"
-</body>
-</html>
-");
+
+            string templateContent = FileManager.ReadEmbeddedFile("./WebResources/HsMod.template.html");
+
+            string nav = GenerateNav(title);
+
+            templateContent = templateContent
+                .Replace("{PluginInfo.PLUGIN_GUID}", PluginInfo.PLUGIN_GUID)
+                .Replace("{useViewport}", useViewport ? Viewport : "")
+                .Replace("{title}", title)
+                .Replace("{nav}", nav)
+                .Replace("{body}", body.ToString())
+                .Replace("{webPageBackImg}", webPageBackImg.Value);
+            builder.Append(templateContent);
             return builder;
         }
 
         public static StringBuilder HomePage()
         {
-            string btn = @" <a href=""/info""><button class=""btn_li"">主要信息</button><br/></a><br/>";
-            btn += @"<a href=""/pack""><button class=""btn_li"">卡包信息</button><br/></a><br/>";
-            btn += @"<a href=""/collection""><button class=""btn_li"">卡牌收藏</button><br/></a><br/>";
-            btn += @"<a href=""/skins""><button class=""btn_li"">皮肤信息</button><br/></a><br/>";
-            btn += @"<a href=""/lettuce""><button class=""btn_li"">佣兵关卡</button><br/></a><br/>";
-            btn += @"<a href=""/mercenaries""><button class=""btn_li"">佣兵收藏</button><br/></a><br/>";
-            btn += @"<a href=""/matchlog""><button class=""btn_li"">炉石对局</button><br/></a><br/>";
-            btn += @"<a href=""/about""><button class=""btn_li"">关&emsp;&emsp;于</button><br/></a><br/>";
+            var btn = GenerateBtn();
             string body = @"<h1 style=""text-align: center; opacity: 0.6;"">HsMod</h1>";
             body += $@"<div style=""text-align: center; width: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);"">{btn}</div>";
             return Template("index", body);
         }
 
+
+
         public static StringBuilder AboutPage()
         {
             StringBuilder builder = new StringBuilder();
             builder.AppendLine(@"<h3 style=""text-align: center;"">关于HsMod</h3>");
-            builder.AppendLine($"<p>Author: <a href='https://github.com/Pik-4'>Pik_4</a><br />Page Last Updated: 2022.12.10<br />HsMod Version:{PluginInfo.PLUGIN_VERSION}</p><br />");
-            builder.Append("<p><strong>H</strong>earth<strong>s</strong>tone <strong>Mod</strong>ify Based on BepInEx 基于BepInEx的炉石修改，插件源代码位于<a href='https://github.com/Pik-4/HsMod'>github.com/Pik-4/HsMod</a>，插件不会收集您的任何信息；项目遵循<code>AGPL-3.0</code>，仅用作学习研究。</p>\r\n");
-            builder.Append("<h3>已实现的功能</h3>\r\n<ol start='' >\r\n<li>支持齿轮快慢8倍速（设置中允许扩展到快慢32倍）</li>\r\n<li>允许使用VerifyWebCredentials登录（亦支持命令行启动，不需要启动战网）。</li>\r\n<li>屏蔽错误报告，当发生异常时，不会向暴雪报告错误信息。</li>\r\n<li>禁用掉线，允许长时间无操作</li>\r\n<li>允许报错自动退出</li>\r\n<li>允许移除窗口焦点</li>\r\n<li>解除窗口大小化限制</li>\r\n<li>拦截弹窗（如无法匹配等）提示。</li>\r\n<li>移除中国特色提示</li>\r\n<li>支持移除削弱补丁提示，移除广告推销，移除天梯结算奖励等弹窗</li>\r\n<li>允许屏蔽对局结束的升级提示、结算提示</li>\r\n<li>允许屏蔽战令、成就等奖励领取提示</li>\r\n<li>允许快速开包，空格一次开5张</li>\r\n<li>允许在开包时自动分解全额分解的卡牌</li>\r\n<li>允许显示游戏帧率信息</li>\r\n<li>允许修改游戏帧率</li>\r\n<li>支持在收藏、英雄、卡背、打击特效、酒馆面板等场景，右键选中卡牌时显示Dbid</li>\r\n<li>支持收藏显示9+卡牌实际数量</li>\r\n<li>允许在0-0（可以不组卡牌）时放弃对决</li>\r\n<li>允许自动领取竞技场、对决等奖励（结束时点包裹）</li>\r\n<li>允许进入炉石开发者模式</li>\r\n<li>好友观战自动旋转卡牌、自动观战双方</li>\r\n<li>支持炉边聚会模拟定位</li>\r\n<li>允许自动屏蔽对手表情或设置对方表情上限；支持屏蔽思考表情；支持屏蔽鲍勃语音；支持对战跳过英雄介绍</li>\r\n<li>支持表情无冷却（表情发送最小间隔1.5秒）</li>\r\n<li>支持表情快捷键</li>\r\n<li>支持快速战斗（跳过部分动画，比齿轮更丝滑，开启时屏蔽终结特效，该选项可在酒馆与佣兵(PVE)生效，佣兵可能在最终死亡结算有卡顿，）</li>\r\n<li>支持炉石自动金卡、钻石卡</li>\r\n<li>允许单独屏蔽对手卡牌特效</li>\r\n<li>允许显示对手完整战网昵称</li>\r\n<li>允许点击头像获取酒馆玩家昵称</li>\r\n<li>允许对战中添加对手</li>\r\n<li>允许在传说前显对手示天梯等级</li>\r\n<li>支持标记对手已知卡牌</li>\r\n<li>允许使用快捷键静音炉石</li>\r\n<li>允许自动举报对手；当自动举报对手启用时，可以自动生成对局记录</li>\r\n<li>支持模拟拔线（需要开启快捷键）</li>\r\n<li>支持一键自动分解全额分解的卡牌（需要开启快捷键）</li>\r\n<li>支持一键移除<code>新！</code>（需要开启快捷键，可能需要重新进入收藏，佣兵可能重启后失效）</li>\r\n<li>支持修改对战英雄皮肤、酒馆英雄皮肤、终结特效、对战面板、酒馆面板、幸运币等皮肤信息。（需要配置<code>HsSkins.cfg</code>，或在设置中修改，对局中更新需要在按下<code>F4</code>保存后，模拟拔线）</li>\r\n<li>支持修改卡背（对局中自动生效）</li>\r\n<li>支持佣兵随机皮肤，强制钻石皮肤等</li>\r\n<li>支持屏蔽佣兵宝箱、天梯奖励等弹窗</li>\r\n<li>支持屏蔽佣兵对战界面缩放</li>\r\n<li>支持模拟开包（支持结果随机，支持自定义卡包类型、数量、稀有度、品质等信息；支持模拟固定结果）</li>\r\n<li>支持设备模拟（允许领取iOS、Android等设备的卡包卡背，可能需要一局对战）</li>\r\n<li>支持金币购买纳克萨玛斯、黑石山、探险者协会等冒险（也支持卡拉赞，但无法打序章）</li>\r\n<li>允许强开卡拉赞（不能打序章，未通关前不能跳关）</li>\r\n<li>支持信息展示（showinfo，需要启用插件，默认HTTP，端口58744）；支持显示佣兵养成进度、开包历史信息等。</li>\r\n<li>支持接收炉石启动参数，如指定分辨率大小等。</li>\r\n<li>支持Webshell，路径为/shell。需要在设置中开启，目前中文显示可能存在乱码。</li>\r\n<li>允许通过Web读取本地文件，即解析静态页面。该功能尚在开发中，目前以<code>Hearthstone\\website</code>作为根目录。</li>\r\n\r\n</ol>");
-            builder.AppendLine("<h3><strong>补充说明</strong></h3>\r\n<ol start='' >\r\n<li>插件不可放置在含有中文的目录下，即炉石安装路径不能含有中文。</li>\r\n<li>本插件可能与基于<code>Assembly-CSharp.dll</code>的修改冲突，修改<code>Assembly-CSharp.dll</code>可能导致IL指令定位异常，进而造成相关Patch无法生效；还可能与其他BepInEx插件（例如佣兵、MixMod）冲突，原因是同一个方法可能在两个插件中都存在Patch，当有多个Patch时，运行结果可能会异常，本插件没有检测原方法是否被修改。</li>\r\n<li>皮肤的配置文件在<code>Hearthstone\\BepInEx\\config\\HsSkins.cfg</code>。若无，则在运行游戏后自动创建。</li>\r\n<li><code>F4</code>为固定快捷键，用于获取游戏内部分信息（相关信息存放在<code>Hearthstone\\BepInEx\\</code>目录下）、<strong>更新皮肤配置</strong>、重启Web服务等。其余快捷键均可自定义配置。</li>\r\n<li>本插件在默认状态下，几乎全部的功能均需要手动开启；插件大部分功能能在配置中找到说明，少部分功能只在Patch中提及（如最小化限制）。</li>\r\n<li>本插件Web Server（即Showinfo）的默认端口为58744，一般情况下，监听本地所有IP，使用云服务器时，请注意防火墙、安全组等配置。</li>\r\n<li>对局统计所使用的log文件是<code>BepInEx\\HsMatch.log</code>，可在设置中修改。（字段以<code>,</code>分隔）</li>\r\n<li>出现问题时先尝试删除相关<code>.cfg</code>配置文件（一般位于<code>BepInEx\\config\\</code>），进行重新配置；如果依然存在问题，请带上<code>HsMod.cfg</code>提交<a href='https://github.com/Pik-4/HsMod/issues'>Issues</a>，但不保证及时解答。</li>\r\n<li><code>GetHsLib.py</code>用于更新炉石自有运行库，<code>install.bat</code>用于将编译好的<code>HsMod.dll</code>复制到默认炉石目录（前提是BepInEx已经配置好）。此外，在push修改版本号后（PluginInfo.cs发生变化后），会自动生成<a href='https://github.com/Pik-4/HsMod/releases'>release</a>。</li>\r\n<li>如果出现皮肤显示异常，请检查<code>HsSkins.cfg</code>，并尝试删除<code>HsMod.cfg</code>重新进行配置。</li>\r\n<li>如果修改设置无法保存，请检查是否启用其他炉石插件。</li>\r\n\r\n</ol>");
+            builder.AppendLine($"<p>Author: <a href='https://github.com/Pik-4'>Pik_4</a><br />Page Last Updated: 2024.11.05<br />HsMod Version:{PluginInfo.PLUGIN_VERSION}</p><br />");
+            builder.AppendLine(FileManager.ReadEmbeddedFile($"./WebResources/about.{pluginInitLanague.Value}.html"));
             return Template(builder, "About");
         }
 
@@ -246,8 +103,7 @@ text-decoration: none;
         {
             StringBuilder builder = new StringBuilder();
             builder.AppendLine(@"<h3 style=""text-align: center;"">WebShell</h3>");
-
-            builder.Append("<form id=\"Shell\" name=\"Shell\" action=\"/webshell\" method=\"post\">\r\n<input type=\"text\" class=\"form-control\" id=\"command\" name=\"command\" placeholder=\"command\" value=\"\"/>\r\n<button type=\"submit\" id=\"send\" class=\"send\">执行</button>\r\n</form>\r\n<p><br/></p>\r\n<p style=\"white-space: pre-line;\"><span id=\"result\"></span></p>\r\n<script src=\"/jquery.min.js\"></script>\r\n<script>\r\nfunction reverse(str){\r\n\tstr=str.replace(/</g, \"\\&lt\");\r\n\tstr=str.replace(/>/g, \"\\&gt\");\r\n\treturn str;\r\n\t}\r\n$(function () {\r\n        $(\"#Shell\").submit(function () {\r\n            $.ajax({\r\ntype: \"POST\",\r\nurl: \"/webshell\",\r\ndata: $(\"#Shell\").serialize(),\r\nsuccess: function (data) {\r\ndocument.getElementById(\"result\").innerHTML = reverse(data);\r\n},\r\nerror: function (data) {\r\ndocument.getElementById(\"result\").innerHTML = \"执行失败！\";\r\n}\r\n});\r\nreturn false;\r\n});\r\n});\r\n</script>");
+            builder.AppendLine(FileManager.ReadEmbeddedFile("./WebResources/shell.html"));
             return Template(builder, "WebShell");
         }
 
@@ -959,7 +815,7 @@ text-decoration: none;
             {
                 builder.Append("<br />");
             }
-            return Template(builder, "Mercenaries").Remove(108, 127);
+            return Template(builder, "Mercenaries", false);
         }
 
         public static StringBuilder PackPage()
@@ -1026,8 +882,7 @@ text-decoration: none;
         public static StringBuilder MatchLogPage()
         {
             StringBuilder builder = new StringBuilder();
-            if (!System.IO.File.Exists(System.IO.Path.Combine("BepinEx/Log", CommandConfig.GlobalHSUnitID, hsMatchLogPath.Value + "@" + DateTime.Today.ToString("yyyy-MM-dd") + ".log")))
-                return Template(builder.Append("对局文件不存在！"), "MatchLog");
+            if (!System.IO.File.Exists(CommandConfig.hsMatchLogPath)) return Template(builder.Append("对局文件不存在！"), "MatchLog");
             else builder.Append(@"<h3 style=""text-align: center;"">对局记录</h3>");
 
             try
@@ -1042,7 +897,7 @@ text-decoration: none;
                 temp += "</tr>";
                 builder.Append(temp);
 
-                foreach (string line in System.IO.File.ReadLines(System.IO.Path.Combine("BepinEx/Log", CommandConfig.GlobalHSUnitID, hsMatchLogPath.Value + "@" + DateTime.Today.ToString("yyyy-MM-dd") + ".log")).Reverse())
+                foreach (string line in System.IO.File.ReadLines(CommandConfig.hsMatchLogPath).Reverse())
                 {
                     temp = "";
                     if (line != String.Empty)
@@ -1056,6 +911,7 @@ text-decoration: none;
                                 if (lineSplit[i] == "胜利") temp += $"<td style=\"color:#01FF70\">胜利</td>";
                                 else if (lineSplit[i] == "失败") temp += $"<td style=\"color:#FF4136\">失败</td>";
                                 else if (lineSplit[i] == "未知" || lineSplit[i] == "平局") temp += $"<td>{lineSplit[i]}</td>";
+                                else if (int.Parse(lineSplit[i]) > 0) temp += $"<td style=\"color:#01FF70\">+{int.Parse(lineSplit[i])}</td>";
 								else if (lineSplit[i] == "第一名") temp += $"<td style=\"color:#01FF70\">第一名</td>";
 								else if (lineSplit[i] == "第二名") temp += $"<td style=\"color:#01FF70\">第二名</td>";
 								else if (lineSplit[i] == "第三名") temp += $"<td style=\"color:#01FF70\">第三名</td>";
@@ -1083,13 +939,72 @@ text-decoration: none;
             {
                 builder.Append("</table>");
             }
-            return Template(builder, "MatchLog").Remove(108, 127);
+            return Template(builder, "MatchLog", false);
         }
 
         public static StringBuilder AlivePage()
         {
-            return new StringBuilder().Append(System.Diagnostics.Process.GetCurrentProcess()?.Id.ToString());
+            return new StringBuilder().Append($"{{\"pid\":{System.Diagnostics.Process.GetCurrentProcess()?.Id},\"login\":\"{Utils.CacheLoginStatus}\"}}");
         }
 
+        public static StringBuilder BepInExLogPage(int lines = -1)
+        {
+            string logPath = Path.Combine(BepInEx.Paths.BepInExRootPath, "LogOutput.log");
+            StringBuilder output = new StringBuilder().Append("");
+
+            if (File.Exists(logPath))
+            {
+                try
+                {
+                    if (lines <= 0)
+                    {
+                        // 以共享模式打开文件
+                        using (FileStream fs = new FileStream(logPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                        {
+                            using (StreamReader reader = new StreamReader(fs))
+                            {
+                                string content = reader.ReadToEnd();
+                                output.Append(content);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        output.Append(Utils.ReadLastLine(logPath, 666));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    output.Append(ex.Message);
+                }
+            }
+            return output;
+        }
+        public static StringBuilder HsModCfgPage(string cfg)
+        {
+            string cfgPath = Path.Combine(BepInEx.Paths.ConfigPath, cfg);
+            StringBuilder output = new StringBuilder().Append("");
+
+            if (File.Exists(cfgPath))
+            {
+                try
+                {
+                    // 以共享模式打开文件
+                    using (FileStream fs = new FileStream(cfgPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        using (StreamReader reader = new StreamReader(fs))
+                        {
+                            string content = reader.ReadToEnd();
+                            output.Append(content);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    output.Append(ex.Message);
+                }
+            }
+            return output;
+        }
     }
 }
