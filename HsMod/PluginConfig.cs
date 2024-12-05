@@ -147,7 +147,7 @@ namespace HsMod
             public static int webServerPort = -1;
             public static string hsMatchLogPath
             {
-                get { return Path.Combine(BepInEx.Paths.BepInExRootPath, "HsMod", "Log", GlobalHSUnitID, "gamerecord@" + DateTime.Today.ToString("yyyy-MM-dd") + ".log"); }
+                get { return Path.Combine(BepInEx.Paths.BepInExRootPath, "Log", GlobalHSUnitID, "gamerecord@" + DateTime.Today.ToString("yyyy-MM-dd") + ".log"); }
                 set { }
             }
             public static int width = -1;

@@ -911,7 +911,6 @@ namespace HsMod
                                 if (lineSplit[i] == "胜利") temp += $"<td style=\"color:#01FF70\">胜利</td>";
                                 else if (lineSplit[i] == "失败") temp += $"<td style=\"color:#FF4136\">失败</td>";
                                 else if (lineSplit[i] == "未知" || lineSplit[i] == "平局") temp += $"<td>{lineSplit[i]}</td>";
-                                else if (int.Parse(lineSplit[i]) > 0) temp += $"<td style=\"color:#01FF70\">+{int.Parse(lineSplit[i])}</td>";
 								else if (lineSplit[i] == "第一名") temp += $"<td style=\"color:#01FF70\">第一名</td>";
 								else if (lineSplit[i] == "第二名") temp += $"<td style=\"color:#01FF70\">第二名</td>";
 								else if (lineSplit[i] == "第三名") temp += $"<td style=\"color:#01FF70\">第三名</td>";
