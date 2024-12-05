@@ -204,7 +204,6 @@ namespace HsMod
         public static void PatchAll()
         {
             LoadPatch(typeof(Patcher));
-			LoadPatch(typeof(Patcher.PatchAntiCheatTimerCreateTimer));
 			LoadPatch(typeof(Patcher.PatchAntiCheat));
             LoadPatch(typeof(Patcher.PatchMisc));
             LoadPatch(typeof(Patcher.PatchEmote));
@@ -1826,25 +1825,44 @@ namespace HsMod
                                 Utils.TryReportOpponent();
                             }
                             string finalResult = "未知";
-                            switch (playState)
-                            {
-                                case TAG_PLAYSTATE.WINNING:
-                                case TAG_PLAYSTATE.WON:
-                                    finalResult = "胜利";
-                                    break;
-                                case TAG_PLAYSTATE.CONCEDED:
-                                case TAG_PLAYSTATE.LOST:
-                                case TAG_PLAYSTATE.LOSING:
-                                    finalResult = "失败";
-                                    break;
-                                case TAG_PLAYSTATE.TIED:
-                                    finalResult = "平局";
-                                    break;
-                                default:
-                                    break;
-                            }
+							if (GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_BATTLEGROUNDS)
+							{
+								switch (GameState.Get().GetFriendlySidePlayer().GetHero().GetRealTimePlayerLeaderboardPlace())
+								{
 
-                            string gameType = (GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_RANKED) ? GameMgr.Get().GetFormatType().ToString() : GameMgr.Get().GetGameType().ToString();
+									case 1: finalResult = "第一名"; break;
+									case 2: finalResult = "第二名"; break;
+									case 3: finalResult = "第三名"; break;
+									case 4: finalResult = "第四名"; break;
+									case 5: finalResult = "第五名"; break;
+									case 6: finalResult = "第六名"; break;
+									case 7: finalResult = "第七名"; break;
+									case 8: finalResult = "第八名"; break;
+									default: break;
+								}
+							}
+							else
+							{
+								switch (playState)
+								{
+									case TAG_PLAYSTATE.WINNING:
+									case TAG_PLAYSTATE.WON:
+										finalResult = "胜利";
+										break;
+									case TAG_PLAYSTATE.CONCEDED:
+									case TAG_PLAYSTATE.LOST:
+									case TAG_PLAYSTATE.LOSING:
+										finalResult = "失败";
+										break;
+									case TAG_PLAYSTATE.TIED:
+										finalResult = "平局";
+										break;
+									default:
+										break;
+								}
+							}
+
+							string gameType = (GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_RANKED) ? GameMgr.Get().GetFormatType().ToString() : GameMgr.Get().GetGameType().ToString();
 
                             string gameRank = "-";
                             if ((GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_RANKED) && (GameMgr.Get().GetFormatType() != PegasusShared.FormatType.FT_UNKNOWN))
