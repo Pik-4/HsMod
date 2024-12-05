@@ -2,6 +2,7 @@ using Blizzard.GameService.SDK.Client.Integration;
 using Blizzard.T5.Core;
 using Blizzard.T5.Core.Time;
 using HarmonyLib;
+using PegasusShared;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
+using static HsMod.Patcher;
 using static HsMod.PluginConfig;
 
 namespace HsMod
@@ -28,7 +30,7 @@ namespace HsMod
 
         public static void LoadPatch(Type loadType)
         {
-            try
+			try
             {
                 Harmony harmony;
                 int harmonyCount;
@@ -38,7 +40,7 @@ namespace HsMod
                 Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"{loadType.Name} => Patched {harmonyCount} methods");
                 AllHarmony.Add(harmony);
                 AllHarmonyName.Add(loadType.Name);
-            }
+			}
             catch (Exception ex)
             {
                 if (loadType == typeof(Patcher.PatchAntiCheat))
@@ -202,7 +204,8 @@ namespace HsMod
         public static void PatchAll()
         {
             LoadPatch(typeof(Patcher));
-            LoadPatch(typeof(Patcher.PatchAntiCheat));
+			LoadPatch(typeof(Patcher.PatchAntiCheatTimerCreateTimer));
+			LoadPatch(typeof(Patcher.PatchAntiCheat));
             LoadPatch(typeof(Patcher.PatchMisc));
             LoadPatch(typeof(Patcher.PatchEmote));
             LoadPatch(typeof(Patcher.PatchIGMMessage));
@@ -264,26 +267,42 @@ namespace HsMod
     //前置Patch为harmony补丁，后置Patch为反射
     public class Patcher
     {
-
-        public class PatchAntiCheat
+		public class PatchAntiCheat
         {
-            //禁用反作弊
-            [HarmonyPrefix]
-            [HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "OnLoginComplete")]
-            public static bool PatchAntiCheatManagerOnLoginComplete()
-            {
-                Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat feature is disabled.");
-                return false;
-            }
+			//禁用反作弊
+			[HarmonyPrefix]
+			[HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "OnLoginComplete")]
+			public static bool PatchAntiCheatManagerOnLoginComplete()
+			{
+				Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat OnLoginComplete feature is disabled.");
+				return false;
+			}
 
-            [HarmonyPrefix]
-            [HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "Shutdown")]
-            public static bool PatchAntiCheatManagerShutdown()
-            {
-                Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat feature is disabled.");
-                return false;
-            }
-        }
+			[HarmonyPrefix]
+			[HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "Shutdown")]
+			public static bool PatchAntiCheatManagerShutdown()
+			{
+				Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat Shutdown feature is disabled.");
+				return false;
+			}
+
+			[HarmonyPrefix]
+			[HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "TryCallSDK")]
+			[HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "CallInterfaceCallSDK")]
+			public static bool PatchAntiCheatManagerTryCallSDK(ref string scriptId)
+			{
+				Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat TryCallSDK feature is disabled.");
+				return false;
+			}
+
+			[HarmonyPrefix]
+			[HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "InnerSDKMethodCall")]
+			public static bool PatchAntiCheatManagerInnerSDKMethodCall(ref Action<string> handler, ref string args)
+			{
+				Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat InnerSDKMethodCall feature is disabled.");
+				return false;
+			}
+		}
 
         public class PatchMisc
         {
@@ -588,22 +607,27 @@ namespace HsMod
                 return isRewardToastShow.Value;
             }
 
-            //战令、成就等奖励领取提示
-            [HarmonyPrefix]
-            [HarmonyPatch(typeof(Hearthstone.Progression.RewardTrack), "HandleRewardGranted")]
-            public static bool PatchHandleRewardGranted(int rewardTrackId, int level, bool forPaidTrack, List<PegasusUtil.RewardItemOutput> rewardItemOutput)      //隐藏通行证奖励
-            {
-                if (!isRewardToastShow.Value)
-                {
-                    Hearthstone.Progression.RewardTrackManager.Get().GetRewardTrack(Assets.Global.RewardTrackType.GLOBAL)?.AckReward(rewardTrackId, level, forPaidTrack);
-                    Hearthstone.Progression.RewardTrackManager.Get().GetRewardTrack(Assets.Global.RewardTrackType.BATTLEGROUNDS)?.AckReward(rewardTrackId, level, forPaidTrack);
-                    return false;
-                }
-                else return true;
-            }
+			//战令、成就等奖励领取提示
+			[HarmonyPrefix]
+			[HarmonyPatch(typeof(Hearthstone.Progression.RewardTrack), "HandleRewardGranted")]
+			public static bool PatchHandleRewardGranted(int rewardTrackId, int level, PegasusShared.RewardTrackPaidType paidType, List<PegasusUtil.RewardItemOutput> rewardItemOutput)      //隐藏通行证奖励
+			{
+				if (!isRewardToastShow.Value)
+				{
+					RewardTrackDbfRecord record = GameDbf.RewardTrack.GetRecord(rewardTrackId);
+					if (record == null)
+					{
+						return false;
+					}
 
-            //测试补丁，屏蔽奖励显示
-            [HarmonyPrefix]
+					Hearthstone.Progression.RewardTrackManager.Get()?.GetRewardTrack(record.RewardTrackType)?.AckReward(rewardTrackId, level, paidType);
+					return false;
+				}
+				else return true;
+			}
+
+			//测试补丁，屏蔽奖励显示
+			[HarmonyPrefix]
             [HarmonyPatch(typeof(Hearthstone.Progression.RewardPresenter), "ShowNextReward")]
             public static bool PatchRewardPresenterShowNextReward(Hearthstone.Progression.RewardPresenter __instance, ref Action onHiddenCallback)
             {
