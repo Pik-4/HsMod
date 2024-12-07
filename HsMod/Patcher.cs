@@ -5,6 +5,7 @@ using HarmonyLib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -1738,41 +1739,41 @@ namespace HsMod
                                 Utils.TryReportOpponent();
                             }
                             string finalResult = "未知";
-							if (GameMgr.Get().GetGameType() != PegasusShared.GameType.GT_BATTLEGROUNDS)
-							{
-                            switch (playState)
+                            if (GameMgr.Get().GetGameType() != PegasusShared.GameType.GT_BATTLEGROUNDS)
                             {
-                                case TAG_PLAYSTATE.WINNING:
-                                case TAG_PLAYSTATE.WON:
-                                    finalResult = "胜利";
-                                    break;
-                                case TAG_PLAYSTATE.CONCEDED:
-                                case TAG_PLAYSTATE.LOST:
-                                case TAG_PLAYSTATE.LOSING:
-                                    finalResult = "失败";
-                                    break;
-                                case TAG_PLAYSTATE.TIED:
-                                    finalResult = "平局";
-                                    break;
-                                default:
-                                    break;
+                                switch (playState)
+                                {
+                                    case TAG_PLAYSTATE.WINNING:
+                                    case TAG_PLAYSTATE.WON:
+                                        finalResult = "胜利";
+                                        break;
+                                    case TAG_PLAYSTATE.CONCEDED:
+                                    case TAG_PLAYSTATE.LOST:
+                                    case TAG_PLAYSTATE.LOSING:
+                                        finalResult = "失败";
+                                        break;
+                                    case TAG_PLAYSTATE.TIED:
+                                        finalResult = "平局";
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
-							}
-							else
-							{
-								switch (GameState.Get().GetFriendlySidePlayer().GetHero().GetRealTimePlayerLeaderboardPlace())
-								{
-									case 1: finalResult = "第一名"; break;
-									case 2: finalResult = "第二名"; break;
-									case 3: finalResult = "第三名"; break;
-									case 4: finalResult = "第四名"; break;
-									case 5: finalResult = "第五名"; break;
-									case 6: finalResult = "第六名"; break;
-									case 7: finalResult = "第七名"; break;
-									case 8: finalResult = "第八名"; break;
-									default: break;
-								}
-							}
+                            else
+                            {
+                                switch (GameState.Get().GetFriendlySidePlayer().GetHero().GetRealTimePlayerLeaderboardPlace())
+                                {
+                                    case 1: finalResult = "第一名"; break;
+                                    case 2: finalResult = "第二名"; break;
+                                    case 3: finalResult = "第三名"; break;
+                                    case 4: finalResult = "第四名"; break;
+                                    case 5: finalResult = "第五名"; break;
+                                    case 6: finalResult = "第六名"; break;
+                                    case 7: finalResult = "第七名"; break;
+                                    case 8: finalResult = "第八名"; break;
+                                    default: break;
+                                }
+                            }
 
                             string gameType = (GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_RANKED) ? GameMgr.Get().GetFormatType().ToString() : GameMgr.Get().GetGameType().ToString();
 
@@ -1786,10 +1787,10 @@ namespace HsMod
                                     gameRank = (gameRank == "传说") ? "传说" + currentMedal.legendIndex.ToString() : (currentMedal.earnedStars > 0 ? gameRank + "-" + currentMedal.earnedStars.ToString() : "-");
                                 }
                             }
-							else if (GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_BATTLEGROUNDS)
-							{
+                            else if (GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_BATTLEGROUNDS)
+                            {
                                 gameRank = BaconLobbyMgr.Get()?.GetBattlegroundsActiveGameModeRating().ToString();
-							}
+                            }
                             finalResult = $"{String.Join("<br />", DateTime.Now.ToString().Split(' '))},{finalResult},{gameRank},{gameType},{Utils.CacheLastOpponentFullName},";
                             finalResult += $"High:{Utils.CacheLastOpponentAccountID.High}+Low:{Utils.CacheLastOpponentAccountID.Low}";
                             if (isAutoReportEnable.Value)
@@ -1811,7 +1812,15 @@ namespace HsMod
                 if (autoQuitTimer.Value > 0 && ConfigValue.Get().RunningTime >= autoQuitTimer.Value)
                 {
                     Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "定时重启！即将退出游戏...");
-                    Application.Quit();
+                    try
+                    {
+                        Application.Quit();
+                    }
+                    finally
+                    {
+                        System.Threading.Thread.Sleep(11451);
+                        Process.GetCurrentProcess().Kill();
+                    }
                 }
             }
 
