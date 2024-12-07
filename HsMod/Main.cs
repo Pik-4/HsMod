@@ -203,8 +203,8 @@ namespace HsMod
                 }
                 else if (keySimulateDisconnect.Value.IsDown())
                 {
-                    Network.Get()?.QueueDispatcher.SetDebugGameConnectionState(false, System.Net.Sockets.SocketError.ConnectionReset);
-                    //Network.Get()?.SimulateUncleanDisconnectFromGameServer();
+                    //Network.Get()?.QueueDispatcher.SetDebugGameConnectionState(false, System.Net.Sockets.SocketError.ConnectionReset);
+                    Network.Get()?.SimulateUncleanDisconnectFromGameServer();
                     return;
                 }
                 else if (keyShowFPS.Value.IsDown())
