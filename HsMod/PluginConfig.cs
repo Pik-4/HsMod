@@ -379,7 +379,7 @@ namespace HsMod
                     isRewardToastShow.Value = false;
                     isAutoOpenBoxesRewardEnable.Value = true;
                     isAutoExit.Value = true;
-                    isIdleKickEnable.Value = true;
+                    isIdleKickEnable.Value = false;
                     isQuickPackOpeningEnable.Value = true;
                     //isAutoRefundCardDisenchantEnable.Value = true;
                     isAutoRecvMercenaryRewardEnable.Value = true;
@@ -405,7 +405,7 @@ namespace HsMod
                     isRewardToastShow.Value = true;
                     isAutoOpenBoxesRewardEnable.Value = false;
                     isAutoExit.Value = false;
-                    isIdleKickEnable.Value = false;
+                    isIdleKickEnable.Value = true;
                     isQuickPackOpeningEnable.Value = true;
                     //isAutoRefundCardDisenchantEnable.Value = false;
                     isAutoRecvMercenaryRewardEnable.Value = true;
