@@ -5,7 +5,6 @@ using HarmonyLib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -53,7 +52,7 @@ namespace HsMod
                 Utils.MyLogger(BepInEx.Logging.LogLevel.Error, $"{loadType.Name} => {ex.Message} \n{ex.InnerException}");
                 Utils.MyLogger(BepInEx.Logging.LogLevel.Error, "HsMod patch failed!");
                 System.Threading.Thread.Sleep(11451);
-                Application.Quit(114514);
+                Utils.Quit(114514);
             }
         }
 
@@ -518,7 +517,7 @@ namespace HsMod
             {
                 if (isAutoExit.Value)
                 {
-                    Application.Quit();
+                    Utils.Quit();
                     return false;
                 }
                 else return true;
@@ -1761,7 +1760,7 @@ namespace HsMod
                             }
                             else
                             {
-                                switch (GameState.Get().GetFriendlySidePlayer().GetHero().GetRealTimePlayerLeaderboardPlace())
+                                switch (GameState.Get()?.GetFriendlySidePlayer()?.GetHero()?.GetRealTimePlayerLeaderboardPlace())
                                 {
                                     case 1: finalResult = "第一名"; break;
                                     case 2: finalResult = "第二名"; break;
@@ -1792,7 +1791,8 @@ namespace HsMod
                                 gameRank = BaconLobbyMgr.Get()?.GetBattlegroundsActiveGameModeRating().ToString();
                             }
                             finalResult = $"{String.Join("<br />", DateTime.Now.ToString().Split(' '))},{finalResult},{gameRank},{gameType},{Utils.CacheLastOpponentFullName},";
-                            finalResult += $"High:{Utils.CacheLastOpponentAccountID.High}+Low:{Utils.CacheLastOpponentAccountID.Low}";
+                            //finalResult += $"High:{Utils.CacheLastOpponentAccountID.High}+Low:{Utils.CacheLastOpponentAccountID.Low}";
+                            finalResult += $"Opponent: {Utils.CacheLastOpponentAccountID.Low}, MyPlayer: {BnetPresenceMgr.Get()?.GetMyPlayer()?.GetBestName()?.ToString()}";
                             if (isAutoReportEnable.Value)
                             {
                                 finalResult += " => 已举报";
@@ -1812,15 +1812,7 @@ namespace HsMod
                 if (autoQuitTimer.Value > 0 && ConfigValue.Get().RunningTime >= autoQuitTimer.Value)
                 {
                     Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "定时重启！即将退出游戏...");
-                    try
-                    {
-                        Application.Quit();
-                    }
-                    finally
-                    {
-                        System.Threading.Thread.Sleep(11451);
-                        Process.GetCurrentProcess().Kill();
-                    }
+                    Utils.Quit();
                 }
             }
 

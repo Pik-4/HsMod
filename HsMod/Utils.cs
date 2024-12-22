@@ -3,6 +3,7 @@ using PegasusUtil;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -1038,6 +1039,19 @@ namespace HsMod
             {
                 MyLogger(LogLevel.Error, ex.Message);
                 MyLogger(LogLevel.Error, ex.StackTrace);
+            }
+        }
+
+        public static void Quit(int exitCode = 0)
+        {
+            try
+            {
+                UnityEngine.Application.Quit(exitCode);
+            }
+            finally
+            {
+                System.Threading.Thread.Sleep(11451);
+                Process.GetCurrentProcess().Kill();
             }
         }
 

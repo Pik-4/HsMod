@@ -20,7 +20,7 @@ namespace HsMod
             btn += @"<a href=""/lettuce""><button class=""btn_li"">佣兵关卡</button><br/></a><br />";
             btn += @"<a href=""/mercenaries""><button class=""btn_li"">佣兵收藏</button><br/></a><br />";
             if (System.IO.File.Exists(CommandConfig.hsMatchLogPath)) btn += @"<a href=""/matchlog""><button class=""btn_li"">炉石对局</button><br/></a><br />";
-            btn += @"<a href=""/config/index.html""><button class=""btn_li"">配置修改</button><br/></a><br />";
+            if (Directory.Exists(Path.Combine(PluginConfig.HsModWebSite, "config", "index.html"))) btn += @"<a href=""/config/index.html""><button class=""btn_li"">配置修改</button><br/></a><br />";
             btn += @"<a href=""/about""><button class=""btn_li"">关&emsp;&emsp;于</button><br/></a><br />";
             return btn;
         }

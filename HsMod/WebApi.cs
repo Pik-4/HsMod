@@ -13,10 +13,11 @@ namespace HsMod
 
         public static async Task<string> RunShellCommandAsync(string command)
         {
-            if (!isWebshellEnable.Value) {
+            if (!isWebshellEnable.Value)
+            {
                 return string.Empty;
             }
-            
+
             var processInfo = new ProcessStartInfo
             {
                 CreateNoWindow = true,

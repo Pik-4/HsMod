@@ -1,6 +1,5 @@
 ﻿using BepInEx;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 using static HsMod.PluginConfig;
@@ -159,6 +158,13 @@ namespace HsMod
 
         private void Update()
         {
+            // todo: check game status
+            if ((autoQuitTimer.Value > 0) && (ConfigValue.Get().RunningTime >= (autoQuitTimer.Value + 1145)))
+            {
+                Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "Force Auto Quit...");
+                Utils.Quit();
+            }
+
             if (Input.GetKeyUp(KeyCode.F4))
             {
                 int allPatchNum = 0;
