@@ -159,7 +159,7 @@ namespace HsMod
         private void Update()
         {
             // todo: check game status
-            if ((autoQuitTimer.Value > 0) && (ConfigValue.Get().RunningTime >= (autoQuitTimer.Value + 1145)))
+            if ((autoQuitTimer.Value > 0) && (ConfigValue.Get().RunningTime >= (autoQuitTimer.Value + 1818)))
             {
                 Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "Force Auto Quit...");
                 Utils.Quit();

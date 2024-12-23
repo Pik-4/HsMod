@@ -1791,12 +1791,12 @@ namespace HsMod
                                 gameRank = BaconLobbyMgr.Get()?.GetBattlegroundsActiveGameModeRating().ToString();
                             }
                             finalResult = $"{String.Join("<br />", DateTime.Now.ToString().Split(' '))},{finalResult},{gameRank},{gameType},{Utils.CacheLastOpponentFullName},";
-                            //finalResult += $"High:{Utils.CacheLastOpponentAccountID.High}+Low:{Utils.CacheLastOpponentAccountID.Low}";
-                            finalResult += $"Opponent: {Utils.CacheLastOpponentAccountID.Low}, MyPlayer: {BnetPresenceMgr.Get()?.GetMyPlayer()?.GetBestName()?.ToString()}";
+                            finalResult += $"OPPOSING: Low:{Utils.CacheLastOpponentAccountID.Low}+High:{Utils.CacheLastOpponentAccountID.High}";
                             if (isAutoReportEnable.Value)
                             {
                                 finalResult += " => 已举报";
                             }
+                            finalResult += $"<br />FRIENDLY: {BnetPresenceMgr.Get()?.GetMyPlayer()?.GetBestName()?.ToString()}";
                             System.IO.File.AppendAllText(CommandConfig.hsMatchLogPath, finalResult + "\n");
                             Utils.CacheLastOpponentAccountID = null;
                         }

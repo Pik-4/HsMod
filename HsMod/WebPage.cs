@@ -893,7 +893,7 @@ namespace HsMod
                 temp += "<th>当前排名</th>";
                 temp += "<th>游戏模式</th>";
                 temp += "<th>你的对手</th>";
-                temp += "<th>对手信息</th>";
+                temp += "<th>玩家信息</th>";
                 temp += "</tr>";
                 builder.Append(temp);
 
