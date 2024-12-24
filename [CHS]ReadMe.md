@@ -261,6 +261,12 @@ https://eu.battle.net/login/en/?app=wtcg
 
 注意：中国的`Env`参数为`cn.actual.battlenet.com.cn`。
 
+### Groups
+
+Telegram @HearthstoneMod
+
+[Discord](https://discord.gg/BCnhxtXHVq)
+
 ### TODO
 
 1. 整理ReadMe，更新Wiki等；整理配置与Patch之间关系；多语言支持
@@ -273,7 +279,7 @@ https://eu.battle.net/login/en/?app=wtcg
 
 1. [MixMod_4pda](https://4pda.to/forum/index.php?showtopic=870696&st=4780#entry114865283)
 2. [MixMod_github](https://github.com/DeNcHiK3713/MixMod)
-3. [Hearthstone Advanced Mod](https://hearthmod.com/)
+3. [Hearthstone Apollo Mod](https://hearthmod.com/)
 4. [从0开始教你使用BepInEx为unity游戏制作插件Mod](https://mod.3dmgame.com/read/3)
 5. [BepInEx Docs](https://docs.bepinex.dev/)
 6. [Harmony](https://harmony.pardeike.net/articles/intro.html)

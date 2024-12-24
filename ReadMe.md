@@ -261,6 +261,12 @@ With the plugin enabled, the support `./Hearthstone.exe VerifyWebCredentials` co
 
 Note: The `Env` parameter for China is `cn.actual.battlenet.com.cn`.
 
+### Groups
+
+Telegram @HearthstoneMod
+
+[Discord](https://discord.gg/BCnhxtXHVq)
+
 ### TODO 
 
 1. Organize ReadMe, update Wiki, etc.; Organize the relationship between Configuration and Patch; Multi-language support
@@ -273,7 +279,7 @@ Note: The `Env` parameter for China is `cn.actual.battlenet.com.cn`.
 
 1. [MixMod_4pda](https://4pda.to/forum/index.php?showtopic=870696&st=4780#entry114865283)
 2. [MixMod_github](https://github.com/DeNcHiK3713/MixMod)
-3. [Hearthstone Advanced Mod](https://hearthmod.com/)
+3. [Hearthstone Apollo Mod](https://hearthmod.com/)
 4. [Teach you how to use BepInEx to make plugin mods for unity games from scratch](https://mod.3dmgame.com/read/3)
 5. [BepInEx Docs](https://docs.bepinex.dev/)
 6. [Harmony](https://harmony.pardeike.net/articles/intro.html)
