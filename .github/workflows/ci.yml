@@ -44,6 +44,12 @@ jobs:
         python-version: '3.13'
     
     # Custom step to upload to Telegram
+    - name: get hsmod version
+      id: version
+      run: |
+        Get-Content ./HsMod/PluginInfo.cs | Select-String -Pattern 'public const string PLUGIN_VERSION = "(.*?)"' | ForEach-Object { ($_ -match '"(.*?)"') | Out-Null }
+        $version = $matches[1];
+        echo "PLUGIN_VERSION=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
     - name: Upload to Telegram
       env:
         CHAT_ID: ${{ secrets.CHAT_ID }}
@@ -52,6 +58,7 @@ jobs:
         COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         COMMIT_URL: ${{ github.event.head_commit.url }}
         RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        VERSION: ${{ steps.version.outputs.PLUGIN_VERSION }}
         TITLE: HsMod
       run: |
         if ($env:BOT_TOKEN -ne "") {
