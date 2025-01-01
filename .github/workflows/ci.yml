@@ -8,31 +8,43 @@ on:
 
 jobs:
   build:
-
     runs-on: windows-latest
 
     steps:
+    # Checkout the repository
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
+    
+    # Setup .NET SDK
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.x
+    
+    # Restore dependencies
     - name: Restore dependencies
       run: dotnet restore --locked-mode
+    
+    # Build the project
     - name: Build HsMod
       run: dotnet build --configuration Release --no-restore
+    
+    # Upload the built artifact
     - name: Upload HsMod to artifact
       uses: actions/upload-artifact@v4
       with:
         name: HsMod.dll
         path: HsMod/Release/HsMod.dll
 
-    - name: Upload to telegram
+    # Set up Python (new step)
+    - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.13'
+    
+    # Custom step to upload to Telegram
+    - name: Upload to Telegram
       env:
         CHAT_ID: ${{ secrets.CHAT_ID }}
         BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
