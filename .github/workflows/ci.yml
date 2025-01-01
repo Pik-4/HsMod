@@ -28,9 +28,10 @@ jobs:
       with:
         name: HsMod.dll
         path: HsMod/Release/HsMod.dll
+
     - name: Upload to telegram
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      uses: actions/checkout@v4
+      uses: actions/setup-python@v5
         with:
           python-version: '3.13'
       env:
