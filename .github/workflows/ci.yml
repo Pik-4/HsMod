@@ -54,9 +54,10 @@ jobs:
         RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         TITLE: HsMod
       run: |
-        $VERSION = git rev-list --count HEAD
-        $HSMOD = Get-ChildItem -Path .\HsMod\Release -Filter HsMod.dll -Recurse | Select-Object -First 1
-        python -m pip install --upgrade pip
-        python -m pip install telethon
-        python .github\scripts\telegram.py $HSMOD.FullName
-        
+        if ($env:BOT_TOKEN -ne "") {
+          $VERSION = git rev-list --count HEAD
+          $HSMOD = Get-ChildItem -Path .\HsMod\Release -Filter HsMod.dll -Recurse | Select-Object -First 1
+          python -m pip install --upgrade pip
+          python -m pip install telethon
+          python .github\scripts\telegram.py $HSMOD.FullName
+        }
