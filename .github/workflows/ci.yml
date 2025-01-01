@@ -28,3 +28,25 @@ jobs:
       with:
         name: HsMod.dll
         path: HsMod/Release/HsMod.dll
+
+    - name: Upload to telegram
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      env:
+        CHAT_ID: ${{ secrets.CHAT_ID }}
+        BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        MESSAGE_THREAD_ID: ${{ secrets.MESSAGE_THREAD_ID }}
+        COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        COMMIT_URL: ${{ github.event.head_commit.url }}
+        RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        TITLE: HsMod
+      run: |
+        if ($env:BOT_TOKEN -ne "") {
+          $VERSION = git rev-list --count HEAD
+          $HSMOD = Get-ChildItem -Path .\HsMod\Release -Filter HsMod.dll -Recurse | Select-Object -First 1
+          python -m pip install --upgrade pip
+          python -m pip install telethon
+          python .github\scripts\telegram.py $HSMOD.FullName
+        }
