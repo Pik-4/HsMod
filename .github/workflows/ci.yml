@@ -50,8 +50,8 @@ jobs:
 
       - name: Find Artifacts
         run: |
-          echo "HSMOD_FILE=$(find artifacts -name '*.dll')"
-          echo "HSMOD_FILE=$(find artifacts -name '*.dll' -print -quit)" >> $GITHUB_ENV
+          echo "HSMOD_FILE=$(find artifacts -type f -name '*.dll' -print -quit)"
+          echo "HSMOD_FILE=$(find artifacts -type f -name '*.dll' -print -quit)" >> $GITHUB_ENV
 
       - name: Post to Telegram
         env:
