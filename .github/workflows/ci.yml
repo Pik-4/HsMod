@@ -50,6 +50,11 @@ jobs:
 
       - name: Find Artifacts
         run: |
+          echo `pwd`
+          ls -alh HsMod/HsMod/artifacts/HsMod.dll
+          ls -alh HsMod/artifacts/HsMod.dll
+          ls -alh artifacts/HsMod.dll
+          ls -alh .
           echo "HSMOD_FILE=$(find artifacts -name '*.dll')" >> $GITHUB_ENV
 
       - name: Post to Telegram
