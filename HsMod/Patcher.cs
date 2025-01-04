@@ -1791,7 +1791,14 @@ namespace HsMod
                                 gameRank = BaconLobbyMgr.Get()?.GetBattlegroundsActiveGameModeRating().ToString();
                             }
                             finalResult = $"{String.Join("<br />", DateTime.Now.ToString().Split(' '))},{finalResult},{gameRank},{gameType},{Utils.CacheLastOpponentFullName},";
-                            finalResult += $"OPPOSING: Low:{Utils.CacheLastOpponentAccountID.Low}+High:{Utils.CacheLastOpponentAccountID.High}";
+                            if (Utils.CacheLastOpponentAccountID.High == 72057594037927936)
+                            {
+                                finalResult += $"OPPOSING: {Utils.CacheLastOpponentAccountID.Low}";
+                            }
+                            else
+                            {
+                                finalResult += $"OPPOSING: Low:{Utils.CacheLastOpponentAccountID.Low}+High:{Utils.CacheLastOpponentAccountID.High}";
+                            }
                             if (isAutoReportEnable.Value)
                             {
                                 finalResult += " => 已举报";
