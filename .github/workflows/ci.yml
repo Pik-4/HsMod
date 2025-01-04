@@ -38,39 +38,7 @@ jobs:
         path: HsMod/Release/HsMod.dll
         compression-level: 9
 
-    # Set up Python (new step)
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.13'
-    
-    # Custom step to upload to Telegram
-    - name: get hsmod version
-      id: version
-      run: |
-        Get-Content ./HsMod/PluginInfo.cs | Select-String -Pattern 'public const string PLUGIN_VERSION = "(.*?)"' | ForEach-Object { ($_ -match '"(.*?)"') | Out-Null }
-        $version = $matches[1];
-        echo "PLUGIN_VERSION=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-    - name: Upload to Telegram
-      env:
-        CHAT_ID: ${{ secrets.CHAT_ID }}
-        BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-        MESSAGE_THREAD_ID: ${{ secrets.MESSAGE_THREAD_ID }}
-        COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
-        COMMIT_URL: ${{ github.event.head_commit.url }}
-        RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        VERSION: ${{ steps.version.outputs.PLUGIN_VERSION }}
-        TITLE: HsMod
-      run: |
-        if ($env:BOT_TOKEN -ne "") {
-          $VERSION = git rev-list --count HEAD
-          $HSMOD = Get-ChildItem -Path .\HsMod\Release -Filter HsMod.dll -Recurse | Select-Object -First 1
-          python -m pip install --upgrade pip
-          python -m pip install telethon
-          python .github\scripts\telegram.py $HSMOD.FullName
-        }
-
-  push_to_canary_channel:
+  push_to_telegram:
     runs-on: ubuntu-latest
     name: Push to Telegram
     needs: build
