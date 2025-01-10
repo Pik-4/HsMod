@@ -598,6 +598,31 @@ namespace HsMod
                 }
             }
 
+            //处理置换
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(RedundantNDEPopup), "Show")]
+            public static bool PatchRedundantNDEPopup(ref UIBButton ___m_rerollButton)
+            {
+                if (!isAutoRedundantNDE.Value)
+                    return true;
+
+                ___m_rerollButton.TriggerPress();
+                ___m_rerollButton.TriggerRelease();
+                return false;
+			}
+			//处理未领取的奖励
+			[HarmonyPostfix]
+			[HarmonyPatch(typeof(RewardTrackSeasonRoll), "Show")]
+			public static void Patch_RewardTrackSeasonRoll_Show(RewardTrackSeasonRoll __instance)
+			{
+				if (isAlertPopupShow.Value)
+					return;
+
+				__instance.ShowChooseOneRewardPickerPopup();
+			}
+
+
+
             //屏蔽开屏防沉迷提示
             [HarmonyPrefix]
             [HarmonyPatch(typeof(SplashScreen), "GetRatingsScreenRegion")]
@@ -2467,7 +2492,7 @@ namespace HsMod
                                 (queueInfo.secondsTilEnd / 60L).ToString(),
                                 "分钟"
                     }), ((float)(queueInfo.secondsTilEnd)) + 3f);
-                    Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, $"当前排队人数：{queueInfo.position}，还剩{queueInfo.secondsTilEnd / 60L}分钟（{queueInfo.secondsTilEnd}秒）。");
+                    Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"当前排队人数：{queueInfo.position}，还剩{queueInfo.secondsTilEnd / 60L}分钟（{queueInfo.secondsTilEnd}秒）。");
                 }
             }
 

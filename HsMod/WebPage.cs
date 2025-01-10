@@ -981,7 +981,7 @@ namespace HsMod
         }
         public static StringBuilder HsModCfgPage(string cfg)
         {
-            string cfgPath = Path.Combine(BepInEx.Paths.ConfigPath, cfg);
+            string cfgPath = Path.Combine(BepInEx.Paths.ConfigPath, CommandConfig.GlobalHSUnitID, cfg);
             StringBuilder output = new StringBuilder().Append("");
 
             if (File.Exists(cfgPath))

@@ -333,5 +333,8 @@
 	"CardState.Default": "默认（不做修改）",
 	"CardState.OnlyMy": "仅友方有效",
 	"CardState.All": "全部生效",
-	"CardState.Disabled": "禁用特效"
+	"CardState.Disabled": "禁用特效",
+	"isAutoRedundantNDE.name": "自动置换卡牌",
+	"isAutoRedundantNDE.label": "优化",
+	"isAutoRedundantNDE.description": "屏蔽卡牌置换窗口并且自动置换"
 }
