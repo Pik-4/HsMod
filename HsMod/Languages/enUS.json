@@ -333,5 +333,8 @@
   "CardState.Default": "Default (no modification)",
   "CardState.OnlyMy": "Only available to friendly players",
   "CardState.All": "All available",
-  "CardState.Disabled": "Disable special effects"
+  "CardState.Disabled": "Disable special effects",
+  "isAutoRedundantNDE.name": "Auto Replace Cards",
+  "isAutoRedundantNDE.label": "Optimization",
+  "isAutoRedundantNDE.description": "Disable the card replacement window and automatically replace cards"
 }
