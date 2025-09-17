@@ -1,10 +1,7 @@
 name: Auto Release
 
 on:
-  push:
-    branches: [ "bepinex5" ]
-    paths:
-      - '**PluginInfo.cs'
+  workflow_dispatch:
 
 jobs:
   build:
