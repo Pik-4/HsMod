@@ -1,0 +1,25 @@
+name: Auto Sync Fork
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 每天 UTC 时间 00:00 运行（北京时间 08:00）
+    - cron: '0 0 * * *'
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Fork Sync
+  
+      uses: tgymnich/fork-sync@v1.2.1
+      with:
+        owner: cliencer
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        head: bepinex5
+        base: bepinex5
