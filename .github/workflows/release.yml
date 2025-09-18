@@ -30,30 +30,34 @@ jobs:
       id: check-updates
       run: |
         # 检查是否有更新
-        if git diff --quiet upstream/${{ github.event.repository.default_branch }} ${{ github.event.repository.default_branch }}; then
+        $diffResult = git diff upstream/${{ github.event.repository.default_branch }} ${{ github.event.repository.default_branch }}
+        if ([string]::IsNullOrEmpty($diffResult)) {
           echo "没有需要同步的更新"
-          echo "has_updates=false" >> $GITHUB_OUTPUT
-        else
+          echo "has_updates=false" >> $env:GITHUB_OUTPUT
+        } else {
           echo "检测到上游有更新"
-          echo "has_updates=true" >> $GITHUB_OUTPUT
+          echo "has_updates=true" >> $env:GITHUB_OUTPUT
           
           # 记录更新信息
           git log --oneline upstream/${{ github.event.repository.default_branch }} ^${{ github.event.repository.default_branch }} > updates.txt
-          echo "UPDATES<<EOF" >> $GITHUB_ENV
-          cat updates.txt >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-        fi
+          $updates = Get-Content updates.txt -Raw
+          Add-Content -Path $env:GITHUB_ENV -Value "UPDATES<<EOF"
+          Add-Content -Path $env:GITHUB_ENV -Value $updates
+          Add-Content -Path $env:GITHUB_ENV -Value "EOF"
+        }
+        
     - name: Merge upstream changes
       if: steps.check-updates.outputs.has_updates == 'true'
       run: |
         git checkout ${{ github.event.repository.default_branch }}
         
         # 尝试合并，如果冲突则中止
-        if ! git merge upstream/${{ github.event.repository.default_branch }} --no-edit; then
-          echo "合并冲突，中止同步"
+        $mergeResult = git merge upstream/${{ github.event.repository.default_branch }} --no-edit 2>&1
+        if ($LASTEXITCODE -ne 0) {
+          echo "合并冲突，中止同步: $mergeResult"
           git merge --abort
           exit 1
-        fi
+        }
     - name: Push changes
       if: steps.check-updates.outputs.has_updates == 'true'
       run: |
