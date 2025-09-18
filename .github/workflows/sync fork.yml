@@ -19,7 +19,7 @@ jobs:
   
       uses: tgymnich/fork-sync@v1.2.1
       with:
-        owner: cliencer
+        owner: Pik-4
         github_token: ${{ secrets.GITHUB_TOKEN }}
         head: bepinex5
         base: bepinex5
