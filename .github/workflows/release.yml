@@ -2,9 +2,9 @@ name: Auto Release
 
 on:
   workflow_dispatch:
-  schedule:
-    # 每天 UTC 时间 00:00 运行（北京时间 08:00）
-    - cron: '0 0 * * *'
+  push:
+    branches:
+    - bepinex5
 jobs:
   build:
 
@@ -14,66 +14,7 @@ jobs:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-
-    - name: Configure Git
-      run: |
-        git config user.name "GitHub Actions"
-        git config user.email "actions@users.noreply.github.com"
-        
-    - name: Add upstream repository
-      run: |
-        # 添加上游仓库作为远程仓库
-        git remote add upstream https://github.com/Pik-4/HsMod.git
-        git fetch upstream
-        
-    - name: Check for updates
-      id: check-updates
-      run: |
-        # 检查是否有更新
-        $diffResult = git diff upstream/${{ github.event.repository.default_branch }} ${{ github.event.repository.default_branch }}
-        if ([string]::IsNullOrEmpty($diffResult)) {
-          echo "没有需要同步的更新"
-          echo "has_updates=false" >> $env:GITHUB_OUTPUT
-        } else {
-          echo "检测到上游有更新"
-          echo "has_updates=true" >> $env:GITHUB_OUTPUT
-          
-          # 记录更新信息
-          git log --oneline upstream/${{ github.event.repository.default_branch }} ^${{ github.event.repository.default_branch }} > updates.txt
-          $updates = Get-Content updates.txt -Raw
-          Add-Content -Path $env:GITHUB_ENV -Value "UPDATES<<EOF"
-          Add-Content -Path $env:GITHUB_ENV -Value $updates
-          Add-Content -Path $env:GITHUB_ENV -Value "EOF"
-        }
-        
-    - name: Merge upstream changes
-      if: steps.check-updates.outputs.has_updates == 'true'
-      run: |
-        git checkout ${{ github.event.repository.default_branch }}
-        
-        # 尝试合并，如果冲突则中止
-        $mergeResult = git merge upstream/${{ github.event.repository.default_branch }} --no-edit 2>&1
-        if ($LASTEXITCODE -ne 0) {
-          echo "合并冲突，中止同步: $mergeResult"
-          git merge --abort
-          exit 1
-        }
-    - name: Push changes
-      if: steps.check-updates.outputs.has_updates == 'true'
-      run: |
-        git push origin ${{ github.event.repository.default_branch }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.x
-
-
-
-
-        
+   
     - name: Restore dependencies
       if: steps.check-updates.outputs.has_updates == 'true'
       run: dotnet restore --locked-mode
