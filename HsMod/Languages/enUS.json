@@ -354,5 +354,8 @@
   "CardState.Disabled": "Disable special effects",
   "isAutoRedundantNDE.name": "Auto Replace Cards",
   "isAutoRedundantNDE.label": "Optimization",
-  "isAutoRedundantNDE.description": "Disable the card replacement window and automatically replace cards"
+  "isAutoRedundantNDE.description": "Disable the card replacement window and automatically replace cards",
+  "SaveCardTextures.name": "Card Art Export",
+  "SaveCardTextures.label": "Hearthstone",
+  "SaveCardTextures.description": "Save the card artwork locally and avoid enabling it during battles, as it may consume performance and cause lag. The artwork is stored in the path: \\Hearthstone\\CardTexturesDownload"
 }

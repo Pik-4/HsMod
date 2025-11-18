@@ -354,5 +354,8 @@
 	"CardState.Disabled": "禁用特效",
 	"isAutoRedundantNDE.name": "自动置换卡牌",
 	"isAutoRedundantNDE.label": "优化",
-	"isAutoRedundantNDE.description": "屏蔽卡牌置换窗口并且自动置换"
+	"isAutoRedundantNDE.description": "屏蔽卡牌置换窗口并且自动置换",
+	"SaveCardTextures.name": "卡牌原画导出",
+	"SaveCardTextures.label": "炉石",
+	"SaveCardTextures.description": "卡牌原画保存到本地，尽量不要在对战中开启，会耗费一定性能导致卡顿，原画存放路径\\Hearthstone\\CardTexturesDownload"
 }
