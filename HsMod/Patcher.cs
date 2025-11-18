@@ -2021,7 +2021,21 @@ namespace HsMod
                 }
                 return true;
             }
-
+            [HarmonyPatch(typeof(Actor), "SetPortraitTexture")]
+            private static void PatchSetPortraitTexture(Actor __instance, ref Texture texture)
+            {
+                try
+                {
+                    if (SaveCardTextures.Value)
+                    {
+                        Plugin.Instance.StartCoroutine(Utils.SaveLoadCardLocalTextures(__instance, texture));
+                    }
+                }
+                catch (Exception e)
+                {
+                    Utils.MyLogger(BepInEx.Logging.LogLevel.Error, e);
+                }
+            }
             //// 生成Power.log
             //[HarmonyPrefix]
             //[HarmonyPatch(typeof(Log), "get_ConfigPath")]
@@ -2077,20 +2091,29 @@ namespace HsMod
 
         public class PatchFavorite
         {
-            // 尝试屏蔽对手的时尚小垃圾。
             [HarmonyPrefix]
-            [HarmonyPatch(typeof(CutsceneManager), "LoadSceneIfNeeded")]
-            public static void PatchLoadSceneIfNeeded(ref CutsceneSceneDef sceneDef, ref bool forceLoad)
+            [HarmonyPatch(typeof(CornerSpellReplacementManager), "UpdateCornerReplacements")]
+            private static void PatchUpdateCornerReplacements(ref CornerReplacementContext friendlyNewContext)
             {
-                if (sceneDef != null)
+                try
                 {
                     if (skinPet.Value != -1)
-                        sceneDef.SetupData.FriendlyPetSkinDbId = skinPet.Value;
+                    {
+                        Player playerBySide2 = GameState.Get()?.GetPlayerBySide(Player.Side.FRIENDLY);
+                        playerBySide2?.SetTag(GAME_TAG.PET_VARIANT_ID, 0);
+                    }
+
                     if (skinOpposingPet.Value != -1)
-                        sceneDef.SetupData.OpponentPetSkinDbId = skinOpposingPet.Value;
+                    {
+                        Player playerBySide2 = GameState.Get()?.GetPlayerBySide(Player.Side.OPPOSING);
+                        playerBySide2?.SetTag(GAME_TAG.PET_VARIANT_ID, 0);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex);
                 }
             }
-
 
 
             //加载处理

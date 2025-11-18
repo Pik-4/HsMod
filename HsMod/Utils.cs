@@ -1,6 +1,7 @@
 ﻿using BepInEx.Logging;
 using PegasusUtil;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -8,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using UnityEngine;
 using static HsMod.PluginConfig;
 
 namespace HsMod
@@ -1406,6 +1408,87 @@ namespace HsMod
                 }
                 
             }
+        }
+
+        public static IEnumerator SaveLoadCardLocalTextures(Actor __instance, Texture texture)
+        {
+            try
+            {
+                if (null != texture)
+                {
+                    string cardId = __instance?.GetEntityDef()?.GetCardId();
+
+                    if (!string.IsNullOrEmpty(cardId))
+                    {
+                        string cardName = __instance?.GetEntityDef()?.GetName();
+
+                        string type = "";
+                        if (TAG_PREMIUM.SIGNATURE == __instance.GetPremium())
+                        {
+                            type = "-SIGNATURE";
+                        }
+
+                        string filePath = Path.Combine(
+                            Application.dataPath.Substring(0, Application.dataPath.LastIndexOf("/")),
+                            "CardTexturesDownload", cardName + type + "-" + cardId + ".png");
+
+                        if (File.Exists(filePath))
+                        {
+                            yield break;
+                        }
+
+                        RenderTexture rt = RenderTexture.GetTemporary(
+                            texture.width,
+                            texture.height,
+                            0,
+                            RenderTextureFormat.ARGBFloat,
+                            RenderTextureReadWrite.Linear,
+                            8,
+                            RenderTextureMemoryless.None);
+
+                        Material copyMat = new Material(Shader.Find("Unlit/Texture"));
+                        Graphics.Blit(texture, rt, copyMat);
+                        UnityEngine.Object.Destroy(copyMat);
+
+                        RenderTexture previous = RenderTexture.active;
+                        RenderTexture.active = rt;
+
+                        Texture2D readableTexture = new Texture2D(
+                            texture.width,
+                            texture.height,
+                            TextureFormat.RGBAFloat,
+                            false,
+                            true);
+
+                        readableTexture.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
+                        readableTexture.Apply();
+
+                        RenderTexture.active = previous;
+                        RenderTexture.ReleaseTemporary(rt);
+
+                        File.WriteAllBytes(filePath, readableTexture.EncodeToPNG());
+                        UnityEngine.Object.Destroy(readableTexture);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                if (!Directory.Exists(Path.Combine("CardTexturesDownload")))
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(Path.Combine("CardTexturesDownload"));
+                    }
+                    catch (Exception e2)
+                    {
+                        MyLogger(LogLevel.Error, e2.Message);
+                    }
+                }
+
+                MyLogger(LogLevel.Error, e);
+            }
+
+            yield break;
         }
     }
 }
