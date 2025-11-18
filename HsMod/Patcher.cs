@@ -2021,6 +2021,8 @@ namespace HsMod
                 }
                 return true;
             }
+            
+            [HarmonyPrefix]
             [HarmonyPatch(typeof(Actor), "SetPortraitTexture")]
             private static void PatchSetPortraitTexture(Actor __instance, ref Texture texture)
             {
@@ -2028,7 +2030,7 @@ namespace HsMod
                 {
                     if (SaveCardTextures.Value)
                     {
-                        Plugin.Instance.StartCoroutine(Utils.SaveLoadCardLocalTextures(__instance, texture));
+                        __instance.StartCoroutine(Utils.SaveLoadCardLocalTextures(__instance, texture));
                     }
                 }
                 catch (Exception e)
