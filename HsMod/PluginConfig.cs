@@ -63,6 +63,8 @@ namespace HsMod
         
         public static ConfigEntry<bool> isPatchAssetLoader;
         public static ConfigEntry<bool> shieldMainBoxLuckyDraw;
+        // 卡牌原画导出
+        public static ConfigEntry<bool> SaveCardTextures;
 
         public static ConfigEntry<bool> isOpponentGoldenCardShow;
         public static ConfigEntry<bool> isSignatureCardStateEnable;
@@ -241,6 +243,7 @@ namespace HsMod
             isBgsSeasonTicketUnlock = config.Bind(LocalizationManager.GetLangValue("isBgsSeasonTicketUnlock.label"), LocalizationManager.GetLangValue("isBgsSeasonTicketUnlock.name"), false, LocalizationManager.GetLangValue("isBgsSeasonTicketUnlock.description"));
             isPatchAssetLoader = config.Bind(LocalizationManager.GetLangValue("isPatchAssetLoader.label"), LocalizationManager.GetLangValue("isPatchAssetLoader.name"), false, LocalizationManager.GetLangValue("isPatchAssetLoader.description"));
             shieldMainBoxLuckyDraw = config.Bind(LocalizationManager.GetLangValue("shieldMainBoxLuckyDraw.label"), LocalizationManager.GetLangValue("shieldMainBoxLuckyDraw.name"), false, LocalizationManager.GetLangValue("shieldMainBoxLuckyDraw.description"));
+            SaveCardTextures = config.Bind(LocalizationManager.GetLangValue("SaveCardTextures.label"), LocalizationManager.GetLangValue("SaveCardTextures.name"), false, LocalizationManager.GetLangValue("SaveCardTextures.description"));
             //考虑导出单独配置
             skinCoin = config.Bind(LocalizationManager.GetLangValue("skinCoin.label"), LocalizationManager.GetLangValue("skinCoin.name"), -1, LocalizationManager.GetLangValue("skinCoin.description"));
             skinCardBack = config.Bind(LocalizationManager.GetLangValue("skinCardBack.label"), LocalizationManager.GetLangValue("skinCardBack.name"), -1, LocalizationManager.GetLangValue("skinCardBack.description"));

@@ -10,6 +10,8 @@ namespace HsMod
     [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
     public class Plugin : BaseUnityPlugin
     {
+        public static Plugin Instance { get; private set; }
+
         private void OnGUI()
         {
             if (UtilsArgu.Instance.Exists("hsunitid"))
