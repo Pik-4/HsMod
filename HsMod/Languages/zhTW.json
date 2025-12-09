@@ -1,4 +1,4 @@
-﻿{
+{
 	"hsmod.declaration": "[開源軟體] HsMod僅於GitHub發布，請慎防受騙。\nhttps://github.com/Pik-4/HsMod",
 	"isPluginEnable.name": "HsMod狀態",
 	"isPluginEnable.label": "全域",
@@ -119,6 +119,18 @@
 	"shieldMainBoxLuckyDraw.name": "屏蔽主介面樂透活動",
 	"shieldMainBoxLuckyDraw.label": "爐石",
 	"shieldMainBoxLuckyDraw.description": "屏蔽主介面樂透活動，預設false",
+	"signatureFirst.name": "傳說造型優先",
+	"signatureFirst.label": "爐石戰記",
+	"signatureFirst.description": "傳說造型的品質高於鑽石，預設為關閉",
+	"previewCardPlaySounds.name": "卡牌預覽播放音效",
+	"previewCardPlaySounds.label": "爐石戰記",
+	"previewCardPlaySounds.description": "在收藏中以右鍵預覽卡牌時，播放其登場音效，預設為開啟",
+	"checkCollDeckValidForMode.name": "檢查牌組在遊戲模式中是否有效",
+	"checkCollDeckValidForMode.label": "最佳化",
+	"checkCollDeckValidForMode.description": "避免在開放模式中意外使用標準模式牌組。在牌組選擇介面中，如果標準牌組被停用且正在開放模式中時給出提示，預設為開啟",
+	"oldSignatureSave.name": "新繪外觀的舊版傳說卡牌",
+	"oldSignatureSave.label": "爐石戰記",
+	"oldSignatureSave.description": "預設為關閉，不會修改。啟用後，所有舊的傳說卡牌將變為新版本。",
 	"maxCardState.description": "強制卡牌頂級外觀（目前優先順序：鑽石、珍藏、金卡、普通）",
 	"isAutoRecvMercenaryRewardEnable.name": "自動領獎",
 	"isAutoRecvMercenaryRewardEnable.label": "傭兵",
@@ -141,6 +153,9 @@
 	"isBgsSeasonTicketUnlock.name": "旅店通票解鎖",
 	"isBgsSeasonTicketUnlock.label": "旅店",
 	"isBgsSeasonTicketUnlock.description": "是否解鎖旅店通票（允許4選1, 而不是2選1）。",
+	"isPatchAssetLoader.name": "停用特殊卡牌外觀",
+	"isPatchAssetLoader.label": "造型",
+	"isPatchAssetLoader.description": "當選擇非英語的語言時，停用特殊卡牌外觀的資源載入。",
 	"skinCoin.name": "幸運幣",
 	"skinCoin.label": "外觀",
 	"skinCoin.description": "幸運幣的偏好ID，-1表示不做修改（遊戲內模擬斷線可以即時更新）",
@@ -351,5 +366,8 @@
 	"CardState.Disabled": "禁用特效",
 	"isAutoRedundantNDE.name": "自動置換卡牌",
 	"isAutoRedundantNDE.label": "最佳化",
-	"isAutoRedundantNDE.description": "屏蔽卡牌置換視窗並且自動置換"
+	"isAutoRedundantNDE.description": "屏蔽卡牌置換視窗並且自動置換",
+	"SaveCardTextures.name": "卡牌美術圖匯出",
+	"SaveCardTextures.label": "爐石戰記",
+	"SaveCardTextures.description": "將卡牌美術圖儲存到本機，建議不要在對戰期間啟用，因為它可能會消耗效能並導致延遲。美術圖儲存路徑為：\\Hearthstone\\CardTexturesDownload"
 }
