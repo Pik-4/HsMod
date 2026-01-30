@@ -1,0 +1,25 @@
+name: HsMod.dll Auto Build
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - run: dotnet restore
+      - run: dotnet build -c Release -p:RestoreLockedMode=true
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: HsMod - Latest Auto Build
+          files: HsMod/Release/HsMod.dll
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
