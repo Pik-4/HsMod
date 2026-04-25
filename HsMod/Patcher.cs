@@ -1009,7 +1009,7 @@ namespace HsMod
                     float timeScale = 1f;
                     if (timeGear.Value > 1) timeScale = (float)timeGear.Value;
                     else if (timeGear.Value < -1) timeScale = -1f / (float)timeGear.Value;
-                    if (timeScale >= 8) timeScale = 8f;
+                    if (timeScale >= 999) timeScale = 999f;
                     else if (timeScale <= -8) timeScale = 0.125f;    // will not exec
                     Time.timeScale = ((timeScale > ___m_timeScaleMultiplier) ? ((timeScale + (___m_timeScaleMultiplier - 1f) * 0.5f) * ___m_gameTimeScale) : ((___m_timeScaleMultiplier + (timeScale - 1f) * 0.5f) * ___m_gameTimeScale));
                     return false;
