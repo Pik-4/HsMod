@@ -1704,19 +1704,9 @@ namespace HsMod
             }
 
             //金卡钻石卡补丁
-            [HarmonyPrefix]
-            [HarmonyPatch(typeof(EntityBase), nameof(EntityBase.GetPremiumType))]
-            public static bool PatchGetPremiumType(EntityBase __instance, ref TAG_PREMIUM __result)
-            {
-                
-                return Utils.GetPremiumType(ref __instance, ref __result);
-            }
-            [HarmonyPrefix]
-            [HarmonyPatch(typeof(Actor), nameof(Actor.GetPremium))]
-            public static bool PatchActorGetPremiumType(ref TAG_PREMIUM __result, ref Entity ___m_entity, ref Actor __instance)
-            {
-                return Utils.GetPremiumType(ref ___m_entity, ref __result);
-            }
+            // Removed PatchGetPremiumType / PatchActorGetPremiumType — Entity.GetPremiumType
+            // was renamed/removed in the Hearthstone June 2026 patch. This disables the
+            // golden/diamond/signature visual override features.
             
             // 收藏预览卡牌时播放入场音效
             [HarmonyPrefix]
@@ -1933,22 +1923,22 @@ namespace HsMod
                                 Utils.TryReportOpponent();
                                 Utils.TryAutoReport();
                             }
-                            string finalResult = "未知";
+                            string finalResult = "Unknown";
                             if (GameMgr.Get().GetGameType() != PegasusShared.GameType.GT_BATTLEGROUNDS)
                             {
                                 switch (playState)
                                 {
                                     case TAG_PLAYSTATE.WINNING:
                                     case TAG_PLAYSTATE.WON:
-                                        finalResult = "胜利";
+                                        finalResult = "Victory";
                                         break;
                                     case TAG_PLAYSTATE.CONCEDED:
                                     case TAG_PLAYSTATE.LOST:
                                     case TAG_PLAYSTATE.LOSING:
-                                        finalResult = "失败";
+                                        finalResult = "Defeat";
                                         break;
                                     case TAG_PLAYSTATE.TIED:
-                                        finalResult = "平局";
+                                        finalResult = "Draw";
                                         break;
                                     default:
                                         break;
@@ -1958,14 +1948,14 @@ namespace HsMod
                             {
                                 switch (GameState.Get()?.GetFriendlySidePlayer()?.GetHero()?.GetRealTimePlayerLeaderboardPlace())
                                 {
-                                    case 1: finalResult = "第一名"; break;
-                                    case 2: finalResult = "第二名"; break;
-                                    case 3: finalResult = "第三名"; break;
-                                    case 4: finalResult = "第四名"; break;
-                                    case 5: finalResult = "第五名"; break;
-                                    case 6: finalResult = "第六名"; break;
-                                    case 7: finalResult = "第七名"; break;
-                                    case 8: finalResult = "第八名"; break;
+                                    case 1: finalResult = "1st Place"; break;
+                                    case 2: finalResult = "2nd Place"; break;
+                                    case 3: finalResult = "3rd Place"; break;
+                                    case 4: finalResult = "4th Place"; break;
+                                    case 5: finalResult = "5th Place"; break;
+                                    case 6: finalResult = "6th Place"; break;
+                                    case 7: finalResult = "7th Place"; break;
+                                    case 8: finalResult = "8th Place"; break;
                                     default: break;
                                 }
                             }
@@ -1979,7 +1969,7 @@ namespace HsMod
                                 if (currentMedal != null)
                                 {
                                     gameRank = Utils.RankIdxToString(currentMedal.starLevel);
-                                    gameRank = (gameRank == "传说") ? "传说" + currentMedal.legendIndex.ToString() : (currentMedal.earnedStars > 0 ? gameRank + "-" + currentMedal.earnedStars.ToString() : "-");
+                                    gameRank = (gameRank == "Legend") ? "Legend" + currentMedal.legendIndex.ToString() : (currentMedal.earnedStars > 0 ? gameRank + "-" + currentMedal.earnedStars.ToString() : "-");
                                 }
                             }
                             else if (GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_BATTLEGROUNDS)
@@ -1997,7 +1987,7 @@ namespace HsMod
                             }
                             if (isAutoReportEnable.Value)
                             {
-                                finalResult += " => 已举报";
+                                finalResult += " => Reported";
                             }
                             finalResult += $"<br />FRIENDLY: {BnetPresenceMgr.Get()?.GetMyPlayer()?.GetBestName()?.ToString()}";
                             System.IO.File.AppendAllText(CommandConfig.hsMatchLogPath, finalResult + "\n");
@@ -2014,7 +2004,7 @@ namespace HsMod
                 // 自动退出
                 if (autoQuitTimer.Value > 0 && ConfigValue.Get().RunningTime >= autoQuitTimer.Value)
                 {
-                    Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "定时重启！即将退出游戏...");
+                    Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "Scheduled restart! Exiting game...");
                     Utils.Quit();
                 }
             }
@@ -2061,7 +2051,7 @@ namespace HsMod
                                         if (hintText != null)
                                         {
                                             hintText = hintText + "\n" + entityDef.GetCardTextInHand();
-                                            UIStatus.Get().AddInfo($"注意: {hintText}", 15f);
+                                            UIStatus.Get().AddInfo($"Note: {hintText}", 15f);
                                         }
                                     }
                                 }
@@ -2084,7 +2074,7 @@ namespace HsMod
                         string hintText2 = string.Join(" ", hintList);
                         if (hintText2 != "")
                         {
-                            UIStatus.Get().AddInfo($"注意: {hintText2}", 15f);
+                            UIStatus.Get().AddInfo($"Note: {hintText2}", 15f);
                         }
                     }
 
@@ -2131,7 +2121,7 @@ namespace HsMod
 
                     string heroClass = isRogue ? GameStrings.GetClassName(TAG_CLASS.ROGUE)
                                                : GameStrings.GetClassName(GameState.Get().GetOpposingPlayer().GetHero().GetClass());
-                    title = $"对手职业是{heroClass}，套牌{oppoCardCount}张";
+                    title = $"Opponent class: {heroClass}, deck size: {oppoCardCount}";
                 }
             }
             
@@ -2735,13 +2725,13 @@ namespace HsMod
                 if (isIGMMessageShow.Value)
                 {
                     UIStatus.Get()?.AddInfo(string.Concat(new string[] {
-                                "当前排队人数：",
+                                "Queue position: ",
                                 queueInfo.position.ToString(),
-                                ", 还剩",
+                                ", remaining ",
                                 (queueInfo.secondsTilEnd / 60L).ToString(),
-                                "分钟"
+                                " min"
                     }), ((float)(queueInfo.secondsTilEnd)) + 3f);
-                    Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"当前排队人数：{queueInfo.position}，还剩{queueInfo.secondsTilEnd / 60L}分钟（{queueInfo.secondsTilEnd}秒）。");
+                    Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"Queue position: {queueInfo.position}, remaining {queueInfo.secondsTilEnd / 60L} min ({queueInfo.secondsTilEnd}s).");
                 }
             }
 

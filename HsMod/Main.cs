@@ -254,6 +254,13 @@ namespace HsMod
                         return;
                     }
 
+                    if (keyBulkDisenchant.Value.IsDown()
+                        && SceneMgr.Get().GetMode() == SceneMgr.Mode.COLLECTIONMANAGER)
+                    {
+                        Utils.TryBulkDisenchantNonPremium();
+                        return;
+                    }
+
                     if (GameState.Get() == null || GameMgr.Get() == null) return;
                     if (GameMgr.Get().IsBattlegrounds() && keyShutUpBob.Value.IsDown())
                     {

@@ -42,23 +42,23 @@ namespace HsMod
         //}
         public enum SkinType
         {
-            [Description("卡背")]
+            [Description("Card Back")]
             CARDBACK,
-            [Description("卡牌")]
+            [Description("Card")]
             CARD,
-            [Description("硬币")]
+            [Description("Coin")]
             COIN,
-            [Description("英雄皮肤")]
+            [Description("Hero Skin")]
             HERO,
-            [Description("酒馆鲍勃")]
+            [Description("Bob (Battlegrounds)")]
             BOB,
-            [Description("酒馆终结特效")]
+            [Description("Battlegrounds Finisher")]
             BATTLEGROUNDSFINISHER,
-            [Description("酒馆战场")]
+            [Description("Battlegrounds Board")]
             BATTLEGROUNDSBOARD,
-            [Description("酒馆英雄皮肤")]
+            [Description("Battlegrounds Hero Skin")]
             BATTLEGROUNDSHERO,
-            [Description("英雄技能")]
+            [Description("Hero Power")]
             HEROPOWER,
         }
         public enum AlertPopupResponse
@@ -71,24 +71,24 @@ namespace HsMod
         }
         public enum ConfigTemplate
         {
-            [Description("默认")]
+            [Description("Default")]
             DoNothing,
-            [Description("挂机")]
+            [Description("Away From Keyboard")]
             AwayFromKeyboard,
-            [Description("反挂机")]
+            [Description("Anti-AFK")]
             AntiAwayFromKeyboard
         }
         public enum BuyAdventureTemplate
         {
-            [Description("默认")]
+            [Description("Default")]
             DoNothing,
-            [Description("纳克萨玛斯的诅咒")]
+            [Description("Curse of Naxxramas")]
             BuyNAX,
-            [Description("黑石山的火焰")]
+            [Description("Blackrock Mountain")]
             BuyBRM,
-            [Description("探险者协会")]
+            [Description("The League of Explorers")]
             BuyLOE,
-            [Description("卡拉赞之夜")]
+            [Description("One Night in Karazhan")]
             BuyKara
         }
         public enum CardRarity    // 卡牌稀有度
@@ -154,14 +154,14 @@ namespace HsMod
                         cardCount.gTotal += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 50;
-                        return $"<td>金色普通</td><td>{count}</td>";
+                        return $"<td>Golden Common</td><td>{count}</td>";
                     }
                     else
                     {
                         cardCount.common += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 5;
-                        return $"<td>普通</td><td>{count}</td>";
+                        return $"<td>Common</td><td>{count}</td>";
                     }
                 case TAG_RARITY.RARE:
                     if (golden)
@@ -170,14 +170,14 @@ namespace HsMod
                         cardCount.gTotal += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 100;
-                        return $"<td>金色稀有</td><td>{count}</td>";
+                        return $"<td>Golden Rare</td><td>{count}</td>";
                     }
                     else
                     {
                         cardCount.rare += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 20;
-                        return $"<td>稀有</td><td>{count}</td>";
+                        return $"<td>Rare</td><td>{count}</td>";
                     }
                 case TAG_RARITY.EPIC:
                     if (golden)
@@ -186,14 +186,14 @@ namespace HsMod
                         cardCount.gTotal += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 400;
-                        return $"<td>金色史诗</td><td>{count}</td>";
+                        return $"<td>Golden Epic</td><td>{count}</td>";
                     }
                     else
                     {
                         cardCount.epic += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 100;
-                        return $"<td>史诗</td><td>{count}</td>";
+                        return $"<td>Epic</td><td>{count}</td>";
                     }
                 case TAG_RARITY.LEGENDARY:
                     if (golden)
@@ -202,17 +202,17 @@ namespace HsMod
                         cardCount.gTotal += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 1600;
-                        return $"<td>金色传说</td><td>{count}</td>";
+                        return $"<td>Golden Legendary</td><td>{count}</td>";
                     }
                     else
                     {
                         cardCount.legendary += count;
                         cardCount.total += count;
                         cardCount.totalDust += count * 400;
-                        return $"<td>传说</td><td>{count}</td>";
+                        return $"<td>Legendary</td><td>{count}</td>";
                     }
                 default:
-                    return "<td>未知</td>";
+                    return "<td>Unknown</td>";
             }
         }
 
@@ -222,24 +222,24 @@ namespace HsMod
             switch ((rank - 1) / 10)
             {
                 case 0:
-                    text = "青铜";
+                    text = "Bronze";
                     break;
                 case 1:
-                    text = "白银";
+                    text = "Silver";
                     break;
                 case 2:
-                    text = "黄金";
+                    text = "Gold";
                     break;
                 case 3:
-                    text = "铂金";
+                    text = "Platinum";
                     break;
                 case 4:
-                    text = "钻石";
+                    text = "Diamond";
                     break;
                 case 5:
-                    return "传说";
+                    return "Legend";
                 default:
-                    text = "未知";
+                    text = "Unknown";
                     break;
             }
             return text + (11 - (rank - (rank - 1) / 10 * 10)).ToString();
@@ -281,7 +281,7 @@ namespace HsMod
             Blizzard.GameService.SDK.Client.Integration.BattleNet.Get().SubmitReport(Utils.CacheLastOpponentAccountID, Blizzard.GameService.SDK.Client.Integration.ReportType.ComplaintType.CHEATING, subcomplaintTypes);
             subcomplaintTypes.Clear();
 
-            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, Utils.CacheLastOpponentFullName + Utils.CacheLastOpponentAccountID.EntityId.ToString() + "已举报");
+            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, Utils.CacheLastOpponentFullName + Utils.CacheLastOpponentAccountID.EntityId.ToString() + " reported");
         }
 
         public static void TryAutoReport()
@@ -304,7 +304,7 @@ namespace HsMod
             Blizzard.GameService.SDK.Client.Integration.BattleNet.Get().SubmitReport(myPlayer, Blizzard.GameService.SDK.Client.Integration.ReportType.ComplaintType.CHEATING, subcomplaintTypes);
             subcomplaintTypes.Clear();
 
-            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "举报完成。");
+            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "Report complete.");
         }
 
         public static void TryRefundCardDisenchantCallback()
@@ -316,12 +316,12 @@ namespace HsMod
             }
             else if (cardSaleResult.Action != Network.CardSaleResult.SaleResult.CARD_WAS_SOLD)
             {
-                MyLogger(LogLevel.Warning, $"分解失败：{cardSaleResult.Action}");
-                UIStatus.Get().AddInfo("分解失败");
+                MyLogger(LogLevel.Warning, $"Disenchant failed: {cardSaleResult.Action}");
+                UIStatus.Get().AddInfo("Disenchant failed");
             }
             else
             {
-                MyLogger(LogLevel.Warning, "分解成功");
+                MyLogger(LogLevel.Warning, "Disenchant succeeded");
                 CollectionManager.Get().OnCollectionChanged();
             }
         }
@@ -493,11 +493,77 @@ namespace HsMod
                 int sellValue = -(normalSellValue * normalSells + goldenSellValue * goldenSells);
                 totalSell += -sellValue;
                 network.CraftingTransaction(record, sellValue, numNormalCopiesInCollection, numGoldenCopiesInCollection, numSignatureCopiesInCollection, numDiamondCopiesInCollection);
-                MyLogger(LogLevel.Warning, $"尝试分解卡牌：{record.CardID}，普通{normalSells}，金卡{goldenSells}。");
+                MyLogger(LogLevel.Warning, $"Disenchanting card: {record.CardID}, normal {normalSells}, golden {goldenSells}.");
 
             }
-            MyLogger(LogLevel.Warning, "尝试分解粉尘：" + totalSell);
-            UIStatus.Get().AddInfo("尝试分解粉尘：" + totalSell);
+            MyLogger(LogLevel.Warning, "Disenchanting dust: " + totalSell);
+            UIStatus.Get().AddInfo("Disenchanting dust: " + totalSell);
+        }
+
+        // Bulk disenchant: removes ALL normal (non-premium) copies of every craftable card,
+        // skips GOLDEN, DIAMOND, and SIGNATURE versions. Only operable from Collection screen.
+        public static void TryBulkDisenchantNonPremium()
+        {
+            if (SceneMgr.Get()?.GetMode() != SceneMgr.Mode.COLLECTIONMANAGER)
+            {
+                UIStatus.Get()?.AddInfo("Bulk disenchant: must be on Collection screen.");
+                return;
+            }
+            if (CollectionManager.Get() == null || Network.Get() == null || CraftingManager.Get() == null)
+            {
+                UIStatus.Get()?.AddInfo("Bulk disenchant: managers not ready.");
+                return;
+            }
+
+            int totalDust = 0;
+            int totalCards = 0;
+            Network network = Network.Get();
+            network.RegisterNetHandler(PegasusUtil.BoughtSoldCard.PacketID.ID, new Network.NetHandler(TryRefundCardDisenchantCallback), null);
+
+            HashSet<string> processed = new HashSet<string>();
+            foreach (var record in CollectionManager.Get().GetOwnedCards())
+            {
+                if (record == null) continue;
+                if (!record.IsCraftable) continue;
+                if (record.IsHeroSkin) continue;
+                if (record.IsMercenaryAbility) continue;
+                if (record.Set == TAG_CARD_SET.CORE) continue;
+                if (record.PremiumType != TAG_PREMIUM.NORMAL) continue;
+                if (processed.Contains(record.CardId)) continue;
+                processed.Add(record.CardId);
+
+                int numNormal = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.NORMAL);
+                if (numNormal <= 0) continue;
+
+                int numGolden = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.GOLDEN);
+                int numSignature = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.SIGNATURE);
+                int numDiamond = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.DIAMOND);
+
+                CraftingManager.Get().TryGetCardSellValue(record.CardId, TAG_PREMIUM.NORMAL, out int normalSellValue);
+
+                CraftingPendingTransaction pending = new CraftingPendingTransaction
+                {
+                    CardID = record.CardId,
+                    Premium = TAG_PREMIUM.NORMAL,
+                    NormalDisenchantCount = numNormal,
+                    GoldenDisenchantCount = 0,
+                    SignatureDisenchantCount = 0,
+                    DiamondDisenchantCount = 0
+                };
+
+                int sellValue = -(normalSellValue * numNormal);
+                totalDust += -sellValue;
+                totalCards += numNormal;
+
+                // numNormal/Golden/Signature/Diamond passed here are the CURRENT counts (server-side reconciliation).
+                // The disenchant counts inside `pending` tell the server how many of each to remove.
+                network.CraftingTransaction(pending, sellValue, numNormal, numGolden, numSignature, numDiamond);
+                MyLogger(LogLevel.Warning, $"Bulk disenchant card: {record.CardId}, normal x{numNormal} for {normalSellValue * numNormal} dust.");
+            }
+
+            string msg = $"Bulk disenchant: {totalCards} cards, {totalDust} dust.";
+            MyLogger(LogLevel.Warning, msg);
+            UIStatus.Get()?.AddInfo(msg, 30f);
         }
 
         public static void TryGetSafeImg()
@@ -625,12 +691,12 @@ namespace HsMod
             }
             if (SceneMgr.Get().GetMode() == SceneMgr.Mode.STARTUP || SceneMgr.Get().GetMode() == SceneMgr.Mode.LOGIN)
             {
-                UIStatus.Get().AddInfo("未初始化！");
+                UIStatus.Get().AddInfo("Not initialized!");
                 return;
             }
             if (SceneMgr.Get().GetMode() == SceneMgr.Mode.GAMEPLAY)
             {
-                UIStatus.Get().AddInfo("不能在游戏内购买！");
+                UIStatus.Get().AddInfo("Cannot purchase in-game!");
                 return;
             }
             try
@@ -677,8 +743,8 @@ namespace HsMod
 
                 if (StoreManager.GetStaticProductItemOwnershipStatus(productType, wingID, out string failReason) == ItemOwnershipStatus.OWNED)
                 {
-                    Utils.MyLogger(LogLevel.Warning, $"{adventure}：冒险已拥有！");
-                    UIStatus.Get().AddInfo("所选冒险已拥有！");
+                    Utils.MyLogger(LogLevel.Warning, $"{adventure}: adventure already owned!");
+                    UIStatus.Get().AddInfo("Selected adventure already owned!");
                 }
                 else
                 {
@@ -701,17 +767,17 @@ namespace HsMod
         {
             if (SceneMgr.Get().GetMode() == SceneMgr.Mode.STARTUP || SceneMgr.Get().GetMode() == SceneMgr.Mode.LOGIN)
             {
-                UIStatus.Get().AddInfo("未初始化！");
+                UIStatus.Get().AddInfo("Not initialized!");
                 return;
             }
             if (SceneMgr.Get().GetMode() == SceneMgr.Mode.GAMEPLAY)
             {
-                UIStatus.Get().AddInfo("不能在游戏内购买！");
+                UIStatus.Get().AddInfo("Cannot purchase in-game!");
                 return;
             }
             if (!StoreManager.Get().IsOpen())
             {
-                UIStatus.Get().AddInfo("商店初始化失败！");
+                UIStatus.Get().AddInfo("Shop init failed!");
                 return;
             }
             try
@@ -720,18 +786,18 @@ namespace HsMod
                 {
                     foreach (var bundle in StoreManager.Get().GetAvailableBundlesForProduct(t, true))
                     {
-                        Utils.MyLogger(LogLevel.Info, $"[{StoreManager.Get().CanBuyBundle(bundle)}]{t.ToString()}[true] type={bundle?.GetFirstNonGoldVirtualCurrencyPriceType()} id={bundle?.Id} title={bundle?.Title} des={bundle?.Description}");
+                        Utils.MyLogger(LogLevel.Info, $"[{StoreManager.Get().CanBuyBundle(bundle)}]{t.ToString()}[true] type={bundle?.GetFirstVirtualCurrencyPriceType()} id={bundle?.Id} title={bundle?.Title} des={bundle?.Description}");
                         if (bundle?.Id.Value == 1888902) //战旗代币
                         {
                             continue;
                         }
-                        if (bundle?.GetFirstNonGoldVirtualCurrencyPriceType() == CurrencyType.NONE)
+                        if (bundle?.GetFirstVirtualCurrencyPriceType() == CurrencyType.NONE)
                         {
                             if (!bundle.TryGetBundlePrice(CurrencyType.GOLD, out _))
                             {
                                 Utils.MyLogger(LogLevel.Info, $"Found {bundle?.Title}.");
                                 StoreManager.Get().StartStoreBuy(new BuyPmtProductEventArgs(bundle, CurrencyType.GOLD, 1));
-                                UIStatus.Get().AddInfo("请等待购买完成，如果UI卡住，请重进游戏。", 60);
+                                UIStatus.Get().AddInfo("Please wait for purchase to complete. If the UI hangs, restart the game.", 60);
                                 return;
                             }
                         }
@@ -744,7 +810,7 @@ namespace HsMod
                                 //{
                                 //    Utils.MyLogger(LogLevel.Info, $"found.");
                                 //    StoreManager.Get().StartStoreBuy(new BuyPmtProductEventArgs(bundle, CurrencyType.GOLD, 1));
-                                //    UIStatus.Get().AddInfo("请等待购买完成，如果UI卡住，请重进游戏。", 60);
+                                //    UIStatus.Get().AddInfo("Please wait for purchase to complete. If the UI hangs, restart the game.", 60);
                                 //    return;
                                 //}
                                 var pd = bundle?.GetPriceDataModel(pt);
@@ -754,7 +820,7 @@ namespace HsMod
                                     //Utils.MyLogger(LogLevel.Warning, string.Format("Product {0} does not have requested cost for {1}", bundle.Id, pd));
                                     continue;
                                 }
-                                Utils.MyLogger(LogLevel.Info, $"type={pt} Currency/FirstVirtualCurrency={pd?.Currency}/{bundle?.GetFirstNonGoldVirtualCurrencyPriceType()} price={totalPrice} Amount={pd?.Amount} OriginalAmount={pd?.OriginalAmount} OriginalDisplayText={pd?.OriginalDisplayText}");
+                                Utils.MyLogger(LogLevel.Info, $"type={pt} Currency/FirstVirtualCurrency={pd?.Currency}/{bundle?.GetFirstVirtualCurrencyPriceType()} price={totalPrice} Amount={pd?.Amount} OriginalAmount={pd?.OriginalAmount} OriginalDisplayText={pd?.OriginalDisplayText}");
                                 if (totalPrice == 0)
                                 {
                                     Utils.MyLogger(LogLevel.Warning, $"{t.ToString()}[true] id={bundle?.Id} title={bundle?.Title} price=0!!!");
@@ -773,7 +839,7 @@ namespace HsMod
                         }
                     }
                 }
-                UIStatus.Get().AddInfo("未发现零元购商品！");
+                UIStatus.Get().AddInfo("No free items found!");
                 if (targetFrameRate.Value >= 144) // test code
                 {
                     foreach (PegasusUtil.ProductType t in Enum.GetValues(typeof(PegasusUtil.ProductType)))
@@ -781,9 +847,9 @@ namespace HsMod
                         foreach (var bundle in StoreManager.Get().GetAvailableBundlesForProduct(t, false))
                         {
                             // ！！！
-                            Utils.MyLogger(LogLevel.Info, $"[{StoreManager.Get().CanBuyBundle(bundle)}]{t.ToString()}[false] type={bundle?.GetFirstNonGoldVirtualCurrencyPriceType()} id={bundle?.Id} title={bundle?.Title} des={bundle?.Description}");
+                            Utils.MyLogger(LogLevel.Info, $"[{StoreManager.Get().CanBuyBundle(bundle)}]{t.ToString()}[false] type={bundle?.GetFirstVirtualCurrencyPriceType()} id={bundle?.Id} title={bundle?.Title} des={bundle?.Description}");
 
-                            if (bundle?.GetFirstNonGoldVirtualCurrencyPriceType() == CurrencyType.NONE)
+                            if (bundle?.GetFirstVirtualCurrencyPriceType() == CurrencyType.NONE)
                             {
                                 if (!bundle.TryGetBundlePrice(CurrencyType.GOLD, out _))
                                 {
@@ -791,7 +857,7 @@ namespace HsMod
                                     //{
                                     //    Utils.MyLogger(LogLevel.Info, $"Found {bundle?.Title}.");
                                     //    StoreManager.Get().StartStoreBuy(new BuyPmtProductEventArgs(bundle, CurrencyType.GOLD, 1));
-                                    //    UIStatus.Get().AddInfo("请等待购买完成，如果UI卡住，请重进游戏。", 60);
+                                    //    UIStatus.Get().AddInfo("Please wait for purchase to complete. If the UI hangs, restart the game.", 60);
                                     //    return;
                                     //}
                                     Utils.MyLogger(LogLevel.Error, $"[{StoreManager.Get().CanBuyBundle(bundle)}]{t.ToString()}[false] id={bundle?.Id} title={bundle?.Title} des={bundle?.Description}");
@@ -799,7 +865,7 @@ namespace HsMod
                                     //
                                     Utils.MyLogger(LogLevel.Info, $"Found {bundle?.Title}.");
                                     StoreManager.Get().StartStoreBuy(new BuyPmtProductEventArgs(bundle, (CurrencyType)(targetFrameRate.Value - 180), 1));
-                                    UIStatus.Get().AddInfo("请等待购买完成，如果UI卡住，请重进游戏。", 60);
+                                    UIStatus.Get().AddInfo("Please wait for purchase to complete. If the UI hangs, restart the game.", 60);
                                     return;
                                 }
                             }
@@ -1299,7 +1365,7 @@ namespace HsMod
                 //{
                 //    System.IO.File.AppendAllText(savePath, team.Name + "\n");
                 //}
-                System.IO.File.WriteAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到关卡信息如下：\n");
+                System.IO.File.WriteAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\tBounty info captured:\n");
                 System.IO.File.AppendAllText(savePath, "# [ID]\t[Heroic?]\t[Bounty]\t[BossName]\n");
                 foreach (var record in GameDbf.LettuceBounty.GetRecords())     // 生成关卡名称
                 {
@@ -1314,7 +1380,7 @@ namespace HsMod
             public static void MyCards()
             {
                 string savePath = Path.Combine(BepInEx.Paths.BepInExRootPath, "HsMod", "refundcards.log");
-                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到全额分解卡牌情况如下：\n");
+                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\tFull-refund-eligible cards captured:\n");
                 System.IO.File.AppendAllText(savePath, "# [Name]\t[PremiumType]\t[Rarity]\t[CardId]\t[CardDbId]\t[OwnedCount]\n");
                 //Filter<CollectibleCard> filter3 = new Filter<CollectibleCard>((CollectibleCard card) => card.IsRefundable);
                 foreach (var record in CollectionManager.Get().GetOwnedCards())
@@ -1331,7 +1397,7 @@ namespace HsMod
             public static void Skins()
             {
                 string savePath = Path.Combine(BepInEx.Paths.BepInExRootPath, "HsMod", "skins.log");
-                System.IO.File.WriteAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到硬币皮肤如下：\n");
+                System.IO.File.WriteAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\tCoin skins captured:\n");
                 System.IO.File.AppendAllText(savePath, "# [CARD_ID]\t[Name]\n");
                 foreach (var record in GameDbf.CosmeticCoin.GetRecords())
                 {
@@ -1342,7 +1408,7 @@ namespace HsMod
                         System.IO.File.AppendAllText(savePath, saveString + "\n");
                     }
                 }
-                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到卡背信息如下：\n");
+                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\tCard backs captured:\n");
                 System.IO.File.AppendAllText(savePath, "# [ID]\t[Name]\n");
                 foreach (var record in GameDbf.CardBack.GetRecords())
                 {
@@ -1355,7 +1421,7 @@ namespace HsMod
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到游戏面板信息如下：\n");
+                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\tGame boards captured:\n");
                 System.IO.File.AppendAllText(savePath, "# [ID]\t[NOTE_DESC]\n");
                 foreach (var record in GameDbf.Board.GetRecords())
                 {
@@ -1368,7 +1434,7 @@ namespace HsMod
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到酒馆战斗面板如下：\n");
+                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\tBattlegrounds boards captured:\n");
                 System.IO.File.AppendAllText(savePath, "# [ID]\t[CollectionShortName]\t[CollectionName]\n");
                 foreach (var record in GameDbf.BattlegroundsBoardSkin.GetRecords())
                 {
@@ -1381,7 +1447,7 @@ namespace HsMod
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到酒馆终结特效如下：\n");
+                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\tBattlegrounds finishers captured:\n");
                 System.IO.File.AppendAllText(savePath, "# [ID]\t[CollectionShortName]\t[CollectionName]\n");
                 foreach (var record in GameDbf.BattlegroundsFinisher.GetRecords())
                 {
@@ -1394,7 +1460,7 @@ namespace HsMod
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到英雄皮肤（包括酒馆）如下：\n");
+                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\tHero skins (incl. Battlegrounds) captured:\n");
                 System.IO.File.AppendAllText(savePath, "# [CARD_ID]\t[Name]\t[HeroType]\n");
                 foreach (var record in GameDbf.CardHero.GetRecords())
                 {
@@ -1409,7 +1475,7 @@ namespace HsMod
                 }
 
 
-                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到宠物皮肤如下：\n");
+                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\tPet skins captured:\n");
                 System.IO.File.AppendAllText(savePath, "# [PET_ID]\t[Name]\n");
                 foreach (var record in GameDbf.PetVariant.GetRecords())
                 {
