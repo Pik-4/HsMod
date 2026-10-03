@@ -169,7 +169,13 @@ namespace HsMod
         public static Dictionary<string, string> HeroesPowerMapping = new Dictionary<string, string>();
 
         public static ConfigEntry<bool> isAutoRedundantNDE;
-
+        // 卡牌插画MOD
+        public static ConfigEntry<bool> ModTextures;
+        // 用于缓存需要替换卡牌插画的卡牌id 无需清理
+        public static Dictionary<string, string> CacheReplaceCardMap = new Dictionary<string, string>();
+        // 卡牌插画mod的缓存，F4时，会清空
+        public static Dictionary<string, Texture2D> textureCache;
+        
         public static string HsModWebSite;
 
         public static class CommandConfig
@@ -355,7 +361,7 @@ namespace HsMod
             fakeCardID5 = config.Bind(LocalizationManager.GetLangValue("fakeCardID5.label"), LocalizationManager.GetLangValue("fakeCardID5.name"), 67040, new ConfigDescription(LocalizationManager.GetLangValue("fakeCardID5.description"), null, new object[] { "Advanced" }));
             fakeCardPremium5 = config.Bind(LocalizationManager.GetLangValue("fakeCardPremium5.label"), LocalizationManager.GetLangValue("fakeCardPremium5.name"), TAG_PREMIUM.GOLDEN, new ConfigDescription(LocalizationManager.GetLangValue("fakeCardPremium5.description"), null, new object[] { "Advanced" }));
             isAutoRedundantNDE = config.Bind(LocalizationManager.GetLangValue("isAutoRedundantNDE.label"), LocalizationManager.GetLangValue("isAutoRedundantNDE.name"), false, LocalizationManager.GetLangValue("isAutoRedundantNDE.description"));
-
+            ModTextures = config.Bind(LocalizationManager.GetLangValue("ModTextures.label"), LocalizationManager.GetLangValue("ModTextures.name"), true, LocalizationManager.GetLangValue("ModTextures.description"));
             InitCardsMapping();
             LoadSkinsConfigFromFile();
             ConfigValueDelegate();

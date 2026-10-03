@@ -461,5 +461,8 @@
   "nav.pack": "Packs",
   "nav.skins": "Skins",
   "nav.mercenaries": "Mercs",
-  "nav.about": "About"
+  "nav.about": "About",
+  "ModTextures.name": "CardMOD",
+  "ModTextures.label": "CardBeautification",
+  "ModTextures.description": "Card Illustration MOD: Place the VAC_958.jpg file in the Hearthstone\\ModData directory. Restart the game to automatically load the image. Pressing F4 in-game will also reload it. The following naming conventions will be recognized: 1. VAC_958.jpg 2. AdaptiveAmalgam-VAC_958.jpg 3. AdaptiveAmalgam-SIGNATURE-VAC_958.jpg 4. SIGNATURE-VAC_958.jpg AdaptiveAmalgam. This is just a note. The jpg file can also be named xxx-VAC_958.jpg. The image resolution is preferably 512*512"
 }
