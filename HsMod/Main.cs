@@ -183,6 +183,8 @@ namespace HsMod
 
             //启动web服务
             WebServer.Start();
+            // 加载所有自定义卡牌
+            StartCoroutine(Utils.OnLoadCardLocalTextures(this));
 
         }
 
@@ -223,6 +225,8 @@ namespace HsMod
                 LocalizationManager.GetCurrentLang();
                 InactivePlayerKicker.Get()?.SetShouldCheckForInactivity(isIdleKickEnable.Value);
                 WebServer.Restart();
+                // 加载mod图片 
+                StartCoroutine(Utils.OnLoadCardLocalTextures(this));
             }
 
             // Keep the local Battlegrounds pet lifecycle independent of hotkey input.

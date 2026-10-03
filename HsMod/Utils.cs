@@ -11,6 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Networking;
 using static HsMod.PluginConfig;
 
 namespace HsMod
@@ -1593,6 +1594,201 @@ namespace HsMod
 
                 MyLogger(LogLevel.Error, e);
             }
+
+            yield break;
+        }
+
+
+        public static Texture2D GetLocalCardTexture(Actor actor, MonoBehaviour coroutineRunner,
+            TAG_PREMIUM premium = TAG_PREMIUM.NORMAL)
+        {
+            if (actor == null || textureCache == null)
+                return null;
+
+            // 获取 cardId
+            string cardId = null;
+            Entity entity = actor.GetEntity();
+            if (entity != null)
+            {
+                cardId = entity.GetCardId();
+            }
+            else
+            {
+                EntityDef entityDef = actor.GetEntityDef();
+                if (entityDef != null)
+                {
+                    cardId = entityDef.GetCardId();
+                }
+            }
+
+            if (string.IsNullOrEmpty(cardId))
+                return null;
+            string Signature = LocalizationManager.GetCurrentLang() == "zhCN" ? "异画-" : "SIGNATURE-";
+            // 是否是异画（SIGNATURE）
+            bool isSignature = premium == TAG_PREMIUM.SIGNATURE;
+            if (isSignature)
+            {
+                if (textureCache.TryGetValue(Signature + cardId, out Texture2D cachedTextureSign))
+                {
+                    return cachedTextureSign;
+                }
+
+                if (textureCache.TryGetValue(cardId, out Texture2D cachedTexture))
+                {
+                    return cachedTexture;
+                }
+            }
+            else
+            {
+                if (textureCache.TryGetValue(cardId, out Texture2D cachedTexture))
+                {
+                    return cachedTexture;
+                }
+            }
+
+            if (isSignature)
+            {
+                // 查找时使用同样的 key
+                if (CacheReplaceCardMap.TryGetValue(Signature + cardId, out string fileName))
+                {
+                    // 3. 加载本地图片
+                    string path = Path.Combine(
+                        Application.dataPath.Substring(0, Application.dataPath.LastIndexOf("/")),
+                        "ModData", fileName + ".jpg");
+
+                    if (File.Exists(path))
+                    {
+                        coroutineRunner.StartCoroutine(LoadImageByLocal(path, Signature + cardId));
+                    }
+                }
+                else if (CacheReplaceCardMap.TryGetValue(cardId, out string fileName2))
+                {
+                    // 3. 加载本地图片
+                    string path = Path.Combine(
+                        Application.dataPath.Substring(0, Application.dataPath.LastIndexOf("/")),
+                        "ModData", fileName2 + ".jpg");
+
+                    if (File.Exists(path))
+                    {
+                        coroutineRunner.StartCoroutine(LoadImageByLocal(path, Signature + cardId));
+                    }
+                }
+            }
+            else
+            {
+                if (CacheReplaceCardMap.TryGetValue(cardId, out string fileName2))
+                {
+                    string path = Path.Combine(
+                        Application.dataPath.Substring(0, Application.dataPath.LastIndexOf("/")),
+                        "ModData", fileName2 + ".jpg");
+
+                    if (File.Exists(path))
+                    {
+                        coroutineRunner.StartCoroutine(LoadImageByLocal(path, cardId));
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private static IEnumerator LoadImageByLocal(string path, string cardId)
+        {
+            UnityWebRequest wr = new UnityWebRequest("file://" + path);
+            DownloadHandlerTexture texDl =
+                (DownloadHandlerTexture)(object)(wr.downloadHandler =
+                    (DownloadHandler)new DownloadHandlerTexture(true));
+            yield return wr.SendWebRequest();
+            if ((int)wr.result == 1)
+            {
+                if (!textureCache.ContainsKey(cardId))
+                {
+                    textureCache.Add(cardId, texDl.texture);
+                }
+            }
+        }
+
+        // 初始化加载所有自定义卡牌图案，并放入缓存
+        public static IEnumerator OnLoadCardLocalTextures(MonoBehaviour coroutineRunner)
+        {
+            CacheReplaceCardMap = new Dictionary<string, string>();
+            textureCache = new Dictionary<string, Texture2D>();
+
+            // 如果没开启卡牌mod和卡背mod则退出
+            if (!ModTextures.Value)
+            {
+                yield break;
+            }
+
+            string path = Path.Combine("ModData");
+
+            try
+            {
+                if (!Directory.Exists(path))
+                {
+                    yield break;
+                }
+
+                string[] files = Directory.GetFiles(path, "*.jpg");
+                string isSignature = LocalizationManager.GetCurrentLang() == "zhCN" ? "异画-" : "SIGNATURE-";
+                for (int i = 0; i < files.Length; i++)
+                {
+                    // 判断文件名是否包含-，如果包含#则截取#后的字符串，否则全部放入，key 卡牌id value 文件名(不含.jpg)
+                    string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(files[i]);
+                    if (fileNameWithoutExtension.IndexOf('-') >= 0)
+                    {
+                        // 判断是否包含 异画 这2个文字
+                        if (fileNameWithoutExtension.IndexOf(isSignature) >= 0)
+                        {
+                            // key 为异画-卡牌id，value 跟之前一样还是路径
+                            CacheReplaceCardMap.TryAdd(
+                                isSignature +
+                                fileNameWithoutExtension.Substring(fileNameWithoutExtension.IndexOf(isSignature) + 3),
+                                fileNameWithoutExtension);
+                        }
+                        else
+                        {
+                            CacheReplaceCardMap.TryAdd(
+                                fileNameWithoutExtension.Substring(fileNameWithoutExtension.IndexOf('-') + 1),
+                                fileNameWithoutExtension);
+                        }
+                    }
+                    else
+                    {
+                        CacheReplaceCardMap.TryAdd(
+                            fileNameWithoutExtension,
+                            fileNameWithoutExtension);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (!Directory.Exists(path))
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    catch (Exception e)
+                    {
+                        MyLogger(LogLevel.Error, $"OnLoadCardLocalTextures {e.Message}");
+                    }
+                }
+
+                MyLogger(LogLevel.Error, $"OnLoadCardLocalTextures {ex.Message}");
+            }
+
+            foreach (KeyValuePair<string, string> kvp in CacheReplaceCardMap)
+            {
+                string path2 = Path.Combine(
+                    Application.dataPath.Substring(0, Application.dataPath.LastIndexOf("/")),
+                    "ModData", kvp.Value + ".jpg");
+                if (File.Exists(path2))
+                {
+                    coroutineRunner.StartCoroutine(LoadImageByLocal(path2, kvp.Key));
+                }
+            }
+
 
             yield break;
         }

@@ -461,5 +461,8 @@
 	"nav.pack": "卡包",
 	"nav.skins": "皮肤",
 	"nav.mercenaries": "佣兵",
-	"nav.about": "关于"
+	"nav.about": "关于",
+	"ModTextures.name": "卡牌MOD",
+	"ModTextures.label": "卡牌美化",
+	"ModTextures.description": "卡牌插画MOD，将VAC_958.jpg文件放置在 Hearthstone\\ModData下，重启游戏自动加载图片，游戏内按F4也会重新加载以下几种命名都会被识别：1，VAC_958.jpg 2，进化融合怪-VAC_958.jpg 3，进化融合怪-异画-VAC_958.jpg 4，异画-VAC_958.jpg 进化融合怪 这里只是备注，jpg也可命名为融合怪-VAC_958.jpg，图片分辨率最好为512*512"
 }

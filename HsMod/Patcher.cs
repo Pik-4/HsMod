@@ -217,6 +217,7 @@ namespace HsMod
             LoadPatch(typeof(Patcher.PatchDevOptioins));
             LoadPatch(typeof(Patcher.PatchGameMenu));
             LoadPatch(typeof(Patcher.PatchBgRank));
+            LoadPatch(typeof(Patcher.PatchActorMod));
             if (isShowCardLargeCount.Value)
             {
                 LoadPatch(typeof(Patcher.PatchRealtimeCardNum));
