@@ -27,21 +27,23 @@ namespace HsMod
         }
 
         private static string GenerateNav(string title)
+{
+    string nav = string.Empty;
+    if (title != "index")
+    {
+        nav = "<center><ul class=\"nav_ui\">";
+        // Изменено для совместимости с .NET Framework 4.8:
+        var btns = GenerateBtn().Replace("<br/>", "").Split(new string[] { "<br />" }, StringSplitOptions.None);
+        foreach (string btn in btns)
         {
-            string nav = string.Empty;
-            if (title != "index")
-            {
-                nav = "<center><ul class=\"nav_ui\">";
-                var btns = GenerateBtn().Replace("<br/>", "").Split("<br />");
-                foreach (string btn in btns)
-                {
-                    nav += $@"<li class=""nav_li"">{btn}</li>";
-                }
-                nav += "</ul></center><br />";
-            }
-
-            return nav;
+            nav += $@"<li class=""nav_li"">{btn}</li>";
         }
+        nav += "</ul></center><br />";
+    }
+
+    return nav;
+}
+
 
         public static StringBuilder Template(string title = "", string body = "", bool useViewport = true)
         {

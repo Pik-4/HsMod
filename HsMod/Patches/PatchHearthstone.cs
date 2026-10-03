@@ -106,11 +106,11 @@ namespace HsMod
                         if (pair.Value == 1)
                         {
                             // 9 新版随从的异画样式
-                            result.TryAdd(pair.Key, 9);
+                            result[pair.Key] = 9;
                         }
                         else
                         {
-                            result.TryAdd(pair.Key, pair.Value);
+                            result[pair.Key] = pair.Value;
                         }
                     }
                 }
