@@ -209,6 +209,7 @@ namespace HsMod
             LoadPatch(typeof(Patcher.PatchIGMMessage));
             LoadPatch(typeof(Patcher.PatchMercenaries));
             LoadPatch(typeof(Patcher.PatchHearthstone));
+            LoadPatch(typeof(Patcher.PatchAssemble));
             LoadPatch(typeof(Patcher.PatchLogArchive));
             LoadPatch(typeof(Patcher.PatchBattlegrounds));
             LoadPatch(typeof(Patcher.PatchBgsUnlockCollection));
