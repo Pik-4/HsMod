@@ -82,7 +82,7 @@ namespace HsMod
                     // Read the JSON from the request body
                     using (var reader = new StreamReader(request.InputStream))
                     {
-                        string requestBody = await reader.ReadToEndAsync();
+                        string requestBody = reader.ReadToEnd();
                         Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, $"POST: {requestBody}");
                         // Parse JSON and get the "command" field
                         var json = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(requestBody);
@@ -123,7 +123,7 @@ namespace HsMod
                     // Read the JSON from the request body
                     using (var reader = new StreamReader(request.InputStream))
                     {
-                        string requestBody = await reader.ReadToEndAsync();
+                        string requestBody = reader.ReadToEnd();
                         Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, $"POST: {requestBody}");
                         // Parse JSON and get the "key" field
                         var json = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(requestBody);
@@ -183,7 +183,7 @@ namespace HsMod
                     // Read the JSON from the request body
                     using (var reader = new StreamReader(request.InputStream))
                     {
-                        string requestBody = await reader.ReadToEndAsync();
+                        string requestBody = reader.ReadToEnd();
                         Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, $"POST: {requestBody}");
                         // Parse JSON and get the "key" field
                         var json = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(requestBody);
@@ -266,7 +266,7 @@ namespace HsMod
                 if (VaildFilePath(preUrl))   // 优先查找本地文件
                 {
                     context.Response.ContentType = GetMimeType(Path.GetExtension(preUrl));
-                    var file = await File.ReadAllBytesAsync(preUrl);
+                    var file = File.ReadAllBytes(preUrl);
                     await context.Response.OutputStream.WriteAsync(file, 0, file.Length);
                 }
                 else if (rawUrLower == "/safeimg")
