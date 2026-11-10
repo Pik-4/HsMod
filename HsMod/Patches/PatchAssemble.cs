@@ -14,6 +14,7 @@ namespace HsMod
         {
             private static readonly FieldInfo rarityGemMesh = AccessTools.Field(typeof(Actor), nameof(Actor.m_rarityGemMesh));
             private static readonly FieldInfo rarityFrameMesh = AccessTools.Field(typeof(Actor), nameof(Actor.m_rarityFrameMesh));
+            private static readonly MethodInfo getRenderer = AccessTools.Method(typeof(GameObject), nameof(GameObject.GetComponent), Type.EmptyTypes, new[] { typeof(Renderer) });
             private static readonly MethodInfo setRendererEnabled = AccessTools.PropertySetter(typeof(Renderer), nameof(Renderer.enabled));
             private static readonly MethodInfo setRarityMeshEnabled = AccessTools.Method(typeof(PatchAssemble), nameof(SetRarityMeshEnabled));
 
@@ -42,28 +43,26 @@ namespace HsMod
             [HarmonyTranspiler]
             public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
             {
-                List<CodeInstruction> result = new List<CodeInstruction>(instructions);
-                for (int i = 0; i + 3 < result.Count; i++)
+                // CodeMatch 的空操作数会变成通配条件，方法缺失时不应继续匹配。
+                if (getRenderer == null || setRendererEnabled == null)
+                    return instructions;
+
+                CodeMatcher matcher = new CodeMatcher(instructions)
+                    .MatchForward(false,
+                        new CodeMatch(instruction => instruction.opcode == OpCodes.Ldfld &&
+                            (Equals(instruction.operand, rarityGemMesh) || Equals(instruction.operand, rarityFrameMesh))),
+                        new CodeMatch(OpCodes.Callvirt, getRenderer),
+                        new CodeMatch(OpCodes.Ldc_I4_0),
+                        new CodeMatch(OpCodes.Callvirt, setRendererEnabled));
+
+                if (matcher.IsValid)
                 {
-                    if (result[i].opcode != OpCodes.Ldfld ||
-                        (!Equals(result[i].operand, rarityGemMesh) && !Equals(result[i].operand, rarityFrameMesh)))
-                        continue;
-
-                    MethodInfo getComponent = result[i + 1].operand as MethodInfo;
-                    if (result[i + 1].opcode != OpCodes.Callvirt || getComponent == null ||
-                        getComponent.DeclaringType != typeof(GameObject) || getComponent.Name != nameof(GameObject.GetComponent) ||
-                        !getComponent.IsGenericMethod || getComponent.GetGenericArguments()[0] != typeof(Renderer) ||
-                        result[i + 2].opcode != OpCodes.Ldc_I4_0 ||
-                        result[i + 3].opcode != OpCodes.Callvirt || !Equals(result[i + 3].operand, setRendererEnabled))
-                        continue;
-
-                    // 原地替换以保留跳转标签与异常块，仅保护拼装界面的稀有度装饰。
-                    result[i + 1].opcode = OpCodes.Nop;
-                    result[i + 1].operand = null;
-                    result[i + 3].opcode = OpCodes.Call;
-                    result[i + 3].operand = setRarityMeshEnabled;
+                    // 只替换完整的装饰隐藏序列；Set 保留跳转标签和异常块。
+                    matcher.Repeat(match => match
+                        .Advance(1).Set(OpCodes.Nop, null)
+                        .Advance(2).Set(OpCodes.Call, setRarityMeshEnabled));
                 }
-                return result;
+                return matcher.InstructionEnumeration();
             }
 
             private static void SetRarityMeshEnabled(GameObject mesh, bool enabled)
